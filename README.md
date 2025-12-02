@@ -3,6 +3,15 @@
 ## Descripción
 MindNotes es una herramienta especializada para los psicólogos, brinda herramientas para la creación y gestión de reportes/expedientes, utilizando un modelo de Inteligencia artificial con cual se busca que se detecten las voces y transcriba las conversacione, construida con React (frontend) y Node.js/Express (backend).
 
+##Objetivo
+Crear una PWA con dos tipos de usuario, pacientes y psicólogos, para reducir la carga de trabajo de los profesionales y brindarles un mejor servicio a los pacientes utilizando inteligencia artificial, para la transcripción de audio, detección de voces, clasificación y resumen de la información
+
+##Integrantes
+Arana Martínez Eric Rodrigo
+Márquez Torres Mariana
+Otero Cabrero Moises	
+Rivera Gómez Teisel Alfredo	
+
 ## 🚀 Estructura del Proyecto
 
 ```
