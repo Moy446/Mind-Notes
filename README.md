@@ -115,29 +115,17 @@ cd mobile
 npm run android
 ```
 
-##### iOS (solo macOS)
-```bash
-npm run ios
-# o
-cd mobile
-npm run ios
-```
-
 ## 📡 API Endpoints
 
 ### Backend (http://localhost:5000)
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| GET | `/` | Información del servidor |
-| GET | `/api/health` | Estado de la API |
-| GET | `/api/notes` | Obtener todas las notas |
-| POST | `/api/notes` | Crear una nueva nota |
 
 ## 🎨 Características
 
 ### Frontend Web
-- **Interfaz moderna**: Diseño responsive con gradientes y efectos visuales
+- **Interfaz moderna**: Diseño responsive
 - **Gestión de estado**: Hooks de React para manejo del estado
 - **Comunicación API**: Servicios para conectar con el backend
 - **JavaScript**: Desarrollo ágil y flexible
@@ -145,38 +133,9 @@ npm run ios
 
 ### Aplicación Móvil
 - **UI Nativa**: Componentes nativos optimizados para móviles
-- **Navegación fluida**: React Navigation con transiciones suaves
 - **Pull-to-refresh**: Actualización de datos con gesto nativo
-- **Manejo de teclado**: KeyboardAvoidingView para mejor UX
 - **Estados de carga**: ActivityIndicator y feedback visual
 - **Gestión de errores**: Alertas nativas y manejo robusto
 
-## 🌟 Funcionalidades
 
-### Web y Móvil
-✅ **Crear notas**: Formulario para añadir nuevas notas  
-✅ **Ver notas**: Lista de todas las notas con fecha de creación  
-✅ **Comunicación API**: Frontend y backend conectados  
-✅ **Manejo de errores**: Feedback visual para errores  
-✅ **Loading states**: Indicadores de carga  
-
-### Solo Web
-✅ **Interfaz responsive**: Adaptable a dispositivos móviles
-
-### Solo Móvil  
-✅ **UI Nativa**: Experiencia optimizada para dispositivos móviles  
-✅ **Pull-to-refresh**: Actualización de datos con gestos nativos  
-✅ **Navegación modal**: Pantallas con transiciones nativas  
-
-## 🚧 Próximas Funcionalidades
-
-- [ ] Editar notas existentes
-- [ ] Eliminar notas
-- [ ] Búsqueda y filtros
-- [ ] Persistencia en base de datos
-- [ ] Autenticación de usuarios
-- [ ] Categorías/etiquetas para notas
-
----
-
-Desarrollado con ❤️ para la gestión eficiente de notas personales.
+Desarrollado con ❤️ para la gestión eficiente de los pacientes de psicologos
