@@ -7,10 +7,10 @@ MindNotes es una herramienta especializada para los psicólogos, brinda herramie
 Crear una PWA con dos tipos de usuario, pacientes y psicólogos, para reducir la carga de trabajo de los profesionales y brindarles un mejor servicio a los pacientes utilizando inteligencia artificial, para la transcripción de audio, detección de voces, clasificación y resumen de la información
 
 ## Integrantes
-Arana Martínez Eric Rodrigo
-Márquez Torres Mariana
-Otero Cabrero Moises	
-Rivera Gómez Teisel Alfredo	
+- Arana Martínez Eric Rodrigo
+- Márquez Torres Mariana
+- Otero Cabrero Moises	
+- Rivera Gómez Teisel Alfredo	
 
 ## 🚀 Estructura del Proyecto
 
