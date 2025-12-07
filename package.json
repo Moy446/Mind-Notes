@@ -1,6 +1,6 @@
 {
   "name": "mind-notes",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "<h2> Sistema detector de voz impulsado por inteligencia artificial para administración de sesiones psicológicas </h2>\r <p>MindNotes es una herramienta especializada para los psicólogos, brinda herramientas para la creación y gestión de reportes/expedientes, utilizando un modelo de Inteligencia artificial con cual se busca que se detecten las voces y transcriba las conversacione</p>",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,6 @@
     "dev:frontend": "cd frontend && npm run dev",
     "dev:mobile": "cd mobile && npm start",
     "android": "cd mobile && npm run android",
-    "ios": "cd mobile && npm run ios",
     "start:backend": "cd backend && npm start",
     "start:frontend": "cd frontend && npm run build && npm run preview",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../mobile && npm install",
@@ -20,7 +19,7 @@
     "url": "git+https://github.com/Moy446/Mind-Notes.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Mind-Notes Team",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
