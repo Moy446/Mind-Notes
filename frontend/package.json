@@ -1,8 +1,9 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "description": "Frontend de Mind-Notes - Aplicación de notas",
+  "description": "Proyecto de titulacion Mind-Notes - Frontend",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,12 +12,10 @@
   },
   "keywords": [
     "react",
-    "notes",
     "javascript"
   ],
-  "author": "",
+  "author": "Mind-Notes Team",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
