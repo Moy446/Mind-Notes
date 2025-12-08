@@ -24,7 +24,12 @@ Mind-Notes/
 │   │   └── main.jsx
 │   └── package.json
 ├── backend/           # Servidor Express
-│   ├── server.js      # Servidor principal
+│   ├── config/ 
+│   ├── controllers/   # controladores de cada accion
+│   ├── helpers/       # funciones de ayuda para los controladores
+│   ├── models/        # modelos de la base de datos
+│   ├── routes/        # rutas del sevidor
+│   ├── app.js         # Servidor principal
 │   └── package.json
 ├── mobile/            # Aplicación React Native
 │   ├── src/
