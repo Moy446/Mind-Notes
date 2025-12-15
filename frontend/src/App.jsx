@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 import NotesList from './components/NotesList'
+import AddBtn from './components/AddBtn'
+import CloseBtn from './components/CloseBtn'
+import QrBtn from './components/QrBtn'
+import UidBtn from './components/UidBtn'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -56,6 +60,10 @@ function App() {
 
       <main className="main-content">
         <section className="create-note-section">
+          <AddBtn/>
+          <CloseBtn/>
+          <QrBtn/>
+          <UidBtn/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input
