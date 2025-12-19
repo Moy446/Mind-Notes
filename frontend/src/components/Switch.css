@@ -1,0 +1,39 @@
+.div-switch
+{
+    width: 186px;
+    height: 55px;
+    background-color: rgba(41, 115, 178, 30%);
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.div-switch::after
+{
+    content: '';
+    position: absolute;
+    width: 58px;
+    height: 32px;
+    border-radius: 20px;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-color: rgba(41, 115, 178, 30%);
+    transition: all 0.4s;
+}
+
+input[type='checkbox']:checked + .div-switch::after
+{
+    transform: translateX(105px);
+    background-color: rgba(242, 239, 231, 30%);
+}
+
+input[type='checkbox']:checked + .div-switch
+{
+    background-color: rgba(41, 115, 178, 60%);
+}
+
+.offScreen{
+    position: absolute;
+    left: -999999999999999999px;
+}

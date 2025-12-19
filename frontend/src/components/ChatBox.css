@@ -1,0 +1,54 @@
+.chatbox
+{
+    display: flex;
+    height: 90px;
+    width: 410px;
+    border-radius: 20px;
+    background-color: #2973B2;
+}
+
+.chatbox-activo
+{
+   display: flex;
+   height: 90px;
+   width: 410px;
+   border-radius: 20px;
+   background-color: #9ACBD0; 
+}
+
+.img-chatbox{
+    align-self: center;
+    justify-self: center;
+    max-height: 80%;
+    margin-left: 15px;
+}
+
+.div-textchatbox{
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    margin-left: 15px;
+}
+
+.text-chatbox-name{
+    font-family: 'Saira';
+    font-size: 25px;
+    color: black;
+    font-weight: 400;
+}
+
+.text-chatbox-message{
+    font-family: 'Saira';
+    font-size: 20px;
+    color: black;
+    font-weight: 300;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

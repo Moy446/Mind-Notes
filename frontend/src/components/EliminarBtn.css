@@ -1,0 +1,27 @@
+.eliminar-btn{
+    display: flex;
+    height: 40px;
+    background-color: transparent;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Saira';
+    color: #FF1F1F;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-eliminar{
+    max-height: 80%;
+    align-self: center;
+    justify-self: center;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
