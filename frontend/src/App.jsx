@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import './App.css'
 import NotesList from './components/NotesList'
 import AddBtn from './components/AddBtn'
-import CloseBtn from './components/CloseBtn'
-import QrBtn from './components/QrBtn'
-import UidBtn from './components/UidBtn'
+import EliminarBtn from './components/EliminarBtn'
+import ChatBox from './components/ChatBox'
+import AddQr from './components/AddQr'
+import Switch from './components/Switch'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -60,10 +61,18 @@ function App() {
 
       <main className="main-content">
         <section className="create-note-section">
-          <AddBtn/>
-          <CloseBtn/>
-          <QrBtn/>
-          <UidBtn/>
+          <AddBtn img = "src/images/add.png"/>
+          <AddBtn img = "src/images/close.png"/>
+          <AddBtn img = "src/images/uid.png"/>
+          <AddBtn img = "src/images/qr.png"/>
+          <EliminarBtn texto = "Eliminar psicologo" img = "src/images/trashcan.png"/>
+          <EliminarBtn texto = "Eliminar paciente" img = "src/images/trashcan.png"/>
+          <EliminarBtn texto = "Eliminar cuenta" img = "src/images/trashcan.png"/>
+          <EliminarBtn texto = "Cerrar sesión" img = "src/images/logout.png"/>
+          <ChatBox img = "src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor"/>
+          <AddQr title = "Agregar Paciente" img = "src/images/pqr.png"/>
+          <AddQr title = "Agregar Psicologo" img = "src/images/pqr.png"/>
+          <Switch/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input
