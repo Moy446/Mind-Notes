@@ -1,0 +1,46 @@
+.div-search
+{
+    display: flex;
+    height: 53px;
+    width: 100%;
+    background-color: #F2EFE7;
+    border-radius: 50px;
+}
+
+.img-searchbar
+{
+    max-height: 80%;
+    align-self: center;
+    justify-self: center;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.img-searchbar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.img-searchbar:active {
+  transform: translateY(0);
+}
+
+.searchbar-text
+{
+    height: 53px;
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    font-family: 'Saira';
+    outline: none;
+    font-size: large;
+    margin-left: 20px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
