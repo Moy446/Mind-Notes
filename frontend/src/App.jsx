@@ -6,6 +6,8 @@ import EliminarBtn from './components/EliminarBtn'
 import ChatBox from './components/ChatBox'
 import AddQr from './components/AddQr'
 import Switch from './components/Switch'
+import MessageField from './components/MessageField'
+import SearchBar from './components/SearchBar'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -61,18 +63,20 @@ function App() {
 
       <main className="main-content">
         <section className="create-note-section">
-          <AddBtn img = "src/images/add.png"/>
-          <AddBtn img = "src/images/close.png"/>
-          <AddBtn img = "src/images/uid.png"/>
-          <AddBtn img = "src/images/qr.png"/>
-          <EliminarBtn texto = "Eliminar psicologo" img = "src/images/trashcan.png"/>
-          <EliminarBtn texto = "Eliminar paciente" img = "src/images/trashcan.png"/>
-          <EliminarBtn texto = "Eliminar cuenta" img = "src/images/trashcan.png"/>
-          <EliminarBtn texto = "Cerrar sesión" img = "src/images/logout.png"/>
+          <AddBtn num = "1"/>
+          <AddBtn num = "2"/>
+          <AddBtn num = "3"/>
+          <AddBtn num = "4"/>
+          <EliminarBtn texto = "Eliminar psicologo" img = "1"/>
+          <EliminarBtn texto = "Eliminar paciente" img = "1"/>
+          <EliminarBtn texto = "Eliminar cuenta" img = "1"/>
+          <EliminarBtn texto = "Cerrar sesión" img = "2"/>
           <ChatBox img = "src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor"/>
           <AddQr title = "Agregar Paciente" img = "src/images/pqr.png"/>
           <AddQr title = "Agregar Psicologo" img = "src/images/pqr.png"/>
           <Switch/>
+          <MessageField/>
+          <SearchBar/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input
