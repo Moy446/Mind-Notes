@@ -5,7 +5,7 @@ class Psicologo {
     constructor(){
         this.colPsicologos = dbClient.db.collection('psicologos');
     }
-
+    //Funcion para crear un nuevo psicologo en la base de datos
     async create(datosPsicologo){
         try {
             const psicologo = {
@@ -30,7 +30,7 @@ class Psicologo {
             throw new Error('Error al crear el psicologo: ' + error.message);
         }
     }
-
+    //Funcion para buscar un psicologo por su ID
     async findById(idPsicologo){
         try {
             const psicologo = await this.colPsicologos.findOne({ idPsicologo: new ObjectId(idPsicologo) });
@@ -39,7 +39,7 @@ class Psicologo {
             throw new Error('Error al buscar el psicologo por ID: ' + error.message);
         }
     }
-
+    //Funcion para obtener todos los psicologos
     async findAll(){
         try {
             const psicologos = await this.colPsicologos.find({}).toArray();
@@ -49,5 +49,5 @@ class Psicologo {
         }
     }
 }
-
+// Exportar la clase Psicologo 
 export default Psicologo;
