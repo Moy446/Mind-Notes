@@ -8,6 +8,9 @@ import AddQr from './components/AddQr'
 import Switch from './components/Switch'
 import MessageField from './components/MessageField'
 import SearchBar from './components/SearchBar'
+import NameBar from './components/NameBar'
+import DeleteMenu from './components/DeleteMenu'
+import SupportMenu from './components/SupportMenu'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -77,6 +80,11 @@ function App() {
           <Switch/>
           <MessageField/>
           <SearchBar/>
+          <NameBar name = "Psicologo psicologico de psicologia" img = "src/images/pimg2.png"/>
+          <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan y se cancelara la suscripción"/>
+          <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan"/>
+          <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan"/>
+          <SupportMenu/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input
