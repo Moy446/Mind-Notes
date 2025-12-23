@@ -1,17 +1,20 @@
 import dbClient from "../config/dbclient.js";
+import Paciente from "../models/Paciente.js";
 
 class ListaPaciente {
     constructor(){
         this.colListaPaciente = dbClient.db.collection('listaPacientes');
     }
-    async create(datosLista){
+    async create(idPaciente, idPsicologo){
+        const paciente = new Paciente();
         try{
             const listaPaciente = {
-                idPaciente : datosLista.idPaciente,
-                nombrePaciente: datosLista.nombrePaciente,
-                fotoPerfil: datosLista.fotoPerfil || null,
-                idPsicologo: datosLista.idPsicologo,
-                ultimoMensaje: datosLista.ultimoMensaje || null,
+                idPaciente: idPaciente,
+                nombrePaciente: await paciente.findNameById(idPaciente),
+                idPsicologo: idPsicologo,
+                fotoPerfil: null,
+                ultimoMensaje: null
+
             };
             const resultado = await this.colListaPaciente.insertOne(listaPaciente);
             return resultado;
@@ -29,6 +32,8 @@ class ListaPaciente {
             throw new Error('Error al obtener la lista de pacientes: ' + error.message);
         }
     }
+
+   
 }
 
 export default ListaPaciente;

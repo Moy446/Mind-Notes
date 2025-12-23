@@ -1,17 +1,19 @@
 import dbClient from "../config/dbclient.js";
+import Psicologo from "../models/Psicologo.js";
 
 class ListaPsicologo {
-    constructor(){
+    constructor() {
         this.colListaPsicologo = dbClient.db.collection('listaPsicologos');
     }
-    async create(datosLista){
-        try{
+    async create(idPaciente, idPsicologo) {
+        const psicologo = new Psicologo();
+        try {
             const listaPsicologo = {
-                idPsicologo : datosLista.idPsicologo,
-                nombrePsicologo: datosLista.nombrePsicologo,
-                fotoPerfil: datosLista.fotoPerfil || null,
-                idPaciente: datosLista.idPaciente,
-                ultimoMensaje: datosLista.ultimoMensaje || null,
+                idPsicologo: idPsicologo,
+                nombrePsicologo: await psicologo.findNameById(idPsicologo),
+                idPaciente: idPaciente,                fotoPerfil: null,
+                fotoPerfil: null,
+                ultimoMensaje: null,
             };
             const resultado = await this.colListaPsicologo.insertOne(listaPsicologo);
             return resultado;
@@ -20,9 +22,9 @@ class ListaPsicologo {
             throw error;
         }
     }
-    async findPsicologoByIdPaciente(idPaciente){
+    async findPsicologoByIdPaciente(idPaciente) {
         try {
-            const listaPsicologos = await this.colListaPsicologo.find({idPaciente: idPaciente}).toArray();
+            const listaPsicologos = await this.colListaPsicologo.find({ idPaciente: idPaciente }).toArray();
             return listaPsicologos;
         } catch (error) {
             throw new Error('Error al obtener la lista de psicologos: ' + error.message);

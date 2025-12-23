@@ -1,5 +1,6 @@
 import { ObjectId } from "mongodb";
 import dbClient from "../config/dbclient.js";
+import bcrypt from 'bcryptjs';
 
 class Psicologo {
     constructor(){
@@ -10,13 +11,13 @@ class Psicologo {
         try {
             const psicologo = {
                 idPsicologo: new ObjectId(datosPsicologo.idPsicologo),
-                password: datosPsicologo.password,
+                password: await bcrypt.hash(datosPsicologo.Password, 10),
                 nombre: datosPsicologo.nombre,
                 apellido: datosPsicologo.apellido,
                 fechaInicio: datosPsicologo.fechaInicio,
                 fechaFin: datosPsicologo.fechaFin,
                 cedula: datosPsicologo.cedula,
-                email: datosPsicologo.email,
+                email: await bcrypt.hash(datosPsicologo.email, 10),
                 fotoPerfil: datosPsicologo.fotoPerfil,
             };
             const resultado = await this.colPsicologos.insertOne(psicologo);
@@ -39,14 +40,15 @@ class Psicologo {
             throw new Error('Error al buscar el psicologo por ID: ' + error.message);
         }
     }
-    //Funcion para obtener todos los psicologos
-    async findAll(){
+  
+    //Funcion para obtener el nombre del psicologo por su ID
+    async findNameById(idPsicologo){
         try {
-            const psicologos = await this.colPsicologos.find({}).toArray();
-            return psicologos;
+            var psicologo = await this.colPsicologos.findOne({ idPsicologo: new ObjectId(idPsicologo) });
+            return psicologo ? psicologo.nombre : null;
         } catch (error) {
-            throw new Error('Error al obtener los psicologos: ' + error.message);
-        }
+            throw new Error('Error al obtener el nombre del psicologo: ' + error.message);
+        }   
     }
 }
 // Exportar la clase Psicologo 

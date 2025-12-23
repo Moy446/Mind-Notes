@@ -1,4 +1,6 @@
 import dbClient from "../config/dbclient.js";
+import { ObjectId } from "mongodb";
+import bcrypt from 'bcryptjs';
 
 class Paciente {
     constructor(){
@@ -9,8 +11,8 @@ class Paciente {
             const paciente = {
                 idPaciente: new ObjectId(datosUsuario.idPaciente),
                 nombre: datosUsuario.nombre,
-                email: datosUsuario.email,
-                password: datosUsuario.password,
+                email: await bcrypt.hash(datosUsuario.email, 10),
+                password: await bcrypt.hash(datosUsuario.password, 10),
                 telefono: datosUsuario.telefono,
                 fotoPerfil: datosUsuario.fotoPerfil || null,
                 fechaCreacion: new Date(),
@@ -29,7 +31,16 @@ class Paciente {
             } catch (error) {
                 throw new Error('Error al buscar el paciente por ID: ' + error.message);
             }
+    }
+
+    async findNameById(idPaciente){
+        try {
+            var paciente = await this.colPacientes.findOne({ idPaciente: new ObjectId(idPaciente) });
+            return paciente ? paciente.nombre : null;
+        } catch (error) {
+            throw new Error('Error al obtener el nombre del paciente: ' + error.message);
         }
+    }
     
 }
 
