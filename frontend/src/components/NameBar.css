@@ -1,0 +1,70 @@
+.div-contenedor
+{
+    display: flex;
+    height: 63px;
+    width: 100%;
+    background-color: #2973B2;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.div-namebar
+{
+    display: flex;
+    height: 63px;
+    width: 100%;
+    background-color: #2973B2;
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 24px;
+    align-items: center;
+}
+
+.img-namebar
+{
+    max-height: 80%;
+    align-self: center;
+    justify-self: center;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.svg-namebar
+{
+
+}
+
+.svg-namebar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.svg-namebar:active {
+  transform: translateY(0);
+}
+
+.activo-namebar
+{
+    background-color: #9ACBD0;
+    border-radius: 50px;
+}
+
+.searchbar-text
+{
+    height: 53px;
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    font-family: 'Saira';
+    outline: none;
+    font-size: large;
+    margin-left: 20px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
