@@ -28,6 +28,14 @@ class PsicologoController {
         const resultado = await modelPsicologo.create(allData);
         res.status(201).json(resultado);
     }
+    async loginPsicologo(req, res) {
+        const email = req.body.email;
+        const password = req.body.password;
+        const modelPsicologo = new Psicologo();
+        const resultado = await modelPsicologo.login(email, password);
+        res.status(200).json(resultado);
+    }
+
     //Funcion para listar los pacientes asociados a un psicologo
     async vincularPacientes(req, res) {
         const idPsicologo = req.params.Psicologo;

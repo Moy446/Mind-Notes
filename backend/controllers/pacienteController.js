@@ -15,6 +15,14 @@ class PacienteController {
         const resultado = await modelPaciente.create(allData);
         res.status(201).json(resultado);
     }
+
+    async loginPaciente(req, res) {
+        const email = req.body.email;
+        const password = req.body.password;
+        const modelPaciente = new Paciente();
+        const resultado = await modelPaciente.login(email, password);
+        res.status(200).json(resultado);
+    }
     
     async vincularPsicologo(req, res) {
         const idPaciente = req.params.idPaciente;

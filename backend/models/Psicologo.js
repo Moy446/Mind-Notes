@@ -17,7 +17,7 @@ class Psicologo {
                 fechaInicio: datosPsicologo.fechaInicio,
                 fechaFin: datosPsicologo.fechaFin,
                 cedula: datosPsicologo.cedula,
-                email: await bcrypt.hash(datosPsicologo.email, 10),
+                email: datosPsicologo.email,
                 fotoPerfil: datosPsicologo.fotoPerfil,
             };
             const resultado = await this.colPsicologos.insertOne(psicologo);
@@ -30,6 +30,19 @@ class Psicologo {
         } catch (error) {
             throw new Error('Error al crear el psicologo: ' + error.message);
         }
+    }
+    async login(email, password){
+        try {
+            const psicologo =  await this.colPsicologos.findOne({ email: email});
+            if(psicologo && await bcrypt.compare(password, psicologo.password)){
+                return { success: true, psicologo: psicologo };
+            } else {
+                return { success: false, message: 'Email o contraseña incorrectos' };
+            }
+        } catch (error) {
+            console.error("Error en login de psicologo:", error);
+            throw error;
+        }   
     }
     //Funcion para buscar un psicologo por su ID
     async findById(idPsicologo){
