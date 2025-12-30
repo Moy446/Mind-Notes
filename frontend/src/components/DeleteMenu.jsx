@@ -9,7 +9,7 @@ export default function DeleteMenu(props){
             <span className='subtutle'>{props.subtitle}</span>
             <div className='buttons'>
                 <button className='cancel-button'>Cancelar</button>
-                <button className='accept-button'>Aceptar</button>
+                <button className='acceptBtnD'>Aceptar</button>
             </div>
             
         </div>
