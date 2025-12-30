@@ -35,5 +35,5 @@ input[type='checkbox']:checked + .div-switch
 
 .offScreen{
     position: absolute;
-    left: -999999999999999999px;
+    left: -9999999999999999999px;
 }
