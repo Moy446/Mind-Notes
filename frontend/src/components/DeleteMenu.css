@@ -11,17 +11,17 @@
     padding-right: 15px;
 }
 
-.accept-button{
-    width: 180;
-    height: 73;
-    background-color: #9ACBD0;
+.acceptBtnD{
+    width: 180px;
+    height: 73px;
+    background-color: #48A6A7;
     border-radius: 20px;
     border: none;
     cursor: pointer;
     font-family: 'Saira';
     font-size: 25px;
-    color: black;
-    font-weight: 400;
+    color: white;
+    font-weight: 800;
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 30px;
@@ -29,12 +29,12 @@
     margin-left: 10px;
 }
 
-.accept-button:hover {
+.acceptBtnD:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.accept-button:active {
+.acceptBtnD:active {
   transform: translateY(0);
 }
 
@@ -60,8 +60,8 @@
 
 .cancel-button
 {
-    width: 180;
-    height: 73;
+    width: 180px;
+    height: 73px;
     background-color: transparent;
     border-radius: 20px;
     border: none;

@@ -1,0 +1,93 @@
+.subbtn
+{
+    height: 468px;
+    width: 259px;
+    background-color: red;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Saira';
+    color: #2973B2;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+
+.subbtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.subbtn:active {
+  transform: translateY(0);
+}
+
+.free
+{
+    background-color: #F2EFE7;
+    border-color: #2973B2;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.D10{
+    background-color: rgba(154, 203, 208, 60%);
+}
+
+.D30
+{
+    background-color: rgba(72, 166, 167, 70%);
+}
+
+.D40
+{
+    background-color: rgba(41, 115, 178, 80%);
+}
+
+.time
+{
+    font-weight: 400;
+    font-size: 36px;
+}
+
+.time2{
+    color: white;
+}
+
+.price
+{
+    font-weight: 700;
+    font-size: 46px;
+}
+
+.txt-cont{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.imgsub
+{
+    width: 50%;
+}
+
+.des-cont{
+    display: flex;
+    width: 100%;
+    height: 72px;
+    border-width: 2px;
+    border-radius: 20px;
+    color: black;
+    font-weight: 400;
+    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

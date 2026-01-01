@@ -11,6 +11,10 @@ import SearchBar from './components/SearchBar'
 import NameBar from './components/NameBar'
 import DeleteMenu from './components/DeleteMenu'
 import SupportMenu from './components/SupportMenu'
+import SubBtn from './components/SubBtn'
+import AddUID from './components/AddUID'
+import AudioMenu from './components/AudioMenu'
+import MeetMenu from './components/MeetMenu'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -85,6 +89,13 @@ function App() {
           <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan"/>
           <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan"/>
           <SupportMenu/>
+          <SubBtn time = "30 Días" price = "Gratis" des = "Contratar prueba gratuita"/>
+          <SubBtn time = "1 Mes" price = "USD$10" des = "Contratar plan mensual"/>
+          <SubBtn time = "6 Meses" price = "USD$30" des = "Contratar plan semestral"/>
+          <SubBtn time = "1 Año" price = "USD$40" des = "Contratar  plan anual"/>
+          <AddUID/>
+          <AudioMenu/>
+          <MeetMenu/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input
