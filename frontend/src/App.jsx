@@ -14,6 +14,7 @@ import SupportMenu from './components/SupportMenu'
 import SubBtn from './components/SubBtn'
 import AddUID from './components/AddUID'
 import AudioMenu from './components/AudioMenu'
+import MeetMenu from './components/MeetMenu'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -94,6 +95,7 @@ function App() {
           <SubBtn time = "1 Año" price = "USD$40" des = "Contratar  plan anual"/>
           <AddUID/>
           <AudioMenu/>
+          <MeetMenu/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input

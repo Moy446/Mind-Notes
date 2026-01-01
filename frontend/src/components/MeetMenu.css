@@ -1,9 +1,10 @@
-.AudioMenu
+.meetMenu
 {
     height: 396px;
     width: 694px;
     border-radius: 20px;
-    background-color: #9ACBD0;
+    background-color: #F2EFE7;
+    box-shadow: 0px 4px 4px #48A6A7;
     display: flex;
     flex-direction: column;
     padding-left: 80px;
@@ -11,18 +12,11 @@
     padding-top: 40px;
 }
 
-.titleAudio
-{
-    font-family: 'Saira';
-    font-size: 25px;
-    font-weight: 400;
-    color: black;
-}
-
-.custom-select {
+.custom-selectM {
     position: relative;
     display: flex;
     align-items: center;
+    font-family: 'Saira';
     height: 60px;
     border: none;
     outline: none;
@@ -30,10 +24,10 @@
     background-color: rgba(41, 115, 178, 0.5);
     padding-left: 15px;
     width: 100%;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
 }
 
-.select-trigger {
+.select-triggerM {
   display: flex;
   height: 100%;
   width: 100%;
@@ -44,7 +38,7 @@
   outline: none;
 }
 
-.select-options {
+.select-optionsM {
   position: absolute;
   background: rgba(41, 115, 178, 1);
   width: 90%;
@@ -56,9 +50,10 @@
   z-index: 10;
 }
 
-.select-options li {
+.select-optionsM li {
   display: flex;
   align-items: center;
+  font-family: 'Saira';
   width: 90%;
   height: 60px;
   gap: 10px;
@@ -66,24 +61,15 @@
   cursor: pointer;
 }
 
-.avatar {
+.avatarM {
   height: 85%;
   border-radius: 50%;
 }
 
-.radioBtns
+.btnMeet
 {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 60px;
-    z-index: 1;
-}
-
-.accept-button{
     width: 40%;
-    height: 73px;
-    background-color: #2973B2;
+    height: 60px;
     border-radius: 20px;
     border: none;
     cursor: pointer;
@@ -91,66 +77,67 @@
     font-size: 25px;
     color: white;
     font-weight: 800;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 30px;
-    padding-right: 30px;
-    margin-left: 10px;
-    align-self: center;
 }
 
-.accept-button:hover {
+.btnMeet:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
-.accept-button:active {
+.btnMeet:active {
   transform: translateY(0);
 }
 
-.offScreen{
-    position: absolute;
-    left: -999999999999999999px;
-}
-
-.radioA
-{
-    width: 43px;
-    height: 43px;
-    background-color: #F2EFE7;
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.radioA::after
-{
-    content: '';
-    position: absolute;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background-color: transparent;
-    transition: all 0.4s;
-}
-
-input[type='checkbox']:checked + .radioA::after
-{
+.acceptBtnM{
     background-color: #2973B2;
 }
 
-input[type='checkbox']:checked + .radioA
-{
-    background-color: #F2EFE7;
+.cancelBtnM{
+    background-color: #48A6A7;
 }
 
-.radioBtn{
+.meetbtns{
     display: flex;
-    gap: 10px;
+    flex-direction: row;
+    justify-content: space-between;
 }
+
+.dateIn{
+    background-color: rgba(41, 115, 178, 0.5);
+    height: 60px;
+    font-family: 'Saira';
+    font-size: 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.divTime
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.marginDivTime
+{
+    margin-bottom: 70px;
+}
+
+.line
+{
+    background-color: rgba(41, 115, 178, 0.5);
+    height: 4px;
+    width: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: none;
+    outline: none;
+}
+
 
 @font-face {
   font-family: 'Saira';
