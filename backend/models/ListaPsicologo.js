@@ -1,4 +1,4 @@
-import dbClient from "../config/dbclient.js";
+import dbClient from "../config/dbClient.js";
 import Psicologo from "../models/Psicologo.js";
 
 class ListaPsicologo {

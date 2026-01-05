@@ -4,8 +4,10 @@ import 'dotenv/config';
 
 class dbClient{
     constructor(){
-        const queryString = `mongodb+srv://${process.env.USER_DB}:${process.env.PASSWORD_DB}@${process.env.SERVER_DB}/?`;
-        this.client = new MongoClient(queryString);
+        if(!process.env.MONGO_URI){
+            throw new Error("MONGO_URI is not defined in environment variables");
+        }
+        this.client = new MongoClient(process.env.MONGO_URI);
         this.db = null;
         this.connectClient();
     }

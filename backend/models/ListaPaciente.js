@@ -1,4 +1,4 @@
-import dbClient from "../config/dbclient.js";
+import dbClient from "../config/dbClient.js";
 import Paciente from "../models/Paciente.js";
 
 class ListaPaciente {
