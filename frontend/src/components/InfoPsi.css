@@ -1,0 +1,115 @@
+.infopsi
+{
+    height: 961px;
+    width: 465px;
+    background-color: #2973B2;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.upInfoPsi
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.svgInfopsi
+{
+    width: 13%;
+}
+
+.btnInfopsi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btnInfopsi:active {
+  transform: translateY(0);
+}
+
+.imgInfoPsi
+{
+    width: 50%;
+    align-self: center;
+}
+
+.nameInfoPsi
+{
+    font-family: 'Saira';
+    color: white;
+    font-size: 40px;
+    font-weight: 400;
+    align-self: center;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.infoPsiLine
+{
+    height: 3px;
+    background-color: white;
+    width: 95%;
+    align-self: center;
+}
+
+.suppMaterial
+{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    
+}
+
+.titlesuppmaterialinfopsi
+{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.suppTitleInfopsi
+{
+    font-family: 'Saira';
+    color: white;
+    font-size: 24px;
+    font-weight: 200;
+    align-self: center;
+    justify-self: center;
+}
+
+.documentsInfoPsi
+{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.docInfoPsi{
+    width: 94px;
+    height: 94px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.deleteBtnInfoPsi
+{
+    align-items: center;
+    justify-content: center; 
+    margin-bottom: 20px;
+    width: 100%;
+    margin-left: 25%;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

@@ -18,6 +18,10 @@ import MeetMenu from './components/MeetMenu'
 import ChatSelector from './components/ChatSelector'
 import MenuPsi from './components/MenuPsi'
 import MenuPa from './components/MenuPa'
+import InfoPsi from './components/InfoPsi'
+import InfoPa from './components/InfoPa'
+import SuppPsi from './components/SuppPsi'
+import SuppPa from './components/SuppPa'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -102,6 +106,10 @@ function App() {
           <ChatSelector/>
           <MenuPsi/>
           <MenuPa/>
+          <InfoPsi img = "src/images/pimg1.png" name = "Teisel"/>
+          <InfoPa  img = "src/images/pimg2.png" name = "Psicologo psicologico de psicologia"/>
+          <SuppPsi/>
+          <SuppPa/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input

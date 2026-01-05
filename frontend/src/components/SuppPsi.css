@@ -1,0 +1,105 @@
+.suppPsi
+{
+    height: 961px;
+    width: 465px;
+    background-color: #2973B2;
+    display: flex;
+    flex-direction: column;
+}
+
+.svgsuppPsi
+{
+    width: 13%;
+}
+
+.svgsuppPsi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.svgsuppPsi:active {
+  transform: translateY(0);
+}
+
+.suppPsiOp
+{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.activeOp
+{
+    display: flex;
+    font-family: 'Saira';
+    font-size: 15px;
+    font-weight: 400;
+    color: #9ACBD0;
+    justify-content: center;
+    width: 40%;
+    pointer-events: none;
+}
+
+.inactiveOp
+{
+    display: flex;
+    font-family: 'Saira';
+    font-size: 15px;
+    font-weight: 400;
+    color: white;
+    justify-content: center;
+    width: 40%;
+}
+
+.lineDown
+{
+    background-color: #9ACBD0;
+    height: 5px;
+    width: 50%;
+    border: none;
+    transition: all 0.4s;
+}
+
+.lineDown2
+{
+    transform: translateX(100%);
+    background-color: #9ACBD0;
+    height: 5px;
+    width: 50%;
+    border: none;
+    transition: all 0.4s;
+}
+
+.matApo
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-top: 10px;
+}
+
+.itemsmatApo{
+    width: 94px;
+    height: 94px;
+    overflow: hidden;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.unique
+{
+    background-color: #9ACBD0;
+    height: 5px;
+    width: 100%;
+    border: none;
+    transition: all 0.4s;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
