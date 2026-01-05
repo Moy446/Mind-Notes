@@ -1,19 +1,19 @@
 .chatbox
 {
-    display: flex;
-    height: 90px;
-    width: 410px;
-    border-radius: 20px;
-    background-color: #2973B2;
+   display: flex;
+   height: 90px;
+   width: 100%;
+   border-radius: 20px;
+   background-color: #9ACBD0; 
 }
 
 .chatbox-activo
 {
-   display: flex;
-   height: 90px;
-   width: 410px;
-   border-radius: 20px;
-   background-color: #9ACBD0; 
+    display: flex;
+    height: 90px;
+    width: 100%;
+    border-radius: 20px;
+    background-color: #2973B2;
 }
 
 .img-chatbox{
