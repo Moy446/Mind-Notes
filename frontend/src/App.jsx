@@ -15,7 +15,9 @@ import SubBtn from './components/SubBtn'
 import AddUID from './components/AddUID'
 import AudioMenu from './components/AudioMenu'
 import MeetMenu from './components/MeetMenu'
+import HeaderMenu from './components/HeaderMenu'
 import { getNotes, createNote } from './services/api'
+import FooterMenu from './components/FooterMenu'
 
 function App() {
   const [notes, setNotes] = useState([])
@@ -64,8 +66,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>🧠 Mind-Notes</h1>
-        <p>Tu aplicación personal de notas</p>
+        <HeaderMenu img = "src/images/logocolor.png" />
       </header>
 
       <main className="main-content">
@@ -129,6 +130,9 @@ function App() {
           )}
         </section>
       </main>
+      <footer>
+        <FooterMenu img = "src/images/logoCompletoBlanco.png"/>
+      </footer>
     </div>
   )
 }

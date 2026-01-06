@@ -21,7 +21,7 @@ export default function SubBtn(props){
                 return(
                     "subbtn D40"
                 );
-         }
+        }
     }
 
     const imgRender = (price) =>
