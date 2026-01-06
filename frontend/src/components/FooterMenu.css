@@ -1,0 +1,101 @@
+.div-FooterContenedor
+{
+    display: flex;
+    height: 319px;
+    width: 100%;
+    background-color: #2973B2;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3rem;
+}
+
+.nav-footermenu
+{
+    display: grid; 
+    grid-column: auto;
+    height: auto;
+    width: 100%;
+    background-color: #2973B2;
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 18px;
+    align-items: center;
+    justify-content: end;
+    gap: 3%;
+}
+
+.img-footermenu
+{
+    height: 60%;
+    width: auto;
+    align-self: center;
+    justify-self: center;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.a-footermenu
+{
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 18px;
+    align-items: center;
+    text-decoration: none;
+    padding-right: 3%
+}
+
+h4{
+    color: #FFF;
+    font-family: Saira;
+    font-size: 27px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.one{
+    grid-column: 1;
+    grid-row: 1;
+}
+.two{
+    grid-column: 2;
+    grid-row: 1;
+}
+.three{
+    grid-column: 3;
+    grid-row: 1;
+}
+.four{
+    background-color: #1B4D78;
+    opacity: 70%;
+    grid-column: 4;
+    grid-row: 1;
+    border-radius: 5px;
+}
+
+ul{
+    list-style: none;
+}
+
+.input-footer{
+    border-radius: 5px;
+}
+
+.btn-enviar{
+    font-family: 'Saira';
+    background-color: #1B4D78;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    width: 300;
+    height: 35px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
