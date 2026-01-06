@@ -1,7 +1,7 @@
 import React from 'react'
 import './Switch.css'
 
-export default function Switch(props){
+export default function Switch(){
 
     return (
         <div>

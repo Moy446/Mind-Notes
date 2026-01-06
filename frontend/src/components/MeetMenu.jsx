@@ -12,6 +12,7 @@ export default function MeetMenu(){
 
     const [selected, setSelected] = useState(patients[0]);
     const [open, setOpen] = useState(false);
+    const [fecha] = useState(new Date());
 
     return (
         <div className='meetMenu'>
@@ -42,7 +43,7 @@ export default function MeetMenu(){
                 )}
             </div>
             <div className='divTime marginDivTime'>
-                <input type='date' className='dateIn'/>
+                <input type='date' className='dateIn' min={fecha.toLocaleDateString('sv')}/>
                 <div className='divTime'>
                     <input type='time' className='dateIn'/>
                     <hr className='line'/>

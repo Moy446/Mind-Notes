@@ -1,0 +1,65 @@
+.chatselec
+{
+    height: 100%;
+    width: 391px;
+    background-color: #2973B2;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+.wiwiwiCS {
+    flex: 1;
+    min-height: 0;   
+    overflow: hidden;  
+    width: 100%;
+}
+
+.textCS
+{
+    font-family: 'Saira';
+    color: white;
+    font-size: 40px;
+}
+
+.addDivCS
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: right;
+    z-index: 10;
+    bottom: 0;
+    left: 80%;
+    position: absolute;
+    bottom: 10px;
+}
+
+.chatboxes{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 5px;
+    margin-top: 10px;
+    overflow-y: auto;
+    z-index: 0;
+    position: relative;
+}
+
+.chatboxes::-webkit-scrollbar
+{
+    width: 1px; 
+    height: 1px; 
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

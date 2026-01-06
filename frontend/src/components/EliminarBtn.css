@@ -1,7 +1,7 @@
 .eliminar-btn{
     display: flex;
     height: 40px;
-    width: 160px;
+    width: 100%;
     background-color: transparent;
     border-radius: 50%;
     border: none;
@@ -9,6 +9,8 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     font-family: 'Saira';
     color: #FF1F1F;
+    font-size: 24px;
+    font-weight: 100;
     align-items: center;
     gap: 5px;
     

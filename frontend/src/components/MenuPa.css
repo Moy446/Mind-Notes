@@ -1,0 +1,41 @@
+.menuPa
+{
+    height: 1024px;
+    width: 112px;
+    background-color: rgba(41, 115, 178, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.paMendiv
+{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.svgPa
+{
+    width: 50%;
+}
+
+.svgPa:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.svgPa:active {
+  transform: translateY(0);
+}
+
+.selectedPa
+{
+  background-color: #48A6A7;
+  border-radius: 10px;
+}
