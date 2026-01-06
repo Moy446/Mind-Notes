@@ -25,10 +25,10 @@ export default function InfoPsi(props){
                         </p>
                     </div>
                     <div className='documentsInfoPsi'>
-                        <img src="src/images/testimg.png" className='docInfoPsi'/>
-                        <img src="src/images/testimg.png" className='docInfoPsi'/>
-                        <img src="src/images/testimg.png" className='docInfoPsi'/>
-                        <img src="src/images/testimg.png" className='docInfoPsi'/>
+                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
                     </div>
                 </div>
                 <hr className='infoPsiLine'/>

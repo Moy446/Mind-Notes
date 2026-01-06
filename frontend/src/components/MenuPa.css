@@ -33,3 +33,9 @@
 .svgPa:active {
   transform: translateY(0);
 }
+
+.selectedPa
+{
+  background-color: #48A6A7;
+  border-radius: 10px;
+}

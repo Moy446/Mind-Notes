@@ -25,6 +25,12 @@
     width: 50%;
 }
 
+.selectedPsi
+{
+  background-color: #48A6A7;
+  border-radius: 10px;
+}
+
 .svgPsi:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
