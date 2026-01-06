@@ -1,6 +1,6 @@
 .chatselec
 {
-    height: 1024px;
+    height: 100%;
     width: 391px;
     background-color: #2973B2;
     padding-left: 10px;
@@ -16,6 +16,7 @@
     flex: 1;
     min-height: 0;   
     overflow: hidden;  
+    width: 100%;
 }
 
 .textCS
