@@ -6,7 +6,7 @@ import ChatBox from './ChatBox';
 import { useState } from 'react';
 import AddBtnsMenu from './AddBtnsMenu';
 
-export default function ChatSelector(){
+export default function ChatSelector(props){
 
     const [selectedId, setSelectedId] = useState(null);
 
@@ -24,7 +24,7 @@ export default function ChatSelector(){
                 </div>
             </div>
             <div className='addDivCS'>
-                <AddBtnsMenu/>
+                <AddBtnsMenu qrOpen = {props.qrOpen} handleOpen = {props.handleOpen} uidOpen = {props.uidOpen} handleOpenUID = {props.handleOpenUID}/>
             </div>
         </div>
     );

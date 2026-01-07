@@ -5,11 +5,15 @@ import NameBar from './components/NameBar';
 import ChatSelector from './components/ChatSelector';
 import MessageField from './components/MessageField';
 import BubbleChat from './components/BubbleChat';
-export default function ChatPsiF(){
+import { useOutletContext } from 'react-router-dom';
+
+export default function ChatPsiF(props){
+
+    const {qrOpen , handleOpen, uidOpen, handleOpenUID} = useOutletContext();
 
     return(
         <div className='chatPsiF'>
-            <ChatSelector/>
+            <ChatSelector qrOpen = {qrOpen} handleOpen = {handleOpen} uidOpen = {uidOpen} handleOpenUID = {handleOpenUID}/>
             <div className='nameVarCon'>
                 <NameBar img = "/src/images/pimg1.png" name = "Teisel"/>
                 <div className='chatCon'>

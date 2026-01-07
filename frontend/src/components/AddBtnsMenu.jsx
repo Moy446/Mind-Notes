@@ -2,8 +2,9 @@ import React, { useCallback } from 'react'
 import { useState } from 'react';
 import './AddBtnsMenu.css'
 import AddBtn from './AddBtn';
+import AddQr from './AddQr';
 
-export default function AddBtnsMenu(){
+export default function AddBtnsMenu(props){
 
     const [isOpen, setIsOpen] = useState(false)
 
@@ -17,11 +18,11 @@ export default function AddBtnsMenu(){
                 <AddBtn num = "1" isOpen = {isOpen} handleOpen={handleOpen}/>
             </div>
             <div className={isOpen ? 'btn1' : 'backBtn'}>
-                <AddBtn num = "4"/>
+                <AddBtn num = "4" isOpen = {props.qrOpen} handleOpen = {props.handleOpen}/>
             </div>
             <div className={isOpen ? 'btn2' : 'backBtn'}>
-                <AddBtn num = "3"/>
-            </div>
+                <AddBtn num = "3" isOpen = {props.uidOpen} handleOpen = {props.handleOpenUID}/>
+            </div>       
         </div>
     );
 }
