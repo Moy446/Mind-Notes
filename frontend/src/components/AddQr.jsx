@@ -3,7 +3,7 @@ import './AddQr.css'
 
 export default function AddQr(props){
 
-const ref = useRef(null);
+    const ref = useRef(null);
 
     useEffect(() => {
         function handleClickOutside(event) {

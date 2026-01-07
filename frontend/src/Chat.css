@@ -46,6 +46,23 @@
     width: 100%;
     height: auto;
     margin: 0;
+    position: relative;
+}
+
+.showSuppMenu
+{
+    position: absolute;
+    transform: translateY(-180px) translateX(0px);
+    visibility: visible;
+}
+
+.hideSuppMenu
+{
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; 
 }
 
 .bubbles

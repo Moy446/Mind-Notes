@@ -1,15 +1,22 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import './Chat.css'
 import NameBar from './components/NameBar';
 import ChatSelector from './components/ChatSelector';
 import MessageField from './components/MessageField';
 import BubbleChat from './components/BubbleChat';
+import SupportMenu from './components/SupportMenu';
 import { useOutletContext } from 'react-router-dom';
 
 export default function ChatPsiF(props){
 
     const {qrOpen , handleOpen, uidOpen, handleOpenUID} = useOutletContext();
+
+    const [suppOpen, setOpenSupp] = useState(false)
+        
+    const handleOpenSupp = useCallback(() => {
+        setOpenSupp(!suppOpen)
+    }, [suppOpen])
 
     return(
         <div className='chatPsiF'>
@@ -41,7 +48,10 @@ export default function ChatPsiF(props){
                             <BubbleChat text = "Hola, agendeme por favor"/>
                         </div>
                         <div className='textBarChat'>
-                            <MessageField/>
+                            <MessageField suppOpen = {suppOpen} handleOpen = {handleOpenSupp}/>
+                            <div className={suppOpen ? 'showSuppMenu' : 'hideSuppMenu'}>
+                                <SupportMenu suppOpen = {suppOpen} handleOpen = {handleOpenSupp}/>
+                            </div>     
                         </div>
                     </div>
                 </div>
