@@ -4,6 +4,7 @@ import SearchBar from './SearchBar';
 import AddBtn from './AddBtn';
 import ChatBox from './ChatBox';
 import { useState } from 'react';
+import AddBtnsMenu from './AddBtnsMenu';
 
 export default function ChatSelector(){
 
@@ -23,7 +24,7 @@ export default function ChatSelector(){
                 </div>
             </div>
             <div className='addDivCS'>
-                <AddBtn num = "1"/>
+                <AddBtnsMenu/>
             </div>
         </div>
     );
