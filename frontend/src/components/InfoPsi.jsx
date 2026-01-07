@@ -34,7 +34,7 @@ export default function InfoPsi(props){
                 <hr className='infoPsiLine'/>
             </div>
             <div className='deleteBtnInfoPsi'>
-                <EliminarBtn texto = "Eliminar paciente" img = "1"/>
+                <EliminarBtn texto = "Eliminar paciente" img = "1" del = {props.del} handleDel = {props.handleDel}/>
             </div>
         </div>
     );

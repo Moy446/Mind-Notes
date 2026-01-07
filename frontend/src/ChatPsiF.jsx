@@ -7,6 +7,7 @@ import MessageField from './components/MessageField';
 import BubbleChat from './components/BubbleChat';
 import SupportMenu from './components/SupportMenu';
 import InfoPsi from './components/InfoPsi';
+import DeleteMenu from './components/DeleteMenu';
 import { useOutletContext } from 'react-router-dom';
 
 export default function ChatPsiF(props){
@@ -24,6 +25,12 @@ export default function ChatPsiF(props){
     const handleOpenInfo = useCallback(() => {
         setOpneInfo(!infoOpen)
     }, [infoOpen])
+
+    const [delOpen, setOpenDel] = useState(false)
+        
+    const handleOpenDel = useCallback(() => {
+        setOpenDel(!delOpen)
+    }, [delOpen])
 
     return(
         <div className='chatPsiF'>
@@ -62,7 +69,10 @@ export default function ChatPsiF(props){
                         </div>
                     </div>
                     <div className={infoOpen ? '' : 'hiddeInfo'}>
-                        <InfoPsi img = "/src/images/pimg1.png" name = "Teisel" open = {infoOpen} handleOpen = {handleOpenInfo}/>
+                        <InfoPsi img = "/src/images/pimg1.png" name = "Teisel" open = {infoOpen} handleOpen = {handleOpenInfo} del = {delOpen} handleDel = {handleOpenDel}/>
+                    </div>
+                    <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
+                        <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
                     </div>
                 </div>
             </div>

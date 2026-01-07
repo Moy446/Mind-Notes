@@ -23,6 +23,7 @@
     margin: 0;
     height: 100%;
     width: 100%;
+    position: relative;
 }
 
 .chatView
@@ -85,5 +86,11 @@
 {
     display: none;
     transition: all 0.4s;
+}
+
+.showDelMenu
+{
+    position: absolute;
+    transform: translateY(250px) translateX(100px);
 }
 
