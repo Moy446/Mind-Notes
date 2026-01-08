@@ -7,7 +7,7 @@ export default function InfoPsi(props){
     return (
         <div className='infopsi'>
             <div className='upInfoPsi'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6" className='svgInfopsi btnInfopsi'>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6" className='svgInfopsi btnInfopsi' onClick={props.handleOpen}>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
                 <img src={props.img} className='imgInfoPsi'/>
@@ -16,7 +16,7 @@ export default function InfoPsi(props){
                 </p>
                 <hr className='infoPsiLine'/>
                 <div className='suppMaterial'>
-                    <div className='titlesuppmaterialinfopsi'>
+                    <div className='titlesuppmaterialinfopsi btnInfopsi' onClick={props.handleSuppInfo}>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="size-6" className='svgInfopsi'>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z" />
                         </svg>
@@ -25,16 +25,16 @@ export default function InfoPsi(props){
                         </p>
                     </div>
                     <div className='documentsInfoPsi'>
-                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
-                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
-                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
-                        <img src="src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="/src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="/src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="/src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
+                        <img src="/src/images/testimg.png" className='docInfoPsi btnInfopsi'/>
                     </div>
                 </div>
                 <hr className='infoPsiLine'/>
             </div>
             <div className='deleteBtnInfoPsi'>
-                <EliminarBtn texto = "Eliminar psicologo" img = "1"/>
+                <EliminarBtn texto = "Eliminar paciente" img = "1" del = {props.del} handleDel = {props.handleDel}/>
             </div>
         </div>
     );

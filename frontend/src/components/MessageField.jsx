@@ -1,7 +1,7 @@
 import React from 'react'
 import './MessageField.css'
 
-export default function MessageField(){
+export default function MessageField(props){
 
     const handleClick = () => {
         alert("Wiwiwiwiwi");
@@ -9,7 +9,7 @@ export default function MessageField(){
 
     return (
             <div className='message-field'>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" className='img-message' onClick={handleClick}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6" className='img-message' onClick={props.handleOpen}>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
                 <input type="text" id="message" name="message" required minlength="1" maxlength="59" size="10" className='message-text' placeholder="Escribe un mensage"/>

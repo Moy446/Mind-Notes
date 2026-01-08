@@ -23,6 +23,7 @@
     margin: 0;
     height: 100%;
     width: 100%;
+    position: relative;
 }
 
 .chatView
@@ -46,6 +47,23 @@
     width: 100%;
     height: auto;
     margin: 0;
+    position: relative;
+}
+
+.showSuppMenu
+{
+    position: absolute;
+    transform: translateY(-180px) translateX(0px);
+    visibility: visible;
+}
+
+.hideSuppMenu
+{
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; 
 }
 
 .bubbles
@@ -63,3 +81,16 @@
     width: 0px; 
     height: 0px; 
 }
+
+.hiddeInfo
+{
+    display: none;
+    transition: all 0.4s;
+}
+
+.showDelMenu
+{
+    position: absolute;
+    transform: translateY(250px) translateX(100px);
+}
+
