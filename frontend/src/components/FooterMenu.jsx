@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react';
 import './FooterMenu.css'
 
+
 export default function FooterMenu(props){
 
     const [activo, setActivo] = useState(false);
@@ -11,12 +12,14 @@ export default function FooterMenu(props){
     };
 
     return (
+        
+        <div className='div-completeFooter'>
             <div className='div-FooterContenedor'>
                 <img src={props.img} alt="Descripción de la imagen" className='img-footermenu'/>
                 <div className='nav-footermenu'>
 
                     <div className='one'>
-                        <h3>¿Quienes somos?</h3>
+                        <h4>¿Quienes somos?</h4>
                         <p>Somos una herramienta para mejorar el proceso administrativo de los psicólogos
                             con cada uno de los pacientes que atienden.
                         </p>
@@ -54,7 +57,14 @@ export default function FooterMenu(props){
                             </ul>
                         </form>
                     </div>
-                </div>  
+                </div>
             </div>
+            <div className='footer-CopyrightElement'>
+                <p class='CopyrightElement'>2026 @ Todos los derechos reservados. Mind Notes</p>
+                <a href="https://www.facebook.com" className='a-icons'><i class="fa-brands fa-facebook "></i></a>
+                <a href="https://www.instagram.com/mindnotes_oficial?igsh=bHM4bGVkY2h5aWhz" className='a-icons'><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com" className='a-icons'><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
     );
 }
