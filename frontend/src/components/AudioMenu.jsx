@@ -8,11 +8,15 @@ const patients = [
   { id: 3, name: "Moy", img: "/src/images/pimg4.png" }
 ];
 
-export default function AudioMenu(){
+export default function AudioMenu(props){
 
     const [selected, setSelected] = useState(patients[0]);
     const [open, setOpen] = useState(false);
-
+    
+    const onClickAceptar = () =>
+    {
+        
+    }
 
     return (
         <div className='AudioMenu'>
@@ -55,7 +59,7 @@ export default function AudioMenu(){
                     <a className='titleAudio'>Transcripción</a>
                 </div> 
             </div>
-            <button className='accept-button'>Aceptar</button>
+            <button className='accept-button' onClick={props.handleClick}>Aceptar</button>
         </div>
     );
 }

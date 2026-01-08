@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./Grabadora.css";
+import AudioMenu from "./components/AudioMenu";
 
 export default function Grabadora(props) {
     const [record, setRecord] = useState(false);
+    const [openAudio, setOpen] = useState(false);
 
     const canvasRef = useRef(null);
     const audioCtxRef = useRef(null);
@@ -10,14 +12,26 @@ export default function Grabadora(props) {
     const streamRef = useRef(null);
     const animationRef = useRef(null);
 
-    const handleClick = async () => {
+    const handleClick = useCallback(async () => {
         if (!record) {
             await startVisualizer();
+            setRecord(true);
+            setOpen(false);
         } else {
             stopVisualizer();
+            setRecord(false);
         }
-        setRecord(prev => !prev);
-    };
+    }, [record]);
+
+    const handleOpenMenu = useCallback(() => {
+        if (record) {
+            stopVisualizer();
+            setRecord(false);
+            return;
+        }
+
+        setOpen(prev => !prev);
+    }, [record]);
 
     const drawTopRoundedBar = (ctx, x, y, width, height, radius) => {
         ctx.beginPath();
@@ -150,8 +164,12 @@ export default function Grabadora(props) {
     return (
         <div className="grabadora">
             <canvas ref={canvasRef} width={1000} height={200} className="audio" />
-            <div onClick={handleClick} className={`notRecord ${record ? "recording" : ""}`}>
+            <div onClick={handleOpenMenu} className={`notRecord ${record ? "recording" : ""}`}>
 
+            </div>
+
+            <div className={openAudio ? "showPatients" : "hideMenuAudio"}>
+                <AudioMenu handleClick={handleClick} />
             </div>
         </div>
     );
