@@ -14,7 +14,8 @@ summarizer = pipeline(
 
 classifier = pipeline(
     "text-classification",
-    model="bert-base-multilingual-cased"
+    model="./trainingModel/bert-finetuned",
+    tokenizer="./trainingModel/bert-finetuned"
 )
 
 app = FastAPI()
