@@ -37,3 +37,7 @@ pnpm-debug.log
 # IDEs
 .vscode/
 .idea/
+
+#models
+services/nlp/trainingModel/bert-finetuned/
+
