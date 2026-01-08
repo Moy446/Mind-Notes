@@ -8,6 +8,7 @@ import BubbleChat from './components/BubbleChat';
 import SupportMenu from './components/SupportMenu';
 import InfoPsi from './components/InfoPsi';
 import DeleteMenu from './components/DeleteMenu';
+import SuppPsi from './components/SuppPsi';
 import { useOutletContext } from 'react-router-dom';
 
 export default function ChatPsiF(props){
@@ -31,6 +32,12 @@ export default function ChatPsiF(props){
     const handleOpenDel = useCallback(() => {
         setOpenDel(!delOpen)
     }, [delOpen])
+
+    const [suppInfoOpen, setOpenSuppInfo] = useState(false)
+        
+    const handleOpenInfoSupp = useCallback(() => {
+        setOpenSuppInfo(!suppInfoOpen)
+    }, [suppInfoOpen])
 
     return(
         <div className='chatPsiF'>
@@ -69,7 +76,16 @@ export default function ChatPsiF(props){
                         </div>
                     </div>
                     <div className={infoOpen ? '' : 'hiddeInfo'}>
-                        <InfoPsi img = "/src/images/pimg1.png" name = "Teisel" open = {infoOpen} handleOpen = {handleOpenInfo} del = {delOpen} handleDel = {handleOpenDel}/>
+                        {suppInfoOpen 
+                            ? <SuppPsi suppInfO = {suppInfoOpen} handleSuppInfo = {handleOpenInfoSupp}/>
+                            : <InfoPsi img = "/src/images/pimg1.png" name = "Teisel" 
+                                open = {infoOpen} handleOpen = {handleOpenInfo} 
+                                del = {delOpen} handleDel = {handleOpenDel} 
+                                suppInfO = {suppInfoOpen} handleSuppInfo = {handleOpenInfoSupp}
+                                />
+                        }
+                        
+
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
                         <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
