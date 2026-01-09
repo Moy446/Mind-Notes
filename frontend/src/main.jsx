@@ -7,6 +7,7 @@ import MenuPsiF from './MenuPsiF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
 import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
+import PerfilPsiF from './PerfilPsiF.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -17,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='doc:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<div>Calendario</div>}/>
-          <Route path='perfil:id' element={<div>perfil chevere</div>}/>
+          <Route path='perfil:id' element={<PerfilPsiF/>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
       </Routes>
