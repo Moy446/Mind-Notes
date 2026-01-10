@@ -11,7 +11,7 @@ export default function PerfilPsiInfo(props) {
                 <div className='titlePerfil'>
                     Perfil
                 </div>
-                <EliminarBtn texto="Cerrar sesión" img="2" />
+                <EliminarBtn texto="Cerrar sesión" img="2"/>
             </div>
             <div className='perfilbody'>
                 <div className='imgPerfilC'>
@@ -26,7 +26,7 @@ export default function PerfilPsiInfo(props) {
                 <DataPsi data="Plan mensual $USD 10" title="Plan"/>
             </div>
             <div className='bottomPerfil'>
-                <EliminarBtn texto = "Eliminar cuenta" img = "1"/>
+                <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {props.handleDel}/>
             </div>
         </div>
     );
