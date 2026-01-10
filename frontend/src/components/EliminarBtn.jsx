@@ -24,7 +24,9 @@ export default function EliminarBtn(props){
     return (
         <button type="submit" className="eliminar-btn" onClick={props.handleDel}>
             {svgRender(props.img)}
-            {props.texto}
+            <div className='eliminartxt'>
+                {props.texto}
+            </div>
         </button>
     );
 }

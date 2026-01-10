@@ -1,0 +1,118 @@
+.perfilPsiI
+{
+    display: flex;
+    flex-direction: column;
+    width: 440px;
+    height: 100%;
+    border-right: 5px solid #2973B2;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+.perfiltop
+{
+    display: flex;
+    flex-direction: row;
+    gap: 38%;
+    width: 100%;
+}
+
+.titlePerfil
+{
+    font-family: 'Saira';
+    font-weight: 800;
+    color: black;
+    font-size: 25px;
+}
+
+.perfilbody
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 70%;
+    width: 100%;
+}
+
+.imgPerfilC
+{
+    width: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.imgPerfil
+{
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.svgimgPerfil
+{
+    position: absolute;   
+    bottom: 10px;
+    right: 70px;
+}
+
+.svgPerfil
+{
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.svgPerfil:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.svgPerfil:active {
+  transform: translateY(0);
+}
+
+.editInfo
+{
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+}
+
+.titleEditInfo
+{
+    font-family: 'Saira';
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.infoShow
+{
+    font-family: 'Saira';
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bottomPerfil
+{
+    width: 440px;
+    display: flex;
+    justify-content: center;
+}
+
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
