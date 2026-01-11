@@ -1,19 +1,21 @@
 import dbClient from "../config/dbClient.js";
 
+/* Modelo de datos para Chat
+   Aqui unicamente se definen las operaciones relacionadas con la coleccion de Chat
+   en la base de datos MongoDB
+   Operaciones como crear, buscar por ID de psicologo y paciente, etc.
+   Ignorar validaciones y logica de negocio, estas se manejan en los controladores
+*/
+
 class Chat {
     constructor(){
         this.colChat = dbClient.db.collection('chat');
     }
     async create(datosChat){
-        try{
-            const chat = {
-                idPaciente : datosChat.idPaciente,
+       try {
+            let chat = {
+                idPaciente: datosChat.idPaciente,
                 idPsicologo: datosChat.idPsicologo,
-                nombrePaciente: datosChat.nombrePaciente,
-                nombrePsicologo: datosChat.nombrePsicologo,
-                contenido : datosChat.contenido || null,
-                materialAdjunto: datosChat.materialAdjunto || null,
-                expedientes: datosChat.expedientes || null,
             };
             const resultado = await this.colChat.insertOne(chat);
             return resultado;

@@ -1,5 +1,12 @@
 import dbClient from "../config/dbClient.js";
 
+/* Modelo de datos para Cita
+   Aqui unicamente se definen las operaciones relacionadas con la coleccion de Citas
+   en la base de datos MongoDB
+   Operaciones como crear, buscar por ID de psicologo, buscar por ID de paciente, etc.
+   Ignorar validaciones y logica de negocio, estas se manejan en los controladores
+*/
+
 class Cita {
     constructor(){
         this.colCitas = dbClient.db.collection('citas');

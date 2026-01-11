@@ -2,6 +2,13 @@ import dbClient from "../config/dbClient.js";
 import { ObjectId } from "mongodb";
 import bcrypt from 'bcryptjs';
 
+/* Modelo de datos para Paciente
+   Aqui unicamente se definen las operaciones relacionadas con la coleccion de Pacientes
+   en la base de datos MongoDB
+   Operaciones como crear, buscar por ID, buscar por email, etc.
+   Ignorar validaciones y logica de negocio, estas se manejan en los controladores
+*/
+
 class Paciente {
     constructor(){
         this.colPacientes = dbClient.db.collection('pacientes');
@@ -16,25 +23,13 @@ class Paciente {
                 telefono: datosUsuario.telefono,
                 fotoPerfil: datosUsuario.fotoPerfil || null,
                 fechaCreacion: new Date(),
+                socketId: datosUsuario.socketId || null,
+                statusChat: datosUsuario.statusChat || 'offline'
             };
             const resultado = await this.colPacientes.insertOne(paciente);
             return resultado;
         } catch (error) {
             console.error("Error al crear paciente:", error);
-            throw error;
-        }
-    }
-
-    async login(email, password){
-        try {
-            const paciente =  await this.colPacientes.findOne({ email: email});
-            if(paciente && await bcrypt.compare(password, paciente.password)){
-                return { success: true, paciente: paciente };
-            } else {
-                return { success: false, message: 'Email o contraseña incorrectos' };
-            }   
-        } catch (error) {
-            console.error("Error en login de paciente:", error);
             throw error;
         }
     }
@@ -56,7 +51,15 @@ class Paciente {
             throw new Error('Error al obtener el nombre del paciente: ' + error.message);
         }
     }
-    
+
+    async findByEmail(email){
+        try {
+            const paciente = await this.colPacientes.findOne({ email: email });
+            return paciente ? paciente.idPaciente : null;
+        } catch (error) {
+            throw new Error('Error al buscar el paciente por email: ' + error.message);
+        }
+    }
 }
 
 export default Paciente;

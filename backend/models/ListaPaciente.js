@@ -1,5 +1,11 @@
 import dbClient from "../config/dbClient.js";
 import Paciente from "../models/Paciente.js";
+/* Modelo de datos para ListaPaciente
+   Aqui unicamente se definen las operaciones relacionadas con la coleccion de ListaPacientes
+   en la base de datos MongoDB
+    Operaciones como crear, buscar por ID de psicologo, etc.
+    Ignorar validaciones y logica de negocio, estas se manejan en los controladores
+*/
 
 class ListaPaciente {
     constructor(){

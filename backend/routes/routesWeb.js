@@ -13,4 +13,5 @@ router.post('/vincularPacientes/:Psicologo', PsicologoController.vincularPacient
 router.post('/vincularPsicologo/:idPaciente', pacienteController.vincularPsicologo);
 
 
+
 export default router;

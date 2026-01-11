@@ -1,7 +1,13 @@
 import { ObjectId } from "mongodb";
 import dbClient from "../config/dbClient.js";
 import bcrypt from 'bcryptjs';
-
+/*
+Modelo de datos para Psicologo
+Aqui unicamente se definen las operaciones relacionadas con la coleccion de Psicologos
+en la base de datos MongoDB
+Operaciones como crear, buscar por ID, buscar por email, etc.
+Ignorar validaciones y logica de negocio, estas se manejan en los controladores
+*/
 class Psicologo {
     constructor(){
         this.colPsicologos = dbClient.db.collection('psicologos');
@@ -18,7 +24,10 @@ class Psicologo {
                 fechaFin: datosPsicologo.fechaFin,
                 cedula: datosPsicologo.cedula,
                 email: datosPsicologo.email,
-                fotoPerfil: datosPsicologo.fotoPerfil,
+                fotoPerfil: datosPsicologo.fotoPerfil,               
+                fechaCreacion: new Date(),
+
+               
             };
             const resultado = await this.colPsicologos.insertOne(psicologo);
             return {
@@ -31,19 +40,7 @@ class Psicologo {
             throw new Error('Error al crear el psicologo: ' + error.message);
         }
     }
-    async login(email, password){
-        try {
-            const psicologo =  await this.colPsicologos.findOne({ email: email});
-            if(psicologo && await bcrypt.compare(password, psicologo.password)){
-                return { success: true, psicologo: psicologo };
-            } else {
-                return { success: false, message: 'Email o contraseña incorrectos' };
-            }
-        } catch (error) {
-            console.error("Error en login de psicologo:", error);
-            throw error;
-        }   
-    }
+    
     //Funcion para buscar un psicologo por su ID
     async findById(idPsicologo){
         try {
@@ -62,6 +59,15 @@ class Psicologo {
         } catch (error) {
             throw new Error('Error al obtener el nombre del psicologo: ' + error.message);
         }   
+    }
+
+    async findByEmail(email){
+        try {
+            const psicologo = await this.colPsicologos.findOne({ email: email });
+            return psicologo;
+        } catch (error) {
+            throw new Error('Error al buscar el psicologo por email: ' + error.message);
+        }
     }
 }
 // Exportar la clase Psicologo 

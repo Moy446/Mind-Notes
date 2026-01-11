@@ -28,12 +28,23 @@ class PsicologoController {
         const resultado = await modelPsicologo.create(allData);
         res.status(201).json(resultado);
     }
-    async loginPsicologo(req, res) {
-        const email = req.body.email;
-        const password = req.body.password;
-        const modelPsicologo = new Psicologo();
-        const resultado = await modelPsicologo.login(email, password);
-        res.status(200).json(resultado);
+    //Funcion para iniciar sesion como psicologo
+    async loginPsicologo  (req, res)  {
+        try {
+            const { email, password } = req.body;
+            const psicologoModel = new Psicologo();
+            const psicologo = await psicologoModel.findByEmail(email);
+            if (!psicologo) {
+                return res.status(404).json({ success: false, message: 'Psicologo no encontrado' });
+            }
+            const isPasswordValid = await Bcrypt.compare(password, psicologo.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+            }
+            res.status(200).json({ success: true, idPsicologo: psicologo.idPsicologo });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });
+        }
     }
 
     //Funcion para listar los pacientes asociados a un psicologo

@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
-import webRoutes  from './routes/web.js';
+import webRoutes  from './routes/routesWeb.js';
 import cookieParser from 'cookie-parser';
 import csrf from 'csurf';
 

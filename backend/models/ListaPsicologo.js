@@ -1,6 +1,13 @@
 import dbClient from "../config/dbClient.js";
 import Psicologo from "../models/Psicologo.js";
 
+/* Modelo de datos para ListaPsicologo
+   Aqui unicamente se definen las operaciones relacionadas con la coleccion de ListaPsicologos
+   en la base de datos MongoDB
+   Operaciones como crear, buscar por ID de paciente, etc.
+   Ignorar validaciones y logica de negocio, estas se manejan en los controladores
+*/
+
 class ListaPsicologo {
     constructor() {
         this.colListaPsicologo = dbClient.db.collection('listaPsicologos');

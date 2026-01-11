@@ -4,6 +4,10 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Rutas
+import webRoutes from './routes/routesWeb.js';
+import mensajesRoutes from './routes/routesChat.js';
+
 // Middleware
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001'], // URLs del frontend React
@@ -19,6 +23,9 @@ app.get('/', (req, res) => {
     timestamp: new Date().toISOString()
   });
 });
+
+app.use('/', webRoutes);
+app.use('/chat', mensajesRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ 
