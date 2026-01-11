@@ -1,128 +1,102 @@
 .App {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #F2EFE7;
 }
 
-
-.main-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-.create-note-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.create-note-section h2 {
-  margin-bottom: 1rem;
-  color: #333;
-  font-size: 1.5rem;
-}
-
-.create-note-form {
+.first {
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(41, 115, 178, 0.60);
+  color: #FFF;
+  font-family: Saira;
+  padding: 5%;
+  gap: 3rem;
 }
 
-.note-input,
-.note-textarea {
-  padding: 0.75rem;
-  border: 2px solid #e1e5e9;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-  font-family: inherit;
+.first h3 {
+  font-size: 32px;
 }
 
-.note-input:focus,
-.note-textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+.p-QueEsMindNotes {
+  max-width: 600px;
+  font-size: 20px;
 }
 
-.note-textarea {
-  resize: vertical;
-  min-height: 100px;
+.imgNosotros {
+  width: 400px;
+  max-width: 100%;
 }
 
-.create-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.separator{
+  width: 0;
+  height: 0;
+  border-left: 99vw solid transparent;
+  border-bottom: 13.9vw solid #F2EFE7;
+  margin-top: -13.8vw;
 }
 
-.create-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.second {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #F2EFE7;
+  color: #2973B2;
+  font-family: Saira;
+  padding: 5%;
+  gap: 3rem;
 }
 
-.create-btn:active {
-  transform: translateY(0);
+.second h3 {
+  font-size: 32px;
 }
 
-.notes-section {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.p-Mision {
+  max-width: 600px;
+  font-size: 20px;
+  text-align: right;
 }
 
-.notes-section h2 {
-  margin-bottom: 1.5rem;
-  color: #333;
-  font-size: 1.5rem;
+.imgMision {
+  width: 400px;
+  max-width: 100%;
 }
 
-.error-message {
-  background: #fee;
-  color: #c33;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid #fcc;
-}
+.third {
+  background-image: url('src/images/visionBack.png');
+  background-size: cover;
+  background-position: center;
+  min-height: 60vh;
+  width: 100%;
+  padding: 8%;
 
-.loading {
+  color: #FFF;
   text-align: center;
-  padding: 2rem;
-  color: #666;
-  font-size: 1.1rem;
+  font-family: Saira;
+  font-size: 32px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
-  .App-header {
-    padding: 1.5rem 1rem;
+
+  .first,
+  .second {
+    flex-direction: column;
+    text-align: center;
   }
-  
-  .App-header h1 {
-    font-size: 2rem;
+
+  .p-Mision {
+    text-align: center;
   }
-  
-  .create-note-section,
-  .notes-section {
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+
+  .imgNosotros,
+  .imgMision {
+    width: 80%;
+    margin-top: 2rem;
   }
-  
-  .main-content {
-    padding: 0 0.5rem;
+
+  .third {
+    font-size: 22px;
+    padding: 12% 5%;
   }
 }

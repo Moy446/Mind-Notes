@@ -17,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='perfil:id' element={<div>perfil chevere</div>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
+        <Route path='/pruebas' element = {<componentsPruebas/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,
