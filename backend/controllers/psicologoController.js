@@ -1,7 +1,7 @@
 import ListaPaciente from "../models/ListaPaciente.js";
 import Psicologo from "../models/Psicologo.js";
 import Bcrypt from 'bcryptjs';
-import generateToken from "../helpers/jwtControl.js";
+import jwtControl from "../helpers/jwtControl.js";
 
 class PsicologoController {
     constructor(){
@@ -27,10 +27,12 @@ class PsicologoController {
                 fotoPerfil:req.body.fotoPerfil};
         const modelPsicologo = new Psicologo();
         const resultado = await modelPsicologo.create(allData);
-        const token = generateToken(resultado.idPsicologo, resultado.nombre);
-        resultado.token = token;
+        const jwt = new jwtControl();
+        const token = await jwt.generateToken(resultado.idPsicologo.toString(), resultado.nombre, 'psicologo');
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
         res.status(201).json(resultado);
-    }
+    } 
+
     //Funcion para iniciar sesion como psicologo
     async loginPsicologo  (req, res)  {
         try {
@@ -44,7 +46,10 @@ class PsicologoController {
             if (!isPasswordValid) {
                 return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
             }
-            res.status(200).json({ success: true, idPsicologo: psicologo.idPsicologo });
+            const jwt = new jwtControl();
+            const token = await jwt.generateToken(psicologo.idPsicologo.toString(), psicologo.nombre, 'psicologo');
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+            res.status(200).json({ success: true, idPsicologo: psicologo.idPsicologo, token });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });
         }

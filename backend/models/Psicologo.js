@@ -16,7 +16,7 @@ class Psicologo {
     async create(datosPsicologo){
         try {
             const psicologo = {
-                idPsicologo: new ObjectId(datosPsicologo.idPsicologo),
+                idPsicologo: new ObjectId(),
                 password: await bcrypt.hash(datosPsicologo.Password, 10),
                 nombre: datosPsicologo.nombre,
                 apellido: datosPsicologo.apellido,
@@ -29,12 +29,7 @@ class Psicologo {
 
                
             };
-            const resultado = await this.colPsicologos.insertOne(psicologo);
-            return {
-                success: true,
-                message: 'Psicologo creado exitosamente',
-                data: resultado
-            };
+            return psicologo;
 
         } catch (error) {
             throw new Error('Error al crear el psicologo: ' + error.message);
