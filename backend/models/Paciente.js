@@ -26,8 +26,7 @@ class Paciente {
                 socketId: datosUsuario.socketId || null,
                 statusChat: datosUsuario.statusChat || 'offline'
             };
-            const resultado = await this.colPacientes.insertOne(paciente);
-            return resultado;
+            return paciente;
         } catch (error) {
             console.error("Error al crear paciente:", error);
             throw error;

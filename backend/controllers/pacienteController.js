@@ -1,6 +1,8 @@
-import { ObjectId } from "mongodb";
 import Paciente from "../models/Paciente.js";
 import ListaPsicologo from "../models/ListaPsicologo.js";
+import Bcrypt from 'bcryptjs';
+import jwtControl from "../helpers/jwtControl.js";
+
 class PacienteController {
     constructor() {
     }
@@ -14,6 +16,9 @@ class PacienteController {
         };
         const modelPaciente = new Paciente();
         const resultado = await modelPaciente.create(allData);
+        const jwt = new jwtControl();
+        const token = await jwt.generateToken(resultado.idPaciente.toString(), resultado.nombre, 'paciente');
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
         res.status(201).json(resultado);
     }
 
@@ -31,6 +36,9 @@ class PacienteController {
             if (!isPasswordValid) {
                 return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
             }
+            const jwt = new jwtControl();
+            const token = await jwt.generateToken(paciente.idPaciente.toString(), paciente.nombre, 'paciente');
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
             res.status(200).json({ success: true, idPaciente: paciente.idPaciente });
         }
         catch (error) {

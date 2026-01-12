@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import dbClient from "../config/dbClient.js";
 import bcrypt from 'bcryptjs';
+
 /*
 Modelo de datos para Psicologo
 Aqui unicamente se definen las operaciones relacionadas con la coleccion de Psicologos
@@ -8,6 +9,7 @@ en la base de datos MongoDB
 Operaciones como crear, buscar por ID, buscar por email, etc.
 Ignorar validaciones y logica de negocio, estas se manejan en los controladores
 */
+
 class Psicologo {
     constructor(){
         this.colPsicologos = dbClient.db.collection('psicologos');
