@@ -1,6 +1,7 @@
 import ListaPaciente from "../models/ListaPaciente.js";
 import Psicologo from "../models/Psicologo.js";
 import Bcrypt from 'bcryptjs';
+import generateToken from "../helpers/jwtControl.js";
 
 class PsicologoController {
     constructor(){
@@ -26,6 +27,8 @@ class PsicologoController {
                 fotoPerfil:req.body.fotoPerfil};
         const modelPsicologo = new Psicologo();
         const resultado = await modelPsicologo.create(allData);
+        const token = generateToken(resultado.idPsicologo, resultado.nombre);
+        resultado.token = token;
         res.status(201).json(resultado);
     }
     //Funcion para iniciar sesion como psicologo
