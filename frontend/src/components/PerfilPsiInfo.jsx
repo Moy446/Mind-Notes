@@ -2,8 +2,16 @@ import React from 'react'
 import './PerfilPsiInfo.css'
 import EliminarBtn from './EliminarBtn';
 import DataPsi from './DataPsi';
+import { useNavigate } from 'react-router-dom';
 
 export default function PerfilPsiInfo(props) {
+    
+    const navigate = useNavigate();
+
+    const changePlan = () =>
+    {
+        navigate('/psicologo/planes'); 
+    }
 
     return (
         <div className="perfilPsiI">
@@ -23,7 +31,7 @@ export default function PerfilPsiInfo(props) {
                 </div>
                 <DataPsi data="Psicologo psicologico de psicologia" title="Nombre"/>
                 <DataPsi data="psicologo@gmail.com" title="Correo"/>
-                <DataPsi data="Plan mensual $USD 10" title="Plan"/>
+                <DataPsi data="Plan mensual $USD 10" title="Plan" click={changePlan}/>
             </div>
             <div className='bottomPerfil'>
                 <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {props.handleDel}/>

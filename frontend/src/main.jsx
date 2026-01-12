@@ -8,6 +8,7 @@ import ChatPsiF from './ChatPsiF.jsx'
 import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
+import Planes from './Planes.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -19,6 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<div>Calendario</div>}/>
           <Route path='perfil:id' element={<PerfilPsiF/>}/>
+          <Route path='planes' element={<Planes/>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
       </Routes>
