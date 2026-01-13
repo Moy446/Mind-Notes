@@ -15,7 +15,7 @@ async def trancribe(file: UploadFile = File(...)):
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
         tmp.write(await file.read())
         path = tmp.name
-    result = model.transcribe(path, language="es")
+    result = model.transcribe(path, language="es", fp16=False)
     os.remove(path)
 
     return {
