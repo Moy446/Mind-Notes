@@ -72,8 +72,7 @@
     position: sticky;
     display: flex;
     flex-direction: row;
-    right: 1300px;
-    bottom: 450px;
+    bottom: 100px;
     height: 41px;
     width: 175px;
     border-radius: 10px;

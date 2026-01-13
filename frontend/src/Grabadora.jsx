@@ -169,7 +169,7 @@ export default function Grabadora(props) {
             </div>
 
             <div className={openAudio ? "showPatients" : "hideMenuAudio"}>
-                <AudioMenu handleClick={handleClick} />
+                <AudioMenu handleClick={handleClick}/>
             </div>
         </div>
     );
