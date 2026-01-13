@@ -9,6 +9,7 @@ import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
 import Planes from './Planes.jsx'
+import CalendarioF from './CalenndarioF.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -18,12 +19,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='chat:id' element={<ChatPsiF/>}/>
           <Route path='doc:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
-          <Route path='calendario' element={<div>Calendario</div>}/>
+          <Route path='calendario' element={<CalendarioF/>}/>
           <Route path='perfil:id' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 )
