@@ -5,6 +5,7 @@ import './index.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import MenuPsiF from './MenuPsiF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
+import ComoFunciona from "./ComoFunciona.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -17,6 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='perfil:id' element={<div>perfil chevere</div>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
+        <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
       </Routes>
     </BrowserRouter>

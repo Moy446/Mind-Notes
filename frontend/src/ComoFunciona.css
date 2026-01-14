@@ -1,0 +1,62 @@
+.ComoFunciona {
+    min-height: 100vh;
+    background: #F2EFE7;
+}
+
+.section-first {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(154, 203, 208, 0.60);
+    color: #2973B2;
+    font-family: Saira;
+    padding: 5%;
+    gap: 3rem;
+}
+
+.section-first h3 {
+    font-size: 32px;
+}
+
+.p-QueEsMindNotes {
+    max-width: 600px;
+    font-size: 20px;
+}
+
+.imgNosotros {
+    width: 400px;
+    max-width: 100%;
+}
+
+.separator-ComoFunciona{
+    width: 0;
+    height: 0;
+    border-right: 99vw solid transparent;
+    border-bottom: 13.9vw solid #F2EFE7;
+    margin-top: -13.8vw;
+}
+
+/**/
+@media (max-width: 768px) {
+
+.first,
+.second {
+    flex-direction: column;
+    text-align: center;
+}
+
+.p-Mision {
+    text-align: center;
+}
+
+.imgNosotros,
+.imgMision {
+    width: 80%;
+    margin-top: 2rem;
+}
+
+.third {
+    font-size: 22px;
+    padding: 12% 5%;
+}
+}

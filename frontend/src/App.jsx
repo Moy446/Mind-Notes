@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import './App.css'
 import HeaderMenu from './components/headerAndFooter/HeaderMenu'
-import { getNotes, createNote } from './services/api'
 import FooterMenu from './components/headerAndFooter/FooterMenu'
+import './App.css'
 
 function App() {
   return (
