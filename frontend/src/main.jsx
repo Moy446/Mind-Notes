@@ -5,6 +5,7 @@ import './index.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import MenuPsiF from './MenuPsiF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
+
 import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='planes' element={<Planes/>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
+        <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
       </Routes>
     </BrowserRouter>

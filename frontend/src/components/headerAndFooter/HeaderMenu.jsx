@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes,Route ,Link, Router } from 'react-router-dom';
 import './HeaderMenu.css';
 
 export default function HeaderMenu(props) {
@@ -23,11 +25,13 @@ export default function HeaderMenu(props) {
       </button>
 
       <nav className={`nav-headermenu ${activo ? 'activo' : ''}`}>
-        <a href="#" className="a-headermenu">Nosotros</a>
-        <a href="#" className="a-headermenu">¿Cómo funciona?</a>
-        <a href="#" className="a-headermenu">Precios</a>
-        <a href="#" className="a-headermenu">Ingresar</a>
+        <Link to={'/'}>Nosotros</Link>
+        <Link to={"/ComoFunciona"}>¿Cómo funciona?</Link>
+        <Link to={'/ComoFunciona'}>Precios</Link>
+        <Link to={'/ComoFunciona'}>Ingresar</Link>
       </nav>
+
     </div>
+
   );
 }
