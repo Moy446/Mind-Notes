@@ -36,16 +36,75 @@
     margin-top: -13.8vw;
 }
 
+h2{
+    color: #2973B2;
+    text-align: center;
+    font-family: Saira;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+h3{
+    color: #2973B2;
+    text-align: right;
+    font-family: Saira;
+    font-size: 38px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    text-align: center;
+}
+
+.div-colum{
+    display: grid; 
+    grid-column: 200px;
+    height: auto;
+    width: 100%;
+    font-family: 'Saira';
+    padding: 3vw;
+    
+    align-items: center;
+    justify-content: end;
+    gap: 3%;
+
+    grid-template-columns: 2fr 2fr 2fr;
+}
+
+.div-firstColum{
+    grid-column: 1;
+    grid-row: 1;
+}
+.div-secondColum{
+    grid-column: 2;
+    grid-row: 1;
+}
+.div-thirdColum{
+    grid-column: 3;
+    grid-row: 1;
+    gap: 200px; 
+}
+
+.p-colum{
+    color: #2973B2;
+    text-align: justify;
+    font-family: Saira;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
 /**/
 @media (max-width: 768px) {
 
-.first,
-.second {
+.section-first {
     flex-direction: column;
     text-align: center;
 }
 
-.p-Mision {
+.p-colum {
     text-align: center;
 }
 
@@ -55,8 +114,30 @@
     margin-top: 2rem;
 }
 
-.third {
-    font-size: 22px;
-    padding: 12% 5%;
+.div-colum{
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    text-align: center;
+    row-gap: 30px;
+    padding: 20px 0;
+}
+
+.div-firstColum{
+    grid-column: 1 / 3;
+    grid-row: 1;
+    max-width: 90%;
+}
+
+.div-secondColum{
+    grid-column: 1 / 3;
+    grid-row: 2;
+}
+
+.div-thirdColum{
+    grid-column: 1 / 3;
+    grid-row: 3;
+    width: 90%;
+    margin: 0;
 }
 }
