@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import './FooterMenu.css'
+import {Link} from 'react-router-dom';
 
 
 export default function FooterMenu(props){
@@ -27,10 +28,9 @@ export default function FooterMenu(props){
                     </div>
                     <div className='two'>
                         <ul>
-                            <li><a href='#' className='a-footermenu'><h4>Mind Notes</h4></a></li>
-                            <li><a href='#' className='a-footermenu'>Inicio</a></li>
-                            <li><a href='#' className='a-footermenu'>Nosotros</a></li>
-                            <li><a href='#' className='a-footermenu'>¿Cómo funciona?</a></li>
+                            <li><a className='a-footermenu'><h4>Mind Notes</h4></a></li>
+                            <li><Link to={'/'}>Nosotros</Link></li>
+                            <li> <Link to={"/ComoFunciona"}>¿Cómo funciona?</Link></li>
                             <li><a href='#' className='a-footermenu'>Precios</a></li>
                             <li><a href='#' className='a-footermenu'>Ingresar</a></li>
                         </ul>    

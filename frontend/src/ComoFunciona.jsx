@@ -19,6 +19,34 @@ function ComoFunciona() {
 
         <div className='separator-ComoFunciona'></div>
 
+        <h2>Beneficios</h2>
+
+        <div className='div-colum'>
+            <div className='div-firstColum'>
+                <h3>Herramienta</h3>
+                <p className="p-colum">
+                    Realizara resúmenes de la sesión, además identificará los puntos abordados.
+                </p>
+                <img className="imgMision" src="src/images/nosotrosImg.png" alt="Imagen" />
+            </div>
+
+            <div className='div-secondColum'>
+                <h3>Recordatorio</h3>
+                <p className="p-colum">
+                    Para el paciente de sus próximas citas y evitar así las faltas o el poder reagendar a tiempo de una manera más automatizada.
+                </p>
+                <img className="imgMision" src="src/images/nosotrosImg.png" alt="Imagen" />
+            </div>
+
+            <div className='div-thirdColum'>
+                <h3>Aplicacion</h3>
+                <p className="p-colum">
+                    Tendrá organizado todos los materiales de ayuda que le envía su psicólogo y un chat integrado para poder comunicarse con él.
+                </p>
+                <img className="imgMision" src="src/images/nosotrosImg.png" alt="Imagen" />
+            </div>
+        </div>
+
         <footer>
             <FooterMenu img = "src/images/logoCompletoBlanco.png"/>
         </footer>

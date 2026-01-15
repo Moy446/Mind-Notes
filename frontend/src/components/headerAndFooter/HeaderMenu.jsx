@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes,Route ,Link, Router } from 'react-router-dom';
+import { BrowserRouter, Routes,Route ,Link } from 'react-router-dom';
 import './HeaderMenu.css';
 
 export default function HeaderMenu(props) {
@@ -30,8 +30,6 @@ export default function HeaderMenu(props) {
         <Link to={'/ComoFunciona'}>Precios</Link>
         <Link to={'/ComoFunciona'}>Ingresar</Link>
       </nav>
-
     </div>
-
   );
 }
