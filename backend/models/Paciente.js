@@ -16,7 +16,7 @@ class Paciente {
     async create(datosUsuario){
         try{
             const paciente = {
-                idPaciente: new ObjectId(datosUsuario.idPaciente),
+                idPaciente: new ObjectId(),
                 nombre: datosUsuario.nombre,
                 email: datosUsuario.email,
                 password: await bcrypt.hash(datosUsuario.password, 10),
@@ -26,6 +26,7 @@ class Paciente {
                 socketId: datosUsuario.socketId || null,
                 statusChat: datosUsuario.statusChat || 'offline'
             };
+            await this.colPacientes.insertOne(paciente);
             return paciente;
         } catch (error) {
             console.error("Error al crear paciente:", error);

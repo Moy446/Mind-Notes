@@ -28,11 +28,9 @@ class Psicologo {
                 email: datosPsicologo.email,
                 fotoPerfil: datosPsicologo.fotoPerfil,               
                 fechaCreacion: new Date(),
-
-               
             };
+            await this.colPsicologos.insertOne(psicologo);
             return psicologo;
-
         } catch (error) {
             throw new Error('Error al crear el psicologo: ' + error.message);
         }
