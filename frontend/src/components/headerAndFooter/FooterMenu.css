@@ -35,7 +35,7 @@
     cursor: pointer;
 }
 
-.a-footermenu
+/* .a-footermenu
 {
     font-family: 'Saira';
     color: #FFF;
@@ -43,7 +43,7 @@
     align-items: center;
     text-decoration: none;
     padding-right: 3%
-}
+} */
 
 h4{
     color: #FFF;
@@ -80,6 +80,11 @@ h4{
 
 ul{
     list-style: none;
+}
+
+.li-link{
+    color: #FFF;
+    text-decoration: none;
 }
 
 .btn-enviar{

@@ -29,18 +29,18 @@ export default function FooterMenu(props){
                     <div className='two'>
                         <ul>
                             <li><a className='a-footermenu'><h4>Mind Notes</h4></a></li>
-                            <li><Link to={'/'}>Nosotros</Link></li>
-                            <li> <Link to={"/ComoFunciona"}>¿Cómo funciona?</Link></li>
-                            <li><a href='#' className='a-footermenu'>Precios</a></li>
-                            <li><a href='#' className='a-footermenu'>Ingresar</a></li>
+                            <li><Link to={'/'} className='li-link'>Nosotros</Link></li>
+                            <li><Link to={"/ComoFunciona"} className='li-link'>¿Cómo funciona?</Link></li>
+                            <li><Link to={"/ComoFunciona"} className='li-link'>Precios</Link></li>
+                            <li><Link to={"/ComoFunciona"} className='li-link'>Ingresar</Link></li>
                         </ul>    
                     </div>
 
                     <div className='three'>
                         <ul>
-                            <li><a href='#' className='a-footermenu'><h4>Legal</h4></a></li>
-                            <li><a href='#' className='a-footermenu'>Privacidad</a></li>
-                            <li><a href='#' className='a-footermenu'>Terminos y condiciones</a></li>
+                            <li><a className='a-footermenu'><h4>Legal</h4></a></li>
+                            <li><Link to={"/ComoFunciona"} className='li-link'>Privacidad</Link></li>
+                            <li><Link to={"/ComoFunciona"} className='li-link'>Terminos y condiciones</Link></li>
                         </ul>
                     </div>
 

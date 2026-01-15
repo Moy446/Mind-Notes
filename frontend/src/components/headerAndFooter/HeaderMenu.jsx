@@ -25,10 +25,10 @@ export default function HeaderMenu(props) {
       </button>
 
       <nav className={`nav-headermenu ${activo ? 'activo' : ''}`}>
-        <Link to={'/'}>Nosotros</Link>
-        <Link to={"/ComoFunciona"}>¿Cómo funciona?</Link>
-        <Link to={'/ComoFunciona'}>Precios</Link>
-        <Link to={'/ComoFunciona'}>Ingresar</Link>
+        <Link to={'/'} className='nav-link'>Nosotros</Link>
+        <Link to={"/ComoFunciona"} className='nav-link'>¿Cómo funciona?</Link>
+        <Link to={'/ComoFunciona'} className='nav-link'>Precios</Link>
+        <Link to={'/ComoFunciona'} className='nav-link'>Ingresar</Link>
       </nav>
     </div>
   );
