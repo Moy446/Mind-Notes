@@ -11,10 +11,14 @@ function ComoFunciona() {
         </header>
 
         <section className='section-first'>
-            <h3>¿Qué es Mind Notes?</h3>
-            <p className="p-QueEsMindNotes">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
-            </p>
             <img className= "imgNosotros" src="src/images/nosotrosImg.png" alt="Imagen" />
+            <div className='container'>
+                <h3 className='title-text'>¿Cómo funciona?</h3>
+                <p className="p-QueEsMindNotes">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation 
+                </p>
+            </div>
+            
         </section>
 
         <div className='separator-ComoFunciona'></div>
