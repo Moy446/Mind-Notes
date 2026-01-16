@@ -26,7 +26,9 @@ class Psicologo {
                 fechaFin: datosPsicologo.fechaFin,
                 cedula: datosPsicologo.cedula,
                 email: datosPsicologo.email,
-                fotoPerfil: datosPsicologo.fotoPerfil,               
+                fotoPerfil: datosPsicologo.fotoPerfil,
+                socketId: datosPsicologo.socketId || null,
+                statusChat: datosPsicologo.statusChat || 'offline',
                 fechaCreacion: new Date(),
             };
             await this.colPsicologos.insertOne(psicologo);

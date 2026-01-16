@@ -24,7 +24,8 @@ class Paciente {
                 fotoPerfil: datosUsuario.fotoPerfil || null,
                 fechaCreacion: new Date(),
                 socketId: datosUsuario.socketId || null,
-                statusChat: datosUsuario.statusChat || 'offline'
+                statusChat: datosUsuario.statusChat || 'offline',
+                fechaCreacion: new Date()
             };
             await this.colPacientes.insertOne(paciente);
             return paciente;

@@ -4,7 +4,8 @@ import protector from '../helpers/routesProtect.js';
 
 const router = express.Router();
 
-router.get('/:idPsicologo', protector, chat.obtenerMensajes);
-router.post('/:idPsicologo', protector, chat.enviarMensaje);
+router.get('/:idUser', protector, chat.obtenerMensajes);
+router.post('/:idUser', protector, chat.enviarMensaje);
+
 
 export default router;
