@@ -11,6 +11,10 @@ import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
 import Planes from './Planes.jsx'
 
+import ComoFunciona from './ComoFunciona.jsx'
+import PlanesGeneral from './PlanesGeneral.jsx'
+
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
@@ -25,6 +29,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         </Route>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
+        <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
       </Routes>
     </BrowserRouter>

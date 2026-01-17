@@ -48,11 +48,11 @@ export default function FooterMenu(props){
                         <h4>Contactanos</h4>
                         <form>
                             <ul>
-                                <li><input placeholder='Asunto' class= "input-footer" type="text" ></input></li>
-                                <li> <input placeholder='Correo' class= "input-footer" type="text" ></input></li>
-                                <li><input placeholder='Dudas' class= "input-footer" type="text" ></input></li>
+                                <li><input placeholder='Asunto' className= "input-footer" type="text" ></input></li>
+                                <li> <input placeholder='Correo' className= "input-footer" type="text" ></input></li>
+                                <li><input placeholder='Dudas' className= "input-footer" type="text" ></input></li>
                                 <li>
-                                    <button class= "btn-enviar">Enviar</button>
+                                    <button className= "btn-enviar">Enviar</button>
                                 </li>
                             </ul>
                         </form>
@@ -60,10 +60,10 @@ export default function FooterMenu(props){
                 </div>
             </div>
             <div className='footer-CopyrightElement'>
-                <p class='CopyrightElement'>2026 @ Todos los derechos reservados. Mind Notes</p>
-                <a href="https://www.facebook.com" className='a-icons'><i class="fa-brands fa-facebook "></i></a>
-                <a href="https://www.instagram.com/mindnotes_oficial?igsh=bHM4bGVkY2h5aWhz" className='a-icons'><i class="fa-brands fa-instagram"></i></a>
-                <a href="https://www.tiktok.com" className='a-icons'><i class="fa-brands fa-tiktok"></i></a>
+                <p className='CopyrightElement'>2026 @ Todos los derechos reservados. Mind Notes</p>
+                <a href="https://www.facebook.com" className='a-icons'><i className="fa-brands fa-facebook "></i></a>
+                <a href="https://www.instagram.com/mindnotes_oficial?igsh=bHM4bGVkY2h5aWhz" className='a-icons'><i className="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com" className='a-icons'><i className="fa-brands fa-tiktok"></i></a>
             </div>
         </div>
     );

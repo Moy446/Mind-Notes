@@ -1,0 +1,124 @@
+.PlanesGeneral {
+    min-height: 100vh;
+    background: #F2EFE7;
+}
+
+.div-planes{
+    padding: 3%;
+}
+
+h1{
+    color: #2973B2;
+    font-family: Saira;
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.div-planesGeneral{
+    display: grid; 
+    grid-column: 200px;
+    height: auto;
+    width: 100%;
+    font-family: 'Saira';
+    padding: 4vw;
+    
+    align-items: center;
+    justify-content: end;
+    gap: 3%;
+
+    grid-template-columns: 2fr 2fr 2fr;
+}
+
+.img-planesGeneral{
+    width: 147px;
+    height: 147px;
+    aspect-ratio: 26/21;
+    
+}
+
+.div-planUno{
+    grid-column: 1;
+    grid-row: 1;
+
+    width: 259px;
+    height: 259px;
+    border-radius: 20px;
+    background: #2973B2;
+}
+
+.div-planDos{
+    grid-column: 2;
+    grid-row: 1;
+
+    width: 259px;
+    height: 259px;
+    border-radius: 20px;
+    background: #2973B2;
+}
+
+.div-planTres{
+    grid-column: 3;
+    grid-row: 1;
+
+    width: 259px;
+    height: 259px;
+    border-radius: 20px;
+    background: #2973B2;
+}
+
+.p-duracion{
+    color: #FFF;
+    text-align: center;
+    font-family: Saira;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.btn-planesGeneral{
+    border-radius: 20px;
+    border: 10px solid #2973B2;
+    background: #9ACBD0;
+
+    color: #2973B2;
+    text-align: center;
+    font-family: Saira;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+/**/
+@media (max-width: 768px) {
+
+.div-planesGeneral{
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    text-align: center;
+    row-gap: 30px;
+    padding: 20px 0;
+}
+
+.div-planUno{
+    grid-column: 1 / 3;
+    grid-row: 1;
+    max-width: 90%;
+}
+
+.div-planDos{
+    grid-column: 1 / 3;
+    grid-row: 2;
+}
+
+.div-planTres{
+    grid-column: 1 / 3;
+    grid-row: 3;
+    width: 90%;
+    margin: 0;
+}
+}
