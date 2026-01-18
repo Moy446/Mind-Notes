@@ -1,11 +1,17 @@
 import React from 'react'
-import './CalendarioF.css'
+import './CitasList.css'
+import Cita from './Cita';
 
-export default function CalendarioF(props){
+export default function CitasList(props) {
 
     return (
-        <div className="calendarioF">
-            I am posole and a calendar
+        <div className="citas">
+            <Cita name="Teisel" hora="9:00" img="/src/images/testimg.png" />
+            <div className='newCita'>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className='svgCita'>
+                    <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                </svg>
+            </div>
         </div>
     );
 }
