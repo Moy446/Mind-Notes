@@ -32,6 +32,13 @@ export default function CalendarioF(props) {
         return (
             <div className='showCitas'>
                 {elementos}
+                <div className='citaF' style={{
+                    top: `${18.75}%`,
+                    height: `${1 * 4.166667}%`
+                }}>
+                    <img src='/src/images/testimg.png' className='imgCitaF'/>
+                    Teisel
+                </div>
             </div>
         );
     }
@@ -60,14 +67,20 @@ export default function CalendarioF(props) {
 
     const week = diasSemana.map((day, i) => {
         const date = new Date(currentDate);
-        date.setDate(currentDate.getDate() -jsDay + i);
+        date.setDate(currentDate.getDate() - jsDay + i);
         return {
             day,
-            date: date.getDate()
+            date: date.getDate(),
+            fullDate: date
         };
     });
 
-    console.log(week.at(0));
+    console.log(week)
+    console.log(currentDate)
+
+    const citas = [
+        { id: 1, nombre: "Teisel", img: "/src/images/testimg.png", horaI: 9, horaF: 10.2 },
+    ];
 
     return (
         <div className="calendarioF">
@@ -82,7 +95,7 @@ export default function CalendarioF(props) {
                             {week.map((dia) => (
                                 <div className='dia' key={dia}>
                                     {dia.day}
-                                    <div className='numero'>
+                                    <div className={dia.fullDate.getTime() === currentDate.getTime() ? "numero diaActual" : "numero"}>
                                         {dia.date}
                                     </div>
                                 </div>
@@ -90,31 +103,7 @@ export default function CalendarioF(props) {
                         </div>
                         <div className='horas'>
                             {listaHoras()}
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
+                            {listaLineas()}
                             <div className='showCitas'>
                                 <hr className='lineHour' />
                                 <hr className='lineHour' />
