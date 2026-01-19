@@ -40,4 +40,5 @@ pnpm-debug.log
 
 #models
 services/nlp/trainingModel/bert-finetuned/
+services/nlp/trainingModel/bert-ner/
 
