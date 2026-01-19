@@ -15,14 +15,14 @@
 }
 
 .title-App{
-  font-size: 32px;
+  font-size: 45px;
   color: #FFF;
   text-align: left;
 }
 
 .p-QueEsMindNotes {
   max-width: 600px;
-  font-size: 20px;
+  font-size: 30px;
   text-align: left;
 }
 
@@ -51,13 +51,13 @@
 }
 
 .second h3 {
-  font-size: 32px;
+  font-size: 45px;
   text-align: right;
 }
 
 .p-Mision {
   max-width: 600px;
-  font-size: 20px;
+  font-size: 30px;
   text-align: right;
 }
 
@@ -77,7 +77,7 @@
   color: #FFF;
   text-align: center;
   font-family: Saira;
-  font-size: 32px;
+  font-size: 40px;
 }
 
 .third h3{
@@ -92,6 +92,10 @@
   .first,
   .second {
     flex-direction: column;
+    text-align: center;
+  }
+
+  .second h3{
     text-align: center;
   }
 

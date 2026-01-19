@@ -3,8 +3,10 @@ import { useState } from 'react';
 import './FooterMenu.css'
 import {Link} from 'react-router-dom';
 
+//Logo
+import logoBlanco from '../../images/logoCompletoBlanco.png'
 
-export default function FooterMenu(props){
+export default function FooterMenu(){
 
     const [activo, setActivo] = useState(false);
     
@@ -16,7 +18,7 @@ export default function FooterMenu(props){
         
         <div className='div-completeFooter'>
             <div className='div-FooterContenedor'>
-                <img src={props.img} alt="Descripción de la imagen" className='img-footermenu'/>
+                <img src={logoBlanco} alt="Descripción de la imagen" className='img-footermenu'/>
                 <div className='nav-footermenu'>
 
                     <div className='one'>
@@ -31,8 +33,8 @@ export default function FooterMenu(props){
                             <li><a className='a-footermenu'><h4>Mind Notes</h4></a></li>
                             <li><Link to={'/'} className='li-link'>Nosotros</Link></li>
                             <li><Link to={"/ComoFunciona"} className='li-link'>¿Cómo funciona?</Link></li>
-                            <li><Link to={"/ComoFunciona"} className='li-link'>Precios</Link></li>
-                            <li><Link to={"/ComoFunciona"} className='li-link'>Ingresar</Link></li>
+                            <li><Link to={"/PlanesGeneral"} className='li-link'>Precios</Link></li>
+                            <li><Link to={"/Login"} className='li-link'>Ingresar</Link></li>
                         </ul>    
                     </div>
 

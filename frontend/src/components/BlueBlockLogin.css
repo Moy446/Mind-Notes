@@ -1,0 +1,6 @@
+.div-blueBlock{
+    width: 1368px;
+    height: 1024px;
+    border-radius: 100px;
+    background: var(--Principal, #2973B2);
+}

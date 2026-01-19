@@ -1,21 +1,23 @@
-import React, { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes,Route ,Link } from 'react-router-dom';
+import { useState } from 'react';
+import {Link } from 'react-router-dom';
 import './HeaderMenu.css';
 
-export default function HeaderMenu(props) {
+//Logo
+import logoColor from '../../images/logocolor.png'
+
+export default function HeaderMenu() {
   const [activo, setActivo] = useState(false);
 
   return (
     <div className="div-HeaderContenedor">
       <img
-        src={props.img}
+        src={logoColor}
         alt="Logo"
         className="img-headermenu"
       />
 
       <button
-        className="menu-toggle"
+        className={'menu-toggle'}
         onClick={() => setActivo(!activo)}
         aria-label="Abrir menú"
       >
@@ -28,7 +30,7 @@ export default function HeaderMenu(props) {
         <Link to={'/'} className='nav-link'>Nosotros</Link>
         <Link to={"/ComoFunciona"} className='nav-link'>¿Cómo funciona?</Link>
         <Link to={"/PlanesGeneral"} className='nav-link'>Precios</Link>
-        <Link to={'/ComoFunciona'} className='nav-link'>Ingresar</Link>
+        <Link to={'/Login'} className='nav-link'>Ingresar</Link>
       </nav>
     </div>
   );
