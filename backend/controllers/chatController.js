@@ -1,8 +1,20 @@
 import dbClient from "../config/dbClient.js";
+import Chat from "../models/Chat.js";
 
 class ChatController {
     constructor() {
         // No asignar aquí, dbClient.db puede ser null inicialmente
+    }
+
+    async createChat(req, res) {
+        const { idPaciente, idPsicologo } = req.body;
+        try { 
+            const chatModel = new Chat();
+            const resultado = await chatModel.create({ idPaciente, idPsicologo });
+            res.status(201).json({ success: true, chatId: resultado.insertedId });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al crear el chat: ' + error.message });
+        }
     }
 
     async obtenerMensajes(req, res) {
@@ -20,7 +32,7 @@ class ChatController {
     }
 
     async enviarMensaje(req, res) {
-        const { idPsicologo } = req.params;
+        const idPsicologo  = req.params;
         const { idPaciente, mensaje, remitente } = req.body; // remitente: 'paciente' o 'psicologo'
         try {
             const colMensajes = dbClient.db.collection('mensajes');
