@@ -18,6 +18,7 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "axios": "^1.13.2",
     "body-parser": "^2.2.1",
     "cookie-parser": "^1.4.7",
@@ -26,7 +27,9 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "install": "^0.13.0",
-    "mongodb": "^7.0.0"
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^7.0.0",
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
