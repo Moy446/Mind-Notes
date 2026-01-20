@@ -51,7 +51,7 @@ class PacienteController {
         const idPaciente = req.params.idPaciente;
         const listaPsicologoModel = new ListaPsicologo();
         try {
-            listaPsicologoModel.create(idPaciente, req.body.idPsicologo);
+            await listaPsicologoModel.create(idPaciente, req.body.idPsicologo);
             res.status(201).json({
                 success: true,
                 message: 'Psicologo vinculado exitosamente'
