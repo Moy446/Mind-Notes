@@ -17,6 +17,7 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.13.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.11.0"

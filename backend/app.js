@@ -3,6 +3,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import webRoutes from './routes/routesWeb.js';
 import routesChat from './routes/routesChat.js';
+import routesPsicologo from './routes/routesPsicologoApp.js';
 import cookieParser from 'cookie-parser';
 import csrf from 'csurf';
 import { createServer } from 'http';
@@ -37,8 +38,9 @@ async function startServer() {
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
 
     // Routes
-    app.use('/', webRoutes);
-    app.use('/chat', routesChat);
+    app.use('/api', webRoutes);
+    app.use('/api/chat', routesChat);
+    app.use('/api/psicologo', routesPsicologo);
 
     // Inicializar Socket.IO
     chatSocket(io);
