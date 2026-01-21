@@ -1,10 +1,27 @@
 import React from 'react'
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CalendarioF.css'
 import CitasList from './components/CitasList';
+import MeetMenu from './components/MeetMenu'
 
 export default function CalendarioF(props) {
+
+    const citas = [
+        { id: 1, nombre: "Teisel", img: "/src/images/testimg.png", horaI: 9, horaF: 10.2, año: "2026", mes: "0", dia: "20" },
+        { id: 2, nombre: "Wiwiw", img: "/src/images/testimg.png", horaI: 9, horaF: 10.2, año: "2026", mes: "0", dia: "24" },
+        { id: 1, nombre: "Teisel", img: "/src/images/testimg.png", horaI: 11, horaF: 13, año: "2026", mes: "0", dia: "20" },
+    ];
+
+    const [addMenu, openAddMenu] = useState(false);
+    const handleAdd = useCallback(() => {
+                openAddMenu(!addMenu)
+            }, [addMenu])
+
+    const [editMenu, openEditMenu] = useState(false);
+    const handleEdit = useCallback(() => {
+                openEditMenu(!editMenu)
+            }, [editMenu])
 
     function listaHoras() {
         const elementos = [];
@@ -22,23 +39,39 @@ export default function CalendarioF(props) {
         );
     }
 
-    function listaLineas() {
+    function listaLineas(dia) {
         const elementos = [];
+        const citasMostradas = [];
+
+
         for (let i = 1; i <= 23; i++) {
             elementos.push(
                 <hr className='lineHour' />
             );
         }
+
+        for (const cita of citas) {
+            const day = new Date(cita.año, cita.mes, cita.dia);
+            dia.fullDate.setHours(0, 0, 0, 0);
+            day.setHours(0, 0, 0, 0);
+
+            if (day.getTime() === dia.fullDate.getTime()) {
+                citasMostradas.push(
+                    <div className='citaF' onClick={handleEdit} style={{
+                        top: `${cita.horaI * 4.166667}%`,
+                        height: `${(cita.horaF - cita.horaI) * 4.166667}%`
+                    }}>
+                        <img src={cita.img} className='imgCitaF' />
+                        {cita.nombre}
+                    </div>
+                );
+            }
+        }
+
         return (
             <div className='showCitas'>
                 {elementos}
-                <div className='citaF' style={{
-                    top: `${18.75}%`,
-                    height: `${1 * 4.166667}%`
-                }}>
-                    <img src='/src/images/testimg.png' className='imgCitaF'/>
-                    Teisel
-                </div>
+                {citasMostradas}
             </div>
         );
     }
@@ -75,20 +108,13 @@ export default function CalendarioF(props) {
         };
     });
 
-    console.log(week)
-    console.log(currentDate)
-
-    const citas = [
-        { id: 1, nombre: "Teisel", img: "/src/images/testimg.png", horaI: 9, horaF: 10.2 },
-    ];
-
     return (
         <div className="calendarioF">
             <div className='fecha'>
                 Hoy
             </div>
             <div className='contentCalendario'>
-                <CitasList />
+                <CitasList citas={citas} current={currentDate} handleAdd={handleAdd} handleEdit={handleEdit}/>
                 <div className='calendarioWrapper'>
                     <div className='calendario'>
                         <div className='dias'>
@@ -103,160 +129,18 @@ export default function CalendarioF(props) {
                         </div>
                         <div className='horas'>
                             {listaHoras()}
-                            {listaLineas()}
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
-                            <div className='showCitas'>
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                                <hr className='lineHour' />
-                            </div>
+                            {week.map((dia) => (
+                                listaLineas(dia)
+                            ))}
                         </div>
                     </div>
                 </div>
+            </div>
+            <div className={addMenu ? "showAddMenu" : "hideAddMenu"}>
+                  <MeetMenu handleAdd={handleAdd}/>          
+            </div>
+            <div className={editMenu ? "showAddMenu" : "hideAddMenu"}>
+                  <MeetMenu handleAdd={handleAdd} tipo={true} handleEdit={handleEdit}/>          
             </div>
         </div>
     );

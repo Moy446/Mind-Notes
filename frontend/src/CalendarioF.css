@@ -148,6 +148,18 @@
     border-radius: 50%;
 }
 
+.showAddMenu
+{
+    position: absolute;
+    display: flex;
+    top: 30%;
+}
+
+.hideAddMenu
+{
+    display: none;
+}
+
 @font-face {
     font-family: 'Saira';
     src: url('../fonts/Saira.ttf') format('truetype');
