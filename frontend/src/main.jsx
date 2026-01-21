@@ -16,7 +16,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <Routes>
         <Route path='/psicologo' element={<MenuPsiF/>}>
-          <Route path='chat:id' element={<ChatPsiF/>}/>
+          <Route path='chat' element={<ChatPsiF/>}/>
           <Route path='doc:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<CalendarioF/>}/>
