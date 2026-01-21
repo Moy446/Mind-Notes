@@ -1,6 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 import NotesList from './components/NotesList'
+import AddBtn from './components/AddBtn'
+import EliminarBtn from './components/EliminarBtn'
+import ChatBox from './components/ChatBox'
+import AddQr from './components/AddQr'
+import Switch from './components/Switch'
+import MessageField from './components/MessageField'
+import SearchBar from './components/SearchBar'
+import NameBar from './components/NameBar'
+import DeleteMenu from './components/DeleteMenu'
+import SupportMenu from './components/SupportMenu'
+import SubBtn from './components/SubBtn'
+import AddUID from './components/AddUID'
+import AudioMenu from './components/AudioMenu'
+import MeetMenu from './components/MeetMenu'
+import ChatSelector from './components/ChatSelector'
+import MenuPsi from './components/MenuPsi'
+import MenuPa from './components/MenuPa'
+import InfoPsi from './components/InfoPsi'
+import InfoPa from './components/InfoPa'
+import SuppPsi from './components/SuppPsi'
+import SuppPa from './components/SuppPa'
 import { getNotes, createNote } from './services/api'
 
 function App() {
@@ -56,6 +77,39 @@ function App() {
 
       <main className="main-content">
         <section className="create-note-section">
+          <AddBtn num = "1"/>
+          <AddBtn num = "2"/>
+          <AddBtn num = "3"/>
+          <AddBtn num = "4"/>
+          <EliminarBtn texto = "Eliminar psicologo" img = "1"/>
+          <EliminarBtn texto = "Eliminar paciente" img = "1"/>
+          <EliminarBtn texto = "Eliminar cuenta" img = "1"/>
+          <EliminarBtn texto = "Cerrar sesión" img = "2"/>
+          <ChatBox img = "src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor"/>
+          <AddQr title = "Agregar Paciente" img = "src/images/pqr.png"/>
+          <AddQr title = "Agregar Psicologo" img = "src/images/pqr.png"/>
+          <Switch/>
+          <MessageField/>
+          <SearchBar/>
+          <NameBar name = "Psicologo psicologico de psicologia" img = "src/images/pimg2.png"/>
+          <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan y se cancelara la suscripción"/>
+          <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan"/>
+          <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan"/>
+          <SupportMenu/>
+          <SubBtn time = "30 Días" price = "Gratis" des = "Contratar prueba gratuita"/>
+          <SubBtn time = "1 Mes" price = "USD$10" des = "Contratar plan mensual"/>
+          <SubBtn time = "6 Meses" price = "USD$30" des = "Contratar plan semestral"/>
+          <SubBtn time = "1 Año" price = "USD$40" des = "Contratar  plan anual"/>
+          <AddUID/>
+          <AudioMenu/>
+          <MeetMenu/>
+          <ChatSelector/>
+          <MenuPsi/>
+          <MenuPa/>
+          <InfoPsi img = "src/images/pimg1.png" name = "Teisel"/>
+          <InfoPa  img = "src/images/pimg2.png" name = "Psicologo psicologico de psicologia"/>
+          <SuppPsi/>
+          <SuppPa/>
           <h2>Crear Nueva Nota</h2>
           <form onSubmit={handleCreateNote} className="create-note-form">
             <input

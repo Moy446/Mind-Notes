@@ -1,0 +1,24 @@
+.add-btn{
+    height: 50px;
+    width: 50px;
+    background-color: #9ACBD0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.add-btn:active {
+  transform: translateY(0);
+}
+
+.image-add{
+    width: 50%;
+    align-self: center;
+    justify-self: center;
+}

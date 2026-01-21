@@ -1,0 +1,38 @@
+.horarioItem
+{
+    width: 100%;
+    height: auto;
+    align-self: center;
+    font-family: 'Saira';
+    font-weight: 400;
+    font-size: 13px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.showTime
+{
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    align-items: center;
+    justify-content: space-between;
+    visibility: visible;
+}
+
+.hideTime
+{
+    visibility: hidden;
+    width: 60%;
+    height: 60px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
