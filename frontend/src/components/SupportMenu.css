@@ -1,0 +1,63 @@
+.supp-menu
+{
+    width: 196px;
+    height: 167px;
+    background-color: #48A6A7;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.supp-btn
+{
+    display: flex;
+    font-family: 'Saira';
+    font-size: 20px;
+    max-height: 25%;
+    width: 100%;
+    color: white;
+    font-weight: 300;
+    background-color: transparent;
+    border: transparent;
+    align-items: center;
+    justify-items: start;
+    border-radius: 10px;
+    padding-left: 5px;
+}
+
+.supp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  background-color: #2973B2;
+}
+
+.supp-btn:active {
+  transform: translateY(0);
+}
+
+
+.svg-suppmenu
+{
+    height: 60%;
+    align-self: center;
+    justify-self: start;
+    margin-right: 5px;
+}
+
+.txt-suppmenu
+{
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

@@ -1,0 +1,58 @@
+.grabadora
+{
+    height: 100vh;
+    width: 100vw;
+    background-color: #F2EFE7;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    position: relative;
+}
+
+.notRecord
+{
+    height: 86px;
+    width: 86px;
+    border-radius: 100%;
+    background-color: #F62E2E;
+    border-color: white;
+    border-width: 24px;
+    border-style: solid;
+    transition: all 0.4s;
+    margin-top: 50px;
+}
+
+.recording
+{
+    border-width: 10px;
+    transition: all 0.4s;
+}
+
+.notRecord:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.notRecord:active {
+  transform: translateY(0);
+}
+
+.audio
+{
+    height: auto;
+    width: 100%;
+}
+
+.showPatients
+{
+    position: absolute;
+    visibility: visible;
+    bottom: 400px;
+}
+
+.hideMenuAudio
+{
+    display: none;
+}
+

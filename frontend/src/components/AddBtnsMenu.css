@@ -1,0 +1,47 @@
+.addMenu
+{
+    height: auto;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.frontbtn
+{
+    position: relative;
+    z-index: 2; 
+    transition: all 0.4s;
+
+}
+
+.giraGira
+{
+  transform: rotate(45deg);
+  transition: all 0.4s;
+}
+
+.backBtn
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; 
+    transition: 0.4s;
+    visibility: hidden;
+}
+
+.btn1
+{
+    position: absolute;
+    transform: translateY(-60px);
+    transition: 0.4s;
+    visibility: visible;
+}
+
+.btn2
+{
+    position: absolute;
+    transform: translateY(-120px);
+    transition: 0.4s;
+    visibility: visible;
+}
