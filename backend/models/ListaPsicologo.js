@@ -18,7 +18,7 @@ class ListaPsicologo {
             const listaPsicologo = {
                 idPsicologo: idPsicologo,
                 nombrePsicologo: await psicologo.findNameById(idPsicologo),
-                idPaciente: idPaciente,                fotoPerfil: null,
+                idPaciente: idPaciente,                
                 fotoPerfil: null,
                 ultimoMensaje: null,
             };
@@ -35,6 +35,14 @@ class ListaPsicologo {
             return listaPsicologos;
         } catch (error) {
             throw new Error('Error al obtener la lista de psicologos: ' + error.message);
+        }
+    }
+    async getAllPacients(idPsicologo){
+        try{
+            const listaPacientes = await this.colListaPsicologo.find({idPsicologo}).toArray();
+            return listaPacientes;
+        }catch(error){
+            throw new Error('Error al obtener todos los pacientes: ' + error.message);
         }
     }
 }
