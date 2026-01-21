@@ -50,6 +50,17 @@ class Cita {
             throw new Error('Error al obtener las citas: ' + error.message);
         }
     }
+    async getCitaById(idCita){
+        try {
+            if (!ObjectId.isValid(idCita)) {
+                throw new Error('ID de cita no válido');
+            }
+            const cita = await this.colCitas.findOne({_id: new ObjectId(idCita)});
+            return cita;
+        } catch (error) {
+            throw new Error('Error al obtener la cita: ' + error.message);
+        }
+    }
     async editCita(idCita, datosCitaActualizados){
         try{
             if (!ObjectId.isValid(idCita)) {

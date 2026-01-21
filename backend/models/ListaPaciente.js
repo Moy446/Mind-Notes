@@ -1,5 +1,5 @@
 import dbClient from "../config/dbClient.js";
-import Paciente from "../models/Paciente.js";
+import Paciente from "./Paciente.js";
 /* Modelo de datos para ListaPaciente
    Aqui unicamente se definen las operaciones relacionadas con la coleccion de ListaPacientes
    en la base de datos MongoDB
@@ -36,6 +36,14 @@ class ListaPaciente {
             return listaPacientes;
         } catch (error) {
             throw new Error('Error al obtener la lista de pacientes: ' + error.message);
+        }
+    }
+    async getAll(){
+        try {
+            const listaPacientes = await this.colListaPaciente.find().toArray();
+            return listaPacientes;
+        } catch (error) {
+            throw new Error('Error al obtener toda la lista de pacientes: ' + error.message);
         }
     }
 
