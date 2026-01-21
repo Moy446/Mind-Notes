@@ -1,4 +1,5 @@
 import dbClient from "../config/dbClient.js";
+import { ObjectId } from "mongodb";
 
 /* Modelo de datos para Cita
    Aqui unicamente se definen las operaciones relacionadas con la coleccion de Citas
@@ -14,15 +15,17 @@ class Cita {
     async create(datosCita){
         try{
             const cita = {
-                idCita : new ObjectId(datosCita.idCita),
                 idPaciente : datosCita.idPaciente,
                 idPsicologo: datosCita.idPsicologo,
                 nombrePaciente: datosCita.nombrePaciente,
                 nombrePsicologo: datosCita.nombrePsicologo,
                 fechaCita: datosCita.fechaCita,
                 horaInicio: datosCita.horaInicio,
+                horaFin: datosCita.horaFin,
                 duracion: datosCita.duracion,
                 estado: datosCita.estado || 'programada',
+                createdAt: new Date(),
+                updatedAt: new Date()
             };
             const resultado = await this.colCitas.insertOne(cita);
             return resultado;
@@ -45,6 +48,21 @@ class Cita {
             return citas;
         } catch (error) {
             throw new Error('Error al obtener las citas: ' + error.message);
+        }
+    }
+    async editCita(idCita, datosCitaActualizados){
+        try{
+            if (!ObjectId.isValid(idCita)) {
+                throw new Error('ID de cita no válido');
+            }
+            const resultado = await this.colCitas.updateOne({_id: new ObjectId(idCita)}, { $set: {...datosCitaActualizados, updatedAt: new Date()}
+            });
+            if (resultado.matchedCount === 0) {
+                throw new Error("No se encontró la cita");
+            }
+            return resultado;
+        }catch(error){
+            throw new Error('Error al editar la cita: ' + error.message);
         }
     }
 }
