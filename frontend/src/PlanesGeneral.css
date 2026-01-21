@@ -22,8 +22,8 @@ h1{
     height: auto;
     width: 100%;
     font-family: 'Saira';
-    padding: 5vw;
-    gap: 3%;
+    padding: 1vw;
+    gap: 5%;
     justify-content: center;
 }
 
@@ -72,32 +72,77 @@ h1{
 }
 
 /**/
+@media (max-width: 1024px) {
+
+    h1 {
+        font-size: 64px;
+        text-align: center;
+    }
+
+    .div-planesGeneral {
+        gap: 40px;
+    }
+
+    .btn-planesGeneral {
+        font-size: 36px;
+    }
+
+    .p-duracion {
+        font-size: 28px;
+    }
+}
+
+/* ===============================
+RESPONSIVE – MOBILE
+================================ */
 @media (max-width: 768px) {
 
-.div-planesGeneral{
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    justify-items: center;
-    text-align: center;
-    row-gap: 30px;
-    padding: 20px 0;
+    .div-planesGeneral {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .div-planCard {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .img-planesGeneral {
+        width: 120px;
+        height: 120px;
+    }
+
+    h1 {
+        font-size: 48px;
+        text-align: center;
+    }
+
+    .p-duracion {
+        font-size: 24px;
+    }
+
+    .btn-planesGeneral {
+        font-size: 32px;
+        border-width: 6px;
+    }
 }
 
-.div-planUno{
-    grid-column: 1 / 3;
-    grid-row: 1;
-    max-width: 90%;
-}
+/* ===============================
+RESPONSIVE – SMALL MOBILE
+================================ */
+@media (max-width: 480px) {
 
-.div-planDos{
-    grid-column: 1 / 3;
-    grid-row: 2;
-}
+    h1 {
+        font-size: 36px;
+    }
 
-.div-planTres{
-    grid-column: 1 / 3;
-    grid-row: 3;
-    width: 90%;
-    margin: 0;
-}
+    .btn-planesGeneral {
+        font-size: 28px;
+    }
+
+    .p-duracion {
+        font-size: 22px;
+    }
 }
