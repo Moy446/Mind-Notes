@@ -13,7 +13,7 @@ import Planes from './Planes.jsx'
 
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
-import Login from './Login.jsx'
+import Login from './login.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
