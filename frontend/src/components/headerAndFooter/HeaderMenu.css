@@ -1,0 +1,92 @@
+.div-HeaderContenedor {
+    display: flex;
+    height: 100px;
+    width: 100%;
+    background-color: #2973B2;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    position: relative;
+}
+
+.img-headermenu {
+    height: 60%;
+    width: auto;
+    cursor: pointer;
+}
+
+/* ===== MENÚ DESKTOP ===== */
+.nav-headermenu {
+    display: flex;
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 24px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 30px;
+}
+
+.nav-link{
+    color: #FFF;
+    text-decoration: none;
+}
+
+/* ===== BOTÓN HAMBURGUESA ===== */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.menu-toggle span {
+    width: 28px;
+    height: 3px;
+    background: #FFF;
+    margin: 5px 0;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-headermenu {
+        position: absolute;
+        top: 100px;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        background-color: #2973B2;
+        align-items: center;
+        gap: 20px;
+        overflow: hidden;
+        max-height: 0;
+        transition: max-height 0.3s ease;
+    }
+
+    .nav-headermenu.activo {
+        max-height: 300px;
+    }
+
+    .a-headermenu {
+        font-size: 20px;
+        padding: 10px 0;
+    }
+}
+
+a:hover{
+    background: rgba(41, 115, 178, 0.60);
+    border-radius: 10%;
+}
+
+/* ===== FUENTE ===== */
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+}
