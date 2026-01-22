@@ -5,7 +5,6 @@ import './index.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import MenuPsiF from './MenuPsiF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
-import ComoFunciona from "./ComoFunciona.jsx";
 
 import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
