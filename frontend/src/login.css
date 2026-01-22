@@ -27,12 +27,52 @@
     transition: all .6s ease-in-out 1.2s, visibility 0s linear 1s;
 }
 
-.loginContainer.active .formBox{
+.loginContainer.password .formBox{
+    right: 50%;
+}
+
+.loginContainer.register .formBox{
     right: 50%;
 }
 
 form{
     width: 100%;
+}
+
+.div-titleLogin{
+    width: 100%;
+    height: 102px;
+    border-radius: 20px;
+    background: #9ACBD0;
+    margin-left: 9%;
+    padding-top: 1%;
+}
+
+.label-recordarUsuario{
+    width: 100%;
+    height: 102px;
+    border-radius: 20px;
+    background: #9ACBD0;
+    margin-left: 9%;
+    padding-top: 1%;
+}
+
+.div-titleRegister{
+    width: 100%;
+    height: 102px;
+    border-radius: 20px;
+    background: #9ACBD0;
+    margin-right: 9%;
+    padding-top: 1%;
+}
+
+.div-titlePassword{
+    width: 100%;
+    height: 102px;
+    border-radius: 20px;
+    background: #2973B2;
+    margin-right: 9%;
+    padding-top: 1%;
 }
 
 .login-title{
@@ -141,11 +181,13 @@ text-decoration: none;
 }
 
 /*REGISTRO*/
-.formBox.register{
+.formBox{
     visibility: hidden;
 }
 
-.loginContainer.active .formBox.register{
+.loginContainer.login .formBox.login,
+.loginContainer.register .formBox.register,
+.loginContainer.password .formBox.password{
     visibility: visible;
 }
 
@@ -164,10 +206,20 @@ text-decoration: none;
     background: #2973B2;
     z-index: 2 ;
     border-radius: 100px;
-    transition: 1.8s ease-in-out;
+    transition: left 1.8s ease-in-out,
+        background-color 0.8s ease-in-out;
 }
 
-.loginContainer.active .toggle-box::before{
+.loginContainer.password .toggle-box::before {
+    left: 50%;
+    background-color: #48A6A7; /* verde */
+}
+
+.loginContainer.password .btn.login{
+    background-color: #2973B2;
+}
+
+.loginContainer.register .toggle-box::before{
     left: 50%;
 }
 
@@ -175,7 +227,6 @@ text-decoration: none;
     position: absolute;
     width: 50%;
     height: 100%;
-    /* background: #2973B2; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -189,7 +240,14 @@ text-decoration: none;
     transition-delay: 1.2s;
 }
 
-.loginContainer.active .toggle-panel.toggle-left{
+/*Mueve el saludo del panel a la izquierda (sale de la pantalla)*/
+.loginContainer.register .toggle-panel.toggle-left{
+    left: -50%;
+    transition-delay: .6s;
+}
+
+/*Mueve el saludo del panel a la izquierda (sale de la pantalla)*/
+.loginContainer.password .toggle-panel.toggle-left{
     left: -50%;
     transition-delay: .6s;
 }
@@ -199,7 +257,14 @@ text-decoration: none;
     transition-delay: .6s;
 }
 
-.loginContainer.active .toggle-panel.toggle-right{
+/*Mueve el saludo del panel a la derecha (sale de la pantalla)*/
+.loginContainer.register .toggle-panel.toggle-right{
+    right: 0;
+    transition-delay: 1.2s;
+}
+
+/*Mueve el saludo del panel a la derecha (sale de la pantalla)*/
+.loginContainer.password .toggle-panel.toggle-right{
     right: 0;
     transition-delay: 1.2s;
 }
@@ -224,17 +289,29 @@ text-decoration: none;
 
 .btn-toggleRegistrar{
     width: 450px;
-height: 70px;
-border-radius: 20px;
-opacity: 0.7;
-background: var(--Btn2, #9ACBD0);
-border: none;
+    height: 70px;
+    border-radius: 20px;
+    opacity: 0.7;
+    background: var(--Btn2, #9ACBD0);
+    border: none;
 
-color: var(--Background1, #F2EFE7);
-text-align: center;
-font-family: Saira;
-font-size: 30px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+    color: var(--Background1, #F2EFE7);
+    text-align: center;
+    font-family: Saira;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
 }
+
+/**/
+.password-title{
+    color: var(--Background1, #F2EFE7);
+    font-family: Saira;
+    font-size: 45px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+/**/
