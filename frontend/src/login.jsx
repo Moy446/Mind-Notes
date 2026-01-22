@@ -1,5 +1,6 @@
 import React, { useState} from 'react'
 import {Link } from 'react-router-dom';
+import Switch from './components/Switch'
 import './login.css'
 
 export default function Login() {
@@ -19,11 +20,21 @@ export default function Login() {
                         <input type="password" placeholder='Contraseña' required />
                     </div>
 
+                    <div>
+                        <input type="checkbox" className="input-recordarUsuario"/>
+                        <label for="label-recordarUsuario">Recordar usuario</label>
+                    </div>
+
                     <div className='forgotLink'>
                         <Link to={''} className=''>¿Olvidaste tu contraseña?</Link>
                     </div>
 
-                    <button type='submit' className='btn-login'>Ingresar</button>
+                    <div className='forgotLink'>
+                        <p>¿Aún no tienes cuenta?</p>
+                        <Link to={''} className=''>Registrarse --</Link>
+                    </div>
+
+                    <button type='submit' className='btn login'>Ingresar</button>
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
@@ -53,9 +64,10 @@ export default function Login() {
                         <input type="passwordConfirm" placeholder='Confirmar contraseña' required />
                     </div>
 
-                    <button type='switchButton'></button>  
+                    <p className='p-switch'>¿Eres psicólogo?</p>
+                    <Switch/>
 
-                    <button type='submit' className='btn-register'>Registrarse</button>
+                    <button type='submit' className='btn register'>Registrarse</button>
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i class="fa-brands fa-google"></i></a>
@@ -65,7 +77,7 @@ export default function Login() {
 
 
 
-        <div className='toggle-box'>
+        <div className="toggle-box">
             <div className="toggle-panel toggle-left">
                 <h1 className='title-saludo'>¡Hola, bienvenido!</h1>
                 <p>¿Aún no tienes cuenta?</p>
