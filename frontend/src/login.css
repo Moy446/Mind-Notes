@@ -67,17 +67,16 @@ form{
     height: 60px;
     padding: 13px 50px 13px 20px;
     border-radius: 20px;
-    opacity: 0.3;
-    background: var(--Principal, #2973B2);
+    background: var(--Principal, #B6CAD7);
     border: none;
     outline: none;
-    font-size: 16px;
-    color: #000000;
+    font-size: 20px;
+    color: #353535;
     font-weight: 500;
 }
 
 .inputBox input::placeholder{
-    color: #000000;
+    color: #8C8A8A;
     font-weight: 400;
 }
 
@@ -111,6 +110,10 @@ text-decoration: none;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+}
+
+.btn.register{
+    margin-top: 10px;
 }
 
 .input-recordarUsuario{
