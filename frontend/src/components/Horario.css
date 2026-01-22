@@ -1,0 +1,25 @@
+.horario
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.titleHorario
+{
+    font-family: 'Saira';
+    font-weight: 800;
+    color: black;
+    font-size: 25px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

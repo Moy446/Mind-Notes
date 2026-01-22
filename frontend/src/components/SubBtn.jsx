@@ -29,11 +29,11 @@ export default function SubBtn(props){
         if(price == "Gratis")
         {
             return(
-                <img src="src/images/logocolor.png" alt="Descripción de la imagen" className='imgsub'/>
+                <img src="/src/images/logocolor.png" alt="Descripción de la imagen" className='imgsub'/>
             );
         }
         return(
-            <img src="src/images/logowithe.png" alt="Descripción de la imagen" className='imgsub'/>
+            <img src="/src/images/logowithe.png" alt="Descripción de la imagen" className='imgsub'/>
         );
     }
 

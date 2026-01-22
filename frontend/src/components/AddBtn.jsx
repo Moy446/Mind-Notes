@@ -35,7 +35,7 @@ export default function AddBtn(props){
     };
 
     return (
-            <button type="submit" className="add-btn">
+            <button type="submit" className="add-btn" onClick={props.handleOpen}>
                {svgRender(props.num)}
             </button>
     );

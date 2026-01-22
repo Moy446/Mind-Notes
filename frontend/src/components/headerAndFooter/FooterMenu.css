@@ -1,0 +1,231 @@
+.div-FooterContenedor
+{
+    display: flex;
+    height: 319px;
+    width: 100%;
+    background-color: #2973B2;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 25px;
+}
+
+.nav-footermenu
+{
+    display: grid; 
+    grid-column: 200px;
+    height: auto;
+    width: 100%;
+    background-color: #2973B2;
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 18px;
+    align-items: center;
+    justify-content: end;
+    gap: 3%;
+    grid-template-columns: 4fr 2fr 2fr 4fr;
+}
+
+.img-footermenu
+{
+    height: 60%;
+    width: auto;
+    align-self: center;
+    justify-self: center;
+    margin: 20px;
+    cursor: pointer;
+}
+
+/* .a-footermenu
+{
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 18px;
+    align-items: center;
+    text-decoration: none;
+    padding-right: 3%
+} */
+
+h4{
+    color: #FFF;
+    font-family: Saira;
+    font-size: 27px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+.one{
+    grid-column: 1;
+    grid-row: 1;
+}
+.two{
+    grid-column: 2;
+    grid-row: 1;
+}
+.three{
+    grid-column: 3;
+    grid-row: 1;
+    gap: 200px; 
+}
+.four{
+    background: rgba(255, 255, 255, 0.30);
+    border-radius: 5px;
+    grid-column: 4;
+    grid-row: 1;
+    margin: 15px;
+    align-items: center;
+    justify-content: center;
+    justify-items: center;
+    padding: 15px;
+}
+
+ul{
+    list-style: none;
+}
+
+.li-link{
+    color: #FFF;
+    text-decoration: none;
+}
+
+.btn-enviar{
+    font-family: 'Saira';
+    background-color: #1B4D78;
+    font-weight: 400;
+    font-size: 20px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 35px;
+    text-align: center;
+    margin-top: 10px;
+
+    color: #FFF;
+    text-align: center;
+    font-family: Saira;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.input-footer{
+    width: 300px;
+    height: 35px;
+    border-radius: 5px;
+    background: #FFF;
+    border: none;
+    outline: none;
+    margin: 10px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: rgba(27, 77, 120, 0.70);
+
+    text-align: center;
+    font-family: Saira;
+    font-size: 17px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.footer-CopyrightElement{
+    display: flex;
+    width: auto;
+    height: 60px;
+    background: #1B4D78;
+
+    color: #FFF;
+    text-align: center;
+    font-family: Saira;
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: normal;
+    padding-top: 15px;
+    gap: 20px;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.a-icons{
+    color: #FFF;
+}
+
+@font-face {
+    font-family: 'Saira';
+    src: url('../fonts/Saira.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900; 
+}
+
+/**/
+@media (max-width: 900px) {
+
+.div-FooterContenedor {
+    flex-direction: column;
+    height: auto;
+    padding-bottom: 30px;
+}
+
+.img-footermenu {
+    height: 80px;
+    margin: 20px auto;
+}
+
+.nav-footermenu {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    justify-items: center;
+    text-align: center;
+    row-gap: 30px;
+    padding: 20px 0;
+}
+
+.one {
+    grid-column: 1 / 3;
+    grid-row: 1;
+    max-width: 90%;
+}
+
+.two {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.three {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.four {
+    grid-column: 1 / 3;
+    grid-row: 3;
+    width: 90%;
+    margin: 0;
+}
+
+.input-footer {
+    width: 100%;
+    max-width: 280px;
+}
+}
+
+@media (max-width: 480px) {
+
+.footer-CopyrightElement {
+    flex-direction: column;
+    height: auto;
+    padding: 15px 0;
+    gap: 10px;
+}
+
+.footer-CopyrightElement p {
+    text-align: center;
+    padding: 0 10px;
+}
+}
