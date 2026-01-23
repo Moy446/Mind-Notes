@@ -8,11 +8,15 @@ class Agenda {
         try{
             const agenda = {
                 idCita: datosAgenda.idCita,
+                idPsicologo: datosAgenda.idPsicologo,
+                idPaciente: datosAgenda.idPaciente,
                 horaInicio: datosAgenda.horaInicio,
                 horaFin: datosAgenda.horaFin,
                 fechaCita: datosAgenda.fechaCita,
                 fotoPaciente: datosAgenda.fotoPaciente || null,
                 fotoPsicologo: datosAgenda.fotoPsicologo || null,
+                nombrePaciente: datosAgenda.nombrePaciente || '',
+                nombrePsicologo: datosAgenda.nombrePsicologo || '',
                 status: datosAgenda.status || 'programada',
                 createdAt: new Date(),
                 updatedAt: new Date()

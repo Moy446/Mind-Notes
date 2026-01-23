@@ -1,29 +1,44 @@
 import Cita from '../models/Cita.js';
 import Agenda from '../models/Agenda.js';
 import Paciente from '../models/Paciente.js';
+import Psicologo from '../models/Psicologo.js';
 import ListaPaciente from '../models/ListaPaciente.js';
 
 class CalendarioController {
     constructor(){
     }
 
-    async loadCalendar(req,res){
-        const agenda = new Agenda();
-        const datosAgenda = await agenda.getAgenda(req.params.idPsicologo); //ver como lo hace el eric
-         
-        if (!datosAgenda){
-            res.render('calendario'/*vista calendario */, {
-                datosAgenda: ['No tiene ningun paciente asignado']
-            });
-        }
-        res.render('calendario'/*vista calendario */, {
-            datosAgenda: datosAgenda
-        });
+    calcularHora(tiempo){
+        const [hora, minutos] = tiempo.split(':').map(Number);
+        return hora + minutos / 60;
     }
 
-    async crearCita(req,res){
+    loadCalendar = async (req,res) => {
+        const agenda = new Agenda();
+        //obtener idPsicologo de session o token
+        const idPsicologo = "694b01541fb1a9eadec23c53";
+        try {
+            const datosAgenda = await agenda.getAgenda(idPsicologo); //ver como lo hace el eric
+            const formattedAgenda = datosAgenda.map(cita =>({
+                id:cita.idCita,
+                nombre:cita.nombrePaciente,
+                img:cita.fotoPaciente,
+                horaI: this.calcularHora(cita.horaInicio),
+                horaF: this.calcularHora(cita.horaFin),
+                año: cita.fechaCita.split('-')[2],
+                mes: cita.fechaCita.split('-')[1],
+                dia: cita.fechaCita.split('-')[0],
+                estado: cita.status
+        }));   
+            res.status(200).json({success:true, formattedAgenda});
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al buscar en la agenda: ' + error.message });
+        }
+    }
+
+    crearCita = async (req,res) => {
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin, idPsicologo,nombrePsicologo} = req.body;
-        const duracion = horaFin - horaInicio; //checar como calcular la duracion
+        const duracion = (this.calcularHora(horaFin) - this.calcularHora(horaInicio)) * 60;
         try{
             const nuevaCita = {
                 idPaciente,
@@ -37,18 +52,36 @@ class CalendarioController {
                 estado: 'programada'
             } 
             const cita = new Cita();
-            await cita.create(nuevaCita);  
-            //falta agregarla en la agenda
-            res.status(201).json({ success: true, message: 'Cita creada exitosamente' });
+            const result = await cita.create(nuevaCita);  
+            const paciente = new Paciente();
+            const psicologo = new Psicologo();
+            const datosPaciente = await paciente.findById(idPaciente);
+            const datosPsicologo = await psicologo.findById(idPsicologo);
+            const agenda = new Agenda();
+            const nuevaAgenda = {
+                idCita: result.insertedId,
+                idPsicologo,
+                idPaciente,
+                horaInicio,
+                horaFin,
+                fechaCita, 
+                fotoPaciente: datosPaciente.fotoPerfil,
+                fotoPsicologo: datosPsicologo.fotoPerfil,
+                nombrePaciente,
+                nombrePsicologo, //falta ver donde guarda eric estos valores
+                estado: 'programada',
+            }
+            await agenda.create(nuevaAgenda);
+            res.status(201).json({ success: true, message: 'Cita creada exitosamente',result:result });
         }catch(error){
             res.status(500).json({ success: false, message: 'Error al crear la cita: ' + error.message });
         }
     }
 
-    async editarCita(req,res){
+    editarCita = async (req,res) =>{
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin, idPsicologo,nombrePsicologo} = req.body;
         const {idCita} = req.params;
-        const duracion = horaFin - horaInicio;
+        const duracion = (this.calcularHora(horaFin) - this.calcularHora(horaInicio)) * 60;
         try{
             const datosActualizados = {
                 idPaciente,
@@ -64,6 +97,25 @@ class CalendarioController {
             const cita = new Cita();
             await cita.editCita(idCita, datosActualizados);  
             //falta agregarla en la agenda
+            const paciente = new Paciente();
+            const psicologo = new Psicologo();
+            const datosPaciente = await paciente.findById(idPaciente);
+            const datosPsicologo = await psicologo.findById(idPsicologo);
+            const agenda = new Agenda();
+            const nuevaAgenda = {
+                idCita,
+                idPsicologo,
+                idPaciente,
+                horaInicio,
+                horaFin,
+                fechaCita, 
+                fotoPaciente: datosPaciente.fotoPerfil,
+                fotoPsicologo: datosPsicologo.fotoPerfil,
+                nombrePaciente,
+                nombrePsicologo, //falta ver donde guarda eric estos valores
+                estado: 'programada',
+            }
+            await agenda.create(nuevaAgenda);
             res.status(201).json({ success: true, message: 'Cita editada exitosamente' });
         }catch(error){
             res.status(500).json({ success: false, message: 'Error al editar la cita: ' + error.message });
@@ -108,7 +160,7 @@ class CalendarioController {
         }
     }
 
-    async obtenerNombresPacientes(req, res){
+    async cargarPacientes(req, res){
         const listaPacientes = new ListaPaciente();
         const nombresPacientes = await listaPacientes.getAll();
         res.status(200).json({success:true, nombresPacientes});

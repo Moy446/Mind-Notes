@@ -10,6 +10,6 @@ router.post('/calendario', /*Falta middleware, */calendarController.crearCita)
 router.put('/calendario/:idCita', /*Falta middleware, */calendarController.editarCita)
 router.delete('/calendario/:idCita', /*Falta middleware, */calendarController.eliminarCita)
 //Posible ruta, ocupo ver como se armo el archivo
-router.get('/calendario/ci/s', /*Falta middleware, */calendarController.obtenerNombresPacientes)
+router.get('/calendario/pacientes/lista', /*Falta middleware, */calendarController.cargarPacientes)
 
 export default router;
