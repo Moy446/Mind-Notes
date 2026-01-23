@@ -1,25 +1,49 @@
-import React from 'react'
-import { useState, useCallback } from 'react';
+import React, { use } from 'react'
+import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CalendarioF.css'
 import CitasList from './components/CitasList';
 import MeetMenu from './components/MeetMenu'
+import clienteAxios from './services/axios';
 
 export default function CalendarioF(props) {
 
-    const citas = [
-        { id: 1, nombre: "Teisel", img: "/src/images/testimg.png", horaI: 9, horaF: 10.2, año: "2026", mes: "0", dia: "20" },
-        { id: 2, nombre: "Wiwiw", img: "/src/images/testimg.png", horaI: 9, horaF: 10.2, año: "2026", mes: "0", dia: "24" },
-        { id: 1, nombre: "Teisel", img: "/src/images/testimg.png", horaI: 11, horaF: 13, año: "2026", mes: "0", dia: "20" },
-    ];
+    const [citas, setCitas] = useState([]);
+
+    const cargarCitas = async () => {
+        try {
+            const res = await clienteAxios.get('/psicologo/calendario/')
+            if(res.data.success){
+                const citasList = res.data.formattedAgenda
+                setCitas(citasList.map(cita =>({
+                    id: cita.id,
+                    nombre: cita.nombre,
+                    img: cita.img,
+                    horaI: cita.horaI,
+                    horaF: cita.horaF,
+                    año: cita.año,
+                    mes: cita.mes - 1,
+                    dia: cita.dia,
+                    estado: cita.estado
+                })));
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(()=>{
+        cargarCitas();
+    },[])
 
     const [addMenu, openAddMenu] = useState(false);
     const handleAdd = useCallback(() => {
                 openAddMenu(!addMenu)
             }, [addMenu])
 
+    const [selectedCitaId, setSelectedCitaId] = useState(null);
     const [editMenu, openEditMenu] = useState(false);
-    const handleEdit = useCallback(() => {
+    const handleEdit = useCallback((id) => {
+                setSelectedCitaId(id);
                 openEditMenu(!editMenu)
             }, [editMenu])
 
@@ -27,7 +51,7 @@ export default function CalendarioF(props) {
         const elementos = [];
         for (let i = 1; i <= 23; i++) {
             elementos.push(
-                <div>
+                <div key={i}>
                     {i}
                 </div>
             );
@@ -54,12 +78,12 @@ export default function CalendarioF(props) {
             const day = new Date(cita.año, cita.mes, cita.dia);
             dia.fullDate.setHours(0, 0, 0, 0);
             day.setHours(0, 0, 0, 0);
-
             if (day.getTime() === dia.fullDate.getTime()) {
                 citasMostradas.push(
-                    <div className='citaF' onClick={handleEdit} style={{
+                    <div className='citaF' onClick={() => handleEdit(cita.id)} style={{
                         top: `${cita.horaI * 4.166667}%`,
-                        height: `${(cita.horaF - cita.horaI) * 4.166667}%`
+                        height: `${(cita.horaF - cita.horaI) * 4.166667}%`,
+                        backgroundColor: cita.estado === 'confirmada' ? '#A3F4B5' : cita.estado === 'programada' ? '#A3D8F4' : cita.estado === 'reagendada' ? '#e8f4a3' : '#f4a3a3'
                     }}>
                         <img src={cita.img} className='imgCitaF' />
                         {cita.nombre}
@@ -119,7 +143,7 @@ export default function CalendarioF(props) {
                     <div className='calendario'>
                         <div className='dias'>
                             {week.map((dia) => (
-                                <div className='dia' key={dia}>
+                                <div className='dia' key={dia.day}>
                                     {dia.day}
                                     <div className={dia.fullDate.getTime() === currentDate.getTime() ? "numero diaActual" : "numero"}>
                                         {dia.date}
@@ -140,7 +164,7 @@ export default function CalendarioF(props) {
                   <MeetMenu handleAdd={handleAdd}/>          
             </div>
             <div className={editMenu ? "showAddMenu" : "hideAddMenu"}>
-                  <MeetMenu handleAdd={handleAdd} tipo={true} handleEdit={handleEdit}/>          
+                  <MeetMenu handleAdd={handleAdd} tipo={true} handleEdit={handleEdit} citaId= {selectedCitaId}/>          
             </div>
         </div>
     );
