@@ -24,7 +24,7 @@ export default function CalendarioF(props) {
                     horaI: cita.horaI,
                     horaF: cita.horaF,
                     año: cita.año,
-                    mes: cita.mes,
+                    mes: cita.mes - 1,
                     dia: cita.dia,
                     estado: cita.estado
                 })));

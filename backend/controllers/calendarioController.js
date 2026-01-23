@@ -186,10 +186,17 @@ class CalendarioController {
         }
     }
 
-    async obtenerNombresPacientes(req, res){
-        const listaVinculacion = new ListaVinculacion();
-        const nombresPacientes = await listaVinculacion.getAll();
-        res.status(200).json({success:true, nombresPacientes});
+    async cargarPacientes(req, res){
+        //borrar
+        const idPsicologo = "694b01541fb1a9eadec23c53";
+        //
+        try {
+            const listaPacientes = new ListaPaciente();
+            const nombresPacientes = await listaPacientes.findPacienteByIdPsicologo(idPsicologo);
+            res.status(200).json({success:true, nombresPacientes});
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al cargar la lista de pacientes: ' + error.message });    
+        }
     }
 
 }
