@@ -45,6 +45,7 @@ form{
     border-radius: 20px;
     background: #9ACBD0;
     margin-left: 9%;
+    margin-bottom: 40px;
     padding-top: 1%;
 }
 
@@ -72,7 +73,8 @@ form{
     border-radius: 20px;
     background: #2973B2;
     margin-right: 9%;
-    padding-top: 1%;
+    padding-top: 2%;
+    margin-bottom: 120px;
 }
 
 .login-title{
@@ -95,6 +97,12 @@ form{
 
 .p-switch{
     margin-bottom: 2px;
+    text-align: left;
+    margin-left: 12%;
+}
+
+switch{
+    text-align: left;
 }
 
 .inputBox{
@@ -142,6 +150,7 @@ text-decoration: none;
     background: var(--Btn1, #48A6A7);
     box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     border: none;
+    margin-top: 15px;
 
     color: #000;
     text-align: center;
@@ -158,6 +167,20 @@ text-decoration: none;
 
 .input-recordarUsuario{
     margin-bottom: 30px;
+}
+
+.div-links{
+    display: grid; 
+    grid-column: 200px;
+    height: 9vw;
+    width: 100%;
+    font-family: 'Saira';
+    padding: 2vw;
+    /* background: #48A6A7; */
+    align-items: center;
+    justify-content: end;
+    gap: 3%;
+    grid-template-columns: 1fr 1fr;
 }
 
 .loginContainer p{
@@ -177,7 +200,7 @@ text-decoration: none;
     font-size: 24px;
     color: #000;
     text-decoration: none;
-    margin: 0 8px;
+    margin: 10px 8px;
 }
 
 /*REGISTRO*/

@@ -5,6 +5,7 @@ import './login.css'
 
 export default function Login() {
     const [modo, setModo] = useState('login')
+    const [activo, setActivo] = useState(false)
 
     return (
         <div className={`loginContainer ${modo}`}>
@@ -21,34 +22,51 @@ export default function Login() {
                         <input type="password" placeholder='Contraseña' required />
                     </div>
 
-                    <div>
-                        <input type="checkbox" className="input-recordarUsuario"/>
-                        <label htmlFor="input-recordarUsuario">Recordar usuario</label>
-                    </div>
+                    <p className='p-switch'>¿Eres psicólogo?</p>
+                    {/* <Switch
+                        id={"pSwitch"} 
+                        valor={false}
+                        onCambio={(c)=>{!c}}
+                    /> */}
 
-                    <div className='forgotLink'>
-                        <Link to=""
-                            className="link-Password"
-                            onClick={(e) => {
-                                e.preventDefault()
-                                setModo('password')
-                            }}
-                            >
-                            ¿Olvidaste tu contraseña?
-                        </Link>
-                    </div>
-
-                    <div className='forgotLink'>
-                        <p>¿Aún no tienes cuenta?</p>
-                        <Link to={''} className=''
-                            onClick={(e) => {
-                                    e.preventDefault()
-                                    setModo('register')
-                                }}
-                        >Registrarse --</Link>
-                    </div>
+                    <Switch
+                        id="pSwitch"
+                        valor={activo}
+                        // onCambio={(c) => setActivo(!c)}
+                        onCambio={setActivo}
+                    />
 
                     <button type='submit' className='btn login'>Ingresar</button>
+
+                    <div className='div-links'>
+                        <div>
+                            <input type="checkbox" className="input-recordarUsuario"/>
+                            <label htmlFor="input-recordarUsuario">Recordar usuario</label>
+                        </div>
+
+                        <div className='forgotLink'>
+                            <p>¿Aún no tienes cuenta?</p>
+                            <Link to={''} className=''
+                                onClick={(e) => {
+                                        e.preventDefault()
+                                        setModo('register')
+                                    }}
+                            >Registrarse --</Link>
+                        </div>
+
+                        <div className='forgotLink'>
+                            <Link to=""
+                                className="link-Password"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    setModo('password')
+                                }}
+                                >
+                                ¿Olvidaste tu contraseña?
+                            </Link>
+                        </div>
+                    </div>
+
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
@@ -57,7 +75,7 @@ export default function Login() {
             </div>
 
 
-
+{/* ---------------------------REGISTRO--------------------------- */}
             <div className='formBox register'>
                 <form action="form-register">
                     <div className='div-titleRegister'>         
@@ -81,7 +99,12 @@ export default function Login() {
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
-                    <Switch/>
+                    <Switch
+                        id="pSwitch"
+                        valor={activo}
+                        // onCambio={(c) => setActivo(!c)}
+                        onCambio={setActivo}
+                    />
 
                     <button type='submit' className='btn register'>Registrarse</button>
                     <p>O ingresa con:</p>
@@ -92,6 +115,7 @@ export default function Login() {
             </div>
 
 
+{/* ---------------------------Recuperar contraseña--------------------------- */}
             <div className='formBox password'>
                 <form action="form-password">
                     <div className='div-titlePassword'>
