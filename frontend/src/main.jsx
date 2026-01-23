@@ -12,6 +12,7 @@ import Planes from './Planes.jsx'
 import CalendarioF from './CalenndarioF.jsx'
 import MenuPaF from './MenuPaF.jsx'
 import PerfilPaF from './PerfilPaF.jsx'
+import ChatPaF from './ChatPaF.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -26,7 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='planes' element={<Planes/>}/>
         </Route>
         <Route path='/paciente' element={<MenuPaF/>}>
-          <Route path='chat:id' element={<div>chat p</div>}/>
+          <Route path='chat:id' element={<ChatPaF/>}/>
           <Route path='perfil:id' element={<PerfilPaF/>}/>
         </Route>
         <Route path='/' element = {<App/>}/>

@@ -24,7 +24,7 @@ function MenuPaF() {
             <MenuPa/>
             <Outlet context={{qrOpen , handleOpen, uidOpen, handleOpenUID}}/>
             <div className={qrOpen ? 'showQr' : 'hidenMenu'}>
-                <AddQr title = "Agregar Paciente" img = "/src/images/pqr.png" open = {qrOpen} handleOpen = {handleOpen}/>
+                <AddQr title = "Agregar Psicologo" img = "/src/images/pqr.png" open = {qrOpen} handleOpen = {handleOpen}/>
             </div>
             <div className={uidOpen ? 'showUID' : 'hidenMenu'}>
                 <AddUID open = {uidOpen} handleOpen = {handleOpenUID}/>
