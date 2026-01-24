@@ -73,8 +73,7 @@ export default function CalendarioF(props) {
                 <hr className='lineHour' />
             );
         }
-
-        for (const cita of citas) {
+        for (const cita of citas) {   
             const day = new Date(cita.año, cita.mes, cita.dia);
             dia.fullDate.setHours(0, 0, 0, 0);
             day.setHours(0, 0, 0, 0);
@@ -132,13 +131,19 @@ export default function CalendarioF(props) {
         };
     });
 
+    const [lineas,setLineas] = useState([]);
+    const [horas,setHoras] = useState([]);
+    useEffect(() => {
+        cargarCitas();
+    },[])
+
     return (
         <div className="calendarioF">
             <div className='fecha'>
                 Hoy
             </div>
             <div className='contentCalendario'>
-                <CitasList citas={citas} current={currentDate} handleAdd={handleAdd} handleEdit={handleEdit}/>
+                <CitasList citas={citas} current={currentDate} handleAdd={handleAdd} handleEdit={handleEdit} />
                 <div className='calendarioWrapper'>
                     <div className='calendario'>
                         <div className='dias'>

@@ -68,6 +68,7 @@ function App() {
     }
   }
 
+  const [activo, setActivo] = useState(false);
   return (
     <div className="App">
       <header className="App-header">
@@ -88,7 +89,7 @@ function App() {
           <ChatBox img = "src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor"/>
           <AddQr title = "Agregar Paciente" img = "src/images/pqr.png"/>
           <AddQr title = "Agregar Psicologo" img = "src/images/pqr.png"/>
-          <Switch/>
+          <Switch id="pSwitch" valor={activo} onCambio={setActivo}/>
           <MessageField/>
           <SearchBar/>
           <NameBar name = "Psicologo psicologico de psicologia" img = "src/images/pimg2.png"/>
