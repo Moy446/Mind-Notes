@@ -2,13 +2,13 @@ import dbClient from '../config/dbClient.js';
 
 export default (io) => {
   io.on('connection', (socket) => {
-    console.log('Usuario conectado:', socket.id);
+    console.log('Socket ID:', socket.id);
 
     // Unirse a una sala de chat (ej: 'chat-psicologoId-pacienteId')
     socket.on('joinChat', ({ idPsicologo, idPaciente }) => {
       const room = `chat-${idPsicologo}-${idPaciente}`;
       socket.join(room);
-      console.log(`Usuario ${socket.id} se unió a ${room}`);
+      console.log(`Socket ${socket.id} se unió a ${room}`);
     });
 
     // Enviar mensaje
@@ -31,7 +31,7 @@ export default (io) => {
     });
 
     socket.on('disconnect', () => {
-      console.log('Usuario desconectado:', socket.id);
+      console.log('Socket desconectado:', socket.id);
     });
   });
 };
