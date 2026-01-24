@@ -10,17 +10,42 @@ import InfoPsi from './components/InfoPsi';
 import DeleteMenu from './components/DeleteMenu';
 import SuppPsi from './components/SuppPsi';
 import { useOutletContext, useParams } from 'react-router-dom';
-import socket from './services/socket'; // NUEVO: Import del socket
+import socket from './services/socketService'; // NUEVO: Import del socket
+import { authService } from './services/authService';
+import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
+import { u } from 'framer-motion/client';
 
 export default function ChatPsiF(props){
 
-    const {qrOpen , handleOpen, uidOpen, handleOpenUID} = useOutletContext();
+    const {qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey} = useOutletContext();
     const { id } = useParams(); // NUEVO: Obtener el ID del chat de la URL
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
     const [selectedChat, setSelectedChat] = useState(id || null);
-    const idPsicologo = 'psicologo1'; // Temporal, luego vendrá del login
+    const idUser = authService.getUserId();
+    const [n, setN] = useState('Paciente');
+
+    const fetchSelectedName = useCallback(async () => {
+        if(!selectedChat) {
+            setN('Paciente');
+            return;     
+        }
+        try {
+            const data = await obtenerPacientesVinculados(idUser);
+            const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+            const paciente = lista.find(p => p.idPaciente === selectedChat);
+            setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Paciente');
+        } catch (error) {
+            console.error('Error al obtener el nombre del paciente:', error);
+            setN('Paciente');
+        }
+    }, [idUser, selectedChat]);
+
+
+    useEffect(() => {
+        fetchSelectedName();
+}, [fetchSelectedName]);
 
     // Estados existentes
     const [suppOpen, setOpenSupp] = useState(false)
@@ -50,32 +75,43 @@ export default function ChatPsiF(props){
     // NUEVO: Efecto para conectar al chat cuando se selecciona un paciente
     useEffect(() => {
         if (selectedChat) {
-            console.log('🔌 Uniéndose al chat:', selectedChat);
-            
-            // Unirse al chat
-            socket.emit('joinChat', { 
-                idPsicologo, 
-                idPaciente: selectedChat 
-            });
+        console.log('🔌 Uniéndose al chat:', selectedChat);
+        
+        // Cargar mensajes existentes
+        const loadMessages = async () => {
+            try {
+                const data = await obtenerMensajes(idUser, selectedChat);
+                const mensajes = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+                setMessages(mensajes);
+            } catch (error) {
+                console.error('Error al cargar mensajes:', error);
+                setMessages([]);
+            }
+        };
+        loadMessages();
+        
+        // Unirse al chat
+        socket.emit('joinChat', { 
+            idPsicologo: idUser, 
+            idPaciente: selectedChat 
+        });
 
-            // Escuchar mensajes nuevos
-            socket.on('receiveMessage', (newMessage) => {
-                console.log('📨 Mensaje recibido:', newMessage);
-                setMessages((prevMessages) => [...prevMessages, newMessage]);
-            });
+        // Escuchar mensajes nuevos
+        socket.on('receiveMessage', (newMessage) => {
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        });
 
-            return () => {
-                socket.off('receiveMessage');
-            };
-        }
+        return () => {
+            socket.off('receiveMessage');
+        };
+    }
     }, [selectedChat]);
 
     // NUEVO: Función para enviar mensajes
     const handleSendMessage = (message) => {
         if (message.trim() && selectedChat) {
-            console.log('📤 Enviando mensaje:', message);
             socket.emit('sendMessage', {
-                idPsicologo,
+                idPsicologo: idUser,
                 idPaciente: selectedChat,
                 mensaje: message,
                 remitente: 'psicologo'
@@ -98,9 +134,10 @@ export default function ChatPsiF(props){
                 uidOpen={uidOpen} 
                 handleOpenUID={handleOpenUID}
                 onSelectChat={handleSelectChat} // NUEVO: Pasar función de selección
+                refreshKey={refreshKey}
             />
             <div className='nameVarCon'>
-                <NameBar img = "/src/images/pimg1.png" name = "Teisel" open = {infoOpen} handleOpen={handleOpenInfo}/>
+                <NameBar img = "/src/images/pimg1.png" name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>
                 <div className='chatCon'>
                     <div className='chatView'>
                         <div className='bubbles'>
@@ -108,26 +145,8 @@ export default function ChatPsiF(props){
                             {messages.length === 0 ? (
                                 // Mensajes de prueba existentes (se mostrarán si no hay mensajes reales)
                                 <>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
-                                    <BubbleChat text = "Claro que si, con mucho gusto lo agendo, que día?" type = "send"/>
-                                    <BubbleChat text = "Hola, agendeme por favor"/>
+                                    <BubbleChat text = "Manda un mensaje para comenzar el chat" type = "send"/>
+                                    
                                 </>
                             ) : (
                                 // Mensajes reales del socket

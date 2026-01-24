@@ -24,13 +24,13 @@ class PsicologoController {
 
             const allData = {
                 Password: password,
-                nombre,
-                email,
-                apellido: req.body.apellido || '',
-                fechaInicio: req.body.fechaInicio || new Date(),
-                fechaFin: req.body.fechaFin || null,
-                cedula: req.body.cedula || '',
-                fotoPerfil: req.body.fotoPerfil || ''
+                Nombre: nombre,
+                Eemail: email,
+                Apellido: req.body.apellido || null,
+                FechaInicio: req.body.fechaInicio || new Date(),
+                FechaFin: req.body.fechaFin || null,
+                Cedula: req.body.cedula || null,
+                FotoPerfil: req.body.fotoPerfil || null
             };
             const modelPsicologo = new Psicologo();
             const resultado = await modelPsicologo.create(allData);
@@ -80,6 +80,18 @@ class PsicologoController {
                 success: false,
                 message: 'Error al vincular el paciente: ' + error.message
             });
+        }
+    }
+
+    // NUEVO: obtener pacientes vinculados a un psicólogo
+    async obtenerPacientesVinculados(req, res) {
+        const { idPsicologo } = req.params;
+        const listaPacienteModel = new ListaPaciente();
+        try {
+            const data = await listaPacienteModel.findPacienteByIdPsicologo(idPsicologo);
+            res.status(200).json({ success: true, data });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al obtener pacientes: ' + error.message });
         }
     }
 

@@ -118,6 +118,17 @@ export const authService = {
     return localStorage.getItem('userType');
   },
 
+  getUserId() {
+    const type = localStorage.getItem('userType');
+    if (type === 'psicologo') return localStorage.getItem('idPsicologo');
+    if (type === 'paciente') return localStorage.getItem('idPaciente');
+    return null;
+  },
+
+  getUserRole() {
+    return localStorage.getItem('userType');
+  },
+
   isAuthenticated() {
     return !!this.getToken();
   }

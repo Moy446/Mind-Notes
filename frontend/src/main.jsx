@@ -22,12 +22,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/menuPsicologoPrincipal' element={<MenuPsiF/>}>
+        <Route path='/psicologo' element={<MenuPsiF/>}>
           <Route path='chat' element={<ChatPsiF/>}/>
-          <Route path='doc:id' element={<Doc/>}/>
+          <Route path='chat/:id' element={<ChatPsiF/>}/>
+          <Route path='doc/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<CalendarioF/>}/>
-          <Route path='perfil:id' element={<PerfilPsiF/>}/>
+          <Route path='perfil/:id' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
         <Route path='/menuPaciente' element={<MenuPaF/>}/>
@@ -35,7 +36,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/test-login' element={<Login/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

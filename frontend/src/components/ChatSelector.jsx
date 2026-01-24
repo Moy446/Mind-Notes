@@ -1,13 +1,51 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './ChatSelector.css'
 import SearchBar from './SearchBar';
 import AddBtn from './AddBtn';
 import ChatBox from './ChatBox';
 import AddBtnsMenu from './AddBtnsMenu';
+import { obtenerPacientesVinculados } from '../services/vinculacionService';
+import { obtenerPsicologosVinculados } from '../services/vinculacionService';
+import { authService } from '../services/authService';
+
 
 export default function ChatSelector(props){
 
     const [selectedId, setSelectedId] = useState(null);
+    const [contacts, setContacts] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const loadContacts = useCallback(async () => {
+        try {
+            setLoading(true);
+            const userRole = authService.getUserRole();
+            const userId = authService.getUserId();
+            if (!userRole || !userId) {
+                setContacts([]);
+                return;
+            }
+
+            let data = [];
+            if (userRole === 'psicologo') {
+                data = await obtenerPacientesVinculados(userId);
+            } else if (userRole === 'paciente') {
+                data = await obtenerPsicologosVinculados(userId);
+            }
+
+            // Algunos endpoints pueden devolver {data: []} o [] directo
+            const parsed = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+            setContacts(parsed);
+        } catch (error) {
+            console.error('Error al obtener contactos vinculados:', error);
+            setContacts([]);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        loadContacts();
+    }, [loadContacts, props.refreshKey]);
 
     const handleSelect = (id) => {
         setSelectedId(id);
@@ -20,11 +58,25 @@ export default function ChatSelector(props){
                 <p className='textCS'>MindNotes</p>
                 <SearchBar/>
                 <div className='chatboxes'>
-                    <ChatBox img = "/src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor" key="1" isSelected={selectedId === "1"} onSelect={() => handleSelect("1")}/>
-                    <ChatBox img = "/src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor" key="2" isSelected={selectedId === "2"} onSelect={() => handleSelect("2")}/>
-                    <ChatBox img = "/src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor" key="3" isSelected={selectedId === "3"} onSelect={() => handleSelect("3")}/>
-                    <ChatBox img = "/src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor" key="4" isSelected={selectedId === "4"} onSelect={() => handleSelect("4")}/>
-                    <ChatBox img = "/src/images/pimg1.png" name = "Teisel" message = "Hola, agendeme por favor" key="5" isSelected={selectedId === "5"} onSelect={() => handleSelect("5")}/>
+                    {loading && <span className='text-chatbox-message'>Cargando...</span>}
+                    {!loading && contacts.length === 0 && (
+                        <span className='text-chatbox-message'>Sin vinculaciones aún</span>
+                    )}
+                    {!loading && contacts.map((contact, idx) => {
+                        const contactId = contact.idPaciente || contact.idPsicologo || contact._id || contact.id || idx;
+                        const displayName = contact.nombrePaciente || contact.nombrePsicologo || contact.nombre || 'Contacto';
+                        const lastMsg = contact.ultimoMensaje || contact.ultimoMensajeTexto || '';
+                        return (
+                            <ChatBox
+                                key={contactId}
+                                img={contact.fotoPerfil || '/src/images/pimg1.png'}
+                                name={displayName}
+                                message={lastMsg}
+                                isSelected={selectedId === contactId}
+                                onSelect={() => handleSelect(contactId)}
+                            />
+                        );
+                    })}
                 </div>
             </div>
             <div className='addDivCS'>

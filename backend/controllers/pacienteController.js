@@ -70,5 +70,17 @@ class PacienteController {
             });
         }
     }
+
+    // NUEVO: obtener psicólogos vinculados a un paciente
+    async obtenerPsicologosVinculados(req, res) {
+        const { idPaciente } = req.params;
+        const listaPsicologoModel = new ListaPsicologo();
+        try {
+            const data = await listaPsicologoModel.findPsicologoByIdPaciente(idPaciente);
+            res.status(200).json({ success: true, data });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al obtener psicologos: ' + error.message });
+        }
+    }
 }
 export default new PacienteController;
