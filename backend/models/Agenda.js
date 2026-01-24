@@ -1,4 +1,5 @@
 import dbClient from "../config/dbClient.js";
+import { ObjectId } from "mongodb";
 
 class Agenda {
     constructor(){
@@ -8,8 +9,8 @@ class Agenda {
         try{
             const agenda = {
                 idCita: datosAgenda.idCita,
-                idPsicologo: datosAgenda.idPsicologo,
-                idPaciente: datosAgenda.idPaciente,
+                idPsicologo: new ObjectId(datosAgenda.idPsicologo),
+                idPaciente: new ObjectId(datosAgenda.idPaciente),
                 horaInicio: datosAgenda.horaInicio,
                 horaFin: datosAgenda.horaFin,
                 fechaCita: datosAgenda.fechaCita,
@@ -30,10 +31,30 @@ class Agenda {
     }
     async getAgenda(idPsicologo){
         try {
-            const agenda = await this.colAgenda.find({idPsicologo: idPsicologo}).toArray();
+            const agenda = await this.colAgenda.find({idPsicologo: new ObjectId(idPsicologo)}).toArray();
             return agenda;
         } catch (error) {
             console.error("Error al obtener la agenda:", error);
+            throw error;
+        }
+    }
+    async update(idCita, datosActualizados){
+        try {
+            datosActualizados.idPaciente = new ObjectId(datosActualizados.idPaciente);
+            datosActualizados.idPsicologo = new ObjectId(datosActualizados.idPsicologo);
+            const agendaActualizada = await this.colAgenda.updateOne({idCita: new ObjectId(idCita)}, {$set: {...datosActualizados, updatedAt: new Date()}});
+            return agendaActualizada;
+        } catch (error) {
+            console.error("Error al actualizar la agenda:", error);
+            throw error;
+        }
+    }
+    async searchByDayAndPsychologist(fechaCita, idPsicologo){
+        try {
+            const datesOfDay = await this.colAgenda.find({idPsicologo:idPsicologo,fechaCita:fechaCita}).toArray();
+            return datesOfDay;
+        } catch (error) {
+            console.error("Error al buscar el dia en la agenda:", error);
             throw error;
         }
     }

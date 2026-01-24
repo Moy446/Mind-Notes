@@ -24,9 +24,9 @@ class CalendarioController {
                 img:cita.fotoPaciente,
                 horaI: this.calcularHora(cita.horaInicio),
                 horaF: this.calcularHora(cita.horaFin),
-                año: cita.fechaCita.split('-')[2],
+                año: cita.fechaCita.split('-')[0],
                 mes: cita.fechaCita.split('-')[1],
-                dia: cita.fechaCita.split('-')[0],
+                dia: cita.fechaCita.split('-')[2],
                 estado: cita.status
         }));   
             res.status(200).json({success:true, formattedAgenda});
@@ -36,9 +36,27 @@ class CalendarioController {
     }
 
     crearCita = async (req,res) => {
-        const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin, idPsicologo,nombrePsicologo} = req.body;
+        const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = req.body;
         const duracion = (this.calcularHora(horaFin) - this.calcularHora(horaInicio)) * 60;
         try{
+            //Borrar
+            const idPsicologo = "694b01541fb1a9eadec23c53";
+            const nombrePsicologo = "Dr. Psicologo Test";
+            //
+
+            //validar que no haya citas en el mismo horario
+            const agenda = new Agenda();
+            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idPsicologo);
+            for (let cita of citasDelDia){
+                if (horaInicio < cita.horaFin && horaInicio > cita.horaInicio || horaFin > cita.horaInicio && horaFin < cita.horaFin){
+                    throw new Error('Ya existe una cita en el mismo horario');
+                }
+            }
+            const cita = new Cita();
+            const paciente = new Paciente();
+            const psicologo = new Psicologo();
+            const datosPaciente = await paciente.findById(idPaciente);
+            const datosPsicologo = await psicologo.findById(idPsicologo);
             const nuevaCita = {
                 idPaciente,
                 idPsicologo : idPsicologo,/*req.params.idPsicologo,*/
@@ -50,13 +68,7 @@ class CalendarioController {
                 duracion,
                 estado: 'programada'
             } 
-            const cita = new Cita();
             const result = await cita.create(nuevaCita);  
-            const paciente = new Paciente();
-            const psicologo = new Psicologo();
-            const datosPaciente = await paciente.findById(idPaciente);
-            const datosPsicologo = await psicologo.findById(idPsicologo);
-            const agenda = new Agenda();
             const nuevaAgenda = {
                 idCita: result.insertedId,
                 idPsicologo,
@@ -78,10 +90,29 @@ class CalendarioController {
     }
 
     editarCita = async (req,res) =>{
-        const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin, idPsicologo,nombrePsicologo} = req.body;
+        const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = req.body;
         const {idCita} = req.params;
         const duracion = (this.calcularHora(horaFin) - this.calcularHora(horaInicio)) * 60;
         try{
+
+            //Borrar
+            const idPsicologo = "694b01541fb1a9eadec23c53";
+            const nombrePsicologo = "Dr. Psicologo Test";
+            //
+
+            const agenda = new Agenda();
+            //validar que no haya citas en el mismo horario
+            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idPsicologo);
+            for (let cita of citasDelDia){
+                if (horaInicio < cita.horaFin && horaFin > cita.horaInicio && idCita != cita.idCita){
+                    throw new Error('Ya existe una cita en el mismo horario');
+                }
+            }
+            const cita = new Cita();
+            const paciente = new Paciente();
+            const psicologo = new Psicologo();
+            const datosPaciente = await paciente.findById(idPaciente);
+            const datosPsicologo = await psicologo.findById(idPsicologo);
             const datosActualizados = {
                 idPaciente,
                 idPsicologo : idPsicologo,
@@ -93,18 +124,11 @@ class CalendarioController {
                 duracion,
                 estado: 'reagendada'
             } 
-            const cita = new Cita();
-            await cita.editCita(idCita, datosActualizados);  
-            //falta agregarla en la agenda
-            const paciente = new Paciente();
-            const psicologo = new Psicologo();
-            const datosPaciente = await paciente.findById(idPaciente);
-            const datosPsicologo = await psicologo.findById(idPsicologo);
-            const agenda = new Agenda();
+            const resultadoCita = await cita.editCita(idCita, datosActualizados);  
             const nuevaAgenda = {
                 idCita,
                 idPsicologo,
-                idPaciente,
+                idPaciente, //falta ver donde guarda eric estos valores
                 horaInicio,
                 horaFin,
                 fechaCita, 
@@ -112,9 +136,12 @@ class CalendarioController {
                 fotoPsicologo: datosPsicologo.fotoPerfil,
                 nombrePaciente,
                 nombrePsicologo, //falta ver donde guarda eric estos valores
-                estado: 'programada',
+                status: 'reagendada',
             }
-            await agenda.create(nuevaAgenda);
+            const resultadoAgenda = await agenda.update(idCita, nuevaAgenda);
+            if (resultadoAgenda.matchedCount === 0 || resultadoCita.matchedCount === 0) {
+                throw new Error("No se encontró la agenda para actualizar");
+            }
             res.status(201).json({ success: true, message: 'Cita editada exitosamente' });
         }catch(error){
             res.status(500).json({ success: false, message: 'Error al editar la cita: ' + error.message });

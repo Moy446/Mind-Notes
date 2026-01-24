@@ -15,8 +15,12 @@ export default function CitasList(props) {
             day.setHours(0, 0, 0, 0);
 
             if (day.getTime() === props.current.getTime()) {
+                let minutes = cita.horaI - Math.trunc(cita.horaI);
+                let time
+                if (minutes == 0 ) { time = Math.trunc(cita.horaI) + ":00" ;}
+                else { time = Math.trunc(cita.horaI) + ":" + (Math.round(minutes*60));}
                 citasMostradas.push(
-                    <Cita name={cita.nombre} hora={cita.horaI} img={cita.img} handleEdit={props.handleEdit}/>
+                    <Cita name={cita.nombre} hora={time} img={cita.img} handleEdit={() => props.handleEdit(cita.id)} />
                 );
             }
         }

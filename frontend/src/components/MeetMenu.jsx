@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import './MeetMenu.css'
 import Select from 'react-select';
 import clienteAxios from '../services/axios';
+import Swal from 'sweetalert2';
 
 
 export default function MeetMenu(props) {
@@ -36,6 +37,7 @@ export default function MeetMenu(props) {
     }, []);
 
     const [fecha] = useState(new Date());
+    const [hora] = useState(fecha.getHours()+":"+fecha.getMinutes());
     //datos cita = state guardarDatosCita = funcion para actualizar el state
     const [datosCita, guardarDatosCita] = useState({
         idPaciente: '',
@@ -59,11 +61,13 @@ export default function MeetMenu(props) {
         });
     }
 
+
     const validarCita = () => {
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
-        if (!idPaciente || !nombrePaciente || !fechaCita || !horaInicio || !horaFin) {
+        if (!idPaciente || !nombrePaciente || !fechaCita || !horaInicio || !horaFin  || horaInicio >= horaFin) {
             return true;
         }
+        // falta validaciones de hora
         return false;
     }
 
@@ -71,12 +75,22 @@ export default function MeetMenu(props) {
         e.preventDefault()
         //enviar peticion a axios
         clienteAxios.post('/psicologo/calendario', datosCita)
-        .then(res =>{
+        .then(async res =>{
             if(res.data.success){
-                console.log('Cita agendada');
+                await Swal.fire({
+                    title: "Se agendo la cita correctamente",
+                    text: `Se agendo cita a ${datosCita.nombrePaciente}`,
+                    icon: "success"
+                });
                 props.handleAdd();
+                limpiezarDatos();
+                window.location.reload();
             }else{
-                console.log('Error al agendar la cita');
+                Swal.fire({
+                    title: "Error al agendar la cita",
+                    text: `No se pudo agendar cita a ${datosCita.nombrePaciente}`,
+                    icon: "error"
+                });
             }
         })
     }
@@ -85,14 +99,45 @@ export default function MeetMenu(props) {
         e.preventDefault()
         //enviar peticion a axios
         clienteAxios.put(`/psicologo/calendario/${props.citaId}`, datosCita)
-        .then(res =>{
+        .then(async res =>{
             if(res.data.success){
-                console.log('Cita editada');
+                await Swal.fire({
+                    title: "Se modifico la cita correctamente",
+                    text: `Se modifico la cita a ${datosCita.nombrePaciente}`,
+                    icon: "success"
+                });
                 props.handleEdit();
+                limpiezarDatos();
+                window.location.reload();
             }else{
-                console.log('Error al editar la cita');
+                Swal.fire({
+                    title: "Error al modificar la cita",
+                    text: `No se pudo modificar la cita a ${datosCita.nombrePaciente}`,
+                    icon: "error"
+                });
             }
+        }).catch(err => {
+            Swal.fire({
+                title: "Error al modificar la cita",
+                text: `No se pudo modificar la cita a ${datosCita.nombrePaciente}`,
+                icon: "error"
+            });
         })
+    }
+
+    const limpiezarDatos = () => {
+        guardarDatosCita({
+                    idPaciente: '',
+                    nombrePaciente: '',
+                    fechaCita: '',
+                    horaInicio: '',
+                    horaFin: ''
+                })
+    }
+
+    const cerrarVentana = () => {
+        limpiezarDatos();
+        props.tipo ? props.handleEdit() : props.handleAdd();
     }
 
     const [position, setPosition] = useState(null);
@@ -159,11 +204,12 @@ export default function MeetMenu(props) {
                 <div className='divTime'>
                     <input type='time' className='dateIn' name='horaInicio' onChange={actualizarDatos} value={datosCita.horaInicio || ''}/>
                     <hr className='line' />
-                    <input type='time' className='dateIn' name='horaFin' onChange={actualizarDatos} value={datosCita.horaFin || ''}/>{/*la falta del parentesis en la funcion quiere ddecir que se actualiza cuando sucede un evento*/}
+                    <input type='time' className='dateIn' disabled={!datosCita.horaInicio} name='horaFin' onChange={actualizarDatos} value={datosCita.horaFin || ''}/>{/*la falta del parentesis en la funcion quiere ddecir que se actualiza cuando sucede un evento*/}
                 </div>
+                
             </div>
             <div className='meetbtns'>
-                <button className='btnMeet cancelBtnM' onClick={props.tipo ? props.handleEdit : props.handleAdd}>Cancelar</button>
+                <button className='btnMeet cancelBtnM' onClick={cerrarVentana}>Cancelar</button>
                 {
                     props.tipo ?
                         <button type= "submit" className='btnMeet acceptBtnM' disabled= {validarCita()} onClick={editarCita}>Editar</button>
