@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import MenuPsiF from './MenuPsiF.jsx'
+import MenuPaF from './MenuPaF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
 
 import Doc from './Doc.jsx'
@@ -21,7 +22,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        <Route path='/psicologo' element={<MenuPsiF/>}>
+        <Route path='/menuPsicologoPrincipal' element={<MenuPsiF/>}>
           <Route path='chat' element={<ChatPsiF/>}/>
           <Route path='doc:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
@@ -29,11 +30,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='perfil:id' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
+        <Route path='/menuPaciente' element={<MenuPaF/>}/>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
-        <Route path='/Login' element={<Login/>}/>
-        <Route path='/pruebas' element = {<componentsPruebas/>}/>
+        <Route path='/login' element={<Login/>}/>
+        <Route path='/test-login' element={<Login/>}/>
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

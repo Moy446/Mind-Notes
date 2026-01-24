@@ -7,19 +7,26 @@ class PacienteController {
     constructor() {
     }
     async registrarPacienteBD(req, res) {
-        const allData = {
-            nombre: req.body.nombre,
-            email: req.body.email,
-            password: req.body.password,
-            telefono: req.body.telefono,
-            fotoPerfil: req.body.fotoPerfil
-        };
-        const modelPaciente = new Paciente();
-        const resultado = await modelPaciente.create(allData);
-        const jwt = new jwtControl();
-        const token = await jwt.generateToken(resultado.idPaciente.toString(), resultado.nombre, 'paciente');
-        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-        res.status(201).json(resultado);
+        try {
+            const { nombre, email, password } = req.body;
+        
+            
+            const allData = {
+                nombre,
+                email,
+                password,
+                telefono: req.body.telefono || '',
+                fotoPerfil: req.body.fotoPerfil || ''
+            };
+            const modelPaciente = new Paciente();
+            const resultado = await modelPaciente.create(allData);
+            const jwt = new jwtControl();
+            const token = await jwt.generateToken(resultado.idPaciente.toString(), nombre, 'paciente');
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+            res.status(201).json({ success: true, idPaciente: resultado.idPaciente, token });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al registrar: ' + error.message });
+        }
     }
 
     //Login de paciente
@@ -39,7 +46,7 @@ class PacienteController {
             const jwt = new jwtControl();
             const token = await jwt.generateToken(paciente.idPaciente.toString(), paciente.nombre, 'paciente');
             res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-            res.status(200).json({ success: true, idPaciente: paciente.idPaciente });
+            res.status(200).json({ success: true, idPaciente: paciente.idPaciente, token });
         }
         catch (error) {
             res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });

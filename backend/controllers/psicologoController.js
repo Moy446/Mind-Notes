@@ -15,22 +15,32 @@ class PsicologoController {
     }
     //Funcion para registrar un nuevo psicologo en la base de datos
     async registrarPsicologoBD(req, res) {
+        try {
+            const { nombre, email, password, passwordConfirm } = req.body;
+            
+            if (password !== passwordConfirm) {
+                return res.status(400).json({ success: false, message: 'Las contraseñas no coinciden' });
+            }
 
-        const allData = {
-                Password: req.body.password,
-                nombre: req.body.nombre,
-                apellido: req.body.apellido,
-                fechaInicio: req.body.fechaInicio,
-                fechaFin: req.body.fechaFin,
-                cedula: req.body.cedula,
-                email: req.body.email,
-                fotoPerfil:req.body.fotoPerfil};
-        const modelPsicologo = new Psicologo();
-        const resultado = await modelPsicologo.create(allData);
-        const jwt = new jwtControl();
-        const token = await jwt.generateToken(resultado.idPsicologo.toString(), resultado.nombre, 'psicologo');
-        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-        res.status(201).json(resultado);
+            const allData = {
+                Password: password,
+                nombre,
+                email,
+                apellido: req.body.apellido || '',
+                fechaInicio: req.body.fechaInicio || new Date(),
+                fechaFin: req.body.fechaFin || null,
+                cedula: req.body.cedula || '',
+                fotoPerfil: req.body.fotoPerfil || ''
+            };
+            const modelPsicologo = new Psicologo();
+            const resultado = await modelPsicologo.create(allData);
+            const jwt = new jwtControl();
+            const token = await jwt.generateToken(resultado.idPsicologo.toString(), nombre, 'psicologo');
+            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+            res.status(201).json({ success: true, idPsicologo: resultado.idPsicologo, token });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al registrar: ' + error.message });
+        }
     } 
 
     //Funcion para iniciar sesion como psicologo

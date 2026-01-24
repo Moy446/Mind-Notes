@@ -8,8 +8,8 @@ const router = express.Router();
 router.get('/', PsicologoController.probarConexion);
 router.post('/loginPsicologo', PsicologoController.loginPsicologo);
 router.post('/loginPaciente', pacienteController.loginPaciente);
-router.post('/registrarPsicologo', protector, PsicologoController.registrarPsicologoBD);
-router.post('/registrarPaciente', protector, pacienteController.registrarPacienteBD);
+router.post('/registrarPsicologo', PsicologoController.registrarPsicologoBD);
+router.post('/registrarPaciente', pacienteController.registrarPacienteBD);
 router.post('/vincularPacientes/:Psicologo', protector, PsicologoController.vincularPacientes);
 router.post('/vincularPsicologo/:idPaciente', protector, pacienteController.vincularPsicologo);
 

@@ -56,7 +56,7 @@ class Paciente {
     async findByEmail(email){
         try {
             const paciente = await this.colPacientes.findOne({ email: email });
-            return paciente ? paciente.idPaciente : null;
+            return paciente;
         } catch (error) {
             throw new Error('Error al buscar el paciente por email: ' + error.message);
         }
