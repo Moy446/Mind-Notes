@@ -1,5 +1,7 @@
 import express from 'express';
+import multer from 'multer';
 import calendarController from '../controllers/calendarioController.js';
+import grabacionController from '../controllers/grabacionController.js';
 
 const router = express.Router();
 
@@ -9,7 +11,11 @@ router.get('/calendario/:idCita', /*Falta middleware, */calendarController.carga
 router.post('/calendario', /*Falta middleware, */calendarController.crearCita)
 router.put('/calendario/:idCita', /*Falta middleware, */calendarController.editarCita)
 router.delete('/calendario/:idCita', /*Falta middleware, */calendarController.eliminarCita)
-//Posible ruta, ocupo ver como se armo el archivo
 router.get('/calendario/pacientes/lista', /*Falta middleware, */calendarController.cargarPacientes)
 
+/*grabacion */
+const upload = multer({ dest: 'uploads/audio/' });
+
+router.get('/grabacion', /*Falta middleware, */grabacionController.loadPacientes)
+router.post('/grabacion', /*Falta middleware, */upload.single('audio'),grabacionController.guardarGrabacion)
 export default router;

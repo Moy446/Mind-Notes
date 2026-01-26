@@ -51,7 +51,7 @@ class Agenda {
     }
     async searchByDayAndPsychologist(fechaCita, idPsicologo){
         try {
-            const datesOfDay = await this.colAgenda.find({idPsicologo:idPsicologo,fechaCita:fechaCita}).toArray();
+            const datesOfDay = await this.colAgenda.find({idPsicologo:new ObjectId(idPsicologo),fechaCita:fechaCita}).toArray();
             return datesOfDay;
         } catch (error) {
             console.error("Error al buscar el dia en la agenda:", error);
