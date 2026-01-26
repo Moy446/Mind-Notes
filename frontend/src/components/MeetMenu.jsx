@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import { useState, useEffect } from "react";
 import './MeetMenu.css'
 import Select from 'react-select';
@@ -78,8 +78,8 @@ export default function MeetMenu(props) {
         .then(async res =>{
             if(res.data.success){
                 await Swal.fire({
-                    title: "Se agendo la cita correctamente",
-                    text: `Se agendo cita a ${datosCita.nombrePaciente}`,
+                    title: "Se agendó la cita correctamente",
+                    text: `Se agendó cita a ${datosCita.nombrePaciente}`,
                     icon: "success"
                 });
                 props.handleAdd();
@@ -102,12 +102,12 @@ export default function MeetMenu(props) {
         .then(async res =>{
             if(res.data.success){
                 await Swal.fire({
-                    title: "Se modifico la cita correctamente",
-                    text: `Se modifico la cita a ${datosCita.nombrePaciente}`,
+                    title: "Se modificó la cita correctamente",
+                    text: `Se modificó la cita a ${datosCita.nombrePaciente}`,
                     icon: "success"
                 });
                 props.handleEdit();
-                limpiezarDatos();
+                limpiarDatos();
                 window.location.reload();
             }else{
                 Swal.fire({
@@ -125,7 +125,7 @@ export default function MeetMenu(props) {
         })
     }
 
-    const limpiezarDatos = () => {
+    const limpiarDatos = () => {
         guardarDatosCita({
                     idPaciente: '',
                     nombrePaciente: '',
@@ -136,7 +136,7 @@ export default function MeetMenu(props) {
     }
 
     const cerrarVentana = () => {
-        limpiezarDatos();
+        limpiarDatos();
         props.tipo ? props.handleEdit() : props.handleAdd();
     }
 

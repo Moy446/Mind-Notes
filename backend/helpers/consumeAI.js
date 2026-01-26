@@ -13,9 +13,10 @@ class ConsumeAI {
                 form,
                 { headers: form.getHeaders()}
             );
-            return response.data;
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+
+            return {status: 500, message: "Hubo un error en la transcripcion"};
         }
     }
 
@@ -28,9 +29,9 @@ class ConsumeAI {
                 form,
                 { headers: form.getHeaders() }
             );
-            return response.data;
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+            return {status: 500, message: "Hubo un error en la diarizacion"};
         }
     }
 
@@ -40,9 +41,9 @@ class ConsumeAI {
                 process.env.SUMMARIZATION_SERVICE_URL,
                 { text: text }
             )
-            return response.data;
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+            return {status: 500, message: "Hubo un error en la elaboracion del resumen"};
         }
     }
 
@@ -52,9 +53,9 @@ class ConsumeAI {
                 process.env.CLASSIFICATION_SERVICE_URL,
                 { text: text }
             )
-            return response.data;
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+            return {status: 500, message: "Hubo un error en la clasificacion"};
         }
     }
 }

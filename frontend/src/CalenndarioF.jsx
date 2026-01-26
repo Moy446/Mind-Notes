@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CalendarioF.css'
@@ -130,12 +130,6 @@ export default function CalendarioF(props) {
             fullDate: date
         };
     });
-
-    const [lineas,setLineas] = useState([]);
-    const [horas,setHoras] = useState([]);
-    useEffect(() => {
-        cargarCitas();
-    },[])
 
     return (
         <div className="calendarioF">
