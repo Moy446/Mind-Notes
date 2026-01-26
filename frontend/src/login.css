@@ -165,6 +165,12 @@ text-decoration: none;
     margin-top: 10px;
 }
 
+.btn.password{
+    border-radius: 20px;
+    opacity: 0.7;
+    background: var(--Principal, #2973B2);
+}
+
 .input-recordarUsuario{
     margin-bottom: 30px;
 }

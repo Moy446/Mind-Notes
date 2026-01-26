@@ -18,6 +18,7 @@ import ChatPaF from './ChatPaF.jsx'
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
 import Login from './login.jsx'
+import ReestablecerPassword from './ReestablecerPassword.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -40,6 +41,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/Login' element={<Login/>}/>
+        <Route path='/ReestablecerPassword' element={<ReestablecerPassword/>}/>
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
       </Routes>
     </BrowserRouter>

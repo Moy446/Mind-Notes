@@ -131,7 +131,7 @@ export default function Login() {
             </div>
 
 
-
+{/* -----------------------------Panel de color------------------------------- */}
         <div className="toggle-box">
             <div className="toggle-panel toggle-left">
                 <h1 className='title-saludo'>¡Hola, bienvenido!</h1>
