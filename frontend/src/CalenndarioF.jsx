@@ -35,7 +35,7 @@ export default function CalendarioF(props) {
     }
     useEffect(()=>{
         cargarCitas();
-    },[])
+    },[citas])
 
     const [addMenu, openAddMenu] = useState(false);
     const handleAdd = useCallback((e) => {
