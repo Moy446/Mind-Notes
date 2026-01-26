@@ -84,7 +84,6 @@ export default function MeetMenu(props) {
                 });
                 props.handleAdd();
                 limpiezarDatos();
-                window.location.reload();
             }else{
                 Swal.fire({
                     title: "Error al agendar la cita",
@@ -108,7 +107,6 @@ export default function MeetMenu(props) {
                 });
                 props.handleEdit();
                 limpiarDatos();
-                window.location.reload();
             }else{
                 Swal.fire({
                     title: "Error al modificar la cita",
