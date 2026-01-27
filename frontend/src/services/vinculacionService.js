@@ -11,6 +11,7 @@ export const vincularPaciente = async (idPsicologo, idPaciente) => {
             `/vincularPacientes/${idPsicologo}`,
             { idPaciente },
             {
+                withCredentials: true, // IMPORTANTE: envía las cookies HttpOnly
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -35,6 +36,7 @@ export const vincularPsicologo = async (idPaciente, idPsicologo) => {
             `/vincularPsicologo/${idPaciente}`,
             { idPsicologo },
             {
+                withCredentials: true, // IMPORTANTE: envía las cookies HttpOnly
                 headers: {
                     'Content-Type': 'application/json',
                 }
@@ -54,7 +56,9 @@ export const vincularPsicologo = async (idPaciente, idPsicologo) => {
  */
 export const obtenerPacientesVinculados = async (idPsicologo) => {
     try {
-        const response = await clienteAxios.get(`/pacientes/${idPsicologo}`);
+        const response = await clienteAxios.get(`/pacientes/${idPsicologo}`, {
+            withCredentials: true // IMPORTANTE: envía las cookies HttpOnly
+        });
         return response.data;
     } catch (error) {
         console.error('Error al obtener pacientes:', error);
@@ -69,7 +73,9 @@ export const obtenerPacientesVinculados = async (idPsicologo) => {
  */
 export const obtenerPsicologosVinculados = async (idPaciente) => {
     try {
-        const response = await clienteAxios.get(`/psicologos/${idPaciente}`);
+        const response = await clienteAxios.get(`/psicologos/${idPaciente}`, {
+            withCredentials: true // IMPORTANTE: envía las cookies HttpOnly
+        });
         return response.data;
     } catch (error) {
         console.error('Error al obtener psicólogos:', error);
@@ -78,14 +84,16 @@ export const obtenerPsicologosVinculados = async (idPaciente) => {
 };
 
 /**
- * Obtener el histoprial de chat entre un psicólogo y un paciente
+ * Obtener el historial de chat entre un psicólogo y un paciente
  * @param {string} idPsicologo - ID del psicólogo
  * @param {string} idPaciente - ID del paciente
  * @returns {Promise} Historial de chat
  */
 export const obtenerMensajes = async (idPsicologo, idPaciente) => {
     try {
-        const response = await clienteAxios.get(`/mensajes/${idPsicologo}/${idPaciente}`);
+        const response = await clienteAxios.get(`/mensajes/${idPsicologo}/${idPaciente}`, {
+            withCredentials: true // IMPORTANTE: envía las cookies HttpOnly
+        });
         return response.data;
     } catch (error) {
         console.error('Error al obtener mensajes:', error);

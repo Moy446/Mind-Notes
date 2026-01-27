@@ -45,7 +45,7 @@ export default function AddUID(props){
         try {
             // Determinar el rol del usuario actual y la función correspondiente
             const userRole = props.userRole || 'psicologo'; // 'psicologo' o 'paciente'
-            const userId = props.userId || localStorage.getItem('userId');
+            const userId = props.userId; // Obtén el ID desde props (ya viene del contexto del padre)
             
             let result;
 

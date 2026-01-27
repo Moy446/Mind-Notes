@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react';
 import './Chat.css'
 import NameBar from './components/NameBar';
 import ChatSelector from './components/ChatSelector';
@@ -11,7 +11,7 @@ import DeleteMenu from './components/DeleteMenu';
 import SuppPsi from './components/SuppPsi';
 import { useOutletContext, useParams } from 'react-router-dom';
 import socket from './services/socketService'; // NUEVO: Import del socket
-import { authService } from './services/authService';
+import { AuthContext } from './context/AuthContext';
 import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
 import { u } from 'framer-motion/client';
 
@@ -19,11 +19,12 @@ export default function ChatPsiF(props){
 
     const {qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey} = useOutletContext();
     const { id } = useParams(); // NUEVO: Obtener el ID del chat de la URL
+    const { user } = useContext(AuthContext); // Obtén el usuario del contexto
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
     const [selectedChat, setSelectedChat] = useState(id || null);
-    const idUser = authService.getUserId();
+    const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Paciente');
 
     const fetchSelectedName = useCallback(async () => {

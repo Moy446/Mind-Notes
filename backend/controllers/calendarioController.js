@@ -1,7 +1,7 @@
 import Cita from '../models/Cita.js';
 import Agenda from '../models/Agenda.js';
 import Paciente from '../models/Paciente.js';
-import ListaPaciente from '../models/ListaPaciente.js';
+import ListaVinculacion from '../models/ListaVinculacion.js';
 
 class CalendarioController {
     constructor(){
@@ -109,8 +109,8 @@ class CalendarioController {
     }
 
     async obtenerNombresPacientes(req, res){
-        const listaPacientes = new ListaPaciente();
-        const nombresPacientes = await listaPacientes.getAll();
+        const listaVinculacion = new ListaVinculacion();
+        const nombresPacientes = await listaVinculacion.getAll();
         res.status(200).json({success:true, nombresPacientes});
     }
 

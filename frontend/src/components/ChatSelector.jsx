@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useContext } from 'react';
 import './ChatSelector.css'
 import SearchBar from './SearchBar';
 import AddBtn from './AddBtn';
@@ -6,11 +6,12 @@ import ChatBox from './ChatBox';
 import AddBtnsMenu from './AddBtnsMenu';
 import { obtenerPacientesVinculados } from '../services/vinculacionService';
 import { obtenerPsicologosVinculados } from '../services/vinculacionService';
-import { authService } from '../services/authService';
+import { AuthContext } from '../context/AuthContext';
 
 
 export default function ChatSelector(props){
 
+    const { user } = useContext(AuthContext); // Obtén el usuario del contexto
     const [selectedId, setSelectedId] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -18,8 +19,8 @@ export default function ChatSelector(props){
     const loadContacts = useCallback(async () => {
         try {
             setLoading(true);
-            const userRole = authService.getUserRole();
-            const userId = authService.getUserId();
+            const userRole = user?.role;
+            const userId = user?.id;
             if (!userRole || !userId) {
                 setContacts([]);
                 return;
@@ -41,7 +42,7 @@ export default function ChatSelector(props){
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [user]);
 
     useEffect(() => {
         loadContacts();

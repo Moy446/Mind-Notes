@@ -1,11 +1,13 @@
-import React, { useState} from 'react'
+import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
 import { authService } from './services/authService'
+import { AuthContext } from './context/AuthContext'
 import './login.css'
 
 export default function Login() {
     const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
     const [activo, setActivo] = useState(false)
     
     // Estados para login
@@ -30,9 +32,7 @@ export default function Login() {
         setLoginLoading(true);
 
         try {
-            const result = isPsicologo 
-                ? await authService.loginPsicologo(loginEmail, loginPassword)
-                : await authService.loginPaciente(loginEmail, loginPassword);
+            const result = await login(loginEmail, loginPassword, isPsicologo ? 'psicologo' : 'paciente');
 
             if (result && result.success) {
                 // Redirigir según el tipo de usuario

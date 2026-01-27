@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { Outlet } from 'react-router-dom'
 import './Menu.css'
 import MenuPsi from './components/MenuPsi';
 import AddQr from './components/AddQr';
 import AddUID from './components/AddUID';
+import { AuthContext } from './context/AuthContext';
 
 function MenuPsiF() {
 
+    const { user } = useContext(AuthContext); // Obtén el usuario del contexto
     const [qrOpen, setOpenQr] = useState(false)
     const [uidOpen, setOpenUID] = useState(false)
     const [refreshKey, setRefreshKey] = useState(0); // Para refrescar la lista de pacientes
@@ -38,7 +40,7 @@ function MenuPsiF() {
                     handleOpen={handleOpenUID}
                     handleOpenQR={handleOpen}
                     userRole="psicologo"
-                    userId={localStorage.getItem('idPsicologo')}
+                    userId={user?.id}
                     onVinculacionExitosa={handleVinculacionExitosa}
                 />
             </div>

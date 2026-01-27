@@ -1,9 +1,10 @@
-import ListaPaciente from "../models/ListaPaciente.js";
+import ListaVinculacion from "../models/ListaVinculacion.js";
 import Psicologo from "../models/Psicologo.js";
 import Bcrypt from 'bcryptjs';
-import jwtControl from "../helpers/jwtControl.js";
+import cookieCtrl from "../helpers/cookiesControll.js";
 
 class PsicologoController {
+
     constructor(){
 
     }
@@ -33,11 +34,11 @@ class PsicologoController {
                 FotoPerfil: req.body.fotoPerfil || null
             };
             const modelPsicologo = new Psicologo();
-            const resultado = await modelPsicologo.create(allData);
-            const jwt = new jwtControl();
-            const token = await jwt.generateToken(resultado.idPsicologo.toString(), nombre, 'psicologo');
-            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-            res.status(201).json({ success: true, idPsicologo: resultado.idPsicologo, token });
+            const user = await modelPsicologo.create(allData);
+            const accessToken = cookieCtrl.signAccess({ id: user.idPsicologo, role: 'psicologo' });
+            const refreshToken = cookieCtrl.signRefresh({ id: user.idPsicologo, role: 'psicologo' });
+            cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+            res.status(201).json({ success: true, idPsicologo: user.idPsicologo, nombre: user.nombre });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al registrar: ' + error.message });
         }
@@ -56,10 +57,10 @@ class PsicologoController {
             if (!isPasswordValid) {
                 return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
             }
-            const jwt = new jwtControl();
-            const token = await jwt.generateToken(psicologo.idPsicologo.toString(), psicologo.nombre, 'psicologo');
-            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
-            res.status(200).json({ success: true, idPsicologo: psicologo.idPsicologo, token });
+            const accessToken = cookieCtrl.signAccess({ id: psicologo.idPsicologo, role: 'psicologo' });
+            const refreshToken = cookieCtrl.signRefresh({ id: psicologo.idPsicologo, role: 'psicologo' });
+            cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+            res.status(200).json({ success: true, idPsicologo: psicologo.idPsicologo, nombre: psicologo.nombre });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });
         }
@@ -68,9 +69,9 @@ class PsicologoController {
     //Funcion para listar los pacientes asociados a un psicologo
     async vincularPacientes(req, res) {
         const idPsicologo = req.params.Psicologo;
-        const listaPacienteModel = new ListaPaciente();
+        const listaVinculacionModel = new ListaVinculacion();
         try {
-            listaPacienteModel.create(req.body.idPaciente, idPsicologo);
+            await listaVinculacionModel.create(idPsicologo, req.body.idPaciente);
             res.status(201).json({
                 success: true,
                 message: 'Paciente vinculado exitosamente'
@@ -86,9 +87,9 @@ class PsicologoController {
     // NUEVO: obtener pacientes vinculados a un psicólogo
     async obtenerPacientesVinculados(req, res) {
         const { idPsicologo } = req.params;
-        const listaPacienteModel = new ListaPaciente();
+        const listaVinculacionModel = new ListaVinculacion();
         try {
-            const data = await listaPacienteModel.findPacienteByIdPsicologo(idPsicologo);
+            const data = await listaVinculacionModel.findByPsicologo(idPsicologo);
             res.status(200).json({ success: true, data });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al obtener pacientes: ' + error.message });

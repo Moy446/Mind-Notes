@@ -1,77 +1,44 @@
-const API_URL = 'http://localhost:5000/api';
+import clienteAxios from '../services/axios'
 
 export const authService = {
   async loginPaciente(email, password) {
     try {
-      const response = await fetch(`${API_URL}/loginPaciente`, {
-        method: 'POST',
+      const response = await clienteAxios.post('/loginPaciente', { email, password }, {
+        withCredentials: true, // importante: permite enviar/recibir cookies
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // Para enviar las cookies
-        body: JSON.stringify({ email, password }),
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el login');
-      }
-
-      // Guardar el token y id en localStorage
-      localStorage.setItem('token', data.token || '');
-      localStorage.setItem('idPaciente', data.idPaciente);
-      localStorage.setItem('userType', 'paciente');
-
+      const data = response.data;
+      // No guardas token en localStorage, confías en la cookie HttpOnly
       return { success: true, ...data };
     } catch (error) {
-      return { success: false, message: error.message };
+      return { success: false, message: error.response?.data?.message || error.message };
     }
   },
 
   async loginPsicologo(email, password) {
     try {
-      const response = await fetch(`${API_URL}/loginPsicologo`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include', // Para enviar las cookies
-        body: JSON.stringify({ email, password }),
+      const response = await clienteAxios.post('/loginPsicologo', { email, password }, {
+        withCredentials: true, // permite enviar/recibir cookies
       });
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el login');
-      }
-
-      // Guardar el token e id en localStorage
-      localStorage.setItem('token', data.token);
-      localStorage.setItem('idPsicologo', data.idPsicologo);
-      localStorage.setItem('userType', 'psicologo');
-
+      const data = response.data;
+      // No guardas token en localStorage, confías en la cookie HttpOnly
       return { success: true, ...data };
     } catch (error) {
-      return { success: false, message: error.message };
+      return { success: false, message: error.response?.data?.message || error.message };
     }
   },
 
   async registrarPaciente(nombre, email, password, passwordConfirm) {
     try {
-      const response = await fetch(`${API_URL}/registrarPaciente`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ nombre, email, password, passwordConfirm }),
-      });
+      const response = await clienteAxios.post('/registrarPaciente', { nombre, email, password, passwordConfirm });
+      const data = response.data;
 
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el registro');
+      if (!data) {
+        throw new Error('Error en el registro');
       }
 
       return { success: true, ...data };
@@ -82,19 +49,11 @@ export const authService = {
 
   async registrarPsicologo(nombre, email, password, passwordConfirm) {
     try {
-      const response = await fetch(`${API_URL}/registrarPsicologo`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ nombre, email, password, passwordConfirm }),
-      });
-
-      const data = await response.json();
+      const response = await clienteAxios.post('/registrarPsicologo', { nombre, email, password, passwordConfirm });
+      const data = response.data;
       
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el registro');
+      if (!data) {
+        throw new Error('Error en el registro');
       }
 
       return { success: true, ...data };
@@ -103,33 +62,53 @@ export const authService = {
     }
   },
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('idPaciente');
-    localStorage.removeItem('idPsicologo');
-    localStorage.removeItem('userType');
+  // Obtener sesión actual verificando token con el servidor
+  async getSession() {
+    try {
+      const { data } = await clienteAxios.get('/me', { withCredentials: true });
+      return { authenticated: true, user: data.user };
+    } catch {
+      return { authenticated: false, user: null };
+    }
+  },
+
+  // Refrescar el access token
+  async refresh() {
+    try {
+      await clienteAxios.post('/refresh', {}, { withCredentials: true });
+      return { success: true };
+    } catch {
+      return { success: false };
+    }
+  },
+
+  // Logout: llama al servidor para limpiar cookies
+  async logout() {
+    await clienteAxios.post('/logout', {}, { withCredentials: true }).catch(() => {});
   },
 
   getToken() {
-    return localStorage.getItem('token');
+    // Ya no usas localStorage, solo verificas con getSession()
+    return null;
   },
 
   getUserType() {
-    return localStorage.getItem('userType');
+    // Usa getSession() para obtener el rol desde el servidor
+    return null;
   },
 
   getUserId() {
-    const type = localStorage.getItem('userType');
-    if (type === 'psicologo') return localStorage.getItem('idPsicologo');
-    if (type === 'paciente') return localStorage.getItem('idPaciente');
+    // Usa getSession() para obtener el id desde el servidor
     return null;
   },
 
   getUserRole() {
-    return localStorage.getItem('userType');
+    // Usa getSession() para obtener el rol desde el servidor
+    return null;
   },
 
   isAuthenticated() {
-    return !!this.getToken();
+    // Llama a getSession() en lugar de revisar localStorage
+    return this.getSession().then(session => session.authenticated);
   }
 };

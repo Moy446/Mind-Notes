@@ -1,5 +1,5 @@
 import Paciente from "../models/Paciente.js";
-import ListaPsicologo from "../models/ListaPsicologo.js";
+import ListaVinculacion from "../models/ListaVinculacion.js";
 import Bcrypt from 'bcryptjs';
 import jwtControl from "../helpers/jwtControl.js";
 
@@ -22,7 +22,9 @@ class PacienteController {
             const resultado = await modelPaciente.create(allData);
             const jwt = new jwtControl();
             const token = await jwt.generateToken(resultado.idPaciente.toString(), nombre, 'paciente');
-            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const sameSite = useSecure ? 'None' : 'Lax';
+            res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
             res.status(201).json({ success: true, idPaciente: resultado.idPaciente, token });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al registrar: ' + error.message });
@@ -45,7 +47,9 @@ class PacienteController {
             }
             const jwt = new jwtControl();
             const token = await jwt.generateToken(paciente.idPaciente.toString(), paciente.nombre, 'paciente');
-            res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'Strict' });
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const sameSite = useSecure ? 'None' : 'Lax';
+            res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
             res.status(200).json({ success: true, idPaciente: paciente.idPaciente, token });
         }
         catch (error) {
@@ -56,9 +60,9 @@ class PacienteController {
 
     async vincularPsicologo(req, res) {
         const idPaciente = req.params.idPaciente;
-        const listaPsicologoModel = new ListaPsicologo();
+        const listaVinculacionModel = new ListaVinculacion();
         try {
-            await listaPsicologoModel.create(idPaciente, req.body.idPsicologo);
+            await listaVinculacionModel.create(req.body.idPsicologo, idPaciente);
             res.status(201).json({
                 success: true,
                 message: 'Psicologo vinculado exitosamente'
@@ -74,9 +78,9 @@ class PacienteController {
     // NUEVO: obtener psicólogos vinculados a un paciente
     async obtenerPsicologosVinculados(req, res) {
         const { idPaciente } = req.params;
-        const listaPsicologoModel = new ListaPsicologo();
+        const listaVinculacionModel = new ListaVinculacion();
         try {
-            const data = await listaPsicologoModel.findPsicologoByIdPaciente(idPaciente);
+            const data = await listaVinculacionModel.findByPaciente(idPaciente);
             res.status(200).json({ success: true, data });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al obtener psicologos: ' + error.message });

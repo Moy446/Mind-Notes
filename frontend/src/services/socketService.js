@@ -1,18 +1,11 @@
 import { io } from 'socket.io-client';
-import { authService } from './authService';
 
-// Obtener el token de autenticación y el tipo de usuario desde el servicio de autenticación
-const token = authService.getToken();
-const userType = authService.getUserType();
-
-// Configurar la conexión del socket con opciones de transporte y autenticación
+// La conexión del socket no requiere token en auth porque las cookies HttpOnly
+// se envían automáticamente con autoConnect y rejectUnauthorized: false
 const socket = io('http://localhost:5000', {
     transports: ['websocket'],
     autoConnect: true,
-    auth: {
-        token: token,
-        userType: userType
-    }
+    withCredentials: true, // IMPORTANTE: para enviar las cookies HttpOnly
 });
 
 // Manejar eventos de conexión
