@@ -16,17 +16,27 @@ class CalendarioController {
         const agenda = new Agenda();
         //obtener idPsicologo de session o token
         const idPsicologo = "694b01541fb1a9eadec23c53";
+        const currentDate = new Date();
+        const jsDay = currentDate.getDay();
+        let days = []
+        for(let i = 0 ; i < 7 ;i++) {
+            const date = new Date(currentDate);
+            date.setDate(currentDate.getDate() - jsDay + i -1 );
+            days.push({
+                fullDate: date
+            });
+        };
         try {
-            const datosAgenda = await agenda.getAgenda(idPsicologo); //ver como lo hace el eric
+            const datosAgenda = await agenda.getAgenda(idPsicologo,days[0].fullDate , days[6].fullDate); //ver como lo hace el eric
             const formattedAgenda = datosAgenda.map(cita =>({
                 id:cita.idCita,
                 nombre:cita.nombrePaciente,
                 img:cita.fotoPaciente,
                 horaI: this.calcularHora(cita.horaInicio),
                 horaF: this.calcularHora(cita.horaFin),
-                año: cita.fechaCita.split('-')[0],
-                mes: cita.fechaCita.split('-')[1],
-                dia: cita.fechaCita.split('-')[2],
+                año: cita.fechaCita.getFullYear(),
+                mes: cita.fechaCita.getMonth(),
+                dia: cita.fechaCita.getDate() + 1,
                 estado: cita.status
         }));   
             res.status(200).json({success:true, formattedAgenda});
@@ -165,6 +175,7 @@ class CalendarioController {
         try {
             const {idCita} = req.params;
             const cita = new Cita();
+            const paciente = new Paciente();    
             const datosCita = await cita.getCitaById(idCita);
             if (!datosCita) {
                 return res.status(404).json({ success: false, message: 'Cita no encontrada' });
@@ -172,11 +183,12 @@ class CalendarioController {
             const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
             const usuarioModel = new Usuario();    
             const datosPaciente = await usuarioModel.findById(idPaciente); 
+            const fechaString = `${fechaCita.getFullYear()}-${(fechaCita.getMonth() + 1).toString().padStart(2,'0')}-${(fechaCita.getDate() + 1).toString().padStart(2,'0')}`;
             const {fotoPerfil} = datosPaciente;
             res.status(200).json({success:true, cita:{
                 idPaciente,
                 nombrePaciente,
-                fechaCita,
+                fechaCita: fechaString,
                 horaInicio,
                 horaFin,
                 fotoPerfil
@@ -189,11 +201,11 @@ class CalendarioController {
     async cargarPacientes(req, res){
         //borrar
         const idPsicologo = "694b01541fb1a9eadec23c53";
-        //
+        //  
         try {
-            const listaPacientes = new ListaPaciente();
-            const nombresPacientes = await listaPacientes.findPacienteByIdPsicologo(idPsicologo);
-            res.status(200).json({success:true, nombresPacientes});
+            const listaVinculacion = new ListaVinculacion();
+            const nombresPacientes = await listaVinculacion.findByPsicologo(idPsicologo);
+            res.status(200).json({success:true, nombresPacientes });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al cargar la lista de pacientes: ' + error.message });    
         }

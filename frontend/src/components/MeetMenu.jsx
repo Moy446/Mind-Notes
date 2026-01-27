@@ -60,7 +60,6 @@ export default function MeetMenu(props) {
         });
     }
 
-
     const validarCita = () => {
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
         if (!idPaciente || !nombrePaciente || !fechaCita || !horaInicio || !horaFin  || horaInicio >= horaFin) {

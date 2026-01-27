@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CalendarioF.css'
@@ -24,7 +24,7 @@ export default function CalendarioF(props) {
                     horaI: cita.horaI,
                     horaF: cita.horaF,
                     año: cita.año,
-                    mes: cita.mes - 1,
+                    mes: cita.mes,
                     dia: cita.dia,
                     estado: cita.estado
                 })));
@@ -35,7 +35,7 @@ export default function CalendarioF(props) {
     }
     useEffect(()=>{
         cargarCitas();
-    },[citas])
+    },[])
 
     const [addMenu, openAddMenu] = useState(false);
     const handleAdd = useCallback((e) => {
