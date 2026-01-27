@@ -1,5 +1,5 @@
-import ListaPaciente from "../models/ListaPaciente.js";
-import chat from "../models/Chat.js";
+import ListaVinculacion from "../models/ListaVinculacion.js";
+import Chat from "../models/Chat.js";
 import consumeAI from "../helpers/consumeAI.js";
 import fs from "fs";
 
@@ -12,8 +12,8 @@ class GrabacionController {
         const idPsicologo = "694b01541fb1a9eadec23c53";
         //
         try {
-            const listaPacientes = new ListaPaciente();
-            const nombresPacientes = await listaPacientes.findPacienteByIdPsicologo(idPsicologo);
+            const listaVinculacion = new ListaVinculacion();
+            const nombresPacientes = await listaVinculacion.findByPsicologo(idPsicologo);
             res.status(200).json({success:true, nombresPacientes});
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al cargar la lista de pacientes'});    
@@ -22,7 +22,7 @@ class GrabacionController {
 
     async guardarGrabacion(req, res) {
         res.status(200).json({ success: true, message: 'Grabación guardada correctamente' });
-        const {idPsicologo, nombrePaciente, resume, grabacion} = req.body;
+        const {idPaciente, nombrePaciente, resume, grabacion} = req.body;
         try {
             const text = await consumeAI.transcribe(req.file.path);
             const diarization = await consumeAI.diarize(req.file.path); 
@@ -37,7 +37,15 @@ class GrabacionController {
                 //Enviar datos para la elaboracion del archivo
                 
                 //subir archivo a la base de datos
-                
+                const chat = new Chat();
+                const resultado = await chat.insertExpediente("694b01541fb1a9eadec23c53"/*idPsicologo */, idPaciente, req.file.path);
+                if (resultado.modifiedCount === 1) {
+                    //Enviar notificacion por correo
+                    console.log("Expediente insertado correctamente en el chat.");
+                    
+                }else{
+                    res.status(500).json({ success: false, message: 'Error al procesar la grabación' });
+                }
             }
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al procesar la grabación' });

@@ -24,7 +24,7 @@ export default function AudioMenu(props){
                 setPatients(patientsList.map(p => ({
                     idPaciente: p.idPaciente,
                     nombrePaciente: p.nombrePaciente,
-                    fotoPerfil: p.fotoPerfil
+                    fotoPerfil: p.fotoPerfilPaciente
                 })));
                 
             }else{
