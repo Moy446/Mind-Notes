@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './CalendarioF.css'
@@ -9,6 +9,7 @@ import clienteAxios from './services/axios';
 export default function CalendarioF(props) {
 
     const [citas, setCitas] = useState([]);
+    
 
     const cargarCitas = async () => {
         try {
@@ -22,7 +23,7 @@ export default function CalendarioF(props) {
                     horaI: cita.horaI,
                     horaF: cita.horaF,
                     año: cita.año,
-                    mes: cita.mes - 1,
+                    mes: cita.mes,
                     dia: cita.dia,
                     estado: cita.estado
                 })));
@@ -33,18 +34,24 @@ export default function CalendarioF(props) {
     }
     useEffect(()=>{
         cargarCitas();
-    },[citas])
+    },[])
 
     const [addMenu, openAddMenu] = useState(false);
-    const handleAdd = useCallback(() => {
+    const handleAdd = useCallback((e) => {
                 openAddMenu(!addMenu)
+                if (e){
+                    cargarCitas();
+                }
             }, [addMenu])
 
     const [selectedCitaId, setSelectedCitaId] = useState(null);
     const [editMenu, openEditMenu] = useState(false);
-    const handleEdit = useCallback((id) => {
+    const handleEdit = useCallback((id,e) => {
                 setSelectedCitaId(id);
                 openEditMenu(!editMenu)
+                if (e){
+                    cargarCitas();
+                }
             }, [editMenu])
 
     function listaHoras() {
@@ -116,8 +123,8 @@ export default function CalendarioF(props) {
     ]
 
     const currentDate = new Date()
-    const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth())
-    const [currentYear, setCurrentYear] = useState(currentDate.getFullYear())
+    // const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth())
+    // const [currentYear, setCurrentYear] = useState(currentDate.getFullYear())
 
     const jsDay = currentDate.getDay();
 

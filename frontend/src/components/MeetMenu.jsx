@@ -21,9 +21,8 @@ export default function MeetMenu(props) {
                 setPatients(patientsList.map(p => ({
                     idPaciente: p.idPaciente,
                     nombrePaciente: p.nombrePaciente,
-                    fotoPerfil: p.fotoPerfil
+                    fotoPerfil: p.fotoPerfilPaciente
                 })));
-                
             }else{
                 console.log('Error al cargar la lista de pacientes');
             }
@@ -61,7 +60,6 @@ export default function MeetMenu(props) {
         });
     }
 
-
     const validarCita = () => {
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
         if (!idPaciente || !nombrePaciente || !fechaCita || !horaInicio || !horaFin  || horaInicio >= horaFin) {
@@ -82,8 +80,8 @@ export default function MeetMenu(props) {
                     text: `Se agendó cita a ${datosCita.nombrePaciente}`,
                     icon: "success"
                 });
-                props.handleAdd();
-                limpiezarDatos();
+                props.handleAdd(true);
+                limpiarDatos();
             }else{
                 Swal.fire({
                     title: "Error al agendar la cita",
@@ -105,7 +103,7 @@ export default function MeetMenu(props) {
                     text: `Se modificó la cita a ${datosCita.nombrePaciente}`,
                     icon: "success"
                 });
-                props.handleEdit();
+                props.handleEdit("",true);
                 limpiarDatos();
             }else{
                 Swal.fire({

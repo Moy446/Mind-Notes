@@ -48,7 +48,7 @@ class CalendarioController {
             const agenda = new Agenda();
             const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idPsicologo);
             for (let cita of citasDelDia){
-                if (horaInicio < cita.horaFin && horaFin > cita.horaInicio){
+                if (horaInicio < cita.horaFin && horaInicio > cita.horaInicio || horaFin > cita.horaInicio && horaFin < cita.horaFin){
                     throw new Error('Ya existe una cita en el mismo horario');
                 }
             }
