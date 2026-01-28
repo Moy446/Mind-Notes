@@ -81,7 +81,7 @@ export default function Login() {
     };
 
     return (
-        <div className={`loginContainer ${activo ? 'active' : ''}`}>
+        <div className={`loginContainer ${modo}`}>
             <div className='formBox login'>
                 <form onSubmit={handleLogin}>
                     <h1 className='login-title'>MindNotes</h1>
@@ -108,23 +108,51 @@ export default function Login() {
                         />
                     </div>
 
-                    <div>
-                        <input type="checkbox" className="input-recordarUsuario" id="label-recordarUsuario"/>
-                        <label htmlFor="label-recordarUsuario">Recordar usuario</label>
+                    <p className='p-switch'>¿Eres psicólogo?</p>
+                    {/* <Switch
+                        id={"pSwitch"} 
+                        valor={false}
+                        onCambio={(c)=>{!c}}
+                    /> */}
+
+                    <Switch
+                        id="pSwitch"
+                        valor={activo}
+                        // onCambio={(c) => setActivo(!c)}
+                        onCambio={setActivo}
+                    />
+
+                    <button type='submit' className='btn login'>Ingresar</button>
+
+                    <div className='div-links'>
+                        <div>
+                            <input type="checkbox" className="input-recordarUsuario"/>
+                            <label htmlFor="input-recordarUsuario">Recordar usuario</label>
+                        </div>
+
+                        <div className='forgotLink'>
+                            <p>¿Aún no tienes cuenta?</p>
+                            <Link to={''} className=''
+                                onClick={(e) => {
+                                        e.preventDefault()
+                                        setModo('register')
+                                    }}
+                            >Registrarse --</Link>
+                        </div>
+
+                        <div className='forgotLink'>
+                            <Link to=""
+                                className="link-Password"
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    setModo('password')
+                                }}
+                                >
+                                ¿Olvidaste tu contraseña?
+                            </Link>
+                        </div>
                     </div>
 
-                    <div className='forgotLink'>
-                        <Link to={''} className=''>¿Olvidaste tu contraseña?</Link>
-                    </div>
-
-                    <div className='forgotLink'>
-                        <p>¿Aún no tienes cuenta?</p>
-                        <Link to={''} className=''>Registrarse --</Link>
-                    </div>
-
-                    <button type='submit' className='btn login' disabled={loginLoading}>
-                        {loginLoading ? 'Ingresando...' : 'Ingresar'}
-                    </button>
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
@@ -133,7 +161,7 @@ export default function Login() {
             </div>
 
 
-
+{/* ---------------------------REGISTRO--------------------------- */}
             <div className='formBox register'>
                 <form onSubmit={handleRegister}>
                     <h1 className='register-title'>Registrar</h1>
@@ -181,7 +209,12 @@ export default function Login() {
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
-                    <Switch value={isPsicologo} onChange={setIsPsicologo}/>
+                    <Switch
+                        id="pSwitch"
+                        valor={activo}
+                        // onCambio={(c) => setActivo(!c)}
+                        onCambio={setActivo}
+                    />
 
                     <button type='submit' className='btn register' disabled={registerLoading}>
                         {registerLoading ? 'Registrando...' : 'Registrarse'}
@@ -194,25 +227,43 @@ export default function Login() {
             </div>
 
 
+{/* ---------------------------Recuperar contraseña--------------------------- */}
+            <div className='formBox password'>
+                <form action="form-password">
+                    <div className='div-titlePassword'>
+                        <h1 className='password-title'>Reestablecer contraseña</h1>
+                    </div>
 
+                    <div className='inputBox'>
+                        <input type="email" placeholder='Ingresa tu correo electronico' required />
+                    </div>
+
+                    <button type='submit' className='btn password'>Solicitar cambio de contraseña</button>
+                </form>
+            </div>
+
+
+{/* -----------------------------Panel de color------------------------------- */}
         <div className="toggle-box">
             <div className="toggle-panel toggle-left">
                 <h1 className='title-saludo'>¡Hola, bienvenido!</h1>
                 <p>¿Aún no tienes cuenta?</p>
-                <button
+                {/* <button
                     className="btn-toggleRegistrar"
                     onClick={() => setActivo(true)}
                     >
                     Registrarse
-                </button>
+                </button> */}
+                <button onClick={() => setModo('register')} className='btn register'>Registrarse</button>
             </div>
 
             <div className="toggle-panel toggle-right">
                 <h1 className='title-saludo'>¡Hola, de nuevo!</h1>
                 <p>¿Ya tienes cuenta?</p>
-                <button className='btn-toggleRegistrar'
+                {/* <button className='btn-toggleRegistrar'
                 onClick={() => setActivo(false)}
-                >Ingresar</button>
+                >Ingresar</button> */}
+                <button onClick={() => setModo('login')}  className='btn login'>Ingresar</button>
             </div>
         </div>
 

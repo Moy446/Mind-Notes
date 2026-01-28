@@ -1,3 +1,9 @@
+.div-switchContainer{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
 .div-switch
 {
     width: 186px;
@@ -6,7 +12,7 @@
     border-radius: 20px;
     cursor: pointer;
     position: relative;
-    display: inline-block;
+    display: flex;
 }
 
 .div-switch::after

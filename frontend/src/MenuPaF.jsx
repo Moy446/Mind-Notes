@@ -1,25 +1,36 @@
-import React, { useState, useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Outlet } from 'react-router-dom'
 import './Menu.css'
 import MenuPa from './components/MenuPa';
-import { authService } from './services/authService';
+import AddQr from './components/AddQr';
+import AddUID from './components/AddUID';
 
 function MenuPaF() {
-    const navigate = useNavigate();
+
+    const [qrOpen, setOpenQr] = useState(false)
     
-    useEffect(() => {
-        // Verificar si el usuario está autenticado
-        if (!authService.isAuthenticated()) {
-            navigate('/login');
-        }
-    }, [navigate]);
+    const handleOpen = useCallback(() => {
+        setOpenQr(!qrOpen)
+    }, [qrOpen])
+
+    const [uidOpen, setOpenUID] = useState(false)
+    
+    const handleOpenUID = useCallback(() => {
+        setOpenUID(!uidOpen)
+    }, [uidOpen])
 
     return (
         <div className='menuFullCon'>
             <MenuPa/>
-            <Outlet/>
-        </div>
-    )
+            <Outlet context={{qrOpen , handleOpen, uidOpen, handleOpenUID}}/>
+            <div className={qrOpen ? 'showQr' : 'hidenMenu'}>
+                <AddQr title = "Agregar Psicologo" img = "/src/images/pqr.png" open = {qrOpen} handleOpen = {handleOpen}/>
+            </div>
+            <div className={uidOpen ? 'showUID' : 'hidenMenu'}>
+                <AddUID open = {uidOpen} handleOpen = {handleOpenUID}/>
+            </div>
+        </div>  
+    );
 }
 
 export default MenuPaF
