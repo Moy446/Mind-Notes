@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import Paciente from '../models/Paciente.js';
-import Psicologo from '../models/Psicologo.js';
+import Usuario from '../models/Usuario.js';
 
 export default async function protector(req, res, next) {
     // Soporta tokens de pacientes (cookie `token`) y de psicólogos (cookie `accessToken`).
@@ -19,20 +18,28 @@ export default async function protector(req, res, next) {
         const accessSecret = process.env.ACCESS_SECRET || 'default_secret';
         const secret = legacyToken ? jwtSecret : accessSecret;
         const decoded = jwt.verify(token, secret);
-        const pacienteModel = new Paciente();
-        const psicologoModel = new Psicologo();
+        const usuarioModel = new Usuario();
 
         let user = null;
-        if (decoded.role === 'paciente') {
-            user = await pacienteModel.findById(decoded.id);
-        } else if (decoded.role === 'psicologo') {
-            user = await psicologoModel.findById(decoded.id);
-        }
+        // Buscar el usuario por ID independientemente del rol
+        user = await usuarioModel.findById(decoded.id);
 
         if (!user) {
             res.clearCookie('token');
             res.clearCookie('accessToken');
             return res.status(401).json({ success: false, message: 'Acceso denegado. Usuario no encontrado.' });
+        }
+
+        // Verificar que el rol coincida con el tipo de usuario
+        if (decoded.role === 'paciente' && user.esPsicologo) {
+            res.clearCookie('token');
+            res.clearCookie('accessToken');
+            return res.status(403).json({ success: false, message: 'Acceso denegado. Tipo de usuario incorrecto.' });
+        }
+        if (decoded.role === 'psicologo' && !user.esPsicologo) {
+            res.clearCookie('token');
+            res.clearCookie('accessToken');
+            return res.status(403).json({ success: false, message: 'Acceso denegado. Tipo de usuario incorrecto.' });
         }
 
         req.user = user;

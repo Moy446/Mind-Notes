@@ -1,6 +1,5 @@
 import dbClient from "../config/dbClient.js";
-import Psicologo from "./Psicologo.js";
-import Paciente from "./Paciente.js";
+import Usuario from "./Usuario.js";
 import { ObjectId } from "mongodb";
 
 
@@ -12,10 +11,10 @@ class ListaVinculacion {
         try{
             const vinculacion = {  
                 idVinculacion: new ObjectId(),
-                idPsicologo: idPsicologo,
-                idPaciente: idPaciente,
-                nombrePsicologo: await new Psicologo().findNameById(idPsicologo),
-                nombrePaciente: await new Paciente().findNameById(idPaciente),
+                idPsicologo: ObjectId(idPsicologo),
+                idPaciente: ObjectId(idPaciente),
+                nombrePsicologo: await new Usuario().findNameById(idPsicologo),
+                nombrePaciente: await new Usuario().findNameById(idPaciente),
                 fotoPerfilPsicologo: null,
                 fotoPerfilPaciente: null,
             };
@@ -30,7 +29,7 @@ class ListaVinculacion {
     }
     async findVinculacion(idPsicologo, idPaciente){
         try {
-            const vinculacion = await this.colListaVinculacion.findOne({idPsicologo: idPsicologo, idPaciente: idPaciente}); 
+            const vinculacion = await this.colListaVinculacion.findOne({idPsicologo: ObjectId(idPsicologo), idPaciente: ObjectId(idPaciente)}); 
             return vinculacion;
         }
         catch (error) {
@@ -40,7 +39,7 @@ class ListaVinculacion {
 
    async findByPsicologo(idPsicologo){
         try {
-            return this.colListaVinculacion.find({idPsicologo: idPsicologo}).toArray(); 
+            return this.colListaVinculacion.find({idPsicologo: ObjectId(idPsicologo)}).toArray(); 
         } catch (error) {
             throw new Error('Error al obtener las vinculaciones por psicologo: ' + error.message);
         }
@@ -48,7 +47,7 @@ class ListaVinculacion {
 
    async findByPaciente(idPaciente){
         try {
-            return this.colListaVinculacion.find({idPaciente: idPaciente}).toArray();   
+            return this.colListaVinculacion.find({idPaciente: ObjectId(idPaciente)}).toArray();   
         } catch (error) {
             throw new Error('Error al obtener las vinculaciones por paciente: ' + error.message);
         }
@@ -56,7 +55,7 @@ class ListaVinculacion {
 
     async getAllPacientes(idPsicologo){
         try{
-            const vinculaciones = await this.colListaVinculacion.find({idPsicologo: idPsicologo}).toArray();    
+            const vinculaciones = await this.colListaVinculacion.find({idPsicologo: ObjectId(idPsicologo)}).toArray();    
             return vinculaciones;
         }catch(error){
             throw new Error('Error al obtener todos los pacientes vinculados: ' + error.message);
@@ -65,7 +64,7 @@ class ListaVinculacion {
 
     getAllPsicologos(idPaciente){
         try{
-            return this.colListaVinculacion.find({idPaciente: idPaciente}).toArray();   
+            return this.colListaVinculacion.find({idPaciente: ObjectId(idPaciente)}).toArray();   
         }catch(error){
             throw new Error('Error al obtener todos los psicologos vinculados: ' + error.message);
         }

@@ -36,7 +36,7 @@ export default function Login() {
 
             if (result && result.success) {
                 // Redirigir según el tipo de usuario
-                navigate(isPsicologo ? '/psicologo' : '/menuPaciente');
+                navigate(isPsicologo ? '/psicologo' : '/paciente');
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }

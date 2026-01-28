@@ -1,6 +1,6 @@
 import Cita from '../models/Cita.js';
 import Agenda from '../models/Agenda.js';
-import Paciente from '../models/Paciente.js';
+import Usuario from '../models/Usuario.js';
 import ListaVinculacion from '../models/ListaVinculacion.js';
 
 class CalendarioController {
@@ -92,8 +92,8 @@ class CalendarioController {
                 return res.status(404).json({ success: false, message: 'Cita no encontrada' });
             }
             const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
-            const paciente = new Paciente();    
-            const datosPaciente = await paciente.findById(idPaciente); 
+            const usuarioModel = new Usuario();    
+            const datosPaciente = await usuarioModel.findById(idPaciente); 
             const {fotoPerfil} = datosPaciente;
             res.status(200).json({success:true, cita:{
                 idPaciente,

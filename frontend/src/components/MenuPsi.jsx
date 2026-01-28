@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 export default function MenuPsi(){
 
     const [selectedId, setSelectedId] = useState(null);
+    const [uid, setUid] = useState('');
+
 
     return (
         <div className='menuPsi'>
