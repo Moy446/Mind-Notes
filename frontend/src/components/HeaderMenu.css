@@ -1,0 +1,52 @@
+.div-HeaderContenedor
+{
+    display: flex;
+    height: 100px;
+    width: 100%;
+    background-color: #2973B2;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+}
+
+.nav-headermenu
+{
+    display: flex;
+    height: auto;
+    width: 100%;
+    background-color: #2973B2;
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 24px;
+    align-items: center;
+    justify-content: end;
+    gap: 3%;
+}
+
+.img-headermenu
+{
+    height: 60%;
+    width: auto;
+    align-self: center;
+    justify-self: center;
+    margin: 20px;
+    cursor: pointer;
+}
+
+.a-headermenu
+{
+    font-family: 'Saira';
+    color: #FFF;
+    font-size: 24px;
+    align-items: center;
+    text-decoration: none;
+    padding-right: 3%
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

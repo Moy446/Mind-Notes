@@ -1,5 +1,6 @@
 import dbClient from "../config/dbClient.js";
 import Chat from "../models/Chat.js";
+import { ObjectId } from "mongodb";
 
 class ChatController {
     constructor() {
@@ -18,22 +19,25 @@ class ChatController {
     }
 
     async obtenerMensajes(req, res) {
-        const { idPsicologo } = req.params;
-        const { idPaciente } = req.query; // Asumiendo query param para filtrar
+        const { idPsicologo, idPaciente } = req.params;
         try {
             const colMensajes = dbClient.db.collection('mensajes');
-            const filter = { idPsicologo };
-            if (idPaciente) filter.idPaciente = idPaciente;
-            const mensajes = await colMensajes.find(filter).sort({ timestamp: 1 }).toArray();
-            res.status(200).json({ success: true, mensajes });
+            const mensajes = await colMensajes
+                .find({ 
+                    idPsicologo, 
+                    idPaciente 
+                })
+                .sort({ timestamp: 1 })
+                .toArray();
+            res.status(200).json({ success: true, data: mensajes });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al obtener mensajes: ' + error.message });
         }
     }
 
     async enviarMensaje(req, res) {
-        const idPsicologo  = req.params;
-        const { idPaciente, mensaje, remitente } = req.body; // remitente: 'paciente' o 'psicologo'
+        const { idPsicologo } = req.params;
+        const { idPaciente, mensaje, remitente } = req.body;
         try {
             const colMensajes = dbClient.db.collection('mensajes');
             const nuevoMensaje = {
