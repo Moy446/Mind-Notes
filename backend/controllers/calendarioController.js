@@ -77,7 +77,7 @@ class CalendarioController {
             const result = await cita.create(nuevaCita);  
             const nuevaAgenda = {
                 idCita: result.insertedId,
-                idPsicologo,
+                idPsicologo : idUsuario,
                 idPaciente,
                 horaInicio,
                 horaFin,
@@ -85,7 +85,7 @@ class CalendarioController {
                 fotoPaciente: datos.fotoPerfilPaciente,
                 fotoPsicologo: datos.fotoPerfilPsicologo,
                 nombrePaciente,
-                nombrePsicologo, //falta ver donde guarda eric estos valores
+                nombrePsicologo : nombreUsuario, //falta ver donde guarda eric estos valores
                 estado: 'programada',
             }
             await agenda.create(nuevaAgenda);
@@ -107,7 +107,7 @@ class CalendarioController {
 
             const agenda = new Agenda();
             //validar que no haya citas en el mismo horario
-            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idPsicologo);
+            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idUsuario);
             for (let cita of citasDelDia){
                 if (horaInicio < cita.horaFin && horaFin > cita.horaInicio && idCita != cita.idCita){
                     throw new Error('Ya existe una cita en el mismo horario');
@@ -115,7 +115,7 @@ class CalendarioController {
             }
             const cita = new Cita();
             const listaVinculacion = new ListaVinculacion();
-            const datos = await listaVinculacion.findVinculacion(idPsicologo,idPaciente);
+            const datos = await listaVinculacion.findVinculacion(idUsuario,idPaciente);
             const datosActualizados = {
                 idPaciente,
                 idPsicologo : idUsuario,
@@ -130,7 +130,7 @@ class CalendarioController {
             const resultadoCita = await cita.editCita(idCita, datosActualizados);  
             const nuevaAgenda = {
                 idCita,
-                idPsicologo,
+                idPsicologo: idUsuario,
                 idPaciente, //falta ver donde guarda eric estos valores
                 horaInicio,
                 horaFin,
@@ -138,7 +138,7 @@ class CalendarioController {
                 fotoPaciente: datos.fotoPerfilPaciente,
                 fotoPsicologo: datos.fotoPerfilPsicologo,
                 nombrePaciente,
-                nombrePsicologo, //falta ver donde guarda eric estos valores
+                nombrePsicologo : nombreUsuario, //falta ver donde guarda eric estos valores
                 status: 'reagendada',
             }
             const resultadoAgenda = await agenda.update(idCita, nuevaAgenda);
