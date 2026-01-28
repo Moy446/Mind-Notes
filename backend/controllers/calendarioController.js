@@ -16,6 +16,7 @@ class CalendarioController {
         const agenda = new Agenda();
         //obtener idPsicologo de session o token
         const idPsicologo = "694b01541fb1a9eadec23c53";
+        
         const currentDate = new Date();
         const jsDay = currentDate.getDay();
         let days = []
@@ -27,7 +28,7 @@ class CalendarioController {
             });
         };
         try {
-            const datosAgenda = await agenda.getAgenda(idPsicologo,days[0].fullDate , days[6].fullDate); //ver como lo hace el eric
+            const datosAgenda = await agenda.getAgenda(idPsicologo,days[0].fullDate , days[6].fullDate);
             const formattedAgenda = datosAgenda.map(cita =>({
                 id:cita.idCita,
                 nombre:cita.nombrePaciente,
