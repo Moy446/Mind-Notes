@@ -5,6 +5,7 @@ import chatController from '../controllers/chatController.js';
 
 const router = express.Router();
 
+//Rutas de usuario
 router.get('/', UserController.probarConexion);
 router.post('/loginPsicologo', UserController.loginPsicologo);
 router.post('/loginPaciente', UserController.loginPaciente);
@@ -18,5 +19,10 @@ router.post('/vincularPsicologo/:idPaciente', protector, UserController.vincular
 router.get('/pacientes/:idPsicologo', protector, UserController.obtenerPacientesVinculados);
 router.get('/psicologos/:idPaciente', protector, UserController.obtenerPsicologosVinculados);
 router.get('/mensajes/:idPsicologo/:idPaciente', protector, chatController.obtenerMensajes);
+
+//Rutas de autenticación
+router.get('/me', protector, UserController.getMe);
+router.post('/logout', UserController.logout);
+router.post('/refresh', UserController.refresh);
 
 export default router;

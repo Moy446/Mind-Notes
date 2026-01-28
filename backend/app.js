@@ -44,12 +44,7 @@ async function startServer() {
     app.use(cookieParser());
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
 
-    // Endpoints de autenticación
-    app.get('/api/me', protector, UserController.getMe);
 
-    app.post('/api/refresh', UserController.refresh);
-
-    app.post('/api/logout', UserController.logout);
 
     // Routes
     app.use('/api', webRoutes);
