@@ -38,8 +38,9 @@ class GrabacionController {
                 
                 //subir archivo a la base de datos
                 const chat = new Chat();
-                const resultado = await chat.insertExpediente("694b01541fb1a9eadec23c53"/*idPsicologo */, idPaciente, req.file.path);
-                if (resultado.modifiedCount === 1) {
+                const resultadoExpediente = await chat.insertExpediente("694b01541fb1a9eadec23c53"/*idPsicologo */, idPaciente /*,expediente */);
+                const resultadoGrabacion = await chat.insertGrabacion("694b01541fb1a9eadec23c53"/*idPsicologo */, idPaciente, req.file.path);
+                if (resultadoExpediente.modifiedCount === 1 && resultadoGrabacion.modifiedCount === 1) {
                     //Enviar notificacion por correo
                     console.log("Expediente insertado correctamente en el chat.");
                     

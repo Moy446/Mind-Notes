@@ -21,7 +21,8 @@ class Chat {
                 nombrePsicologo: datosChat.nombrePsicologo,
                 mensajes: [],
                 materialAdjunto: [],                
-                expedientes: []
+                expedientes: [],
+                grabaciones: []
             };
             const resultado = await this.colChat.insertOne(chat);
             return resultado;
@@ -67,6 +68,19 @@ class Chat {
             return resultado;
         } catch (error) {
             throw new Error('Error al insertar los expedientes: ' + error.message);
+        }   
+    }
+    async insertGrabacion(idPsicologo,idPaciente, grabacion){
+        try {
+            const resultado = await this.colChat.updateOne({
+                idPaciente: new ObjectId(idPaciente),
+                idPsicologo: new ObjectId(idPsicologo)
+            },{
+                $push: { grabaciones: grabacion}
+            });
+            return resultado;
+        } catch (error) {
+            throw new Error('Error al insertar los grabaciones: ' + error.message);
         }   
     }
 
