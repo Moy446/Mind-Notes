@@ -40,7 +40,7 @@ export default function Login() {
 
                     <div className='div-links'>
                         <div>
-                            <input type="checkbox" className="input-recordarUsuario"/>
+                            <input type="checkbox" id="input-recordarUsuario" className="input-recordarUsuario"/>
                             <label htmlFor="input-recordarUsuario">Recordar usuario</label>
                         </div>
 

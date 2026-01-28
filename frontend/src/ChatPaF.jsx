@@ -5,7 +5,6 @@ import NameBar from './components/NameBar';
 import ChatSelector from './components/ChatSelector';
 import MessageField from './components/MessageField';
 import BubbleChat from './components/BubbleChat';
-import SupportMenu from './components/SupportMenu';
 import InfoPa from './components/InfoPa';
 import DeleteMenu from './components/DeleteMenu';
 import SuppPa from './components/SuppPa';

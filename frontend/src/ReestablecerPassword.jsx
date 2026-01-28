@@ -1,6 +1,4 @@
-import React, { useState} from 'react'
-import {Link } from 'react-router-dom';
-import Switch from './components/Switch'
+import React from 'react'
 import './ReestablecerPassword.css'
 
 

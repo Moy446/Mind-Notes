@@ -101,9 +101,7 @@ form{
     margin-left: 12%;
 }
 
-switch{
-    text-align: left;
-}
+
 
 .inputBox{
     position: relative;
@@ -177,7 +175,6 @@ text-decoration: none;
 
 .div-links{
     display: grid; 
-    grid-column: 200px;
     height: 9vw;
     width: 100%;
     font-family: 'Saira';
