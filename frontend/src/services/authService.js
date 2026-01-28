@@ -67,7 +67,7 @@ export const authService = {
     try {
       const { data } = await clienteAxios.get('/me', { withCredentials: true });
       return { authenticated: true, user: data.user };
-    } catch {
+    } catch (error) {
       return { authenticated: false, user: null };
     }
   },

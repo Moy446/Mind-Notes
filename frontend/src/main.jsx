@@ -30,12 +30,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='doc/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<CalendarioF/>}/>
-          <Route path='perfil/:id' element={<PerfilPsiF/>}/>
+          <Route path='perfil' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
         <Route path='/paciente' element={<MenuPaF/>}>
           <Route path='chat' element={<ChatPsiF/>}/>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
+          <Route path='perfil/:id' element={<PerfilPsiF/>}/>
         </Route>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
