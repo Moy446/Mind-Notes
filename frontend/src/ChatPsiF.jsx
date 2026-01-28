@@ -13,7 +13,6 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import socket from './services/socketService'; // NUEVO: Import del socket
 import { AuthContext } from './context/AuthContext';
 import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
-import { u } from 'framer-motion/client';
 
 export default function ChatPsiF(props){
 
