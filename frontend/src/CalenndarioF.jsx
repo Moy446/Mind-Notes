@@ -5,6 +5,7 @@ import './CalendarioF.css'
 import CitasList from './components/CitasList';
 import MeetMenu from './components/MeetMenu'
 import clienteAxios from './services/axios';
+import Spinner from './components/spinner';
 
 export default function CalendarioF(props) {
 
@@ -137,6 +138,11 @@ export default function CalendarioF(props) {
             fullDate: date
         };
     });
+
+    //cargar spinner
+    if (citas.length === 0){
+        return <Spinner/>
+    }
 
     return (
         <div className="calendarioF">

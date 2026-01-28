@@ -185,7 +185,7 @@ export default function MeetMenu(props) {
                     getOptionValue = {(p) => p.idPaciente }
                     components={{ IndicatorSeparator: () => null }}
                     onChange={actualizarDatosPaciente}
-                    value={patients[position]}
+                    defaultValue={patients[position]}
                     formatOptionLabel={(p)=>(
                         <div className='optionContentM' key={p.idPaciente}>
                             <img src={p.fotoPerfil} className="avatarM"/>
