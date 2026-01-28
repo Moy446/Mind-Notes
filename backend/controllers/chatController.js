@@ -41,8 +41,8 @@ class ChatController {
         try {
             const colMensajes = dbClient.db.collection('mensajes');
             const nuevoMensaje = {
-                idPsicologo,
-                idPaciente,
+                idPsicologo: new ObjectId(idPsicologo),
+                idPaciente: new ObjectId(idPaciente),
                 mensaje,
                 remitente,
                 timestamp: new Date()

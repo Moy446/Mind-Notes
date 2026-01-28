@@ -3,6 +3,8 @@ import ListaVinculacion from "../models/ListaVinculacion.js";
 import Bcrypt from 'bcryptjs';
 import cookieCtrl from "../helpers/cookiesControll.js";
 import jwtControl from "../helpers/jwtControl.js";
+import jwt from 'jsonwebtoken';
+import 'dotenv/config';
 
 class UsuarioController {
 
@@ -77,14 +79,14 @@ class UsuarioController {
     /**
      * Registrar un psicólogo
      */
-    async registrarPsicologoBD(req, res) {
+    registrarPsicologoBD = async (req, res) => {
         return this.registrarUsuario(req, res, true);
     }
 
     /**
      * Registrar un paciente
      */
-    async registrarPacienteBD(req, res) {
+    registrarPacienteBD = async (req, res) => {
         return this.registrarUsuario(req, res, false);
     }
 
@@ -151,14 +153,14 @@ class UsuarioController {
     /**
      * Login de psicólogo
      */
-    async loginPsicologo(req, res) {
+    loginPsicologo = async (req, res) => {
         return this.loginUsuario(req, res, true);
     }
 
     /**
      * Login de paciente
      */
-    async loginPaciente(req, res) {
+    loginPaciente = async (req, res) => {
         return this.loginUsuario(req, res, false);
     }
 
@@ -240,6 +242,86 @@ class UsuarioController {
             res.status(200).json({ success: true, message: 'Conexión exitosa' });
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
+        }
+    }
+
+    /**
+     * Obtener información del usuario actual (sesión activa)
+     */
+    getMe = async (req, res) => {
+        try {
+            if (!req.user) {
+                return res.status(401).json({ success: false, message: 'No autenticado' });
+            }
+
+            // Remover campos sensibles
+            const { password, ...userSafe } = req.user;
+            
+            const userData = {
+                id: userSafe.idUsuario,
+                nombre: userSafe.nombre,
+                email: userSafe.email,
+                fotoPerfil: userSafe.fotoPerfil,
+                telefono: userSafe.telefono,
+                role: userSafe.esPsicologo ? 'psicologo' : 'paciente',
+                plan: userSafe.plan || 'Plan Gratuito',
+                apellido: userSafe.apellido,
+                cedula: userSafe.cedula
+            };
+            
+            res.status(200).json({ 
+                success: true, 
+                user: userData
+            });
+        } catch (error) {
+            res.status(500).json({ success: false, message: error.message });
+        }
+    }
+
+    /**
+     * Cerrar sesión
+     */
+    logout = async (req, res) => {
+        try {
+            res.clearCookie('token');
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
+            res.status(200).json({ success: true, message: 'Sesión cerrada' });
+        } catch (error) {
+            res.status(500).json({ success: false, message: error.message });
+        }
+    }
+
+    /**
+     * Refrescar token de acceso
+     */
+    refresh = async (req, res) => {
+        try {
+            const refreshToken = req.cookies.refreshToken;
+            
+            if (!refreshToken) {
+                return res.status(401).json({ success: false, message: 'Token de refresco no proporcionado' });
+            }
+
+            // Verificar el refresh token y generar nuevo access token
+            const accessSecret = process.env.ACCESS_SECRET || 'default_secret';
+            const refreshSecret = process.env.REFRESH_SECRET || 'default_refresh_secret';
+            
+            const decoded = jwt.verify(refreshToken, refreshSecret);
+            const accessToken = cookieCtrl.signAccess({ id: decoded.id, role: decoded.role });
+            
+            res.cookie('accessToken', accessToken, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+                maxAge: 15 * 60 * 1000 // 15 minutos
+            });
+
+            res.status(200).json({ success: true, message: 'Token renovado' });
+        } catch (error) {
+            res.clearCookie('accessToken');
+            res.clearCookie('refreshToken');
+            res.status(401).json({ success: false, message: 'Token inválido o expirado' });
         }
     }
 }
