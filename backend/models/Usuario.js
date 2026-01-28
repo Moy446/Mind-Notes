@@ -26,6 +26,10 @@ class Usuario {
                 fotoPerfil: datosUsuario.fotoPerfil || datosUsuario.FotoPerfil || null,
                 telefono: datosUsuario.telefono || datosUsuario.Telefono || null,
                 fechaCreacion: new Date(),
+                verificado: false,
+                tokenVerificacion: null,
+                tokenRecuperacion: null,
+                tokenExpiracion: null,
             };
 
             // Campos específicos de Psicólogo
@@ -130,6 +134,115 @@ class Usuario {
             );
         } catch (error) {
             throw new Error('Error al actualizar status de chat: ' + error.message);
+        }
+    }
+
+    /**
+     * Actualizar token de verificación
+     */
+    async actualizarTokenVerificacion(idUsuario, tokenHash) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { tokenVerificacion: tokenHash } }
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar token de verificación: ' + error.message);
+        }
+    }
+
+    /**
+     * Actualizar token de recuperación y expiración
+     */
+    async actualizarTokenRecuperacion(idUsuario, tokenHash, expiracion) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { 
+                    $set: { 
+                        tokenRecuperacion: tokenHash,
+                        tokenExpiracion: expiracion
+                    } 
+                }
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar token de recuperación: ' + error.message);
+        }
+    }
+
+    /**
+     * Buscar usuario por token de recuperación
+     */
+    async findByRecuperacionToken(tokenHash) {
+        try {
+            const usuario = await this.colUsuarios.findOne({ tokenRecuperacion: tokenHash });
+            return usuario;
+        } catch (error) {
+            throw new Error('Error al buscar por token de recuperación: ' + error.message);
+        }
+    }
+
+    /**
+     * Buscar usuario por token de verificación
+     */
+    async findByVerificacionToken(tokenHash) {
+        try {
+            const usuario = await this.colUsuarios.findOne({ tokenVerificacion: tokenHash });
+            return usuario;
+        } catch (error) {
+            throw new Error('Error al buscar por token de verificación: ' + error.message);
+        }
+    }
+
+    /**
+     * Marcar usuario como verificado
+     */
+    async marcarVerificado(idUsuario) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { 
+                    $set: { 
+                        verificado: true,
+                        tokenVerificacion: null
+                    } 
+                }
+            );
+        } catch (error) {
+            throw new Error('Error al marcar como verificado: ' + error.message);
+        }
+    }
+
+    /**
+     * Actualizar contraseña
+     */
+    async actualizarPassword(idUsuario, newPasswordHash) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { password: newPasswordHash } }
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar contraseña: ' + error.message);
+        }
+    }
+
+    /**
+     * Invalidar token de recuperación
+     */
+    async invalidarTokenRecuperacion(idUsuario) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { 
+                    $set: { 
+                        tokenRecuperacion: null,
+                        tokenExpiracion: null
+                    } 
+                }
+            );
+        } catch (error) {
+            throw new Error('Error al invalidar token de recuperación: ' + error.message);
         }
     }
 }

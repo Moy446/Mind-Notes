@@ -18,8 +18,8 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^3.0.3",
     "axios": "^1.13.2",
+    "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -29,6 +29,7 @@
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.0.0",
+    "nodemailer": "^7.0.13",
     "socket.io": "^4.8.3"
   },
   "devDependencies": {

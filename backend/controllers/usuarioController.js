@@ -3,7 +3,9 @@ import ListaVinculacion from "../models/ListaVinculacion.js";
 import Bcrypt from 'bcryptjs';
 import cookieCtrl from "../helpers/cookiesControll.js";
 import jwtControl from "../helpers/jwtControl.js";
+import emailService from "../helpers/emailService.js";
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import 'dotenv/config';
 
 class UsuarioController {
@@ -45,6 +47,21 @@ class UsuarioController {
             const modelUsuario = new Usuario();
             const user = await modelUsuario.create(allData, esPsicologo);
             
+            // Generar token de verificación
+            const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+            const tokenHash = crypto.createHash('sha256').update(tokenVerificacion).digest('hex');
+            
+            await modelUsuario.actualizarTokenVerificacion(user.idUsuario, tokenHash);
+
+            // Enviar correo de verificación
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+            const resultadoEmail = await emailService.enviarVerificacion(
+                user.email,
+                user.nombre,
+                tokenVerificacion,
+                frontendUrl
+            );
+
             // Generar tokens según el tipo de usuario
             const role = esPsicologo ? 'psicologo' : 'paciente';
             
@@ -56,7 +73,8 @@ class UsuarioController {
                     success: true, 
                     idPsicologo: user.idUsuario, 
                     idUsuario: user.idUsuario,
-                    nombre: user.nombre 
+                    nombre: user.nombre,
+                    mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
                 });
             } else {
                 const jwt = new jwtControl();
@@ -68,7 +86,8 @@ class UsuarioController {
                     success: true, 
                     idPaciente: user.idUsuario,
                     idUsuario: user.idUsuario, 
-                    token 
+                    token,
+                    mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
                 });
             }
         } catch (error) {

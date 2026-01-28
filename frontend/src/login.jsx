@@ -8,7 +8,7 @@ import './login.css'
 export default function Login() {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
-    const [activo, setActivo] = useState(false)
+    const [modo, setModo] = useState('login');
     
     // Estados para login
     const [loginEmail, setLoginEmail] = useState('');
@@ -66,7 +66,7 @@ export default function Login() {
 
             if (result.success) {
                 setRegisterError('');
-                setActivo(false); // Cambiar a formulario de login
+                setModo('login'); // Cambiar a formulario de login
                 setLoginEmail(registerEmail);
                 setLoginPassword('');
                 alert('Registro exitoso. Por favor inicia sesión');
@@ -109,17 +109,11 @@ export default function Login() {
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
-                    {/* <Switch
-                        id={"pSwitch"} 
-                        valor={false}
-                        onCambio={(c)=>{!c}}
-                    /> */}
 
                     <Switch
                         id="pSwitch"
-                        valor={activo}
-                        // onCambio={(c) => setActivo(!c)}
-                        onCambio={setActivo}
+                        valor={isPsicologo}
+                        onCambio={setIsPsicologo}
                     />
 
                     <button type='submit' className='btn login'>Ingresar</button>
@@ -210,10 +204,9 @@ export default function Login() {
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
                     <Switch
-                        id="pSwitch"
-                        valor={activo}
-                        // onCambio={(c) => setActivo(!c)}
-                        onCambio={setActivo}
+                        id="pSwitch2"
+                        valor={isPsicologo}
+                        onCambio={setIsPsicologo}
                     />
 
                     <button type='submit' className='btn register' disabled={registerLoading}>

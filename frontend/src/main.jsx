@@ -4,7 +4,6 @@ import App from './App.jsx'
 import './index.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import MenuPsiF from './MenuPsiF.jsx'
-import MenuPaF from './MenuPaF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
 
 import Doc from './Doc.jsx'
@@ -21,6 +20,7 @@ import PlanesGeneral from './PlanesGeneral.jsx'
 import Login from './login.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import ReestablecerPassword from './ReestablecerPassword.jsx'
+import VerificarCuenta from './VerificarCuenta.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -47,10 +47,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
-        <Route path='/login' element={<Login/>}/>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/ReestablecerPassword' element={<ReestablecerPassword/>}/>
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
+        <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />
+        <Route path="/resetear-password/:token" element={<ReestablecerPassword />} />
       </Routes>
     </BrowserRouter>
     </AuthProvider>
