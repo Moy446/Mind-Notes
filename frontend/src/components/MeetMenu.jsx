@@ -16,7 +16,6 @@ export default function MeetMenu(props) {
         try {
             const res = await clienteAxios.get('/psicologo/calendario/pacientes/lista')
             if(res.data.success){
-                
                 const patientsList = res.data.nombresPacientes
                 setPatients(patientsList.map(p => ({
                     idPaciente: p.idPaciente,
@@ -150,7 +149,7 @@ export default function MeetMenu(props) {
                     ["fechaCita"]: res.data.cita.fechaCita,
                     ["horaInicio"]: res.data.cita.horaInicio,
                     ["horaFin"]: res.data.cita.horaFin,
-                    ["fotoPerfil"]: res.data.cita.fotoPerfil
+                    ["fotoPerfil"]: res.data.cita.fotoPerfilPaciente
                 })
             }
             for (let patient of patients){
@@ -185,7 +184,7 @@ export default function MeetMenu(props) {
                     getOptionValue = {(p) => p.idPaciente }
                     components={{ IndicatorSeparator: () => null }}
                     onChange={actualizarDatosPaciente}
-                    defaultValue={patients[position]}
+                    value={patients[position]}
                     formatOptionLabel={(p)=>(
                         <div className='optionContentM' key={p.idPaciente}>
                             <img src={p.fotoPerfil} className="avatarM"/>

@@ -63,10 +63,8 @@ class CalendarioController {
                 }
             }
             const cita = new Cita();
-            const paciente = new Paciente();
-            const psicologo = new Psicologo();
-            const datosPaciente = await paciente.findById(idPaciente);
-            const datosPsicologo = await psicologo.findById(idPsicologo);
+            const listaVinculacion = new ListaVinculacion();
+            const datos = await listaVinculacion.findVinculacion(idPsicologo,idPaciente);
             const nuevaCita = {
                 idPaciente,
                 idPsicologo : idPsicologo,/*req.params.idPsicologo,*/
@@ -86,8 +84,8 @@ class CalendarioController {
                 horaInicio,
                 horaFin,
                 fechaCita, 
-                fotoPaciente: datosPaciente.fotoPerfil,
-                fotoPsicologo: datosPsicologo.fotoPerfil,
+                fotoPaciente: datos.fotoPerfilPaciente,
+                fotoPsicologo: datos.fotoPerfilPsicologo,
                 nombrePaciente,
                 nombrePsicologo, //falta ver donde guarda eric estos valores
                 estado: 'programada',
@@ -119,10 +117,8 @@ class CalendarioController {
                 }
             }
             const cita = new Cita();
-            const paciente = new Paciente();
-            const psicologo = new Psicologo();
-            const datosPaciente = await paciente.findById(idPaciente);
-            const datosPsicologo = await psicologo.findById(idPsicologo);
+            const listaVinculacion = new ListaVinculacion();
+            const datos = await listaVinculacion.findVinculacion(idPsicologo,idPaciente);
             const datosActualizados = {
                 idPaciente,
                 idPsicologo : idPsicologo,
@@ -142,8 +138,8 @@ class CalendarioController {
                 horaInicio,
                 horaFin,
                 fechaCita, 
-                fotoPaciente: datosPaciente.fotoPerfil,
-                fotoPsicologo: datosPsicologo.fotoPerfil,
+                fotoPaciente: datos.fotoPerfilPaciente,
+                fotoPsicologo: datos.fotoPerfilPsicologo,
                 nombrePaciente,
                 nombrePsicologo, //falta ver donde guarda eric estos valores
                 status: 'reagendada',
@@ -175,23 +171,22 @@ class CalendarioController {
         try {
             const {idCita} = req.params;
             const cita = new Cita();
-            const paciente = new Paciente();    
+            const listaVinculacion = new ListaVinculacion();
             const datosCita = await cita.getCitaById(idCita);
             if (!datosCita) {
                 return res.status(404).json({ success: false, message: 'Cita no encontrada' });
             }
             const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
-            const usuarioModel = new Usuario();    
-            const datosPaciente = await usuarioModel.findById(idPaciente); 
+            const datosPaciente = await listaVinculacion.findByPaciente(idPaciente); 
             const fechaString = `${fechaCita.getFullYear()}-${(fechaCita.getMonth() + 1).toString().padStart(2,'0')}-${(fechaCita.getDate() + 1).toString().padStart(2,'0')}`;
-            const {fotoPerfil} = datosPaciente;
+            const {fotoPerfilPaciente} = datosPaciente;
             res.status(200).json({success:true, cita:{
                 idPaciente,
                 nombrePaciente,
                 fechaCita: fechaString,
                 horaInicio,
                 horaFin,
-                fotoPerfil
+                fotoPerfilPaciente
             }});
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al cargar la informacion de la cita del paciente: ' + error.message });
