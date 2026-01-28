@@ -77,14 +77,14 @@ class UsuarioController {
     /**
      * Registrar un psicólogo
      */
-    async registrarPsicologoBD(req, res) {
+    registrarPsicologoBD = async (req, res) => {
         return this.registrarUsuario(req, res, true);
     }
 
     /**
      * Registrar un paciente
      */
-    async registrarPacienteBD(req, res) {
+    registrarPacienteBD = async (req, res) => {
         return this.registrarUsuario(req, res, false);
     }
 
@@ -151,14 +151,14 @@ class UsuarioController {
     /**
      * Login de psicólogo
      */
-    async loginPsicologo(req, res) {
+    loginPsicologo = async (req, res) => {
         return this.loginUsuario(req, res, true);
     }
 
     /**
      * Login de paciente
      */
-    async loginPaciente(req, res) {
+    loginPaciente = async (req, res) => {
         return this.loginUsuario(req, res, false);
     }
 
