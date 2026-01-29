@@ -132,6 +132,7 @@ class UsuarioController {
                     success: false, 
                     message: `Esta cuenta es de tipo ${tipoReal}, no ${tipoEsperado}` 
                 });
+                
             }
 
             const isPasswordValid = await Bcrypt.compare(password, usuario.password);
