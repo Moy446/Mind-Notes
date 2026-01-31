@@ -15,7 +15,7 @@ export default function SuppPsi(props) {
 
     useEffect(() => {
         if (activo) {
-            setMaxPaginador(Math.ceil(props.materialApoyo?.length / 20));
+            setMaxPaginador(Math.ceil(props.materialAdjunto?.length / 20));
         } else {
             setMaxPaginador(Math.ceil((props.expedientes?.length + props.grabaciones?.length) / 20));
         }
