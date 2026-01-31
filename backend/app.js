@@ -4,6 +4,7 @@ import 'dotenv/config';
 import webRoutes from './routes/routesWeb.js';
 import routesChat from './routes/routesChat.js';
 import routesPsicologo from './routes/routesPsicologoApp.js';
+import routesAuth from './routes/routesAuth.js';
 import cookieParser from 'cookie-parser';
 import csrf from 'csurf';
 import { createServer } from 'http';
@@ -12,8 +13,7 @@ import chatSocket from './sockets/chatSocket.js';
 import dbClient from './config/dbClient.js';
 import bodyParser from 'body-parser';
 import cookieCtrl from './helpers/cookiesControll.js';
-import UserController from './controllers/usuarioController.js';
-import protector from './helpers/routesProtect.js';
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -44,17 +44,13 @@ async function startServer() {
     app.use(cookieParser());
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
 
-    // Endpoints de autenticación
-    app.get('/api/me', protector, UserController.getMe);
 
-    app.post('/api/refresh', UserController.refresh);
-
-    app.post('/api/logout', UserController.logout);
 
     // Routes
     app.use('/api', webRoutes);
     app.use('/api/chat', routesChat);
     app.use('/api/psicologo', routesPsicologo);
+    app.use('/api/auth', routesAuth);
 
     // Inicializar Socket.IO
     chatSocket(io);
