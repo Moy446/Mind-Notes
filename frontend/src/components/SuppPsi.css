@@ -1,10 +1,15 @@
 .suppPsi
 {
-    height: 961px;
+    height: 96vh;
     width: 465px;
     background-color: #2973B2;
     display: flex;
     flex-direction: column;
+}
+.headerSuppPsi {
+    margin: 0;
+    background-color: #2973B2;
+    padding: 0;
 }
 
 .svgsuppPsi
@@ -73,18 +78,24 @@
 
 .matApo
 {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     justify-content: space-around;
-    margin-top: 10px;
+    gap: 15px;
+    margin: 20px;
 }
 
 .itemsmatApo{
-    width: 94px;
-    height: 94px;
-    overflow: hidden;
-    object-fit: cover;
-    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 0 8px;
+    justify-content: center;
+    color: white;
+    font-family: 'Saira';
+    font-size: 15px;
+    width: 80px;
 }
 
 .unique
@@ -94,6 +105,83 @@
     width: 100%;
     border: none;
     transition: all 0.4s;
+}
+
+.paginatorSuppPsi{
+    display: flex;
+    width: 27%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 5%;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.textPaginator{
+    font-family: 'Saira';
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+}
+
+.btnPaginator{
+    background-color: #9ACBD0;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-family: 'Saira';
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.btnPaginator:hover{
+
+    background-color: #8cb8bd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+}
+
+/*Responsive*/
+@media only screen and (max-width: 1440px) {
+    .paginatorSuppPsi{
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 940px) {
+    .suppPsi{
+        background-color: #F2EFE7;
+    }
+    .svgsuppPsi{
+        stroke: white;
+    }
+    .suppPsiOp{
+        width: 80%;
+    }
+    .lineDown{
+        width: 40%;
+    }
+    .itemsmatApo{
+        color: black;
+        width: 50px;
+    }
+    .paginatorSuppPsi{
+        width: 50%;
+    }
+    .textPaginator{
+        color: black;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .paginatorSuppPsi{
+        width: 40%;
+    }
 }
 
 @font-face {

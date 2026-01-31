@@ -15,11 +15,11 @@ class Cita {
     async create(datosCita){
         try{
             const cita = {
-                idPaciente : datosCita.idPaciente,
-                idPsicologo: datosCita.idPsicologo,
+                idPaciente : new ObjectId(datosCita.idPaciente),
+                idPsicologo: new ObjectId(datosCita.idPsicologo),
                 nombrePaciente: datosCita.nombrePaciente,
                 nombrePsicologo: datosCita.nombrePsicologo,
-                fechaCita: datosCita.fechaCita,
+                fechaCita: new Date(datosCita.fechaCita),
                 horaInicio: datosCita.horaInicio,
                 horaFin: datosCita.horaFin,
                 duracion: datosCita.duracion,
@@ -66,6 +66,9 @@ class Cita {
             if (!ObjectId.isValid(idCita)) {
                 throw new Error('ID de cita no válido');
             }
+            datosCitaActualizados.idPaciente = new ObjectId(datosCitaActualizados.idPaciente);
+            datosCitaActualizados.idPsicologo = new ObjectId(datosCitaActualizados.idPsicologo);
+            datosCitaActualizados.fechaCita = new Date(datosCitaActualizados.fechaCita);
             const resultado = await this.colCitas.updateOne({_id: new ObjectId(idCita)}, { $set: {...datosCitaActualizados, updatedAt: new Date()}
             });
             if (resultado.matchedCount === 0) {

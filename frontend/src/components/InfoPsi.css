@@ -94,6 +94,19 @@
     margin-bottom: 10px;
 }
 
+.divDocument{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 0 8px;
+    justify-content: center;
+    color: white;
+    font-family: 'Saira';
+    font-size: 15px;
+    width: 80px;
+}
+
 .docInfoPsi{
     width: 94px;
     height: 94px;
@@ -109,6 +122,32 @@
     margin-bottom: 20px;
     width: 100%;
     margin-left: 25%;
+}
+
+@media only screen and (max-width: 940px) {
+    .infopsi{
+        background-color: #F2EFE7;
+
+    }
+    .imgInfoPsi{
+        width: 35%;
+    }
+    .svgInfopsi{
+        width: 10%;
+        stroke: black;
+    }
+    .nameInfoPsi{
+        font-size: 30px;
+        color:black;
+    }
+    .suppTitleInfopsi{
+        color:black;
+    }
+
+    .divDocument{
+        color:black;
+        width: 50px;
+    }
 }
 
 @font-face {
