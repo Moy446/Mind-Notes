@@ -87,12 +87,12 @@ export default function AudioMenu(props){
             <div className='radioBtns'>
                 <div className='radioBtn'>
                     <input type='checkbox' name='resume' id='resume' className='offScreen' onChange={actualizarServices} checked={patientData.resume}/>
-                    <label for="resume" className="radioA"></label>
+                    <label htmlFor="resume" className="radioA"></label>
                     <a className='titleAudio'>Resumen</a>
                 </div>
                 <div className='radioBtn'>
                     <input type='checkbox' name='grabacion' id='grabacion' className='offScreen' onChange={actualizarServices} checked={patientData.grabacion}/>
-                    <label for="grabacion" className="radioA"></label>
+                    <label htmlFor="grabacion" className="radioA"></label>
                     <a className='titleAudio'>Guardar grabacion</a>
                 </div> 
             </div>

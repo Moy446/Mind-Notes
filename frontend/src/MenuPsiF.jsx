@@ -37,7 +37,7 @@ function MenuPsiF() {
             <div className={uidOpen ? 'showUID' : 'hidenMenu'}>
                 <AddUID 
                     open={uidOpen} 
-                    handleOpen={handleOpenUID}
+                    handleOpen={handleOpenUID}  
                     handleOpenQR={handleOpen}
                     userRole="psicologo"
                     userId={user?.id}

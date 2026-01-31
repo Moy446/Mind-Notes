@@ -14,8 +14,8 @@ class CalendarioController {
 
     loadCalendar = async (req,res) => {
         const agenda = new Agenda();
-        //obtener idPsicologo de session o token
-        const idPsicologo = "694b01541fb1a9eadec23c53";
+        const psicologoData = req.user;
+        const idUsuario = psicologoData.idUsuario;
         const currentDate = new Date();
         const jsDay = currentDate.getDay();
         let days = []
@@ -27,7 +27,7 @@ class CalendarioController {
             });
         };
         try {
-            const datosAgenda = await agenda.getAgenda(idPsicologo,days[0].fullDate , days[6].fullDate); //ver como lo hace el eric
+            const datosAgenda = await agenda.getAgenda(idUsuario,days[0].fullDate , days[6].fullDate);
             const formattedAgenda = datosAgenda.map(cita =>({
                 id:cita.idCita,
                 nombre:cita.nombrePaciente,
@@ -49,14 +49,12 @@ class CalendarioController {
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = req.body;
         const duracion = (this.calcularHora(horaFin) - this.calcularHora(horaInicio)) * 60;
         try{
-            //Borrar
-            const idPsicologo = "694b01541fb1a9eadec23c53";
-            const nombrePsicologo = "Dr. Psicologo Test";
-            //
-
+            const psicologoData = req.user;
+            const idUsuario = psicologoData.idUsuario;
+            const nombreUsuario = psicologoData.nombre;
             //validar que no haya citas en el mismo horario
             const agenda = new Agenda();
-            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idPsicologo);
+            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idUsuario);
             for (let cita of citasDelDia){
                 if (horaInicio < cita.horaFin && horaFin > cita.horaInicio){
                     throw new Error('Ya existe una cita en el mismo horario');
@@ -64,12 +62,12 @@ class CalendarioController {
             }
             const cita = new Cita();
             const listaVinculacion = new ListaVinculacion();
-            const datos = await listaVinculacion.findVinculacion(idPsicologo,idPaciente);
+            const datos = await listaVinculacion.findVinculacion(idUsuario,idPaciente);
             const nuevaCita = {
                 idPaciente,
-                idPsicologo : idPsicologo,/*req.params.idPsicologo,*/
+                idPsicologo : idUsuario,/*req.params.idPsicologo,*/
                 nombrePaciente,
-                nombrePsicologo : nombrePsicologo,/*req.params.nombrePsicologo,*/
+                nombrePsicologo : nombreUsuario,/*req.params.nombrePsicologo,*/
                 fechaCita,
                 horaInicio,
                 horaFin,
@@ -79,7 +77,7 @@ class CalendarioController {
             const result = await cita.create(nuevaCita);  
             const nuevaAgenda = {
                 idCita: result.insertedId,
-                idPsicologo,
+                idPsicologo : idUsuario,
                 idPaciente,
                 horaInicio,
                 horaFin,
@@ -87,7 +85,7 @@ class CalendarioController {
                 fotoPaciente: datos.fotoPerfilPaciente,
                 fotoPsicologo: datos.fotoPerfilPsicologo,
                 nombrePaciente,
-                nombrePsicologo, //falta ver donde guarda eric estos valores
+                nombrePsicologo : nombreUsuario, //falta ver donde guarda eric estos valores
                 estado: 'programada',
             }
             await agenda.create(nuevaAgenda);
@@ -103,14 +101,13 @@ class CalendarioController {
         const duracion = (this.calcularHora(horaFin) - this.calcularHora(horaInicio)) * 60;
         try{
 
-            //Borrar
-            const idPsicologo = "694b01541fb1a9eadec23c53";
-            const nombrePsicologo = "Dr. Psicologo Test";
-            //
+            const psicologoData = req.user;
+            const idUsuario = psicologoData.idUsuario;
+            const nombreUsuario = psicologoData.nombre;
 
             const agenda = new Agenda();
             //validar que no haya citas en el mismo horario
-            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idPsicologo);
+            const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idUsuario);
             for (let cita of citasDelDia){
                 if (horaInicio < cita.horaFin && horaFin > cita.horaInicio && idCita != cita.idCita){
                     throw new Error('Ya existe una cita en el mismo horario');
@@ -118,12 +115,12 @@ class CalendarioController {
             }
             const cita = new Cita();
             const listaVinculacion = new ListaVinculacion();
-            const datos = await listaVinculacion.findVinculacion(idPsicologo,idPaciente);
+            const datos = await listaVinculacion.findVinculacion(idUsuario,idPaciente);
             const datosActualizados = {
                 idPaciente,
-                idPsicologo : idPsicologo,
+                idPsicologo : idUsuario,
                 nombrePaciente,
-                nombrePsicologo : nombrePsicologo,
+                nombrePsicologo : nombreUsuario,
                 fechaCita,
                 horaInicio,
                 horaFin,
@@ -133,7 +130,7 @@ class CalendarioController {
             const resultadoCita = await cita.editCita(idCita, datosActualizados);  
             const nuevaAgenda = {
                 idCita,
-                idPsicologo,
+                idPsicologo: idUsuario,
                 idPaciente, //falta ver donde guarda eric estos valores
                 horaInicio,
                 horaFin,
@@ -141,7 +138,7 @@ class CalendarioController {
                 fotoPaciente: datos.fotoPerfilPaciente,
                 fotoPsicologo: datos.fotoPerfilPsicologo,
                 nombrePaciente,
-                nombrePsicologo, //falta ver donde guarda eric estos valores
+                nombrePsicologo : nombreUsuario, //falta ver donde guarda eric estos valores
                 status: 'reagendada',
             }
             const resultadoAgenda = await agenda.update(idCita, nuevaAgenda);
@@ -194,12 +191,11 @@ class CalendarioController {
     }
 
     async cargarPacientes(req, res){
-        //borrar
-        const idPsicologo = "694b01541fb1a9eadec23c53";
-        //  
+            const psicologoData = req.user;
+            const idUsuario = psicologoData.idUsuario;
         try {
             const listaVinculacion = new ListaVinculacion();
-            const nombresPacientes = await listaVinculacion.findByPsicologo(idPsicologo);
+            const nombresPacientes = await listaVinculacion.findByPsicologo(idUsuario);
             res.status(200).json({success:true, nombresPacientes });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al cargar la lista de pacientes: ' + error.message });    

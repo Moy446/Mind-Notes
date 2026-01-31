@@ -1,3 +1,4 @@
+import { th } from "framer-motion/client";
 import dbClient from "../config/dbClient.js";
 import Chat from "../models/Chat.js";
 import { ObjectId } from "mongodb";
@@ -53,6 +54,25 @@ class ChatController {
             res.status(500).json({ success: false, message: 'Error al enviar mensaje: ' + error.message });
         }
     }
+
+    async obtenerInformacionChat(req, res){
+        try {
+            const {idPsicologo, idPaciente} = req.params;
+            const chat = new Chat();
+            const infoChat = await chat.findChatByParticipants(idPaciente, idPsicologo);
+            const patientData = {
+                id : infoChat.idPaciente,
+                nombre: infoChat.nombrePaciente,
+                materialAdjunto: infoChat.materialAdjunto,
+                expedientes: infoChat.expedientes,
+                grabaciones: infoChat.grabaciones
+            } 
+            res.status(200).json({success:true, patientData});
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error obtener la informacion del paciente: ' + error.message });
+        }
+    }
+
 }
 
 export default new ChatController();

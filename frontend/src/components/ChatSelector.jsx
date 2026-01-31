@@ -70,7 +70,7 @@ export default function ChatSelector(props){
                         return (
                             <ChatBox
                                 key={contactId}
-                                img={contact.fotoPerfil || '/src/images/pimg1.png'}
+                                img={contact.fotoPerfilPaciente || contact.fotoPerfilPsicologo || '/src/images/pimg1.png'} //esto genera pedos pq siempre lee la foto del paciente
                                 name={displayName}
                                 message={lastMsg}
                                 isSelected={selectedId === contactId}

@@ -10,6 +10,7 @@ import Spinner from './components/spinner';
 export default function CalendarioF(props) {
 
     const [citas, setCitas] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     
 
     const cargarCitas = async () => {
@@ -28,6 +29,9 @@ export default function CalendarioF(props) {
                     dia: cita.dia,
                     estado: cita.estado
                 })));
+                setIsLoading(false);
+            }else{
+                console.log('Error al cargar las citas'+ res.data.message);
             }
         } catch (error) {
             console.log(error)
@@ -140,7 +144,7 @@ export default function CalendarioF(props) {
     });
 
     //cargar spinner
-    if (citas.length === 0){
+    if (isLoading){
         return <Spinner/>
     }
 

@@ -8,9 +8,9 @@ class GrabacionController {
     }
 
     async loadPacientes(req, res) {
-        //borrar
-        const idPsicologo = "694b01541fb1a9eadec23c53";
-        //
+        
+        const idPsicologo = req.user.idUsuario;
+
         try {
             const listaVinculacion = new ListaVinculacion();
             const nombresPacientes = await listaVinculacion.findByPsicologo(idPsicologo);
@@ -23,6 +23,7 @@ class GrabacionController {
     async guardarGrabacion(req, res) {
         res.status(200).json({ success: true, message: 'Grabación guardada correctamente' });
         const {idPaciente, nombrePaciente, resume, grabacion} = req.body;
+        const idPsicologo = req.user.idUsuario;
         try {
             const text = await consumeAI.transcribe(req.file.path);
             const diarization = await consumeAI.diarize(req.file.path); 
@@ -38,8 +39,8 @@ class GrabacionController {
                 
                 //subir archivo a la base de datos
                 const chat = new Chat();
-                const resultadoExpediente = await chat.insertExpediente("694b01541fb1a9eadec23c53"/*idPsicologo */, idPaciente /*,expediente */);
-                const resultadoGrabacion = await chat.insertGrabacion("694b01541fb1a9eadec23c53"/*idPsicologo */, idPaciente, req.file.path);
+                const resultadoExpediente = await chat.insertExpediente(idPsicologo, idPaciente /*,expediente */);
+                const resultadoGrabacion = await chat.insertGrabacion(idPsicologo, idPaciente, req.file.path);
                 if (resultadoExpediente.modifiedCount === 1 && resultadoGrabacion.modifiedCount === 1) {
                     //Enviar notificacion por correo
                     console.log("Expediente insertado correctamente en el chat.");
