@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
 import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
+import { emailAuthService } from './services/emailAuthService';
 import './login.css'
 
 export default function Login() {
@@ -24,6 +25,15 @@ export default function Login() {
     const [isPsicologo, setIsPsicologo] = useState(false);
     const [registerError, setRegisterError] = useState('');
     const [registerLoading, setRegisterLoading] = useState(false);
+
+    // Estado para recuperación de contraseña
+    const [recoveryEmail, setRecoveryEmail] = useState('');
+    const [recoveryError, setRecoveryError] = useState('');
+    const [recoverySuccess, setRecoverySuccess] = useState('');
+    const [recoveryLoading, setRecoveryLoading] = useState(false);
+
+
+
 
     // Función para manejar login
     const handleLogin = async (e) => {
@@ -79,6 +89,27 @@ export default function Login() {
             setRegisterLoading(false);
         }
     };
+
+    // Función para manejar recuperación de contraseña
+    const handleRecovery = async (e) => {
+        e.preventDefault();
+        setRecoveryError('');
+        setRecoverySuccess('');
+        setRecoveryLoading(true);
+        try {
+            const result = await emailAuthService.solicitarRecuperacion(recoveryEmail);
+            if (result.success) {
+                setRecoverySuccess('Correo de recuperación enviado. Revisa tu bandeja de entrada.');
+            } else {
+                setRecoveryError(result.message || 'Error al solicitar recuperación de contraseña');
+            }
+        } catch (error) {
+            setRecoveryError('Error al solicitar recuperación de contraseña');
+        } finally { 
+            setRecoveryLoading(false);
+        }
+    };
+
 
     return (
         <div className={`loginContainer ${modo}`}>
@@ -222,19 +253,39 @@ export default function Login() {
 
 {/* ---------------------------Recuperar contraseña--------------------------- */}
             <div className='formBox password'>
-                <form action="form-password">
+                <form onSubmit={handleRecovery}>
                     <div className='div-titlePassword'>
                         <h1 className='password-title'>Reestablecer contraseña</h1>
                     </div>
 
+                    {recoveryError && <div className='error-message' style={{color: 'red', marginBottom: '10px'}}>{recoveryError}</div>}
+                    {recoverySuccess && <div className='success-message' style={{color: 'green', marginBottom: '10px'}}>{recoverySuccess}</div>}
+
                     <div className='inputBox'>
-                        <input type="email" placeholder='Ingresa tu correo electronico' required />
+                        <input type="email" 
+                        placeholder='Ingresa tu correo electronico' 
+                        required 
+                        value={recoveryEmail}
+                        onChange={(e) => setRecoveryEmail(e.target.value)}
+                        />
                     </div>
 
-                    <button type='submit' className='btn password'>Solicitar cambio de contraseña</button>
+                    <button type='submit' className='btn password' disabled={recoveryLoading}>
+                        {recoveryLoading ? 'Enviando...' : 'Enviar correo de recuperación'}
+                    </button>
+
+                    <div className='forgotLink'>
+                        <Link to=""
+                            className="link-login"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                setModo('login')
+                            }}
+                        >
+                        </Link>
+                    </div>
                 </form>
             </div>
-
 
 {/* -----------------------------Panel de color------------------------------- */}
         <div className="toggle-box">

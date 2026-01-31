@@ -24,9 +24,8 @@ class AuthController {
 
             const modelUsuario = new Usuario();
             const usuario = await modelUsuario.findByEmail(email);
-
+            console.log('Usuario encontrado para recuperación:', usuario);
             if (!usuario) {
-                // Por seguridad, no revelar si el email existe
                 return res.status(200).json({
                     success: true,
                     message: 'Si el correo existe, recibirás un email con instrucciones'
@@ -43,7 +42,7 @@ class AuthController {
             const expiracion = new Date(Date.now() + 60 * 60 * 1000);
 
             // Guardar token hasheado y expiración
-            await modelUsuario.actualizarTokenRecuperacion(usuario._id, tokenHash, expiracion);
+            await modelUsuario.actualizarTokenRecuperacion(usuario.idUsuario, tokenHash, expiracion);
 
             // Enviar correo
             const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
@@ -82,13 +81,6 @@ class AuthController {
         try {
             const { token, newPassword, confirmPassword } = req.body;
 
-            if (!token || !newPassword) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Token y contraseña son requeridos'
-                });
-            }
-
             if (newPassword !== confirmPassword) {
                 return res.status(400).json({
                     success: false,
@@ -96,6 +88,12 @@ class AuthController {
                 });
             }
 
+            if (!token || !newPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token y contraseña son requeridos'
+                });
+            }
             // Validar longitud mínima de contraseña (8 caracteres)
             if (newPassword.length < 8) {
                 return res.status(400).json({
@@ -106,7 +104,7 @@ class AuthController {
 
             // Generar hash del token para comparar con lo almacenado
             const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-
+                
             const modelUsuario = new Usuario();
             const usuario = await modelUsuario.findByRecuperacionToken(tokenHash);
 
@@ -130,8 +128,8 @@ class AuthController {
             const newPasswordHash = await Bcrypt.hash(newPassword, salt);
 
             // Actualizar contraseña e invalidar token
-            await modelUsuario.actualizarPassword(usuario._id, newPasswordHash);
-            await modelUsuario.invalidarTokenRecuperacion(usuario._id);
+            await modelUsuario.actualizarPassword(usuario.idUsuario, newPasswordHash);
+            await modelUsuario.invalidarTokenRecuperacion(usuario.idUsuario);
 
             return res.status(200).json({
                 success: true,
