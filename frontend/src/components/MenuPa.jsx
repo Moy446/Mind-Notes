@@ -1,7 +1,7 @@
 import React from 'react'
 import './MenuPa.css'
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'lucide-react';
 
 export default function MenuPa() {
 

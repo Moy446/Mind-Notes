@@ -1,39 +1,119 @@
-import React, { useState} from 'react'
-import {Link } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
+import { authService } from './services/authService'
+import { AuthContext } from './context/AuthContext'
 import './login.css'
 
 export default function Login() {
-    const [modo, setModo] = useState('login')
-    const [activo, setActivo] = useState(false)
+    const navigate = useNavigate();
+    const { login } = useContext(AuthContext);
+    const [modo, setModo] = useState('login');
+    
+    // Estados para login
+    const [loginEmail, setLoginEmail] = useState('');
+    const [loginPassword, setLoginPassword] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [loginLoading, setLoginLoading] = useState(false);
+    
+    // Estados para registro
+    const [registerNombre, setRegisterNombre] = useState('');
+    const [registerEmail, setRegisterEmail] = useState('');
+    const [registerPassword, setRegisterPassword] = useState('');
+    const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('');
+    const [isPsicologo, setIsPsicologo] = useState(false);
+    const [registerError, setRegisterError] = useState('');
+    const [registerLoading, setRegisterLoading] = useState(false);
+
+    // Función para manejar login
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setLoginError('');
+        setLoginLoading(true);
+
+        try {
+            const result = await login(loginEmail, loginPassword, isPsicologo ? 'psicologo' : 'paciente');
+
+            if (result && result.success) {
+                // Redirigir según el tipo de usuario
+                navigate(isPsicologo ? '/psicologo' : '/paciente');
+            } else {
+                setLoginError(result?.message || 'Error al iniciar sesión');
+            }
+        } catch (error) {
+            setLoginError('Error al conectar con el servidor');
+        } finally {
+            setLoginLoading(false);
+        }
+    };
+
+    // Función para manejar registro
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setRegisterError('');
+        setRegisterLoading(true);
+
+        if (registerPassword !== registerPasswordConfirm) {
+            setRegisterError('Las contraseñas no coinciden');
+            setRegisterLoading(false);
+            return;
+        }
+
+        try {
+            const result = isPsicologo
+                ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
+                : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
+
+            if (result.success) {
+                setRegisterError('');
+                setModo('login'); // Cambiar a formulario de login
+                setLoginEmail(registerEmail);
+                setLoginPassword('');
+                alert('Registro exitoso. Por favor inicia sesión');
+            } else {
+                setRegisterError(result.message);
+            }
+        } catch (error) {
+            setRegisterError('Error al conectar con el servidor');
+        } finally {
+            setRegisterLoading(false);
+        }
+    };
 
     return (
         <div className={`loginContainer ${modo}`}>
             <div className='formBox login'>
-                <form action="form-login">
-                    <div className='div-titleLogin'>
-                        <h1 className='login-title'>MindNotes</h1>
-                    </div>
+                <form onSubmit={handleLogin}>
+                    <h1 className='login-title'>MindNotes</h1>
+
+                    {loginError && <div className='error-message' style={{color: 'red', marginBottom: '10px'}}>{loginError}</div>}
+
                     <div className='inputBox'>
-                        <input type="text" placeholder='Usuario' required />
+                        <input 
+                            type="email" 
+                            placeholder='Correo' 
+                            required 
+                            value={loginEmail}
+                            onChange={(e) => setLoginEmail(e.target.value)}
+                        />
                     </div>
 
                     <div className='inputBox'>
-                        <input type="password" placeholder='Contraseña' required />
+                        <input 
+                            type="password" 
+                            placeholder='Contraseña' 
+                            required 
+                            value={loginPassword}
+                            onChange={(e) => setLoginPassword(e.target.value)}
+                        />
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
-                    {/* <Switch
-                        id={"pSwitch"} 
-                        valor={false}
-                        onCambio={(c)=>{!c}}
-                    /> */}
 
                     <Switch
                         id="pSwitch"
-                        valor={activo}
-                        // onCambio={(c) => setActivo(!c)}
-                        onCambio={setActivo}
+                        valor={isPsicologo}
+                        onCambio={setIsPsicologo}
                     />
 
                     <button type='submit' className='btn login'>Ingresar</button>
@@ -77,36 +157,61 @@ export default function Login() {
 
 {/* ---------------------------REGISTRO--------------------------- */}
             <div className='formBox register'>
-                <form action="form-register">
-                    <div className='div-titleRegister'>         
-                        <h1 className='register-title'>Registrar</h1>
+                <form onSubmit={handleRegister}>
+                    <h1 className='register-title'>Registrar</h1>
+
+                    {registerError && <div className='error-message' style={{color: 'red', marginBottom: '10px'}}>{registerError}</div>}
+
+                    <div className='inputBox'>
+                        <input 
+                            type="text" 
+                            placeholder='Nombre completo' 
+                            required 
+                            value={registerNombre}
+                            onChange={(e) => setRegisterNombre(e.target.value)}
+                        />
                     </div>
 
                     <div className='inputBox'>
-                        <input type="text" placeholder='Nombre completo' required />
+                        <input 
+                            type="email" 
+                            placeholder='Correo electronico' 
+                            required 
+                            value={registerEmail}
+                            onChange={(e) => setRegisterEmail(e.target.value)}
+                        />
                     </div>
 
                     <div className='inputBox'>
-                        <input type="email" placeholder='Correo electronico' required />
+                        <input 
+                            type="password" 
+                            placeholder='Contraseña' 
+                            required 
+                            value={registerPassword}
+                            onChange={(e) => setRegisterPassword(e.target.value)}
+                        />
                     </div>
 
                     <div className='inputBox'>
-                        <input type="password" placeholder='Contraseña' required />
-                    </div>
-
-                    <div className='inputBox'>
-                        <input type="passwordConfirm" placeholder='Confirmar contraseña' required />
+                        <input 
+                            type="password" 
+                            placeholder='Confirmar contraseña' 
+                            required 
+                            value={registerPasswordConfirm}
+                            onChange={(e) => setRegisterPasswordConfirm(e.target.value)}
+                        />
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
                     <Switch
-                        id="pSwitch"
-                        valor={activo}
-                        // onCambio={(c) => setActivo(!c)}
-                        onCambio={setActivo}
+                        id="pSwitch2"
+                        valor={isPsicologo}
+                        onCambio={setIsPsicologo}
                     />
 
-                    <button type='submit' className='btn register'>Registrarse</button>
+                    <button type='submit' className='btn register' disabled={registerLoading}>
+                        {registerLoading ? 'Registrando...' : 'Registrarse'}
+                    </button>
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
