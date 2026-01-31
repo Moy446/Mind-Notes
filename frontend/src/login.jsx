@@ -22,27 +22,10 @@ export default function Login() {
                         <input type="password" placeholder='Contraseña' required />
                     </div>
 
-                    <p className='p-switch'>¿Eres psicólogo?</p>
-                    {/* <Switch
-                        id={"pSwitch"} 
-                        valor={false}
-                        onCambio={(c)=>{!c}}
-                    /> */}
+                    <button type='submit' className='btn login' id='formLogin'>Ingresar</button>
 
-                    <Switch
-                        id="pSwitch"
-                        valor={activo}
-                        // onCambio={(c) => setActivo(!c)}
-                        onCambio={setActivo}
-                    />
-
-                    <button type='submit' className='btn login'>Ingresar</button>
 
                     <div className='div-links'>
-                        <div>
-                            <input type="checkbox" className="input-recordarUsuario"/>
-                            <label htmlFor="input-recordarUsuario">Recordar usuario</label>
-                        </div>
 
                         <div className='forgotLink'>
                             <p>¿Aún no tienes cuenta?</p>
@@ -99,14 +82,15 @@ export default function Login() {
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
+                    <div className='div-buttons'>
                     <Switch
                         id="pSwitch"
                         valor={activo}
-                        // onCambio={(c) => setActivo(!c)}
                         onCambio={setActivo}
                     />
-
                     <button type='submit' className='btn register'>Registrarse</button>
+                    </div>
+                    
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
