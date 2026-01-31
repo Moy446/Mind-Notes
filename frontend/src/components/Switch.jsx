@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Switch.css'
 
 export default function Switch(props) {
@@ -17,9 +17,9 @@ export default function Switch(props) {
     const id = props.id || 'switch-checkbox';
 
     return (
-        <div>
-            <input type="checkbox" id={id} className='offScreen' checked={isChecked} onChange={handleChange}/>
-            <label htmlFor={id} className="div-switch"></label>
+        <div className='div-switchContainer'>
+            <input type="checkbox" id={props.id} className='offScreen' checked={props.valor} onChange={handleChange}/>
+            <label for={props.id} className="div-switch"></label>
         </div>
     );
 }

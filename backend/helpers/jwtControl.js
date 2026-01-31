@@ -9,7 +9,7 @@ class jwtControl {
     const token = jwt.sign(
       { id, nombre, role },
       secretKey,
-      { expiresIn: '1h' }
+      { expiresIn: '7d' }
     );
     return token;
   }

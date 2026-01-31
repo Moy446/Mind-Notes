@@ -1,0 +1,121 @@
+.verificar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    padding: 20px;
+}
+
+.verificar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.verificar-icon {
+    margin-bottom: 20px;
+    font-size: 60px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    border: 4px solid #f0f0f0;
+    border-top: 4px solid #6366f1;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.icon-exito {
+    color: #10b981;
+    font-weight: bold;
+    animation: popIn 0.5s ease-out;
+}
+
+.icon-error {
+    color: #ef4444;
+    font-weight: bold;
+    animation: popIn 0.5s ease-out;
+}
+
+@keyframes popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.verificar-title {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.verificar-mensaje {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.verificar-subtitulo {
+    color: #999;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.verificar-btn {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.verificar-btn:hover {
+    background: #4f46e5;
+}
+
+.verificar-card.exito {
+    border-left: 5px solid #10b981;
+}
+
+.verificar-card.error {
+    border-left: 5px solid #ef4444;
+}
