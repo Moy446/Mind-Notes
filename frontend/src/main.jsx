@@ -13,6 +13,7 @@ import CalendarioF from './CalenndarioF.jsx'
 import MenuPaF from './MenuPaF.jsx'
 import PerfilPaF from './PerfilPaF.jsx'
 import ChatPaF from './ChatPaF.jsx'
+import Error from './Error.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -30,6 +31,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='chat:id' element={<ChatPaF/>}/>
           <Route path='perfil:id' element={<PerfilPaF/>}/>
         </Route>
+        <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
       </Routes>
     </BrowserRouter>
