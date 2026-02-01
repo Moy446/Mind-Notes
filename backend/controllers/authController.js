@@ -1,0 +1,263 @@
+import Usuario from "../models/Usuario.js";
+import Bcrypt from 'bcryptjs';
+import emailService from "../helpers/emailService.js";
+import crypto from 'crypto';
+import 'dotenv/config';
+
+class AuthController {
+    constructor() {}
+
+    /**
+     * Solicita recuperación de contraseña
+     * Genera token temporal y envía correo
+     */
+    async solicitarRecuperacion(req, res) {
+        try {
+            const { email } = req.body;
+
+            if (!email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El correo es requerido'
+                });
+            }
+
+            const modelUsuario = new Usuario();
+            const usuario = await modelUsuario.findByEmail(email);
+
+            if (!usuario) {
+                // Por seguridad, no revelar si el email existe
+                return res.status(200).json({
+                    success: true,
+                    message: 'Si el correo existe, recibirás un email con instrucciones'
+                });
+            }
+
+            // Generar token aleatorio seguro (32 bytes = 64 caracteres hex)
+            const tokenRecuperacion = crypto.randomBytes(32).toString('hex');
+            
+            // Generar hash del token para almacenar de forma segura
+            const tokenHash = crypto.createHash('sha256').update(tokenRecuperacion).digest('hex');
+            
+            // Token expira en 1 hora
+            const expiracion = new Date(Date.now() + 60 * 60 * 1000);
+
+            // Guardar token hasheado y expiración
+            await modelUsuario.actualizarTokenRecuperacion(usuario._id, tokenHash, expiracion);
+
+            // Enviar correo
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+            const resultado = await emailService.enviarRecuperacion(
+                usuario.email,
+                usuario.nombre,
+                tokenRecuperacion,
+                frontendUrl
+            );
+
+            if (!resultado.success) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error al enviar el correo. Intenta de nuevo más tarde'
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'Email de recuperación enviado. Revisa tu bandeja de entrada'
+            });
+
+        } catch (error) {
+            console.error('Error en solicitarRecuperacion:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error interno del servidor'
+            });
+        }
+    }
+
+    /**
+     * Verifica el token de recuperación y cambia la contraseña
+     */
+    async cambiarPasswordConToken(req, res) {
+        try {
+            const { token, newPassword, confirmPassword } = req.body;
+
+            if (!token || !newPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token y contraseña son requeridos'
+                });
+            }
+
+            if (newPassword !== confirmPassword) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Las contraseñas no coinciden'
+                });
+            }
+
+            // Validar longitud mínima de contraseña (8 caracteres)
+            if (newPassword.length < 8) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'La contraseña debe tener al menos 8 caracteres'
+                });
+            }
+
+            // Generar hash del token para comparar con lo almacenado
+            const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+            const modelUsuario = new Usuario();
+            const usuario = await modelUsuario.findByRecuperacionToken(tokenHash);
+
+            if (!usuario) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token inválido o expirado'
+                });
+            }
+
+            // Validar que el token no haya expirado
+            if (new Date() > usuario.tokenExpiracion) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El token ha expirado. Solicita uno nuevo'
+                });
+            }
+
+            // Hash de la nueva contraseña
+            const salt = await Bcrypt.genSalt(10);
+            const newPasswordHash = await Bcrypt.hash(newPassword, salt);
+
+            // Actualizar contraseña e invalidar token
+            await modelUsuario.actualizarPassword(usuario._id, newPasswordHash);
+            await modelUsuario.invalidarTokenRecuperacion(usuario._id);
+
+            return res.status(200).json({
+                success: true,
+                message: 'Contraseña actualizada exitosamente. Inicia sesión'
+            });
+
+        } catch (error) {
+            console.error('Error en cambiarPasswordConToken:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error interno del servidor'
+            });
+        }
+    }
+
+    /**
+     * Verifica la cuenta del usuario con token
+     */
+    async verificarCuenta(req, res) {
+        try {
+            const { token } = req.params;
+
+            if (!token) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token no proporcionado'
+                });
+            }
+
+            // Generar hash del token
+            const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+
+            const modelUsuario = new Usuario();
+            const usuario = await modelUsuario.findByVerificacionToken(tokenHash);
+
+            if (!usuario) {
+                
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token inválido, expirado o ya utilizado. Si tu cuenta ya está verificada, puedes iniciar sesión.'
+                });
+            }
+            
+            // Verificar usuario
+            await modelUsuario.marcarVerificado(usuario.idUsuario);
+
+            return res.status(200).json({
+                success: true,
+                message: 'Cuenta verificada exitosamente. Ya puedes iniciar sesión'
+            });
+
+        } catch (error) {
+            console.error('Error en verificarCuenta:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error interno del servidor'
+            });
+        }
+    }
+
+    /**
+     * Reenvía el correo de verificación
+     */
+    async reenviarVerificacion(req, res) {
+        try {
+            const { email } = req.body;
+
+            if (!email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El correo es requerido'
+                });
+            }
+
+            const modelUsuario = new Usuario();
+            const usuario = await modelUsuario.findByEmail(email);
+
+            if (!usuario) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Usuario no encontrado'
+                });
+            }
+
+            if (usuario.verificado) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Esta cuenta ya está verificada'
+                });
+            }
+
+            // Generar nuevo token
+            const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+            const tokenHash = crypto.createHash('sha256').update(tokenVerificacion).digest('hex');
+
+            await modelUsuario.actualizarTokenVerificacion(usuario._id, tokenHash);
+
+            // Enviar correo
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+            const resultado = await emailService.enviarVerificacion(
+                usuario.email,
+                usuario.nombre,
+                tokenVerificacion,
+                frontendUrl
+            );
+
+            if (!resultado.success) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Error al enviar el correo'
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'Correo de verificación reenviado'
+            });
+
+        } catch (error) {
+            console.error('Error en reenviarVerificacion:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error interno del servidor'
+            });
+        }
+    }
+}
+
+export default new AuthController();

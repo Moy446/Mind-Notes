@@ -88,6 +88,15 @@
     font-family: 'Saira';
     font-weight: 700;
     font-size: 16px;
+    color: black;
+}
+
+.titleEditInfo2
+{
+    font-family: 'Saira';
+    font-weight: 700;
+    font-size: 16px;
+    color: #F2EFE7;
 }
 
 .infoShow
@@ -95,10 +104,25 @@
     font-family: 'Saira';
     font-weight: 400;
     font-size: 16px;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    color: black;
+}
+
+.infoShow2
+{
+    font-family: 'Saira';
+    font-weight: 400;
+    font-size: 16px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    color: #F2EFE7;
 }
 
 .bottomPerfil

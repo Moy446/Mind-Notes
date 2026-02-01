@@ -10,32 +10,52 @@ import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
 import Planes from './Planes.jsx'
+import CalendarioF from './CalenndarioF.jsx'
+import MenuPaF from './MenuPaF.jsx'
+import PerfilPaF from './PerfilPaF.jsx'
+import ChatPaF from './ChatPaF.jsx'
+import Error from './Error.jsx'
 
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
 import Login from './login.jsx'
+import { AuthProvider } from './context/AuthContext.jsx'
 import ReestablecerPassword from './ReestablecerPassword.jsx'
+import VerificarCuenta from './VerificarCuenta.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
         <Route path='/psicologo' element={<MenuPsiF/>}>
-          <Route path='chat:id' element={<ChatPsiF/>}/>
-          <Route path='doc:id' element={<Doc/>}/>
+          <Route path='chat' element={<ChatPsiF/>}/>
+          <Route path='chat/:id' element={<ChatPsiF/>}/>
+          <Route path='doc/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
-          <Route path='calendario' element={<div>Calendario</div>}/>
-          <Route path='perfil:id' element={<PerfilPsiF/>}/>
+          <Route path='calendario' element={<CalendarioF/>}/>
+          <Route path='perfil' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
+        <Route path='/paciente' element={<MenuPaF/>}>
+          <Route path='chat' element={<ChatPsiF/>}/>
+          <Route path='chat/:id' element={<ChatPsiF/>}/>
+          <Route path='perfil/:id' element={<PerfilPsiF/>}/>
+          <Route path='chat:id' element={<ChatPaF/>}/>
+          <Route path='perfil:id' element={<PerfilPaF/>}/>
+        </Route>
+        <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/Login' element={<Login/>}/>
         <Route path='/ReestablecerPassword' element={<ReestablecerPassword/>}/>
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
+        <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />
+        <Route path="/resetear-password/:token" element={<ReestablecerPassword />} />
       </Routes>
     </BrowserRouter>
-  </React.StrictMode>,
+    </AuthProvider>
+  </React.StrictMode>
 )

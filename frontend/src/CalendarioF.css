@@ -1,0 +1,169 @@
+.calendarioF {
+    background-color: #F2EFE7;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 10px;
+    align-items: center;
+    overflow: hidden;
+    gap: 10px;
+}
+
+.fecha {
+    color: #2973B2;
+    font-family: 'Saira';
+    font-size: 32px;
+    font-weight: 400;
+    display: flex;
+    text-align: left;
+    width: 100%;
+}
+
+.contentCalendario {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendario {
+    height: 90%;
+    width: 100%;
+    background-color: #2973B2;
+    border-radius: 20px;
+}
+
+.calendarioWrapper {
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.dias {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    flex-direction: row;
+    font-family: 'Saira';
+    color: #F2EFE7;
+    font-weight: 400;
+    font-size: 10px;
+    justify-content: space-between;
+    gap: 13.5%;
+    padding-top: 10px;
+    padding-right: 6%;
+    padding-left: 8%;
+    padding-bottom: 10px;
+}
+
+.dia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.numero {
+    font-size: 32px;
+}
+
+.horas {
+    height: 87%;
+    width: 100%;
+    border-bottom: 10px solid #F2EFE7;
+    border-top: 10px solid #F2EFE7;
+    display: flex;
+    flex-direction: row;
+}
+
+.numHoras {
+    display: flex;
+    height: 100%;
+    width: 2%;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: right;
+    font-family: 'Saira';
+    font-size: 12px;
+    font-weight: 400;
+    color: #F2EFE7;
+    padding-right: 5px;
+    padding-top: .5%;
+    padding-bottom: .5%;
+}
+
+.showCitas {
+    display: flex;
+    flex-direction: column;
+    border-left: 5px solid #F2EFE7;
+    height: 100%;
+    width: 14%;
+    justify-content: space-evenly;
+    position: relative;
+}
+
+.lineHour
+{
+    background-color: #F2EFE7;
+    height: 5px;
+    width: 100%;
+    border: none;
+}
+
+.diaActual
+{
+    background-color: #9ACBD0;
+    border-radius: 100%;
+    aspect-ratio: 1/1;
+    text-align: center;
+}
+
+.citaF
+{
+    position: absolute;
+    background-color: #9ACBD0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    width: 100%;
+    font-family: 'Saira';
+    color: #000;
+}
+
+.imgCitaF
+{
+    height: 80%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.showAddMenu
+{
+    position: absolute;
+    display: flex;
+    top: 30%;
+}
+
+.hideAddMenu
+{
+    display: none;
+}
+
+@font-face {
+    font-family: 'Saira';
+    src: url('../fonts/Saira.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+}
