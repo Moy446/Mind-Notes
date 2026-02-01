@@ -108,21 +108,10 @@ export default function Login() {
                         />
                     </div>
 
-                    <p className='p-switch'>¿Eres psicólogo?</p>
+                    <button type='submit' className='btn login' id='formLogin'>Ingresar</button>
 
-                    <Switch
-                        id="pSwitch"
-                        valor={isPsicologo}
-                        onCambio={setIsPsicologo}
-                    />
-
-                    <button type='submit' className='btn login'>Ingresar</button>
 
                     <div className='div-links'>
-                        <div>
-                            <input type="checkbox" className="input-recordarUsuario"/>
-                            <label htmlFor="input-recordarUsuario">Recordar usuario</label>
-                        </div>
 
                         <div className='forgotLink'>
                             <p>¿Aún no tienes cuenta?</p>
@@ -203,6 +192,7 @@ export default function Login() {
                     </div>
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
+                    <div className='div-buttons'>
                     <Switch
                         id="pSwitch2"
                         valor={isPsicologo}
@@ -247,7 +237,7 @@ export default function Login() {
                     >
                     Registrarse
                 </button> */}
-                <button onClick={() => setModo('register')} className='btn register'>Registrarse</button>
+                <button onClick={() => setModo('register')} className='btn register' id='formRegister' >Registrarse</button>
             </div>
 
             <div className="toggle-panel toggle-right">
