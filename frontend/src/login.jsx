@@ -126,7 +126,7 @@ export default function Login() {
                     >
                     Registrarse
                 </button> */}
-                <button onClick={() => setModo('register')} className='btn register'>Registrarse</button>
+                <button onClick={() => setModo('register')} className='btn register' id='formRegister' >Registrarse</button>
             </div>
 
             <div className="toggle-panel toggle-right">
