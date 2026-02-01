@@ -14,6 +14,7 @@ import CalendarioF from './CalenndarioF.jsx'
 import MenuPaF from './MenuPaF.jsx'
 import PerfilPaF from './PerfilPaF.jsx'
 import ChatPaF from './ChatPaF.jsx'
+import Error from './Error.jsx'
 
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
@@ -44,6 +45,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='chat:id' element={<ChatPaF/>}/>
           <Route path='perfil:id' element={<PerfilPaF/>}/>
         </Route>
+        <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
