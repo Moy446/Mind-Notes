@@ -4,33 +4,34 @@ import fs from 'fs';
 class ConsumeAI {
     constructor() {
     }
-    async transcribe(audio){
+    async transcribe(audioPath){
         const form = new FormData();
-        form.append("audio",fs.createReadStream(audio.path))
+        form.append("audio",fs.createReadStream(audioPath))
         try{
             const response = await axios.post(
                 process.env.TRANSCRIPTION_SERVICE_URL,
                 form,
                 { headers: form.getHeaders()}
             );
-            res.json(response.data);
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+
+            return {status: 500, message: "Hubo un error en la transcripcion"};
         }
     }
 
-    async diarize(audio){
+    async diarize(audioPath){
         try{
             const form = new FormData();
-            form.append("audio",fs.createReadStream(audio.path))
+            form.append("audio",fs.createReadStream(audioPath))
             const response = await axios.post(
                 process.env.DIARIZATION_SERVICE_URL,
                 form,
                 { headers: form.getHeaders() }
             );
-            res.json(response.data);
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+            return {status: 500, message: "Hubo un error en la diarizacion"};
         }
     }
 
@@ -40,9 +41,9 @@ class ConsumeAI {
                 process.env.SUMMARIZATION_SERVICE_URL,
                 { text: text }
             )
-            res.json(response.data);
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+            return {status: 500, message: "Hubo un error en la elaboracion del resumen"};
         }
     }
 
@@ -52,9 +53,9 @@ class ConsumeAI {
                 process.env.CLASSIFICATION_SERVICE_URL,
                 { text: text }
             )
-            res.json(response.data);
+            return {status : 200, data: response.data};
         }catch(e){
-            console.log(e);
+            return {status: 500, message: "Hubo un error en la clasificacion"};
         }
     }
 }

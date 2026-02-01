@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import dbClient from "../config/dbClient.js";
 import bcrypt from 'bcryptjs';
+import { u } from "framer-motion/client";
 
 /*
 Modelo unificado de datos para Usuarios (Psicólogos y Pacientes)
@@ -39,6 +40,7 @@ class Usuario {
                 usuario.fechaFin = datosUsuario.fechaFin || datosUsuario.FechaFin;
                 usuario.socketId = datosUsuario.socketId || datosUsuario.SocketId || null;
                 usuario.statusChat = datosUsuario.statusChat || datosUsuario.StatusChat || 'offline';
+                
             } 
             // Campos específicos de Paciente
 
@@ -165,6 +167,7 @@ class Usuario {
                     } 
                 }
             );
+            console.log('Token de recuperación actualizado para usuario:', idUsuario);
         } catch (error) {
             throw new Error('Error al actualizar token de recuperación: ' + error.message);
         }

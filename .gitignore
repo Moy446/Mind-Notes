@@ -26,6 +26,7 @@ Thumbs.db
 
 #mp3 files
 *.mp3
+backend/uploads/audio/
 
 # debug
 npm-debug.log

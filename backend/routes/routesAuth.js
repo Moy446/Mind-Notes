@@ -19,7 +19,7 @@ router.post('/solicitar-recuperacion', (req, res) =>
  * Body: { token: string, newPassword: string, confirmPassword: string }
  * Response: { success: boolean, message: string }
  */
-router.post('/cambiar-password', (req, res) => 
+router.post('/cambiar-password/', (req, res) => 
     authController.cambiarPasswordConToken(req, res)
 );
 

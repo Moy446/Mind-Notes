@@ -13,6 +13,7 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import socket from './services/socketService'; // NUEVO: Import del socket
 import { AuthContext } from './context/AuthContext';
 import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
+import clienteAxios from './services/axios';
 
 export default function ChatPsiF(props){
 
@@ -25,6 +26,8 @@ export default function ChatPsiF(props){
     const [selectedChat, setSelectedChat] = useState(id || null);
     const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Paciente');
+    const [image, setImage] = useState('/src/images/pimg2.png');
+    const [patientData, setPatientData] = useState({});
 
     const fetchSelectedName = useCallback(async () => {
         if(!selectedChat) {
@@ -36,6 +39,7 @@ export default function ChatPsiF(props){
             const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
             const paciente = lista.find(p => p.idPaciente === selectedChat);
             setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Paciente');
+            setImage(paciente ? paciente.fotoPerfilPaciente : '/src/images/pimg2.png');
         } catch (error) {
             console.error('Error al obtener el nombre del paciente:', error);
             setN('Paciente');
@@ -123,11 +127,24 @@ export default function ChatPsiF(props){
     const handleSelectChat = (chatId) => {
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
+        getInformationChat(chatId);
         console.log('💬 Chat seleccionado:', chatId);
     };
 
+    //cargar informacion en el sidebar del paciente
+    const getInformationChat = async (chatId) => {
+        try {
+            const idPsicologo = id;
+            const response = await clienteAxios.get(`/chat/info/${idPsicologo}/${chatId}`);
+            setPatientData(response.data.patientData);
+        } catch (error) {
+            console.error('Error al obtener la información del chat:', error);
+            setPatientData({});
+        }
+    }
+
     return(
-        <div className='chatPsiF'>
+        <div className='chatPsiF'>  
             <ChatSelector 
                 qrOpen={qrOpen} 
                 handleOpen={handleOpen} 
@@ -137,7 +154,7 @@ export default function ChatPsiF(props){
                 refreshKey={refreshKey}
             />
             <div className='nameVarCon'>
-                <NameBar img = "/src/images/pimg1.png" name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>
+                <NameBar img = {image} name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>
                 <div className='chatCon'>
                     <div className='chatView'>
                         <div className='bubbles'>
@@ -172,8 +189,17 @@ export default function ChatPsiF(props){
                     </div>
                     <div className={infoOpen ? '' : 'hiddeInfo'}>
                         {suppInfoOpen 
-                            ? <SuppPsi suppInfO = {suppInfoOpen} handleSuppInfo = {handleOpenInfoSupp}/>
-                            : <InfoPsi img = "/src/images/pimg1.png" name = "Teisel" 
+                            ? <SuppPsi 
+                                suppInfO = {suppInfoOpen} 
+                                handleSuppInfo = {handleOpenInfoSupp} 
+                                expedientes = {patientData.expedientes} 
+                                materialAdjunto = {patientData.materialAdjunto} 
+                                grabaciones = {patientData.grabaciones}
+                                />
+                            : <InfoPsi 
+                                img = {image} 
+                                name = {patientData.nombre} 
+                                materialAdjunto = {patientData.materialAdjunto}
                                 open = {infoOpen} handleOpen = {handleOpenInfo} 
                                 del = {delOpen} handleDel = {handleOpenDel} 
                                 suppInfO = {suppInfoOpen} handleSuppInfo = {handleOpenInfoSupp}
@@ -181,7 +207,7 @@ export default function ChatPsiF(props){
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
+                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${patientData.nombre}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
                     </div>
                 </div>
             </div>

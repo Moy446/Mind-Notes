@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { authService } from './services/emailAuthService';
+import { emailAuthService } from './services/emailAuthService';
 import './ReestablecerPassword.css';
 
 export default function ReestablecerPassword() {
@@ -45,7 +45,7 @@ export default function ReestablecerPassword() {
         }
 
         try {
-            const resultado = await authService.cambiarPassword(token, newPassword, confirmPassword);
+            const resultado = await emailAuthService.cambiarPassword(token, newPassword, confirmPassword);
 
             if (resultado.success) {
                 setExito(true);

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
-export const authService = {
+export const emailAuthService = {
     /**
      * Solicita recuperación de contraseña
      * @param {string} email - Email del usuario
@@ -24,17 +24,26 @@ export const authService = {
 
     /**
      * Cambia la contraseña con token
-     * @param {string} token - Token de recuperación
-     * @param {string} newPassword - Nueva contraseña
+\     * @param {string} newPassword - Nueva contraseña
      * @param {string} confirmPassword - Confirmación de contraseña
      * @returns {Promise<Object>} { success: boolean, message: string }
      */
     async cambiarPassword(token, newPassword, confirmPassword) {
+        console.log('Token en el servicio:', token);
+        console.log('Nueva contraseña en el servicio:', newPassword);
+
+        if(newPassword !== confirmPassword) {
+            return {
+                success: false,
+                message: 'Las contraseñas no coinciden'
+            };
+        }
         try {
-            const response = await axios.post(`${API_URL}/auth/cambiar-password`, {
+            const response = await axios.post(`${API_URL}/auth/cambiar-password/`, {
                 token,
                 newPassword,
                 confirmPassword
+                
             });
             return response.data;
         } catch (error) {
@@ -81,3 +90,4 @@ export const authService = {
         }
     }
 };
+
