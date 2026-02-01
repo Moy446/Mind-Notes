@@ -1,22 +1,49 @@
-import React, { useState, useCallback } from 'react'
+import React, { useContext,useState, useCallback, useEffects, use, useEffect} from 'react'
 import './PerfilPaF.css'
 import DeleteMenu from './components/DeleteMenu';
 import EliminarBtn from './components/EliminarBtn';
 import DataPsi from './components/DataPsi';
+import { useNavigate } from 'react-router-dom'; 
+import { AuthContext } from './context/AuthContext';    
 
 export default function PerfilPaF(props){
+
+    const navigate = useNavigate();
+    const { user, logout, loading } = useContext(AuthContext);
+    const [userData, setUserData] = useState({
+        nombre: '',
+        email: '',
+        fotoPerfil: '/src/images/testimg.png'
+    });
 
     const [delMenu, openDelMenu] = useState(false);
 
     const handleOpenDel = useCallback(() => {
             openDelMenu(!delMenu)
         }, [delMenu])
+    
+    useEffect(() => {
+        if (user) {
+            setUserData({
+                nombre: user.nombre || user.name || 'Usuario',
+                email: user.email || '',
+                fotoPerfil: user.fotoPerfil || '/src/images/testimg.png'
+            });
+        }
+    }, [user]);
 
+     const handleLogout = async () => {
+        const result = await logout();
+        if (result.success) {
+            navigate('/login');
+        }
+    }
+    
     return (
         <div className="perfilPaF">
             <div className='paTitle'>
                 Perfil
-                <EliminarBtn texto="Cerrar sesión" img="2"/>
+                <EliminarBtn texto="Cerrar sesión" img="2" handleDel={handleLogout} />
             </div>
             <div className='perfilInfo'>
                 <div className='imgPerfilPaC'>
@@ -26,8 +53,8 @@ export default function PerfilPaF(props){
                         <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                     </svg>
                 </div>
-                <DataPsi data="Teisel" title="Nombre" patient={true}/>
-                <DataPsi data="correo@gmail.com" title="Correo" patient={true}/>
+                <DataPsi data={userData.nombre} title="Nombre" patient={true}/>
+                <DataPsi data={userData.email} title="Correo" patient={true}/>
                 <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {handleOpenDel}/>
             </div>
             <div className={delMenu ? "showDelMenuPa" : "hiddeDelMenuPa"}>
