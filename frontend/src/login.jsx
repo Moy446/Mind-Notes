@@ -5,6 +5,7 @@ import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
 import './login.css'
+import Swal from 'sweetalert2';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -79,7 +80,12 @@ export default function Login() {
                 setModo('login'); // Cambiar a formulario de login
                 setLoginEmail(registerEmail);
                 setLoginPassword('');
-                alert('Registro exitoso. Por favor inicia sesión');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: 'Por favor inicia sesión',
+                    confirmButtonColor: '#2973B2'
+                });
             } else {
                 setRegisterError(result.message);
             }
@@ -100,6 +106,12 @@ export default function Login() {
             const result = await emailAuthService.solicitarRecuperacion(recoveryEmail);
             if (result.success) {
                 setRecoverySuccess('Correo de recuperación enviado. Revisa tu bandeja de entrada.');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo enviado',
+                    text: 'Se ha enviado un correo para reestablecer tu contraseña. Revisa tu bandeja de entrada.',
+                    confirmButtonColor: '#2973B2'
+                });
             } else {
                 setRecoveryError(result.message || 'Error al solicitar recuperación de contraseña');
             }

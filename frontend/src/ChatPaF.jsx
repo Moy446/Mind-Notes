@@ -23,7 +23,7 @@ export default function ChatPsiF(props){
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
-    const [selectedChat, setSelectedChat] = useState(id || null);
+    const [selectedChat, setSelectedChat] = useState(null);
     const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState('/src/images/pimg2.png');
@@ -154,17 +154,33 @@ export default function ChatPsiF(props){
                 refreshKey={refreshKey}
             />
             <div className='nameVarCon'>
-                <NameBar img = {image} name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>
+                {selectedChat && <NameBar img = {image} name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>}
                 <div className='chatCon'>
                     <div className='chatView'>
                         <div className='bubbles'>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
-                            {messages.length === 0 ? (
-                                // Mensajes de prueba existentes (se mostrarán si no hay mensajes reales)
-                                <>
-                                    <BubbleChat text = "Manda un mensaje para comenzar el chat" type = "receive"/>
-                                    
-                                </>
+                            {!selectedChat ? (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    color: '#999',
+                                    fontSize: '18px'
+                                }}>
+                                    Selecciona un psicólogo para comenzar a chatear
+                                </div>
+                            ) : messages.length === 0 ? (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    color: '#999',
+                                    fontSize: '16px'
+                                }}>
+                                    No hay mensajes aún
+                                </div>
                             ) : (
                                 // Mensajes reales del socket
                                 messages.map((msg, index) => (
@@ -177,11 +193,11 @@ export default function ChatPsiF(props){
                             )}
                         </div>
                         <div className='textBarChat'>
-                            <MessageField 
+                            {selectedChat && <MessageField 
                                 suppOpen={suppOpen} 
                                 handleOpen={handleOpenSupp}
                                 onSendMessage={handleSendMessage} // NUEVO: Pasar función de envío
-                            />
+                            />}
                             <div className={suppOpen ? 'showSuppMenu' : 'hideSuppMenu'}>
                                 <SupportMenu suppOpen = {suppOpen} handleOpen = {handleOpenSupp}/>
                             </div>     
