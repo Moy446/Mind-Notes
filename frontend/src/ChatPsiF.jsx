@@ -25,24 +25,23 @@ export default function ChatPsiF(props){
     const [messages, setMessages] = useState([]);
     const [selectedChat, setSelectedChat] = useState(id || null);
     const idUser = user?.id; // Usa el ID del contexto
-    const [n, setN] = useState('Paciente');
+    const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState('/src/images/pimg2.png');
     const [patientData, setPatientData] = useState({});
 
     const fetchSelectedName = useCallback(async () => {
         if(!selectedChat) {
-            setN('Paciente');
+            setN('Usuario no seleccionado');
             return;     
         }
         try {
             const data = await obtenerPacientesVinculados(idUser);
             const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
             const paciente = lista.find(p => p.idPaciente === selectedChat);
-            setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Paciente');
+            setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Usuario no seleccionado');
             setImage(paciente ? paciente.fotoPerfilPaciente : '/src/images/pimg2.png');
         } catch (error) {
-            console.error('Error al obtener el nombre del paciente:', error);
-            setN('Paciente');
+            setN('Usuario no seleccionado');
         }
     }, [idUser, selectedChat]);
 
@@ -58,10 +57,10 @@ export default function ChatPsiF(props){
         setOpenSupp(!suppOpen)
     }, [suppOpen])
 
-    const [infoOpen, setOpneInfo] = useState(false)
+    const [infoOpen, setOpenInfo] = useState(false)
         
     const handleOpenInfo = useCallback(() => {
-        setOpneInfo(!infoOpen)
+        setOpenInfo(!infoOpen)
     }, [infoOpen])
 
     const [delOpen, setOpenDel] = useState(false)
@@ -79,7 +78,6 @@ export default function ChatPsiF(props){
     // NUEVO: Efecto para conectar al chat cuando se selecciona un paciente
     useEffect(() => {
         if (selectedChat) {
-        console.log('🔌 Uniéndose al chat:', selectedChat);
         
         // Cargar mensajes existentes
         const loadMessages = async () => {
@@ -88,7 +86,6 @@ export default function ChatPsiF(props){
                 const mensajes = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
                 setMessages(mensajes);
             } catch (error) {
-                console.error('Error al cargar mensajes:', error);
                 setMessages([]);
             }
         };
@@ -102,6 +99,7 @@ export default function ChatPsiF(props){
 
         // Escuchar mensajes nuevos
         socket.on('receiveMessage', (newMessage) => {
+            console.log('📨 Nuevo mensaje recibido:', newMessage);
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
 
@@ -109,7 +107,7 @@ export default function ChatPsiF(props){
             socket.off('receiveMessage');
         };
     }
-    }, [selectedChat]);
+    }, [selectedChat, idUser]);
 
     // NUEVO: Función para enviar mensajes
     const handleSendMessage = (message) => {
@@ -125,6 +123,10 @@ export default function ChatPsiF(props){
 
     // NUEVO: Función para seleccionar un chat
     const handleSelectChat = (chatId) => {
+        // Evitar volver a seleccionar el mismo chat
+        if (chatId === selectedChat) {
+            return;
+        }
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
