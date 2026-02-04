@@ -233,6 +233,8 @@ export default function Login() {
                     <button type='submit' className='btn register' disabled={registerLoading}>
                         {registerLoading ? 'Registrando...' : 'Registrarse'}
                     </button>
+                    </div>
+                    
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>

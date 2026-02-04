@@ -93,4 +93,98 @@
     position: absolute;
     transform: translateY(250px) translateX(100px);
 }
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
 
+    .chatView {
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
+    }
+
+    .bubbles {
+        max-height: 90%;
+    }
+
+    .showSuppMenu {
+        transform: translateY(-160px) translateX(0);
+    }
+
+    .showDelMenu {
+        transform: translateY(220px) translateX(80px);
+    }
+}
+/* ------------------------------------------------------------------------------------------------------------------------------------ */
+@media (max-width: 1024px) {
+
+    .chatView {
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-bottom: 16px;
+    }
+
+    .bubbles {
+        max-height: 90%;
+    }
+
+    .showSuppMenu {
+        transform: translateY(-160px) translateX(0);
+    }
+
+    .showDelMenu {
+        transform: translateY(220px) translateX(80px);
+    }
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+    .chatPsiF {
+        flex-direction: column;
+    }
+
+    .chatView {
+        height: 100%;
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-bottom: 14px;
+    }
+
+    .bubbles {
+        max-height: 85%;
+    }
+
+    .textBarChat {
+        position: sticky;
+        bottom: 0;
+        background-color: #F2EFE7;
+    }
+
+    .showSuppMenu {
+        transform: translateY(-140px) translateX(0);
+    }
+
+    .showDelMenu {
+        transform: translateY(200px) translateX(60px);
+    }
+}
+/* ------------------------------------------------------------------------------------------------------------------------------------ */
+@media (max-width: 480px) {
+
+    .chatView {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+    }
+
+    .bubbles {
+        max-height: 82%;
+    }
+
+    .showSuppMenu {
+        transform: translateY(-120px) translateX(0);
+    }
+
+    .showDelMenu {
+        transform: translateY(180px) translateX(40px);
+    }
+}

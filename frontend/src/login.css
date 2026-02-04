@@ -517,185 +517,33 @@ text-decoration: none;
 }
 
 /* --------------------------------------------------------------------------------------------------------------------- */
-@media screen and (max-width: 768px) {
-    .loginContainer{
-        height: calc(100vh - 40px);
-    }
+@media (max-width: 768px) {
 
-    .formBox.login{
-        height: 80%;
-    }
-
-    /* Mueve el form de registro hacia arriba */
-    .loginContainer.register .formBox{
-        right: 0;
-        bottom: 30%;
-    }
-
-    .toggle-box::before{
-        left: 0;
-        top: -270%;
+    .menuPsi {
         width: 100%;
-        height: 295%;
-        border-radius: 20vw;
-        transition: top 1.8s ease-in-out
+        height: 80px;
+        flex-direction: row;
+        padding: 0 20px;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
     }
 
-    #formRegister{
-        width: 50%;
+    .psiMendiv {
+        flex-direction: row;
+        width: auto;
+        gap: 20px;
     }
 
-    .button.btn.register{
-        width: 50%;
+    .svgPsi {
+        width: 40px;
     }
 
-    /* Mueve el panel azul superior a la parte inferior */
-    .loginContainer.register .toggle-box::before{
-        left: 0;
-        top: 70%;
+    .selectedPsi {
+        border-radius: 10px;
+        padding: 6px;
     }
-
-    .toggle-panel{
-        width: 100%;
-        height: 27%;
-        transition: .6s ease-in-out;
-    }
-
-    .toggle-panel.toggle-left{
-        top: 0;
-        transition-delay: 1.2s;
-    }
-
-    /* Mueve los textos del toggle hacia arriba */
-    .loginContainer.register .toggle-panel.toggle-left{
-        left: 0;
-        top: -30%;
-    }
-
-    .toggle-panel.toggle-right{
-        right: 0;
-        bottom: -30%;
-    }
-
-    /* Mantiene el texto del toggle inferior fuera de la pantalla en la vista inicial */
-    .loginContainer.register .toggle-panel.toggle-right{
-        bottom: 0;
-    }
-    .toggle-panel.toggle-left .btn.register{
-        margin-bottom: 2%;
-    }
-
-    .btn{
-        width: 50%;
-        height: 70px;
-        font-size: 35px;
-        color: #F2EFE7;
-    }
-
-    h1.title-saludo{
-        font-size: 45px;
-    }
-
-    .toggle-panel p{
-        font-size: 25px;
-        margin-bottom: 2%;
-    }
-
-    /* Reestablecer contraseña */
-        /* Mueve el form de registro hacia arriba */
-    .loginContainer.password .toggle-box::before{
-        left: 0;
-        top: 70%;
-    }
-
-        /* Mueve los textos del toggle hacia arriba */
-    .loginContainer.password .toggle-panel.toggle-left{
-        left: 0;
-        top: -30%;
-    }
-
-        /* Mantiene el texto del toggle inferior fuera de la pantalla en la vista inicial */
-    .loginContainer.password .toggle-panel.toggle-right{
-        bottom: 0;
-    }
-
-        /* Mueve el form de reestablecer hacia arriba */
-    .loginContainer.password .formBox{
-        right: 0;
-        bottom: 30%;
-    }
-
-    /* TEXTO EN EL LOGIN */
-
-    /* FORM LOGIN */
-    h1.login-title{
-    font-size: 45px;
-    align-items: center;
-    }
-
-    .div-titleLogin{
-    width: 100%;
-    height: 80px;
-    margin-bottom: 3vw;
-    margin-top: -6vw;
-    }
-
-    .inputBox{
-        width: 100%;
-        height: 70px;
-        margin-top: 2%;
-    }
-
-    .inputBox input{
-        height: 70px;
-    }
-
-    #formLogin{
-        color: #000;
-        margin: 0;
-    }
-
-    .div-buttons{
-    /* display: grid; 
-    grid-column: 200px; */
-    display: flex;
-    flex-direction: row;
-    height: 9vw;
-    width: 100%;
-    font-family: 'Saira';
-    padding: 2vw;
-    margin: 0 5% 5% 0;
-    align-items: center;
-    justify-content: start;
-    gap: 10%;
-    /* grid-template-columns: 1fr 1fr; */
 }
-
-.div-buttons button{
-    width: 30%;
-    
-}
-
-.div-links{
-    margin-top: 2%;
-}
-
-/* Registro */
-
-.h1.register-title{
-    font-size: 45px;
-}
-
-.div-titleRegister{
-    height: 80px;
-}
-
-.btn.register{
-    width: 100%;
-}
-
-}
-
 /* --------------------------------------------------------------------------------------------------------------------- */
 
 /* --------------------------------------------------------------------------------------------------------------------- */
