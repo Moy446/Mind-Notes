@@ -10,7 +10,7 @@ import 'dotenv/config';
 
 class UsuarioController {
 
-    constructor(){
+    constructor() {
 
     }
 
@@ -21,74 +21,85 @@ class UsuarioController {
     async registrarUsuario(req, res, esPsicologo = false) {
         try {
             const { nombre, email, password } = req.body;
-            
-            // Validación de contraseña para psicólogos
-            if (esPsicologo && req.body.passwordConfirm && password !== req.body.passwordConfirm) {
-                return res.status(400).json({ success: false, message: 'Las contraseñas no coinciden' });
+
+            const usuarioModel = new Usuario();
+            const emailExistente = await usuarioModel.findByEmail(email);
+
+            if (emailExistente) {
+                return res.status(400).json({ success: false, message: 'El correo ya está registrado' });
             }
+            else {
+                // Validación de contraseña coincidente para ambos tipos de usuarios
+                const passwordConfirm = req.body.passwordConfirm;
+                if (!passwordConfirm) {
+                    return res.status(400).json({ success: false, message: 'Debes confirmar la contraseña' });
+                }
+                if (password !== passwordConfirm) {
+                    return res.status(400).json({ success: false, message: 'Las contraseñas no coinciden' });
+                }
 
-            const allData = {
-                password,
-                nombre,
-                email,
-                fotoPerfil: req.body.fotoPerfil || null
-            };
+                const allData = {
+                    password,
+                    nombre,
+                    email,
+                    fotoPerfil: req.body.fotoPerfil || null
+                };
 
-            // Campos adicionales según el tipo de usuario
-            if (esPsicologo) {
-                allData.apellido = req.body.apellido || null;
-                allData.fechaInicio = req.body.fechaInicio || new Date();
-                allData.fechaFin = req.body.fechaFin || null;
-                allData.cedula = req.body.cedula || null;
-            } else {
-                allData.telefono = req.body.telefono || '';
-            }
+                // Campos adicionales según el tipo de usuario
+                if (esPsicologo) {
+                    allData.apellido = req.body.apellido || null;
+                    allData.fechaInicio = req.body.fechaInicio || new Date();
+                    allData.fechaFin = req.body.fechaFin || null;
+                    allData.cedula = req.body.cedula || null;
+                } else {
+                    allData.telefono = req.body.telefono || '';
+                }
 
-            const modelUsuario = new Usuario();
-            const user = await modelUsuario.create(allData, esPsicologo);
-            
-            // Generar token de verificación
-            const tokenVerificacion = crypto.randomBytes(32).toString('hex');
-            const tokenHash = crypto.createHash('sha256').update(tokenVerificacion).digest('hex');
-            
-            await modelUsuario.actualizarTokenVerificacion(user.idUsuario, tokenHash);
+                const user = await usuarioModel.create(allData, esPsicologo);
 
-            // Enviar correo de verificación
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
-            const resultadoEmail = await emailService.enviarVerificacion(
-                user.email,
-                user.nombre,
-                tokenVerificacion,
-                frontendUrl
-            );
+                // Generar token de verificación
+                const tokenVerificacion = crypto.randomBytes(32).toString('hex');
+                const tokenHash = crypto.createHash('sha256').update(tokenVerificacion).digest('hex');
 
-            // Generar tokens según el tipo de usuario
-            const role = esPsicologo ? 'psicologo' : 'paciente';
-            
-            if (esPsicologo) {
-                const accessToken = cookieCtrl.signAccess({ id: user.idUsuario, role });
-                const refreshToken = cookieCtrl.signRefresh({ id: user.idUsuario, role });
-                cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
-                res.status(201).json({ 
-                    success: true, 
-                    idPsicologo: user.idUsuario, 
-                    idUsuario: user.idUsuario,
-                    nombre: user.nombre,
-                    mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
-                });
-            } else {
-                const jwt = new jwtControl();
-                const token = await jwt.generateToken(user.idUsuario.toString(), nombre, role);
-                const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
-                const sameSite = useSecure ? 'None' : 'Lax';
-                res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
-                res.status(201).json({ 
-                    success: true, 
-                    idPaciente: user.idUsuario,
-                    idUsuario: user.idUsuario, 
-                    token,
-                    mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
-                });
+                await usuarioModel.actualizarTokenVerificacion(user.idUsuario, tokenHash);
+
+                // Enviar correo de verificación
+                const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:5173';
+                const resultadoEmail = await emailService.enviarVerificacion(
+                    user.email,
+                    user.nombre,
+                    tokenVerificacion,
+                    frontendUrl
+                );
+
+                // Generar tokens según el tipo de usuario
+                const role = esPsicologo ? 'psicologo' : 'paciente';
+
+                if (esPsicologo) {
+                    const accessToken = cookieCtrl.signAccess({ id: user.idUsuario, role });
+                    const refreshToken = cookieCtrl.signRefresh({ id: user.idUsuario, role });
+                    cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                    res.status(201).json({
+                        success: true,
+                        idPsicologo: user.idUsuario,
+                        idUsuario: user.idUsuario,
+                        nombre: user.nombre,
+                        mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
+                    });
+                } else {
+                    const jwt = new jwtControl();
+                    const token = await jwt.generateToken(user.idUsuario.toString(), nombre, role);
+                    const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+                    const sameSite = useSecure ? 'None' : 'Lax';
+                    res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
+                    res.status(201).json({
+                        success: true,
+                        idPaciente: user.idUsuario,
+                        idUsuario: user.idUsuario,
+                        token,
+                        mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
+                    });
+                }
             }
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al registrar: ' + error.message });
@@ -100,6 +111,7 @@ class UsuarioController {
      */
     registrarPsicologoBD = async (req, res) => {
         return this.registrarUsuario(req, res, true);
+
     }
 
     /**
@@ -118,21 +130,28 @@ class UsuarioController {
             const { email, password } = req.body;
             const usuarioModel = new Usuario();
             const usuario = await usuarioModel.findByEmail(email);
-            
+
             if (!usuario) {
                 const tipoUsuario = esPsicologo ? 'Psicologo' : 'Paciente';
                 return res.status(404).json({ success: false, message: `${tipoUsuario} no encontrado` });
+            }
+
+            // Verificar que la cuenta esté verificada
+            if (!usuario.verificado) {
+                return res.status(403).json({ 
+                    success: false, 
+                    message: 'Debes verificar tu correo antes de acceder' 
+                });
             }
 
             // Verificar que el tipo de usuario coincida
             if (usuario.esPsicologo !== esPsicologo) {
                 const tipoEsperado = esPsicologo ? 'psicólogo' : 'paciente';
                 const tipoReal = usuario.esPsicologo ? 'psicólogo' : 'paciente';
-                return res.status(403).json({ 
-                    success: false, 
-                    message: `Esta cuenta es de tipo ${tipoReal}, no ${tipoEsperado}` 
+                return res.status(403).json({
+                    success: false,
+                    message: `Esta cuenta es de tipo ${tipoReal}, no ${tipoEsperado}`
                 });
-                
             }
 
             const isPasswordValid = await Bcrypt.compare(password, usuario.password);
@@ -146,11 +165,11 @@ class UsuarioController {
                 const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role });
                 const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role });
                 cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
-                res.status(200).json({ 
-                    success: true, 
+                res.status(200).json({
+                    success: true,
                     idPsicologo: usuario.idUsuario,
-                    idUsuario: usuario.idUsuario, 
-                    nombre: usuario.nombre 
+                    idUsuario: usuario.idUsuario,
+                    nombre: usuario.nombre
                 });
             } else {
                 const jwt = new jwtControl();
@@ -158,11 +177,11 @@ class UsuarioController {
                 const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
                 const sameSite = useSecure ? 'None' : 'Lax';
                 res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
-                res.status(200).json({ 
-                    success: true, 
+                res.status(200).json({
+                    success: true,
                     idPaciente: usuario.idUsuario,
-                    idUsuario: usuario.idUsuario, 
-                    token 
+                    idUsuario: usuario.idUsuario,
+                    token
                 });
             }
         } catch (error) {
@@ -188,9 +207,18 @@ class UsuarioController {
      * Vincular pacientes a un psicólogo
      */
     async vincularPacientes(req, res) {
-        const idPsicologo = req.params.Psicologo;
+        const idPsicologo = req.params.idPsicologo;
         const listaVinculacionModel = new ListaVinculacion();
         try {
+            // Validar que no exista vinculación previa
+            const vinculacionExistente = await listaVinculacionModel.findVinculacion(idPsicologo, req.body.idPaciente);
+            if (vinculacionExistente) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Este paciente ya está vinculado a este psicólogo'
+                });
+            }
+
             await listaVinculacionModel.create(idPsicologo, req.body.idPaciente);
             res.status(201).json({
                 success: true,
@@ -211,6 +239,15 @@ class UsuarioController {
         const idPaciente = req.params.idPaciente;
         const listaVinculacionModel = new ListaVinculacion();
         try {
+            // Validar que no exista vinculación previa
+            const vinculacionExistente = await listaVinculacionModel.findVinculacion(req.body.idPsicologo, idPaciente);
+            if (vinculacionExistente) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Este psicólogo ya está vinculado a este paciente'
+                });
+            }
+
             await listaVinculacionModel.create(req.body.idPsicologo, idPaciente);
             res.status(201).json({
                 success: true,
@@ -276,7 +313,7 @@ class UsuarioController {
 
             // Remover campos sensibles
             const { password, ...userSafe } = req.user;
-            
+
             const userData = {
                 id: userSafe.idUsuario,
                 nombre: userSafe.nombre,
@@ -288,9 +325,9 @@ class UsuarioController {
                 apellido: userSafe.apellido,
                 cedula: userSafe.cedula
             };
-            
-            res.status(200).json({ 
-                success: true, 
+
+            res.status(200).json({
+                success: true,
                 user: userData
             });
         } catch (error) {
@@ -318,7 +355,7 @@ class UsuarioController {
     refresh = async (req, res) => {
         try {
             const refreshToken = req.cookies.refreshToken;
-            
+
             if (!refreshToken) {
                 return res.status(401).json({ success: false, message: 'Token de refresco no proporcionado' });
             }
@@ -326,10 +363,10 @@ class UsuarioController {
             // Verificar el refresh token y generar nuevo access token
             const accessSecret = process.env.ACCESS_SECRET || 'default_secret';
             const refreshSecret = process.env.REFRESH_SECRET || 'default_refresh_secret';
-            
+
             const decoded = jwt.verify(refreshToken, refreshSecret);
             const accessToken = cookieCtrl.signAccess({ id: decoded.id, role: decoded.role });
-            
+
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === 'production',

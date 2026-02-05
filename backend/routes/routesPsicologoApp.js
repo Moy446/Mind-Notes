@@ -2,16 +2,17 @@ import express from 'express';
 import multer from 'multer';
 import calendarController from '../controllers/calendarioController.js';
 import grabacionController from '../controllers/grabacionController.js';
+import protector from '../helpers/routesProtect.js';
 
 const router = express.Router();
 
 /*calendario */
-router.get('/calendario', /*Falta middleware, */calendarController.loadCalendar)
-router.get('/calendario/:idCita', /*Falta middleware, */calendarController.cargarCita)
-router.post('/calendario', /*Falta middleware, */calendarController.crearCita)
-router.put('/calendario/:idCita', /*Falta middleware, */calendarController.editarCita)
-router.delete('/calendario/:idCita', /*Falta middleware, */calendarController.eliminarCita)
-router.get('/calendario/pacientes/lista', /*Falta middleware, */calendarController.cargarPacientes)
+router.get('/calendario', protector, calendarController.loadCalendar)
+router.get('/calendario/:idCita', protector, calendarController.cargarCita)
+router.post('/calendario', protector, calendarController.crearCita)
+router.put('/calendario/:idCita', protector, calendarController.editarCita)
+router.delete('/calendario/:idCita', protector, calendarController.eliminarCita)
+router.get('/calendario/pacientes/lista', protector, calendarController.cargarPacientes)
 
 /*grabacion */
 //configuracion multer
@@ -37,6 +38,6 @@ const fileFilter = (req, file, cb) => {
 }
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
-router.get('/grabacion', /*Falta middleware, */grabacionController.loadPacientes)
-router.post('/grabacion', /*Falta middleware, */upload.single('audio'),grabacionController.guardarGrabacion)
+router.get('/grabacion', protector, grabacionController.loadPacientes)
+router.post('/grabacion', protector, upload.single('audio'),grabacionController.guardarGrabacion)
 export default router;

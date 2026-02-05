@@ -88,6 +88,12 @@ export default function MeetMenu(props) {
                     icon: "error"
                 });
             }
+        }).catch(err => {
+            Swal.fire({
+                title: "Error al agendar la cita",
+                text: `No se pudo agendar cita a ${datosCita.nombrePaciente}`,
+                icon: "error"
+            });
         })
     }
 

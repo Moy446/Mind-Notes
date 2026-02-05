@@ -43,7 +43,7 @@ export const authService = {
 
       return { success: true, ...data };
     } catch (error) {
-      return { success: false, message: error.message };
+      return { success: false, message: error.response?.data?.message || error.message };
     }
   },
 
@@ -58,7 +58,7 @@ export const authService = {
 
       return { success: true, ...data };
     } catch (error) {
-      return { success: false, message: error.message };
+      return { success: false, message: error.response?.data?.message || error.message };
     }
   },
 

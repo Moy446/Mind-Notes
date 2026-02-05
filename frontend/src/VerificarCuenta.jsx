@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { authService } from './services/emailAuthService';
+import { emailAuthService } from './services/emailAuthService';
 import './VerificarCuenta.css';
 
 export default function VerificarCuenta() {
@@ -16,13 +16,13 @@ export default function VerificarCuenta() {
         // Solo ejecutar una vez
         if (!yaVerificado.current) {
             yaVerificado.current = true;
-            verificarToken();
+            handleToken();
         }
     }, [token]);
 
-    const verificarToken = async () => {
+    const handleToken = async () => {
         try {
-            const resultado = await authService.verificarCuenta(token);
+            const resultado = await emailAuthService.verificarCuenta(token);
             
             if (resultado.success) {
                 setEstado('exito');
