@@ -36,7 +36,7 @@ export default function ChatSelector(props){
 
             // Algunos endpoints pueden devolver {data: []} o [] directo
             const parsed = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
-            setContacts(parsed);
+            setContacts(parsed.filter(Boolean));
         } catch (error) {
             console.error('Error al obtener contactos vinculados:', error);
             setContacts([]);
@@ -60,6 +60,7 @@ export default function ChatSelector(props){
 
     // Filtrar contactos basándose en el término de búsqueda
     const filteredContacts = contacts.filter((contact) => {
+        if (!contact) return false;
         const userRole = user?.role;
         const displayName = userRole === 'psicologo' 
             ? (contact.nombrePaciente || contact.nombre || '')

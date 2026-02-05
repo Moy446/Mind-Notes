@@ -17,7 +17,6 @@ export default function AddQr(props){
     const [success, setSuccess] = useState('');
     const [scanning, setScanning] = useState(false);
 
-    console.log('Id:', props.userId);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -107,7 +106,6 @@ export default function AddQr(props){
                 return;
             }
 
-            console.log('Generando QR para:', props.userId);
 
             // Generar QR y dibujarlo en el canvas
             await QRCode.toCanvas(qrCanvasRef.current, String(props.userId), {
@@ -121,7 +119,6 @@ export default function AddQr(props){
                 }
             });
 
-            console.log('QR generado exitosamente');
         } catch (err) {
             console.error('Error generando QR:', err);
             setError('Error al generar el código QR: ' + err.message);
@@ -150,6 +147,11 @@ export default function AddQr(props){
             return;
         }
 
+        if (!props.userId) {
+            setError('No se pudo obtener tu ID de usuario. Vuelve a iniciar sesión.');
+            return;
+        }
+
         setLoading(true);
         setError('');
         setSuccess('');
@@ -165,7 +167,7 @@ export default function AddQr(props){
                 result = await vincularPsicologo(userId, uid.trim());
             }
 
-            if (result.success) {
+            if (result?.success) {
                 setSuccess(result.message);
                 
                 if (props.onVinculacionExitosa) {
@@ -227,13 +229,13 @@ export default function AddQr(props){
                             className='btn-qr-option btnefect'
                             onClick={() => setMode('generar')}
                         >
-                            📱 Ver mi QR
+                             Ver mi QR
                         </button>
                         <button 
                             className='btn-qr-option btnefect'
                             onClick={() => setMode('escanear')}
                         >
-                            📸 Escanear QR
+                         Escanear QR
                         </button>
                     </div>
                     <button className='cancel-addqr' onClick={handleCerrar}>Cancelar</button>
