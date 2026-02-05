@@ -252,6 +252,44 @@ class Usuario {
             throw new Error('Error al invalidar token de recuperación: ' + error.message);
         }
     }
+
+    /**
+     * Actualizar información del perfil del usuario
+     */
+    async actualizarPerfil(idUsuario, datosActualizar) {
+        try {
+            const camposPermitidos = {};
+            
+            if (datosActualizar.nombre !== undefined) {
+                camposPermitidos.nombre = datosActualizar.nombre;
+            }
+            if (datosActualizar.email !== undefined) {
+                camposPermitidos.email = datosActualizar.email;
+            }
+            if (datosActualizar.telefono !== undefined) {
+                camposPermitidos.telefono = datosActualizar.telefono;
+            }
+            if (datosActualizar.fotoPerfil !== undefined) {
+                camposPermitidos.fotoPerfil = datosActualizar.fotoPerfil;
+            }
+            if (datosActualizar.apellido !== undefined) {
+                camposPermitidos.apellido = datosActualizar.apellido;
+            }
+
+            if (Object.keys(camposPermitidos).length === 0) {
+                throw new Error('No hay campos para actualizar');
+            }
+
+            const result = await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: camposPermitidos }
+            );
+
+            return result.modifiedCount > 0;
+        } catch (error) {
+            throw new Error('Error al actualizar perfil: ' + error.message);
+        }
+    }
 }
 
 // Exportar la clase Usuario 
