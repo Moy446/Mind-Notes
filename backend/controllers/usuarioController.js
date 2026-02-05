@@ -208,10 +208,20 @@ class UsuarioController {
      */
     async vincularPacientes(req, res) {
         const idPsicologo = req.params.idPsicologo;
+        const { idPaciente } = req.body;
         const listaVinculacionModel = new ListaVinculacion();
+        
         try {
+            // Validar que ambos IDs estén presentes
+            if (!idPsicologo || !idPaciente) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'ID del psicólogo y del paciente son requeridos'
+                });
+            }
+            
             // Validar que no exista vinculación previa
-            const vinculacionExistente = await listaVinculacionModel.findVinculacion(idPsicologo, req.body.idPaciente);
+            const vinculacionExistente = await listaVinculacionModel.findVinculacion(idPsicologo, idPaciente);
             if (vinculacionExistente) {
                 return res.status(400).json({
                     success: false,
@@ -219,12 +229,22 @@ class UsuarioController {
                 });
             }
 
-            await listaVinculacionModel.create(idPsicologo, req.body.idPaciente);
+            await listaVinculacionModel.create(idPsicologo, idPaciente);
             res.status(201).json({
                 success: true,
                 message: 'Paciente vinculado exitosamente'
             });
         } catch (error) {
+            console.error('Error en vincularPacientes:', error);
+            
+            // Validar si es un error por ID inválido
+            if (error.message.includes('ID') || error.message.includes('inválido')) {
+                return res.status(400).json({
+                    success: false,
+                    message: error.message
+                });
+            }
+            
             res.status(500).json({
                 success: false,
                 message: 'Error al vincular el paciente: ' + error.message
@@ -237,10 +257,20 @@ class UsuarioController {
      */
     async vincularPsicologo(req, res) {
         const idPaciente = req.params.idPaciente;
+        const { idPsicologo } = req.body;
         const listaVinculacionModel = new ListaVinculacion();
+        
         try {
+            // Validar que ambos IDs estén presentes
+            if (!idPaciente || !idPsicologo) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'ID del paciente y del psicólogo son requeridos'
+                });
+            }
+            
             // Validar que no exista vinculación previa
-            const vinculacionExistente = await listaVinculacionModel.findVinculacion(req.body.idPsicologo, idPaciente);
+            const vinculacionExistente = await listaVinculacionModel.findVinculacion(idPsicologo, idPaciente);
             if (vinculacionExistente) {
                 return res.status(400).json({
                     success: false,
@@ -248,12 +278,22 @@ class UsuarioController {
                 });
             }
 
-            await listaVinculacionModel.create(req.body.idPsicologo, idPaciente);
+            await listaVinculacionModel.create(idPsicologo, idPaciente);
             res.status(201).json({
                 success: true,
                 message: 'Psicologo vinculado exitosamente'
             });
         } catch (error) {
+            console.error('Error en vincularPsicologo:', error);
+            
+            // Validar si es un error por ID inválido
+            if (error.message.includes('ID') || error.message.includes('inválido')) {
+                return res.status(400).json({
+                    success: false,
+                    message: error.message
+                });
+            }
+            
             res.status(500).json({
                 success: false,
                 message: 'Error al vincular el psicologo: ' + error.message

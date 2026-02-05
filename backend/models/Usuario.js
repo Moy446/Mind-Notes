@@ -56,6 +56,10 @@ class Usuario {
      */
     async findById(idUsuario){
         try {
+            // Validar que el ID sea un ObjectId válido
+            if (!ObjectId.isValid(idUsuario)) {
+                throw new Error('ID de usuario inválido');
+            }
             const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
             return usuario;
         } catch (error) {
