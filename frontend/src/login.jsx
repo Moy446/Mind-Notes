@@ -189,11 +189,10 @@ export default function Login() {
                             </Link>
                         </div>
                     </div>
-
-                    <p>O ingresa con:</p>
+                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
-                    </div>
+                    </div>           
                 </form>
             </div>
 
@@ -245,6 +244,8 @@ export default function Login() {
                         />
                     </div>
 
+                    
+
                     <p className='p-switch'>¿Eres psicólogo?</p>
                     <Switch
                         id="pSwitch2"
@@ -252,13 +253,14 @@ export default function Login() {
                         onCambio={setIsPsicologo}
                     />
 
-                    <button type='submit' className='btn register' disabled={registerLoading}>
-                        {registerLoading ? 'Registrando...' : 'Registrarse'}
-                    </button>
                     <p>O ingresa con:</p>
                     <div className='div-google'>
                         <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
                     </div>
+
+                    <button type='submit' className='btn register' disabled={registerLoading}>
+                        {registerLoading ? 'Registrando...' : 'Registrarse'}
+                    </button>
                 </form>
             </div>
 

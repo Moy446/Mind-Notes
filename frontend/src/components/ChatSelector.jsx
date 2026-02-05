@@ -15,6 +15,7 @@ export default function ChatSelector(props){
     const [selectedId, setSelectedId] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
     const loadContacts = useCallback(async () => {
         try {
@@ -53,17 +54,40 @@ export default function ChatSelector(props){
         props.onSelectChat(id);
     };
 
+    const handleSearchChange = (term) => {
+        setSearchTerm(term);
+    };
+
+    // Filtrar contactos basándose en el término de búsqueda
+    const filteredContacts = contacts.filter((contact) => {
+        const userRole = user?.role;
+        const displayName = userRole === 'psicologo' 
+            ? (contact.nombrePaciente || contact.nombre || '')
+            : (contact.nombrePsicologo || contact.nombre || '');
+        return displayName.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    const userRole = user?.role;
+    const searchPlaceholder = userRole === 'psicologo' ? 'Buscar paciente' : 'Buscar psicólogo';
+
     return (
         <div className='chatselec'>
             <div className='wiwiwiCS'>
                 <p className='textCS'>MindNotes</p>
-                <SearchBar/>
+                <SearchBar 
+                    searchTerm={searchTerm} 
+                    onSearchChange={handleSearchChange}
+                    placeholder={searchPlaceholder}
+                />
                 <div className='chatboxes'>
                     {loading && <span className='text-chatbox-message'>Cargando...</span>}
                     {!loading && contacts.length === 0 && (
                         <span className='text-chatbox-message'>Sin vinculaciones aún</span>
                     )}
-                    {!loading && contacts.map((contact, idx) => {
+                    {!loading && filteredContacts.length === 0 && contacts.length > 0 && (
+                        <span className='text-chatbox-message'>No se encontraron resultados</span>
+                    )}
+                    {!loading && filteredContacts.map((contact, idx) => {
                         const userRole = user?.role;
                         const contactId = userRole === 'psicologo' ? (contact.idPaciente || contact._id || contact.id || idx) : (contact.idPsicologo || contact._id || contact.id || idx);
                         const displayName = userRole === 'psicologo' ? (contact.nombrePaciente || contact.nombre || 'Contacto') : (contact.nombrePsicologo || contact.nombre || 'Contacto');

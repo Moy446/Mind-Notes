@@ -24,12 +24,11 @@ import ReestablecerPassword from './ReestablecerPassword.jsx'
 import VerificarCuenta from './VerificarCuenta.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
+      <Routes>
           {/*-- Rutas protegidas para psicólogos --*/}
         <Route path='/psicologo' element={<ProtectedRoute requiredRole="psicologo"><MenuPsiF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
@@ -57,7 +56,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />
         <Route path="/resetear-password/:token" element={<ReestablecerPassword />} />
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
     </AuthProvider>
   </React.StrictMode>
 )
