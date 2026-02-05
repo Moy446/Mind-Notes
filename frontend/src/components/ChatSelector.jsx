@@ -64,13 +64,15 @@ export default function ChatSelector(props){
                         <span className='text-chatbox-message'>Sin vinculaciones aún</span>
                     )}
                     {!loading && contacts.map((contact, idx) => {
-                        const contactId = contact.idPaciente || contact.idPsicologo || contact._id || contact.id || idx;
-                        const displayName = contact.nombrePaciente || contact.nombrePsicologo || contact.nombre || 'Contacto';
+                        const userRole = user?.role;
+                        const contactId = userRole === 'psicologo' ? (contact.idPaciente || contact._id || contact.id || idx) : (contact.idPsicologo || contact._id || contact.id || idx);
+                        const displayName = userRole === 'psicologo' ? (contact.nombrePaciente || contact.nombre || 'Contacto') : (contact.nombrePsicologo || contact.nombre || 'Contacto');
                         const lastMsg = contact.ultimoMensaje || contact.ultimoMensajeTexto || '';
+                        const profileImg = userRole === 'psicologo' ? (contact.fotoPerfilPaciente || '/src/images/pimg1.png') : (contact.fotoPerfilPsicologo || '/src/images/pimg1.png');
                         return (
                             <ChatBox
                                 key={contactId}
-                                img={contact.fotoPerfilPaciente || contact.fotoPerfilPsicologo || '/src/images/pimg1.png'} //esto genera pedos pq siempre lee la foto del paciente
+                                img={profileImg}
                                 name={displayName}
                                 message={lastMsg}
                                 isSelected={selectedId === contactId}
