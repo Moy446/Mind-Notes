@@ -18,16 +18,23 @@ class Usuario {
 
     async create(datosUsuario, esPsicologo = false){
         try {
+            // Preparar password: null si viene de Google, hasheado si viene de registro normal
+            let passwordHash = null;
+            if (datosUsuario.password) {
+                passwordHash = await bcrypt.hash(datosUsuario.password, 10);
+            }
+
             const usuario = {
                 idUsuario: new ObjectId(),
                 esPsicologo: esPsicologo,
-                password: await bcrypt.hash(datosUsuario.password || datosUsuario.Password, 10),
+                password: passwordHash,
                 nombre: datosUsuario.nombre || datosUsuario.Nombre,
                 email: datosUsuario.email || datosUsuario.Eemail,
                 fotoPerfil: datosUsuario.fotoPerfil || datosUsuario.FotoPerfil || null,
                 telefono: datosUsuario.telefono || datosUsuario.Telefono || null,
+                googleId: datosUsuario.googleId || null,
                 fechaCreacion: new Date(),
-                verificado: false,
+                verificado: datosUsuario.verificado || false,
                 tokenVerificacion: null,
                 tokenRecuperacion: null,
                 tokenExpiracion: null,
@@ -88,6 +95,18 @@ class Usuario {
             return usuario;
         } catch (error) {
             throw new Error('Error al buscar el usuario por email: ' + error.message);
+        }
+    }
+
+    /**
+     * Buscar un usuario por Google ID
+     */
+    async findByGoogleId(googleId){
+        try {
+            const usuario = await this.colUsuarios.findOne({ googleId: googleId });
+            return usuario;
+        } catch (error) {
+            throw new Error('Error al buscar usuario por Google ID: ' + error.message);
         }
     }
 
@@ -288,6 +307,21 @@ class Usuario {
             return result.modifiedCount > 0;
         } catch (error) {
             throw new Error('Error al actualizar perfil: ' + error.message);
+        }
+    }
+
+    /**
+     * Actualizar Google ID de un usuario
+     */
+    async actualizarGoogleId(idUsuario, googleId) {
+        try {
+            const result = await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { googleId: googleId } }
+            );
+            return result.modifiedCount > 0;
+        } catch (error) {
+            throw new Error('Error al actualizar Google ID: ' + error.message);
         }
     }
 }

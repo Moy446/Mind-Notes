@@ -36,6 +36,13 @@ export default function Login() {
 
 
 
+    //Funcion Login con Google
+    const handleGoogleLogin = () => {
+        // Redirigir directamente a la ruta de autenticación de Google en el backend
+        window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+    };
+
+
     // Función para manejar login
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -191,7 +198,13 @@ export default function Login() {
                     </div>
                      <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
+                        <button 
+                            type='button'
+                            className='google-icon' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <i className="fa-brands fa-google"></i>
+                        </button>
                     </div>           
                 </form>
             </div>
@@ -255,7 +268,13 @@ export default function Login() {
 
                     <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
+                        <button 
+                            type='button'
+                            className='google-icon' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <i className="fa-brands fa-google"></i>
+                        </button>
                     </div>
 
                     <button type='submit' className='btn register' disabled={registerLoading}>

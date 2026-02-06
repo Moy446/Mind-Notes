@@ -154,6 +154,15 @@ class UsuarioController {
                 });
             }
 
+            // Verificar que el usuario tenga contraseña (no fue registrado solo con Google)
+            if (!usuario.password) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Esta cuenta fue registrada con Google. Por favor usa "Iniciar con Google"',
+                    loginMethod: 'google'
+                });
+            }
+
             const isPasswordValid = await Bcrypt.compare(password, usuario.password);
             if (!isPasswordValid) {
                 return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
@@ -380,9 +389,30 @@ class UsuarioController {
      */
     logout = async (req, res) => {
         try {
+            // Limpiar cookies de autenticación
             res.clearCookie('token');
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
+            res.clearCookie('connect.sid'); // Cookie de sesión de Passport
+            
+            // Destruir sesión de Passport si existe
+            if (req.session) {
+                req.session.destroy((err) => {
+                    if (err) {
+                        console.error('Error al destruir sesión:', err);
+                    }
+                });
+            }
+            
+            // Logout de Passport si el usuario está autenticado
+            if (req.logout) {
+                req.logout((err) => {
+                    if (err) {
+                        console.error('Error en logout de Passport:', err);
+                    }
+                });
+            }
+            
             res.status(200).json({ success: true, message: 'Sesión cerrada' });
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
