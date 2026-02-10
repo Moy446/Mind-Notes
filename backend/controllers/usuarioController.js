@@ -170,29 +170,116 @@ class UsuarioController {
 
             const role = esPsicologo ? 'psicologo' : 'paciente';
 
-            if (esPsicologo) {
-                const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role });
-                const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role });
-                cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
-                res.status(200).json({
-                    success: true,
-                    idPsicologo: usuario.idUsuario,
-                    idUsuario: usuario.idUsuario,
-                    nombre: usuario.nombre
-                });
-            } else {
+            const respond = async () => {
+                if (esPsicologo) {
+                    const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role });
+                    const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role });
+                    cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                    return res.status(200).json({
+                        success: true,
+                        idPsicologo: usuario.idUsuario,
+                        idUsuario: usuario.idUsuario,
+                        nombre: usuario.nombre
+                    });
+                }
+
                 const jwt = new jwtControl();
                 const token = await jwt.generateToken(usuario.idUsuario.toString(), usuario.nombre, role);
                 const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
                 const sameSite = useSecure ? 'None' : 'Lax';
                 res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
-                res.status(200).json({
+                return res.status(200).json({
                     success: true,
                     idPaciente: usuario.idUsuario,
                     idUsuario: usuario.idUsuario,
                     token
                 });
+            };
+
+            if (typeof req.login === 'function') {
+                return req.login(usuario, (err) => {
+                    if (err) {
+                        return res.status(500).json({
+                            success: false,
+                            message: 'Error al iniciar sesión'
+                        });
+                    }
+
+                    return respond();
+                });
             }
+
+            return respond();
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });
+        }
+    }
+
+    /**
+     * Login unificado - detecta automáticamente el tipo de usuario
+     */
+    loginUnificado = async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            const usuarioModel = new Usuario();
+            const usuario = await usuarioModel.findByEmail(email);
+
+            if (!usuario) {
+                return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
+            }
+
+            // Verificar que la cuenta esté verificada
+            if (!usuario.verificado) {
+                return res.status(403).json({ 
+                    success: false, 
+                    message: 'Debes verificar tu correo antes de acceder' 
+                });
+            }
+
+            // Verificar que el usuario tenga contraseña (no fue registrado solo con Google)
+            if (!usuario.password) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Esta cuenta fue registrada con Google. Por favor usa "Iniciar con Google"',
+                    loginMethod: 'google'
+                });
+            }
+
+            const isPasswordValid = await Bcrypt.compare(password, usuario.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
+            }
+
+            // Detectar automáticamente el tipo de usuario
+            const esPsicologo = usuario.esPsicologo;
+            const role = esPsicologo ? 'psicologo' : 'paciente';
+
+            // Generar tokens sin usar sesiones de Passport
+            if (esPsicologo) {
+                const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role });
+                const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role });
+                cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                return res.status(200).json({
+                    success: true,
+                    idPsicologo: usuario.idUsuario,
+                    idUsuario: usuario.idUsuario,
+                    nombre: usuario.nombre,
+                    role: 'psicologo'
+                });
+            }
+
+            const jwt = new jwtControl();
+            const token = await jwt.generateToken(usuario.idUsuario.toString(), usuario.nombre, role);
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const sameSite = useSecure ? 'None' : 'Lax';
+            res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
+            return res.status(200).json({
+                success: true,
+                idPaciente: usuario.idUsuario,
+                idUsuario: usuario.idUsuario,
+                token,
+                role: 'paciente'
+            });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });
         }
@@ -200,6 +287,7 @@ class UsuarioController {
 
     /**
      * Login de psicólogo
+     * DEPRECATED: Esta función puede ser eliminada. Usar loginUnificado() en su lugar
      */
     loginPsicologo = async (req, res) => {
         return this.loginUsuario(req, res, true);
@@ -207,6 +295,7 @@ class UsuarioController {
 
     /**
      * Login de paciente
+     * DEPRECATED: Esta función puede ser eliminada. Usar loginUnificado() en su lugar
      */
     loginPaciente = async (req, res) => {
         return this.loginUsuario(req, res, false);
@@ -395,20 +484,20 @@ class UsuarioController {
             res.clearCookie('refreshToken');
             res.clearCookie('connect.sid'); // Cookie de sesión de Passport
             
+            // Logout de Passport si el usuario está autenticado
+            if (typeof req.logout === 'function' && req.session) {
+                req.logout((err) => {
+                    if (err) {
+                        console.error('Error en logout de Passport:', err);
+                    }
+                });
+            }
+
             // Destruir sesión de Passport si existe
             if (req.session) {
                 req.session.destroy((err) => {
                     if (err) {
                         console.error('Error al destruir sesión:', err);
-                    }
-                });
-            }
-            
-            // Logout de Passport si el usuario está autenticado
-            if (req.logout) {
-                req.logout((err) => {
-                    if (err) {
-                        console.error('Error en logout de Passport:', err);
                     }
                 });
             }

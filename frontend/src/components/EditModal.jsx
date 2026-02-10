@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './EditModal.css';
 
 export default function EditModal({ open, handleClose, title, currentValue, onSave, type = 'text' }) {
-    const [value, setValue] = useState(currentValue || '');
+    const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+
+    useEffect(() => {
+        if (open) {
+            setValue('');
+            setError('');
+        }
+    }, [open]);
 
     const handleSave = async () => {
         if (!value || value.trim() === '') {
@@ -17,6 +24,7 @@ export default function EditModal({ open, handleClose, title, currentValue, onSa
 
         try {
             await onSave(value);
+            
             handleClose();
         } catch (err) {
             setError('Error al guardar los cambios');
@@ -49,7 +57,7 @@ export default function EditModal({ open, handleClose, title, currentValue, onSa
                     
                     {error && (
                         <div className='modal-error'>
-                             {error}
+                            {error}
                         </div>
                     )}
                 </div>

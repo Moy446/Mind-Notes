@@ -45,10 +45,15 @@ async function startServer() {
     app.use(express.urlencoded({ extended: true }));
 
     app.use(cookieParser());
-    
-    // Configurar sesión para Passport
+
+    const sessionSecret = process.env.SESSION_SECRET || process.env.JWT_SECRET;
+    if (!sessionSecret) {
+        throw new Error('SESSION_SECRET is required for express-session');
+    }
+
+    // Configurar sesi3n para Passport
     app.use(session({
-        secret: process.env.JWT_SECRET,
+        secret: sessionSecret,
         resave: false,
         saveUninitialized: false,
         cookie: { 

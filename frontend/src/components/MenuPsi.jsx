@@ -29,7 +29,7 @@ export default function MenuPsi(){
     return (
         <div className='menuPsi'>
             <div className='psiMendiv'>
-                <Link to="/" className='svgPsi'>
+                <Link to="" className='svgPsi'>
                     <img src="/src/images/logowithe.png" className='imgMPsi'/>
                 </Link>
 

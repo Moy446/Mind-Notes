@@ -23,7 +23,7 @@ export default function Login() {
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('');
-    const [isPsicologo, setIsPsicologo] = useState(false);
+    const [isPsicologo, setIsPsicologo] = useState(false); // Solo para registro
     const [registerError, setRegisterError] = useState('');
     const [registerLoading, setRegisterLoading] = useState(false);
 
@@ -50,11 +50,11 @@ export default function Login() {
         setLoginLoading(true);
 
         try {
-            const result = await login(loginEmail, loginPassword, isPsicologo ? 'psicologo' : 'paciente');
+            const result = await login(loginEmail, loginPassword);
 
             if (result && result.success) {
-                // Redirigir según el tipo de usuario
-                navigate(isPsicologo ? '/psicologo' : '/paciente');
+                // Redirigir según el tipo de usuario detectado automáticamente
+                navigate(result.role === 'psicologo' ? '/psicologo' : '/paciente');
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }
@@ -130,8 +130,13 @@ export default function Login() {
     };
 
 
+
+
     return (
         <div className={`loginContainer ${modo}`}>
+
+{/* ---------------------------LOGIN--------------------------- */}
+
             <div className='formBox login'>
                 <form onSubmit={handleLogin}>
                     <h1 className='login-title'>MindNotes</h1>
@@ -157,14 +162,6 @@ export default function Login() {
                             onChange={(e) => setLoginPassword(e.target.value)}
                         />
                     </div>
-
-                    <p className='p-switch'>¿Eres psicólogo?</p>
-
-                    <Switch
-                        id="pSwitch"
-                        valor={isPsicologo}
-                        onCambio={setIsPsicologo}
-                    />
 
                     <button type='submit' className='btn login'>Ingresar</button>
 
@@ -200,10 +197,13 @@ export default function Login() {
                     <div className='div-google'>
                         <button 
                             type='button'
-                            className='google-icon' 
+                            className='google-button' 
                             onClick={handleGoogleLogin}
                         >
-                            <i className="fa-brands fa-google"></i>
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
                         </button>
                     </div>           
                 </form>
@@ -270,10 +270,13 @@ export default function Login() {
                     <div className='div-google'>
                         <button 
                             type='button'
-                            className='google-icon' 
+                            className='google-button' 
                             onClick={handleGoogleLogin}
                         >
-                            <i className="fa-brands fa-google"></i>
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
                         </button>
                     </div>
 
