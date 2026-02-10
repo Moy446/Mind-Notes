@@ -17,6 +17,7 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
+    "@react-oauth/google": "^0.13.4",
     "axios": "^1.13.2",
     "lucide-react": "^0.563.0",
     "qr-scanner": "^1.4.2",

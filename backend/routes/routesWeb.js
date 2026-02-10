@@ -14,6 +14,8 @@ router.post('/registrarPaciente', UserController.registrarPacienteBD);
 router.get('/me', protector, UserController.getMe);
 router.post('/logout', UserController.logout);
 router.post('/refresh', UserController.refresh);
+router.put('/usuario/:id', protector, UserController.actualizarPerfil);
+router.get('/usuario/:id', protector, UserController.obtenerPerfil);
 router.post('/vincularPacientes/:idPsicologo', protector, UserController.vincularPacientes);
 router.post('/vincularPsicologo/:idPaciente', protector, UserController.vincularPsicologo);
 router.get('/pacientes/:idPsicologo', protector, UserController.obtenerPacientesVinculados);

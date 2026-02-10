@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';
+import session from 'express-session';
+import passport from 'passport';
+import setupPassport from './config/passport.js';
 import webRoutes from './routes/routesWeb.js';
 import routesChat from './routes/routesChat.js';
 import routesPsicologo from './routes/routesPsicologoApp.js';
@@ -42,6 +45,25 @@ async function startServer() {
     app.use(express.urlencoded({ extended: true }));
 
     app.use(cookieParser());
+    
+    // Configurar sesión para Passport
+    app.use(session({
+        secret: process.env.JWT_SECRET,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { 
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        }
+    }));
+
+    // Inicializar Passport
+    setupPassport(passport);
+    app.use(passport.initialize());
+    app.use(passport.session());
+    
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
 
 

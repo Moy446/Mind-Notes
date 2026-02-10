@@ -23,9 +23,13 @@ import { AuthProvider } from './context/AuthContext.jsx'
 import ReestablecerPassword from './ReestablecerPassword.jsx'
 import VerificarCuenta from './VerificarCuenta.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import GoogleCallback from './GoogleCallback.jsx'
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <AuthProvider>
       <BrowserRouter>
       <Routes>
@@ -55,8 +59,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
         <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />
         <Route path="/resetear-password/:token" element={<ReestablecerPassword />} />
+        <Route path="/dashboard" element={<GoogleCallback />} />
       </Routes>
       </BrowserRouter>
     </AuthProvider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 )

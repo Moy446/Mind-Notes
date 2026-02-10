@@ -154,6 +154,15 @@ class UsuarioController {
                 });
             }
 
+            // Verificar que el usuario tenga contraseña (no fue registrado solo con Google)
+            if (!usuario.password) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Esta cuenta fue registrada con Google. Por favor usa "Iniciar con Google"',
+                    loginMethod: 'google'
+                });
+            }
+
             const isPasswordValid = await Bcrypt.compare(password, usuario.password);
             if (!isPasswordValid) {
                 return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
@@ -380,9 +389,30 @@ class UsuarioController {
      */
     logout = async (req, res) => {
         try {
+            // Limpiar cookies de autenticación
             res.clearCookie('token');
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
+            res.clearCookie('connect.sid'); // Cookie de sesión de Passport
+            
+            // Destruir sesión de Passport si existe
+            if (req.session) {
+                req.session.destroy((err) => {
+                    if (err) {
+                        console.error('Error al destruir sesión:', err);
+                    }
+                });
+            }
+            
+            // Logout de Passport si el usuario está autenticado
+            if (req.logout) {
+                req.logout((err) => {
+                    if (err) {
+                        console.error('Error en logout de Passport:', err);
+                    }
+                });
+            }
+            
             res.status(200).json({ success: true, message: 'Sesión cerrada' });
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
@@ -419,6 +449,107 @@ class UsuarioController {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
             res.status(401).json({ success: false, message: 'Token inválido o expirado' });
+        }
+    }
+
+    /**
+     * Actualizar perfil del usuario
+     */
+    async actualizarPerfil(req, res) {
+        try {
+            const { id } = req.params;
+            const datosActualizar = req.body;
+
+            // El middleware protector asigna req.user con el objeto usuario completo
+            const userIdFromToken = req.user.idUsuario.toString();
+
+            // Validar que el usuario esté actualizando su propio perfil
+            if (userIdFromToken !== id.toString()) {
+                return res.status(403).json({ 
+                    success: false, 
+                    message: 'No tienes permiso para actualizar este perfil' 
+                });
+            }
+
+            const usuarioModel = new Usuario();
+
+            // Si se está actualizando el email, verificar que no exista
+            if (datosActualizar.email) {
+                const emailExistente = await usuarioModel.findByEmail(datosActualizar.email);
+                if (emailExistente && emailExistente.idUsuario.toString() !== id) {
+                    return res.status(400).json({ 
+                        success: false, 
+                        message: 'El correo ya está en uso' 
+                    });
+                }
+            }
+
+            const actualizado = await usuarioModel.actualizarPerfil(id, datosActualizar);
+
+            if (actualizado) {
+                const usuarioActualizado = await usuarioModel.findById(id);
+                return res.status(200).json({ 
+                    success: true, 
+                    message: 'Perfil actualizado exitosamente',
+                    data: {
+                        id: usuarioActualizado.idUsuario,
+                        nombre: usuarioActualizado.nombre,
+                        email: usuarioActualizado.email,
+                        fotoPerfil: usuarioActualizado.fotoPerfil,
+                        telefono: usuarioActualizado.telefono,
+                        apellido: usuarioActualizado.apellido
+                    }
+                });
+            } else {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'No se pudo actualizar el perfil' 
+                });
+            }
+        } catch (error) {
+            console.error('Error al actualizar perfil:', error);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Error al actualizar perfil: ' + error.message 
+            });
+        }
+    }
+
+    /**
+     * Obtener perfil del usuario
+     */
+    async obtenerPerfil(req, res) {
+        try {
+            const { id } = req.params;
+
+            const usuarioModel = new Usuario();
+            const usuario = await usuarioModel.findById(id);
+
+            if (!usuario) {
+                return res.status(404).json({ 
+                    success: false, 
+                    message: 'Usuario no encontrado' 
+                });
+            }
+
+            return res.status(200).json({ 
+                success: true, 
+                data: {
+                    id: usuario.idUsuario,
+                    nombre: usuario.nombre,
+                    email: usuario.email,
+                    fotoPerfil: usuario.fotoPerfil,
+                    telefono: usuario.telefono,
+                    apellido: usuario.apellido,
+                    esPsicologo: usuario.esPsicologo
+                }
+            });
+        } catch (error) {
+            console.error('Error al obtener perfil:', error);
+            return res.status(500).json({ 
+                success: false, 
+                message: 'Error al obtener perfil: ' + error.message 
+            });
         }
     }
 }
