@@ -209,17 +209,28 @@
         display: block;
     }
 
-    div.citas{
-        height: 15vw;
+.citas {
+        width: 56px;
+        height: 56px;
+        bottom: 16px;
+        right: 16px;
     }
 
+    div.citas{
+        height: 12vw;
+    }
     .contentCalendario {
         flex-direction: column;
     }
 
+    .calendarioWrapper{
+        display: block;
+    }
+
     .calendario {
         width: 100%;
-        height: 100%;
+        height: 80%;
+        margin-top: 3vw;
     }
 
     .fecha {
@@ -262,9 +273,6 @@
         height: 70%;
     }
 
-    .menuPsi{
-        height: 10vw;
-    }
 }
 
 /* ------------------------------------------------------------------------------------------------------------------------------------- */
@@ -295,5 +303,12 @@
 
     .citaF {
         font-size: 12px;
+    }
+
+    div.citas {
+        width: 56px;
+        height: 56px;
+        bottom: 16px;
+        right: 16px;
     }
 }

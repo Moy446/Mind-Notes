@@ -191,6 +191,8 @@
     .btnMeet {
         font-size: 22px;
         height: 56px;
+        margin-bottom: 3vw;
+        margin-top: -5vw;
     }
 
     .custom-selectM,
@@ -213,6 +215,10 @@
         padding-left: 40px;
         padding-right: 40px;
         padding-top: 30px;
+    }
+
+    div.meetMenu{
+        width: 100%;
     }
 
     .meetbtns {
@@ -245,9 +251,13 @@
 
     .meetMenu {
         width: 95%;
-        padding-left: 25px;
-        padding-right: 25px;
-        padding-top: 25px;
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 30px;
+    }
+
+    div.meetMenu{
+        width: 100%;
     }
 
     .meetbtns {
@@ -256,9 +266,10 @@
     }
 
     .btnMeet {
-        width: 100%;
+        width: 95%;
         height: 52px;
         font-size: 18px;
+        margin-top: -3vw;
     }
 
     .custom-selectM,
