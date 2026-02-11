@@ -17,6 +17,7 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
+    "@react-oauth/google": "^0.13.4",
     "@syncfusion/ej2-react-documenteditor": "^32.1.25",
     "@tiptap/extensions": "^3.18.0",
     "@tiptap/pm": "^3.18.0",
@@ -25,6 +26,8 @@
     "axios": "^1.13.2",
     "framer-motion": "^12.34.0",
     "lucide-react": "^0.563.0",
+    "qr-scanner": "^1.4.2",
+    "qrcode": "^1.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.11.0",
