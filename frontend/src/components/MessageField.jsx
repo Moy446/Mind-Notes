@@ -23,13 +23,7 @@ const MessageField = (props) => { // CAMBIO: Recibir props completo
     };
 
     return (
-        <div className='message-field' style={{ 
-            padding: '15px', 
-            borderTop: '1px solid #ccc',
-            backgroundColor: '#f0f0f0',
-            display: 'flex',
-            gap: '10px'
-        }}>
+        <div className='message-field'>
             <input
                 type="text"
                 id="message"
@@ -40,14 +34,6 @@ const MessageField = (props) => { // CAMBIO: Recibir props completo
                 size="10"
                 className='message-text'
                 placeholder="Escribe un mensaje..."
-                style={{
-                    flex: 1,
-                    padding: '10px 15px',
-                    border: '1px solid #ccc',
-                    borderRadius: '20px',
-                    outline: 'none',
-                    fontSize: '14px'
-                }}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
@@ -56,16 +42,6 @@ const MessageField = (props) => { // CAMBIO: Recibir props completo
                 onClick={handleSend}
                 disabled={!message.trim()}
                 className='send-button'
-                style={{
-                    padding: '10px 25px',
-                    backgroundColor: !message.trim() ? '#ccc' : '#25d366',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '20px',
-                    cursor: !message.trim() ? 'not-allowed' : 'pointer',
-                    fontWeight: 'bold',
-                    fontSize: '14px'
-                }}
             >
                 Enviar
             </button>

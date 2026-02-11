@@ -32,7 +32,15 @@ function MenuPsiF() {
             <MenuPsi/>
             <Outlet context={{qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey}}/>
             <div className={qrOpen ? 'showQr' : 'hidenMenu'}>
-                <AddQr title = "Agregar Paciente" img = "/src/images/pqr.png" open = {qrOpen} handleOpen = {handleOpen}/>
+                <AddQr 
+                    title = "Agregar Paciente" 
+                    img = "/src/images/pqr.png" 
+                    open = {qrOpen} 
+                    handleOpen = {handleOpen}
+                    userRole="psicologo"
+                    userId={user?.id}
+                    onVinculacionExitosa={handleVinculacionExitosa}
+                />
             </div>
             <div className={uidOpen ? 'showUID' : 'hidenMenu'}>
                 <AddUID 

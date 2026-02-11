@@ -2,8 +2,10 @@ import React, { useContext, useState, useEffect } from 'react'
 import './PerfilPsiInfo.css'
 import EliminarBtn from './EliminarBtn';
 import DataPsi from './DataPsi';
+import EditModal from './EditModal';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { actualizarPerfil } from '../services/usuarioService';
 
 export default function PerfilPsiInfo(props) {
     
@@ -15,6 +17,7 @@ export default function PerfilPsiInfo(props) {
         plan: 'Plan Gratuito',
         fotoPerfil: '/src/images/testimg.png'
     });
+    const [editModal, setEditModal] = useState({ open: false, field: '', title: '', value: '' });
 
     useEffect(() => {
         if (user) {
@@ -39,9 +42,27 @@ export default function PerfilPsiInfo(props) {
         }
     }
 
-    const handleNombreChange = () => {
-        // Lógica para cambiar el nombre
-    }
+    const handleOpenEdit = (field, title, value) => {
+        setEditModal({ open: true, field, title, value });
+    };
+
+    const handleCloseEdit = () => {
+        setEditModal({ open: false, field: '', title: '', value: '' });
+    };
+
+    const handleSaveEdit = async (newValue) => {
+        try {
+            const updateData = { [editModal.field]: newValue };
+            const result = await actualizarPerfil(user.id, updateData);
+            
+            if (result.success) {
+                setUserData(prev => ({ ...prev, [editModal.field]: newValue }));
+            }
+        } catch (error) {
+            console.error('Error al actualizar:', error);
+            throw error;
+        }
+    };
     
     const deleteAccount = () => {
         // Lógica para eliminar la cuenta
@@ -77,13 +98,29 @@ export default function PerfilPsiInfo(props) {
                         <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                     </svg>
                 </div>
-                <DataPsi data={userData.nombre} title="Nombre" click={handleNombreChange}/>
-                <DataPsi data={userData.email} title="Correo"/>
+                <DataPsi 
+                    data={userData.nombre} 
+                    title="Nombre" 
+                    click={() => handleOpenEdit('nombre', 'Nombre', userData.nombre)}
+                />
+                <DataPsi 
+                    data={userData.email} 
+                    title="Correo"
+                    click={() => handleOpenEdit('email', 'Correo', userData.email)}
+                />
                 <DataPsi data={userData.plan} title="Plan" click={changePlan}/>
             </div>
             <div className='bottomPerfil'>
                 <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {props.handleDel}/>
             </div>
+            <EditModal
+                open={editModal.open}
+                handleClose={handleCloseEdit}
+                title={editModal.title}
+                currentValue={editModal.value}
+                onSave={handleSaveEdit}
+                type={editModal.field === 'email' ? 'email' : 'text'}
+            />
         </div>
     );
 }
