@@ -12,7 +12,7 @@ import SuppPsi from './components/SuppPsi';
 import { useOutletContext, useParams } from 'react-router-dom';
 import socket from './services/socketService'; // NUEVO: Import del socket
 import { AuthContext } from './context/AuthContext';
-import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
+import { obtenerPsicologosVinculados , obtenerMensajes } from './services/vinculacionService';
 import clienteAxios from './services/axios';
 
 export default function ChatPsiF(props){
@@ -35,11 +35,11 @@ export default function ChatPsiF(props){
             return;     
         }
         try {
-            const data = await obtenerPacientesVinculados(idUser);
+            const data = await obtenerPsicologosVinculados(idUser);
             const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
-            const paciente = lista.find(p => p.idPaciente === selectedChat);
-            setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Usuario no seleccionado');
-            setImage(paciente ? paciente.fotoPerfilPaciente : '/src/images/pimg2.png');
+            const psicologo = lista.find(p => p.idPsicologo === selectedChat);
+            setN(psicologo ? psicologo.nombrePsicologo ||  psicologo?.nombre : 'Usuario no seleccionado');
+            setImage(psicologo ? psicologo.fotoPerfilPsicologo : '/src/images/pimg2.png');
         } catch (error) {
             setN('Usuario no seleccionado');
         }
@@ -75,14 +75,14 @@ export default function ChatPsiF(props){
         setOpenSuppInfo(!suppInfoOpen)
     }, [suppInfoOpen])
 
-    // NUEVO: Efecto para conectar al chat cuando se selecciona un paciente
+    // NUEVO: Efecto para conectar al chat cuando se selecciona un psicólogo
     useEffect(() => {
         if (selectedChat) {
         
         // Cargar mensajes existentes
         const loadMessages = async () => {
             try {
-                const data = await obtenerMensajes(idUser, selectedChat);
+                const data = await obtenerMensajes(selectedChat, idUser);
                 const mensajes = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
                 setMessages(mensajes);
             } catch (error) {
@@ -93,13 +93,12 @@ export default function ChatPsiF(props){
         
         // Unirse al chat
         socket.emit('joinChat', { 
-            idPsicologo: idUser, 
-            idPaciente: selectedChat 
+            idPsicologo: selectedChat,
+            idPaciente: idUser 
         });
 
         // Escuchar mensajes nuevos
         socket.on('receiveMessage', (newMessage) => {
-            console.log('📨 Nuevo mensaje recibido:', newMessage);
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
 
@@ -113,10 +112,10 @@ export default function ChatPsiF(props){
     const handleSendMessage = (message) => {
         if (message.trim() && selectedChat) {
             socket.emit('sendMessage', {
-                idPsicologo: idUser,
-                idPaciente: selectedChat,
+                idPsicologo: selectedChat,
+                idPaciente: idUser,
                 mensaje: message,
-                remitente: 'psicologo'
+                remitente: 'paciente'
             });
         }
     };
@@ -130,14 +129,13 @@ export default function ChatPsiF(props){
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
-        console.log('💬 Chat seleccionado:', chatId);
     };
 
-    //cargar informacion en el sidebar del paciente
-    const getInformationChat = async (pacienteId) => {
+    //cargar informacion en el sidebar del psicólogo
+    const getInformationChat = async (chatId) => {
         try {
-            const idPsicologo = id;
-            const response = await clienteAxios.get(`/chat/info/${idPsicologo}/${pacienteId}`);
+            const idPaciente = idUser;
+            const response = await clienteAxios.get(`/chat/info/${chatId}/${idPaciente}`);
             setPatientData(response.data.patientData);
         } catch (error) {
             console.error('Error al obtener la información del chat:', error);
@@ -161,7 +159,7 @@ export default function ChatPsiF(props){
                     <div className='chatView'>
                         <div className='bubbles'>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
-                             {!selectedChat ? (
+                            {!selectedChat ? (
                                 <div style={{
                                     display: 'flex',
                                     justifyContent: 'center',
@@ -183,19 +181,19 @@ export default function ChatPsiF(props){
                                 }}>
                                     No hay mensajes aún
                                 </div>
-                            ) :(
+                            ) : (
                                 // Mensajes reales del socket
                                 messages.map((msg, index) => (
                                     <BubbleChat 
                                         key={index}
                                         text={msg.mensaje}
-                                        type={msg.remitente === 'psicologo' ? 'send' : 'receive'}
+                                        type={msg.remitente === 'paciente' ? 'send' : 'receive'}
                                     />
                                 ))
                             )}
                         </div>
                         <div className='textBarChat'>
-                            { selectedChat && <MessageField 
+                            {selectedChat && <MessageField 
                                 suppOpen={suppOpen} 
                                 handleOpen={handleOpenSupp}
                                 onSendMessage={handleSendMessage} // NUEVO: Pasar función de envío

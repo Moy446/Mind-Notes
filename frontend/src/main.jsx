@@ -4,7 +4,6 @@ import App from './App.jsx'
 import './index.css'
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import MenuPsiF from './MenuPsiF.jsx'
-import MenuPaF from './MenuPaF.jsx'
 import ChatPsiF from './ChatPsiF.jsx'
 
 import Doc from './Doc.jsx'
@@ -12,11 +11,18 @@ import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
 import Planes from './Planes.jsx'
 import CalendarioF from './CalenndarioF.jsx'
+import MenuPaF from './MenuPaF.jsx'
+import PerfilPaF from './PerfilPaF.jsx'
+import ChatPaF from './ChatPaF.jsx'
+import Error from './Error.jsx'
 
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
 import Login from './login.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
+import ReestablecerPassword from './ReestablecerPassword.jsx'
+import VerificarCuenta from './VerificarCuenta.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -24,8 +30,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-        <Route path='/psicologo' element={<MenuPsiF/>}>
-          <Route path='chat' element={<ChatPsiF/>}/>
+          {/*-- Rutas protegidas para psicólogos --*/}
+        <Route path='/psicologo' element={<ProtectedRoute requiredRole="psicologo"><MenuPsiF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
           <Route path='doc/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
@@ -33,15 +39,23 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='perfil' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
-        <Route path='/paciente' element={<MenuPaF/>}>
-          <Route path='chat' element={<ChatPsiF/>}/>
-          <Route path='chat/:id' element={<ChatPsiF/>}/>
-          <Route path='perfil/:id' element={<PerfilPsiF/>}/>
+        {/*-- Rutas protegidas para pacientes --*/}
+        <Route path='/paciente' element={<ProtectedRoute requiredRole="paciente"><MenuPaF/></ProtectedRoute>}>
+          <Route path='chat/:id' element={<ChatPaF/>}/>
+          <Route path='perfil/:id' element={<PerfilPaF/>}/>
+          <Route path='chat:id' element={<ChatPaF/>}/>
+          <Route path='perfil:id' element={<PerfilPaF/>}/>
         </Route>
+        {/*-- Rutas públicas --*/}
+        <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
-        <Route path='/login' element={<Login/>}/>
+        <Route path='/Login' element={<Login/>}/>
+        <Route path='/ReestablecerPassword' element={<ReestablecerPassword/>}/>
+        <Route path='/pruebas' element = {<componentsPruebas/>}/>
+        <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />
+        <Route path="/resetear-password/:token" element={<ReestablecerPassword />} />
       </Routes>
     </BrowserRouter>
     </AuthProvider>
