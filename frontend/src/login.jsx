@@ -33,10 +33,13 @@ export default function Login() {
     const [recoverySuccess, setRecoverySuccess] = useState('');
     const [recoveryLoading, setRecoveryLoading] = useState(false);
 
+    //Función de expresion regular para validar contraseña
+    const validarPassword = (password) =>{
+        const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
 
-
-
-    //Funcion Login con Google
+    //Función Login con Google
     const handleGoogleLogin = () => {
         // Redirigir directamente a la ruta de autenticación de Google en el backend
         window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
@@ -78,6 +81,11 @@ export default function Login() {
         }
 
         try {
+            if(!validarPassword(registerPassword)){
+                setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
+                setRegisterLoading(false);
+                return;
+            }
             const result = isPsicologo
                 ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
                 : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
