@@ -1,5 +1,7 @@
+import { th } from "framer-motion/client";
 import dbClient from "../config/dbClient.js";
 import Chat from "../models/Chat.js";
+import { ObjectId } from "mongodb";
 
 class ChatController {
     constructor() {
@@ -18,37 +20,43 @@ class ChatController {
     }
 
     async obtenerMensajes(req, res) {
-        const { idPsicologo } = req.params;
-        const { idPaciente } = req.query; // Asumiendo query param para filtrar
+        const { idPsicologo, idPaciente } = req.params;
         try {
-            const colMensajes = dbClient.db.collection('mensajes');
-            const filter = { idPsicologo };
-            if (idPaciente) filter.idPaciente = idPaciente;
-            const mensajes = await colMensajes.find(filter).sort({ timestamp: 1 }).toArray();
-            res.status(200).json({ success: true, mensajes });
+            console.log('🔍 Buscando mensajes para:', { idPsicologo, idPaciente });
+            const chat = new Chat();
+            const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
+            
+            if (!chatData) {
+                console.log('❌ Chat no encontrado');
+                return res.status(404).json({ success: false, message: 'Chat no encontrado', data: [] });
+            }
+            
+            console.log('✅ Chat encontrado con', chatData.mensajes?.length || 0, 'mensajes');
+            res.status(200).json({ success: true, data: chatData.mensajes || [] });
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Error al obtener mensajes: ' + error.message });
+            console.error('❌ Error al obtener mensajes:', error);
+            res.status(500).json({ success: false, message: 'Error al obtener mensajes: ' + error.message, data: [] });
         }
     }
 
-    async enviarMensaje(req, res) {
-        const idPsicologo  = req.params;
-        const { idPaciente, mensaje, remitente } = req.body; // remitente: 'paciente' o 'psicologo'
+    async obtenerInformacionChat(req, res){
         try {
-            const colMensajes = dbClient.db.collection('mensajes');
-            const nuevoMensaje = {
-                idPsicologo,
-                idPaciente,
-                mensaje,
-                remitente,
-                timestamp: new Date()
-            };
-            await colMensajes.insertOne(nuevoMensaje);
-            res.status(201).json({ success: true, message: 'Mensaje enviado' });
+            const {idPsicologo, idPaciente} = req.params;
+            const chat = new Chat();
+            const infoChat = await chat.findChatByParticipants(idPaciente, idPsicologo);
+            const patientData = {
+                id : infoChat.idPaciente,
+                nombre: infoChat.nombrePaciente,
+                materialAdjunto: infoChat.materialAdjunto,
+                expedientes: infoChat.expedientes,
+                grabaciones: infoChat.grabaciones
+            } 
+            res.status(200).json({success:true, patientData});
         } catch (error) {
-            res.status(500).json({ success: false, message: 'Error al enviar mensaje: ' + error.message });
+            res.status(500).json({ success: false, message: 'Error obtener la informacion del paciente: ' + error.message });
         }
     }
+
 }
 
 export default new ChatController();

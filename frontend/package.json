@@ -17,11 +17,18 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
+    "@syncfusion/ej2-react-documenteditor": "^32.1.25",
+    "@tiptap/extensions": "^3.18.0",
+    "@tiptap/pm": "^3.18.0",
+    "@tiptap/react": "^3.18.0",
+    "@tiptap/starter-kit": "^3.18.0",
     "axios": "^1.13.2",
+    "lucide-react": "^0.563.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.11.0",
     "react-select": "^5.10.2",
+    "socket.io-client": "^4.8.3",
     "sweetalert2": "^11.26.17"
   },
   "devDependencies": {

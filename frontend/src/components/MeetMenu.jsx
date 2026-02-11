@@ -1,4 +1,4 @@
-import React, { use } from 'react'
+import React from 'react'
 import { useState, useEffect } from "react";
 import './MeetMenu.css'
 import Select from 'react-select';
@@ -16,14 +16,12 @@ export default function MeetMenu(props) {
         try {
             const res = await clienteAxios.get('/psicologo/calendario/pacientes/lista')
             if(res.data.success){
-                
                 const patientsList = res.data.nombresPacientes
                 setPatients(patientsList.map(p => ({
                     idPaciente: p.idPaciente,
                     nombrePaciente: p.nombrePaciente,
-                    fotoPerfil: p.fotoPerfil
+                    fotoPerfil: p.fotoPerfilPaciente
                 })));
-                
             }else{
                 console.log('Error al cargar la lista de pacientes');
             }
@@ -61,7 +59,6 @@ export default function MeetMenu(props) {
         });
     }
 
-
     const validarCita = () => {
         const {idPaciente,nombrePaciente, fechaCita, horaInicio, horaFin} = datosCita;
         if (!idPaciente || !nombrePaciente || !fechaCita || !horaInicio || !horaFin  || horaInicio >= horaFin) {
@@ -78,13 +75,12 @@ export default function MeetMenu(props) {
         .then(async res =>{
             if(res.data.success){
                 await Swal.fire({
-                    title: "Se agendo la cita correctamente",
-                    text: `Se agendo cita a ${datosCita.nombrePaciente}`,
+                    title: "Se agendó la cita correctamente",
+                    text: `Se agendó cita a ${datosCita.nombrePaciente}`,
                     icon: "success"
                 });
-                props.handleAdd();
-                limpiezarDatos();
-                window.location.reload();
+                props.handleAdd(true);
+                limpiarDatos();
             }else{
                 Swal.fire({
                     title: "Error al agendar la cita",
@@ -92,6 +88,12 @@ export default function MeetMenu(props) {
                     icon: "error"
                 });
             }
+        }).catch(err => {
+            Swal.fire({
+                title: "Error al agendar la cita",
+                text: `No se pudo agendar cita a ${datosCita.nombrePaciente}`,
+                icon: "error"
+            });
         })
     }
 
@@ -102,13 +104,12 @@ export default function MeetMenu(props) {
         .then(async res =>{
             if(res.data.success){
                 await Swal.fire({
-                    title: "Se modifico la cita correctamente",
-                    text: `Se modifico la cita a ${datosCita.nombrePaciente}`,
+                    title: "Se modificó la cita correctamente",
+                    text: `Se modificó la cita a ${datosCita.nombrePaciente}`,
                     icon: "success"
                 });
-                props.handleEdit();
-                limpiezarDatos();
-                window.location.reload();
+                props.handleEdit("",true);
+                limpiarDatos();
             }else{
                 Swal.fire({
                     title: "Error al modificar la cita",
@@ -125,7 +126,7 @@ export default function MeetMenu(props) {
         })
     }
 
-    const limpiezarDatos = () => {
+    const limpiarDatos = () => {
         guardarDatosCita({
                     idPaciente: '',
                     nombrePaciente: '',
@@ -136,7 +137,7 @@ export default function MeetMenu(props) {
     }
 
     const cerrarVentana = () => {
-        limpiezarDatos();
+        limpiarDatos();
         props.tipo ? props.handleEdit() : props.handleAdd();
     }
 
@@ -154,7 +155,7 @@ export default function MeetMenu(props) {
                     ["fechaCita"]: res.data.cita.fechaCita,
                     ["horaInicio"]: res.data.cita.horaInicio,
                     ["horaFin"]: res.data.cita.horaFin,
-                    ["fotoPerfil"]: res.data.cita.fotoPerfil
+                    ["fotoPerfil"]: res.data.cita.fotoPerfilPaciente
                 })
             }
             for (let patient of patients){

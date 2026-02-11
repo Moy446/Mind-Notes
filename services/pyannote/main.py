@@ -15,24 +15,26 @@ pipeline = Pipeline.from_pretrained(
 
 
 @app.post("/diarize")
-async def diarize(file: UploadFile = File(...)):
-    pass
+async def diarize(audio: UploadFile = File(...)):
     with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as temp_audio:
-        temp_audio.write(await file.read())
+        temp_audio.write(await audio.read())
         temp_audio_path = temp_audio.name
 
     diarization = pipeline(temp_audio_path)
 
     results = []
-    for turn, _, speaker in diarization.itertracks(yield_label=True):
-        results.append({
-            "start": turn.start,
-            "end": turn.end,
-            "speaker": speaker
-        })
-
-    os.remove(temp_audio_path)
-    return {"diarization": results}
+    try:
+        for turn, _, speaker in diarization.itertracks(yield_label=True):
+            results.append({
+                "start": turn.start,
+                "end": turn.end,
+                "speaker": speaker
+            }) 
+    except Exception as e:
+        return {"error": str(e)}
+    finally:
+        os.remove(temp_audio_path)
+    return {"data": results}
 
 if __name__ == "__main__":
     uvicorn.run(app, host=os.getenv("IP"), port=int(os.getenv("PORT")))

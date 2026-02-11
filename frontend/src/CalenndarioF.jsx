@@ -5,10 +5,13 @@ import './CalendarioF.css'
 import CitasList from './components/CitasList';
 import MeetMenu from './components/MeetMenu'
 import clienteAxios from './services/axios';
+import Spinner from './components/spinner';
 
 export default function CalendarioF(props) {
 
     const [citas, setCitas] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    
 
     const cargarCitas = async () => {
         try {
@@ -22,10 +25,13 @@ export default function CalendarioF(props) {
                     horaI: cita.horaI,
                     horaF: cita.horaF,
                     año: cita.año,
-                    mes: cita.mes - 1,
+                    mes: cita.mes,
                     dia: cita.dia,
                     estado: cita.estado
                 })));
+                setIsLoading(false);
+            }else{
+                console.log('Error al cargar las citas'+ res.data.message);
             }
         } catch (error) {
             console.log(error)
@@ -36,15 +42,21 @@ export default function CalendarioF(props) {
     },[])
 
     const [addMenu, openAddMenu] = useState(false);
-    const handleAdd = useCallback(() => {
+    const handleAdd = useCallback((e) => {
                 openAddMenu(!addMenu)
+                if (e){
+                    cargarCitas();
+                }
             }, [addMenu])
 
     const [selectedCitaId, setSelectedCitaId] = useState(null);
     const [editMenu, openEditMenu] = useState(false);
-    const handleEdit = useCallback((id) => {
+    const handleEdit = useCallback((id,e) => {
                 setSelectedCitaId(id);
                 openEditMenu(!editMenu)
+                if (e){
+                    cargarCitas();
+                }
             }, [editMenu])
 
     function listaHoras() {
@@ -116,8 +128,8 @@ export default function CalendarioF(props) {
     ]
 
     const currentDate = new Date()
-    const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth())
-    const [currentYear, setCurrentYear] = useState(currentDate.getFullYear())
+    // const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth())
+    // const [currentYear, setCurrentYear] = useState(currentDate.getFullYear())
 
     const jsDay = currentDate.getDay();
 
@@ -131,11 +143,10 @@ export default function CalendarioF(props) {
         };
     });
 
-    const [lineas,setLineas] = useState([]);
-    const [horas,setHoras] = useState([]);
-    useEffect(() => {
-        cargarCitas();
-    },[])
+    //cargar spinner
+    if (isLoading){
+        return <Spinner/>
+    }
 
     return (
         <div className="calendarioF">

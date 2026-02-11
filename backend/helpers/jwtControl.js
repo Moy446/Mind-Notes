@@ -1,7 +1,6 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import Psicologo from '../models/Psicologo.js';
-import Paciente from '../models/Paciente.js';
+import Usuario from '../models/Usuario.js';
 
 class jwtControl {
   //Funcion para generar un token JWT
@@ -10,7 +9,7 @@ class jwtControl {
     const token = jwt.sign(
       { id, nombre, role },
       secretKey,
-      { expiresIn: '1h' }
+      { expiresIn: '7d' }
     );
     return token;
   }
@@ -22,23 +21,24 @@ class jwtControl {
     }
     try {
       const decoded = jwt.verify(token, secretKey);
-      // Verificar si el usuario es un paciente o un psicologo
-      if (decoded.role === 'paciente') {
-        const pacienteModel = new Paciente();
-        const user = await pacienteModel.getUserById(decoded.id);
-        if (user) {
-          return { role: 'paciente', user };
-        }
-      } else if (decoded.role === 'psicologo') {
-        const psicologoModel = new Psicologo();
-        const user = await psicologoModel.findById(decoded.id);
-        if (user) {
-          return { role: 'psicologo', user };
-        }
+      const usuarioModel = new Usuario();
+      const user = await usuarioModel.findById(decoded.id);
+      
+      if (!user) {
+        throw new Error('Usuario no encontrado');
       }
-      throw new Error('Usuario no encontrado');
+
+      // Verificar que el rol coincida con el tipo de usuario
+      if (decoded.role === 'paciente' && user.esPsicologo) {
+        throw new Error('Tipo de usuario incorrecto');
+      }
+      if (decoded.role === 'psicologo' && !user.esPsicologo) {
+        throw new Error('Tipo de usuario incorrecto');
+      }
+
+      return { role: decoded.role, user };
     } catch (error) {
-      throw new Error('Token inválido');
+      throw new Error('Token inválido: ' + error.message);
     }
   }
 }
