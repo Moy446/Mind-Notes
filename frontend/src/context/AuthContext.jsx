@@ -30,12 +30,9 @@ export function AuthProvider({ children }) {
     checkSession();
   }, []);
 
-  const login = async (email, password, type) => {
+  const login = async (email, password) => {
     try {
-      const result = await (type === 'psicologo' 
-        ? authService.loginPsicologo(email, password)
-        : authService.loginPaciente(email, password)
-      );
+      const result = await authService.login(email, password);
       
       if (result.success) {
         // Obtener sesión completa desde el servidor
@@ -43,7 +40,7 @@ export function AuthProvider({ children }) {
         if (session.authenticated && session.user) {
           setUser(session.user);
           setAuthenticated(true);
-          return { success: true, user: session.user };
+          return { success: true, user: session.user, role: result.role };
         }
       }
       return result;

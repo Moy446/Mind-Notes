@@ -7,6 +7,8 @@ const router = express.Router();
 
 //Rutas de usuario
 router.get('/', UserController.probarConexion);
+router.post('/login', UserController.loginUnificado); // Login unificado
+// DEPRECATED: Las siguientes rutas pueden ser eliminadas, usar /login en su lugar
 router.post('/loginPsicologo', UserController.loginPsicologo);
 router.post('/loginPaciente', UserController.loginPaciente);
 router.post('/registrarPsicologo', UserController.registrarPsicologoBD);

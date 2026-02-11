@@ -45,6 +45,30 @@ async function startServer() {
     app.use(express.urlencoded({ extended: true }));
 
     app.use(cookieParser());
+
+    const sessionSecret = process.env.SESSION_SECRET || process.env.JWT_SECRET;
+    if (!sessionSecret) {
+        throw new Error('SESSION_SECRET is required for express-session');
+    }
+
+    // Configurar sesi3n para Passport
+    app.use(session({
+        secret: sessionSecret,
+        resave: false,
+        saveUninitialized: false,
+        cookie: { 
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000 // 24 horas
+        }
+    }));
+
+    // Inicializar Passport
+    setupPassport(passport);
+    app.use(passport.initialize());
+    app.use(passport.session());
+    
     
     // Configurar sesión para Passport
     app.use(session({
