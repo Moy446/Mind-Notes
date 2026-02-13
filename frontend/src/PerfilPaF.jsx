@@ -3,8 +3,10 @@ import './PerfilPaF.css'
 import DeleteMenu from './components/DeleteMenu';
 import EliminarBtn from './components/EliminarBtn';
 import DataPsi from './components/DataPsi';
+import EditModal from './components/EditModal';
 import { useNavigate } from 'react-router-dom'; 
-import { AuthContext } from './context/AuthContext';    
+import { AuthContext } from './context/AuthContext';
+import { actualizarPerfil } from './services/usuarioService';    
 
 export default function PerfilPaF(props){
 
@@ -17,10 +19,35 @@ export default function PerfilPaF(props){
     });
 
     const [delMenu, openDelMenu] = useState(false);
+    const [editModal, setEditModal] = useState({ open: false, field: '', title: '', value: '' });
 
     const handleOpenDel = useCallback(() => {
             openDelMenu(!delMenu)
         }, [delMenu])
+
+    const handleOpenEdit = (field, title, value) => {
+        setEditModal({ open: true, field, title, value });
+    };
+
+    const handleCloseEdit = () => {
+        setEditModal({ open: false, field: '', title: '', value: '' });
+    };
+
+    const handleSaveEdit = async (newValue) => {
+        try {
+            const updateData = { [editModal.field]: newValue };
+            const result = await actualizarPerfil(user.id, updateData);
+            
+            if (result.success) {
+                setUserData(prev => ({ ...prev, [editModal.field]: newValue }));
+                // Actualizar también en el contexto si es necesario
+                // Puedes agregar un método updateUser en AuthContext
+            }
+        } catch (error) {
+            console.error('Error al actualizar:', error);
+            throw error;
+        }
+    };
     
     useEffect(() => {
         if (user) {
@@ -53,13 +80,31 @@ export default function PerfilPaF(props){
                         <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
                     </svg>
                 </div>
-                <DataPsi data={userData.nombre} title="Nombre" patient={true}/>
-                <DataPsi data={userData.email} title="Correo" patient={true}/>
+                <DataPsi 
+                    data={userData.nombre} 
+                    title="Nombre" 
+                    patient={true}
+                    click={() => handleOpenEdit('nombre', 'Nombre', userData.nombre)}
+                />
+                <DataPsi 
+                    data={userData.email} 
+                    title="Correo" 
+                    patient={true}
+                    click={() => handleOpenEdit('email', 'Correo', userData.email)}
+                />
                 <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {handleOpenDel}/>
             </div>
             <div className={delMenu ? "showDelMenuPa" : "hiddeDelMenuPa"}>
                <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan" del={delMenu} handleDel={handleOpenDel}/>
             </div>
+            <EditModal
+                open={editModal.open}
+                handleClose={handleCloseEdit}
+                title={editModal.title}
+                currentValue={editModal.value}
+                onSave={handleSaveEdit}
+                type={editModal.field === 'email' ? 'email' : 'text'}
+            />
         </div>
     );
 }

@@ -34,14 +34,22 @@ function MenuPaF() {
             <MenuPa/>
             <Outlet context={{qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey}}/>
             <div className={qrOpen ? 'showQr' : 'hidenMenu'}>
-                <AddQr title = "Agregar Psicologo" img = "/src/images/pqr.png" open = {qrOpen} handleOpen = {handleOpen}/>
+                <AddQr 
+                    title = "Agregar Psicologo" 
+                    img = "/src/images/pqr.png" 
+                    open = {qrOpen} 
+                    handleOpen = {handleOpen}
+                    userRole="paciente"
+                    userId={user?.id}
+                    onVinculacionExitosa={handleVinculacionExitosa}
+                />
             </div>
             <div className={uidOpen ? 'showUID' : 'hidenMenu'}>
                 <AddUID 
                     open={uidOpen} 
                     handleOpen={handleOpenUID}  
                     handleOpenQR={handleOpen}
-                    userRole="Paciente"
+                    userRole="paciente"
                     userId={user?.id}
                     onVinculacionExitosa={handleVinculacionExitosa}
                 />

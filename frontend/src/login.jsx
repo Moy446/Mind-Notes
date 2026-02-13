@@ -23,7 +23,7 @@ export default function Login() {
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('');
-    const [isPsicologo, setIsPsicologo] = useState(false);
+    const [isPsicologo, setIsPsicologo] = useState(false); // Solo para registro
     const [registerError, setRegisterError] = useState('');
     const [registerLoading, setRegisterLoading] = useState(false);
 
@@ -33,7 +33,17 @@ export default function Login() {
     const [recoverySuccess, setRecoverySuccess] = useState('');
     const [recoveryLoading, setRecoveryLoading] = useState(false);
 
+    //Función de expresion regular para validar contraseña
+    const validarPassword = (password) =>{
+        const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
 
+    //Función Login con Google
+    const handleGoogleLogin = () => {
+        // Redirigir directamente a la ruta de autenticación de Google en el backend
+        window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+    };
 
 
     // Función para manejar login
@@ -43,11 +53,11 @@ export default function Login() {
         setLoginLoading(true);
 
         try {
-            const result = await login(loginEmail, loginPassword, isPsicologo ? 'psicologo' : 'paciente');
+            const result = await login(loginEmail, loginPassword);
 
             if (result && result.success) {
-                // Redirigir según el tipo de usuario
-                navigate(isPsicologo ? '/psicologo' : '/paciente');
+                // Redirigir según el tipo de usuario detectado automáticamente
+                navigate(result.role === 'psicologo' ? '/psicologo' : '/paciente');
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }
@@ -71,6 +81,11 @@ export default function Login() {
         }
 
         try {
+            if(!validarPassword(registerPassword)){
+                setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
+                setRegisterLoading(false);
+                return;
+            }
             const result = isPsicologo
                 ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
                 : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
@@ -123,8 +138,13 @@ export default function Login() {
     };
 
 
+
+
     return (
         <div className={`loginContainer ${modo}`}>
+
+{/* ---------------------------LOGIN--------------------------- */}
+
             <div className='formBox login'>
                 <form onSubmit={handleLogin}>
                     <h1 className='login-title'>MindNotes</h1>
@@ -150,14 +170,6 @@ export default function Login() {
                             onChange={(e) => setLoginPassword(e.target.value)}
                         />
                     </div>
-
-                    <p className='p-switch'>¿Eres psicólogo?</p>
-
-                    <Switch
-                        id="pSwitch"
-                        valor={isPsicologo}
-                        onCambio={setIsPsicologo}
-                    />
 
                     <button type='submit' className='btn login'>Ingresar</button>
 
@@ -189,11 +201,19 @@ export default function Login() {
                             </Link>
                         </div>
                     </div>
-
-                    <p>O ingresa con:</p>
+                     <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
-                    </div>
+                        <button 
+                            type='button'
+                            className='google-button' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
+                        </button>
+                    </div>           
                 </form>
             </div>
 
@@ -245,6 +265,8 @@ export default function Login() {
                         />
                     </div>
 
+                    
+
                     <p className='p-switch'>¿Eres psicólogo?</p>
                     <Switch
                         id="pSwitch2"
@@ -252,13 +274,23 @@ export default function Login() {
                         onCambio={setIsPsicologo}
                     />
 
+                    <p>O ingresa con:</p>
+                    <div className='div-google'>
+                        <button 
+                            type='button'
+                            className='google-button' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
+                        </button>
+                    </div>
+
                     <button type='submit' className='btn register' disabled={registerLoading}>
                         {registerLoading ? 'Registrando...' : 'Registrarse'}
                     </button>
-                    <p>O ingresa con:</p>
-                    <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
-                    </div>
                 </form>
             </div>
 

@@ -134,10 +134,10 @@ export default function ChatPsiF(props){
     };
 
     //cargar informacion en el sidebar del paciente
-    const getInformationChat = async (chatId) => {
+    const getInformationChat = async (pacienteId) => {
         try {
             const idPsicologo = id;
-            const response = await clienteAxios.get(`/chat/info/${idPsicologo}/${chatId}`);
+            const response = await clienteAxios.get(`/chat/info/${idPsicologo}/${pacienteId}`);
             setPatientData(response.data.patientData);
         } catch (error) {
             console.error('Error al obtener la información del chat:', error);

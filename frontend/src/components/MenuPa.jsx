@@ -27,7 +27,7 @@ export default function MenuPa() {
     return (
         <div className='menuPa'>
             <div className='paMendiv'>
-                <Link to="/" className='svgPa'>
+                <Link to="" className='svgPa'>
                     <img src="/src/images/logowithe.png" className='imgMPsi' />
                 </Link>
                 <Link to={`/paciente/chat/${datos}`} className='svgPa'>

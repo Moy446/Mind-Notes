@@ -186,21 +186,17 @@ export default function Grabadora(props) {
                         'Content-Type': 'multipart/form-data'
                     }
                 }).then(res => {
-                    if(res.data.success){
-                        Swal.fire({
-                            type: 'success',
-                            title: 'Grabación guardada correctamente',
-                            text: 'Se le enviará un mensaje por correo para revisar el documento',
-                            icon: 'success'
-                        });
-                    }else{
-                        Swal.fire({
-                            type: 'error',
-                            title: 'Hubo un problema para guardar el audio',
-                            text: 'Disculpe las molestias, intenta de nuevo mas tarde',
-                            icon: 'error'
-                        });
-                    }
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'La grabacion se esta procesando',
+                        text: 'Se le enviará un mensaje por correo cuando el documento este listo',
+                    });
+                }).catch(e =>{
+                    Swal.fire({
+                        title: 'Hubo un problema para guardar el audio',
+                        text: 'Disculpe las molestias, intenta de nuevo mas tarde',
+                        icon: 'error'
+                    });
                 })
             }
         }
