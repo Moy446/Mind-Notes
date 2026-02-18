@@ -7,6 +7,7 @@ import emailService from "../helpers/emailService.js";
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import 'dotenv/config';
+import { li } from "framer-motion/client";
 
 class UsuarioController {
 
@@ -583,6 +584,8 @@ class UsuarioController {
             }
 
             const actualizado = await usuarioModel.actualizarPerfil(id, datosActualizar);
+            const listaVinculacionModel = new ListaVinculacion();
+            await listaVinculacionModel.actualizarNombreEnVinculaciones(id, datosActualizar.nombre);
 
             if (actualizado) {
                 const usuarioActualizado = await usuarioModel.findById(id);
@@ -604,6 +607,7 @@ class UsuarioController {
                     message: 'No se pudo actualizar el perfil' 
                 });
             }
+
         } catch (error) {
             console.error('Error al actualizar perfil:', error);
             return res.status(500).json({ 
@@ -611,6 +615,32 @@ class UsuarioController {
                 message: 'Error al actualizar perfil: ' + error.message 
             });
         }
+    }
+
+    //Actualizar la lista de vinculacion con el nuevo nombre del usuario
+    async actualizarListaVinculacion(req, res) {
+        try {
+            const { idPsicologo, idPaciente } = req.body;
+            const listaVinculacionModel = new ListaVinculacion();
+            const actualizado = await listaVinculacionModel.actualizarVinculacion(idPsicologo, idPaciente);
+
+            if (actualizado) {  
+                return res.status(200).json({ 
+                    success: true, 
+                    message: 'Lista de vinculacion actualizada exitosamente'
+                });
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar la lista de vinculacion'
+                });
+            }   
+        } catch (error) {
+            return res.status(500).json({
+                success: false,
+                message: 'Error al actualizar lista de vinculacion: ' + error.message
+            });
+        }   
     }
 
     /**

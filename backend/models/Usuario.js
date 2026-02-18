@@ -47,6 +47,14 @@ class Usuario {
                 usuario.fechaFin = datosUsuario.fechaFin || datosUsuario.FechaFin;
                 usuario.socketId = datosUsuario.socketId || datosUsuario.SocketId || null;
                 usuario.statusChat = datosUsuario.statusChat || datosUsuario.StatusChat || 'offline';
+                usuario.stripeCustomerId = datosUsuario.stripeCustomerId || null;
+                usuario.suscripcion = {
+                    plan: null,
+                    estado: 'inactiva',
+                    fechaInicio: null,
+                    fechaFin: null,
+                    stripeSubscriptionId: null
+                };
                 
             } 
             // Campos específicos de Paciente
@@ -322,6 +330,46 @@ class Usuario {
             return result.modifiedCount > 0;
         } catch (error) {
             throw new Error('Error al actualizar Google ID: ' + error.message);
+        }
+    }
+
+    async updateStripeCustomerId(idUsuario, stripeCustomerId) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { stripeCustomerId: stripeCustomerId } }
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar Stripe Customer ID: ' + error.message);
+        }
+    }
+
+    async activarPlan(idUsuario, plan, sessionId) {
+        const ahora = new Date();
+        let fechaFin = new Date(ahora.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+        if (plan === 'seisMeses') {
+            fechaFin = new Date(ahora.getTime() + 6 * 30 * 24 * 60 * 60 * 1000);
+        } else if (plan === 'unYear') {
+            fechaFin = new Date(ahora.getTime() + 12 * 30 * 24 * 60 * 60 * 1000);
+        }
+
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                {
+                    $set: {
+                        'suscripcion.plan': plan,
+                        'suscripcion.estado': 'activa',
+                        'suscripcion.fechaInicio': ahora,
+                        'suscripcion.fechaFin': fechaFin,
+                        'suscripcion.stripeSubscriptionId': sessionId
+                    }
+                }
+            );
+            return true;
+        } catch (error) {
+            throw new Error('Error al actualizar suscripcion: ' + error.message);
         }
     }
 }

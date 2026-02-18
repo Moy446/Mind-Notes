@@ -14,14 +14,12 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import chatSocket from './sockets/chatSocket.js';
 import dbClient from './config/dbClient.js';
-import bodyParser from 'body-parser';
 import cookieCtrl from './helpers/cookiesControll.js';
+import paymentController from './controllers/paymentController.js';
 
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.use(bodyParser.json());
-app.use(cookieParser())
 
 
 async function startServer() {
@@ -41,9 +39,14 @@ async function startServer() {
         credentials: true
     }));
     
+    app.post(
+        '/api/psicologo/webhook/stripe',
+        express.raw({ type: 'application/json' }),
+        paymentController.confirmarPago
+    );
+
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
-
     app.use(cookieParser());
 
     const sessionSecret = process.env.SESSION_SECRET || process.env.JWT_SECRET;
@@ -51,7 +54,7 @@ async function startServer() {
         throw new Error('SESSION_SECRET is required for express-session');
     }
 
-    // Configurar sesi3n para Passport
+    // Configurar sesión para Passport (SOLO UNA VEZ)
     app.use(session({
         secret: sessionSecret,
         resave: false,
@@ -64,33 +67,14 @@ async function startServer() {
         }
     }));
 
-    // Inicializar Passport
+    // Inicializar Passport (SOLO UNA VEZ)
     setupPassport(passport);
     app.use(passport.initialize());
     app.use(passport.session());
-    
-    
-    // Configurar sesión para Passport
-    app.use(session({
-        secret: process.env.JWT_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: { 
-            httpOnly: true, 
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000 // 24 horas
-        }
-    }));
+    app.use(passport.authenticate('session')); 
 
-    // Inicializar Passport
-    setupPassport(passport);
-    app.use(passport.initialize());
-    app.use(passport.session());
     
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
-
-
 
     // Routes
     app.use('/api', webRoutes);

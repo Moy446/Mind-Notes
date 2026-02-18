@@ -96,6 +96,22 @@ class ListaVinculacion {
         }
     }   
 
+    async actualizarNombreEnVinculaciones(idUsuario, nuevoNombre){
+        console.log('Actualizando nombre en vinculaciones para usuario:', idUsuario, 'Nuevo nombre:', nuevoNombre);
+        try {
+            await this.colListaVinculacion.updateMany(
+                { $or: [ { idPsicologo: new ObjectId(idUsuario) }, { idPaciente: new ObjectId(idUsuario) } ] },
+                [
+                    { $set: {   
+                        nombrePsicologo: { $cond: [ { $eq: [ "$idPsicologo", new ObjectId(idUsuario) ] }, nuevoNombre, "$nombrePsicologo" ] },
+                        nombrePaciente: { $cond: [ { $eq: [ "$idPaciente", new ObjectId(idUsuario) ] }, nuevoNombre, "$nombrePaciente" ] }
+                    } } 
+                ]
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar el nombre en las vinculaciones: ' + error.message);
+        }
+    }
 
    async getAll(){
         try {

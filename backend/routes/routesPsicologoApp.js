@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import calendarController from "../controllers/calendarioController.js";
 import grabacionController from "../controllers/grabacionController.js";
+import paymentController from "../controllers/paymentController.js";
 import protector from "../helpers/routesProtect.js";
 
 const router = express.Router();
@@ -50,5 +51,9 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.get("/grabacion", protector, grabacionController.loadPacientes);
 router.post("/grabacion",protector,upload.single("audio"),grabacionController.guardarGrabacion);
+
+// Pagos (Stripe)
+router.post("/checkout", protector, paymentController.sesionPago);
+router.get("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
 
 export default router;

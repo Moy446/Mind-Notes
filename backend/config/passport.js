@@ -3,7 +3,7 @@ import Usuario from '../models/Usuario.js';
 import 'dotenv/config';
 
 /**
- * Google OAuth con Passaport Strategy
+ * Google OAuth con Passport Strategy - Compatible con Passport 0.7.0
  */
 export default function setupPassport(passport) {
     passport.use(new GoogleStrategy({
@@ -15,26 +15,22 @@ export default function setupPassport(passport) {
         try {
             const usuarioModel = new Usuario();
             
-            // Buscar si el usuario ya existe por googleId
             let usuario = await usuarioModel.findByGoogleId(profile.id);
             
             if (!usuario) {
-                // Buscar si existe por email
                 usuario = await usuarioModel.findByEmail(profile.emails[0].value);
                 
                 if (usuario) {
-                    // Si existe por email, simplemente vincular Google ID
                     await usuarioModel.actualizarGoogleId(usuario.idUsuario, profile.id);
                 } else {
-                    // Crear nuevo usuario si no existe
                     usuario = await usuarioModel.create({
                         nombre: profile.displayName,
                         email: profile.emails[0].value,
                         fotoPerfil: profile.photos[0]?.value || null,
                         googleId: profile.id,
                         password: null,
-                        verificado: true // Google ya verificó el email
-                    }, false);  // esPsicologo como segundo argumento
+                        verificado: true
+                    }, false);
                 }
             }
             

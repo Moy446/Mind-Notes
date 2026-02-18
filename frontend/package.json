@@ -32,7 +32,8 @@
     "react-router-dom": "^7.11.0",
     "react-select": "^5.10.2",
     "socket.io-client": "^4.8.3",
-    "sweetalert2": "^11.26.17"
+    "sweetalert2": "^11.26.17",
+    "tiptap": "^1.32.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.4",
