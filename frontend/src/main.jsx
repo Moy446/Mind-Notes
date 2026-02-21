@@ -22,15 +22,20 @@ import Login from './login.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
 import ReestablecerPassword from './ReestablecerPassword.jsx'
 import VerificarCuenta from './VerificarCuenta.jsx'
+import ProtectedRoute from './components/ProtectedRoute.jsx'
+import GoogleCallback from './GoogleCallback.jsx'
+import componentsPruebas from './componentsPruebas.jsx'
 
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-        <Route path='/psicologo' element={<MenuPsiF/>}>
-          <Route path='chat' element={<ChatPsiF/>}/>
+      <Routes>
+          {/*-- Rutas protegidas para psicólogos --*/}
+        <Route path='/psicologo' element={<ProtectedRoute requiredRole="psicologo"><MenuPsiF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
           <Route path='doc/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
@@ -38,13 +43,14 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path='perfil' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
-        <Route path='/paciente' element={<MenuPaF/>}>
-          <Route path='chat' element={<ChatPsiF/>}/>
-          <Route path='chat/:id' element={<ChatPsiF/>}/>
-          <Route path='perfil/:id' element={<PerfilPsiF/>}/>
+        {/*-- Rutas protegidas para pacientes --*/}
+        <Route path='/paciente' element={<ProtectedRoute requiredRole="paciente"><MenuPaF/></ProtectedRoute>}>
+          <Route path='chat/:id' element={<ChatPaF/>}/>
+          <Route path='perfil/:id' element={<PerfilPaF/>}/>
           <Route path='chat:id' element={<ChatPaF/>}/>
           <Route path='perfil:id' element={<PerfilPaF/>}/>
         </Route>
+        {/*-- Rutas públicas --*/}
         <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
@@ -54,8 +60,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
         <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />
         <Route path="/resetear-password/:token" element={<ReestablecerPassword />} />
+        <Route path="/dashboard" element={<GoogleCallback />} />
       </Routes>
-    </BrowserRouter>
+      </BrowserRouter>
     </AuthProvider>
+    </GoogleOAuthProvider>
   </React.StrictMode>
 )

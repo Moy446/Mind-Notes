@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import './Error.css'
 
 function Error(props) {
@@ -12,7 +12,10 @@ function Error(props) {
             <div className='textDescriptionError'>
                 {props.desc}
             </div>
-        </div>  
+            <Link to="/" className='btnError'>
+                Regresar al inicio
+            </Link>
+        </div>
     );
 }
 

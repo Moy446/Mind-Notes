@@ -1,4 +1,6 @@
 import dbClient from '../config/dbClient.js';
+import Chat from '../models/Chat.js';
+import { ObjectId } from 'mongodb';
 
 export default (io) => {
   io.on('connection', (socket) => {
@@ -14,19 +16,29 @@ export default (io) => {
     // Enviar mensaje
     socket.on('sendMessage', async ({ idPsicologo, idPaciente, mensaje, remitente }) => {
       try {
-        const colMensajes = dbClient.db.collection('mensajes');
+        console.log('📨 Guardando mensaje:', { idPsicologo, idPaciente, mensaje, remitente });
+        
+        const chat = new Chat();
         const nuevoMensaje = {
-          idPsicologo,
-          idPaciente,
+          _id: new ObjectId(),
           mensaje,
           remitente,
           timestamp: new Date()
         };
-        await colMensajes.insertOne(nuevoMensaje);
+        
+        // Insertar el mensaje dentro del array mensajes del Chat
+        const resultado = await chat.insertMensaje(
+          idPsicologo,
+          idPaciente,
+          nuevoMensaje
+        );
+        
+        console.log('✅ Mensaje guardado:', resultado);
+        
         const room = `chat-${idPsicologo}-${idPaciente}`;
         io.to(room).emit('receiveMessage', nuevoMensaje);
       } catch (error) {
-        console.error('Error al enviar mensaje via socket:', error);
+        console.error('❌ Error al enviar mensaje via socket:', error);
       }
     });
 

@@ -23,7 +23,6 @@ import InfoPa from './components/InfoPa'
 import SuppPsi from './components/SuppPsi'
 import SuppPa from './components/SuppPa'
 import HeaderMenu from './components/headerAndFooter/HeaderMenu'
-import { getNotes, createNote } from './services/api'
 import FooterMenu from './components/headerAndFooter/FooterMenu'
 
 function componentsPruebas() {
@@ -111,26 +110,7 @@ function componentsPruebas() {
             <InfoPa  img = "src/images/pimg2.png" name = "Psicologo psicologico de psicologia"/>
             <SuppPsi/>
             <SuppPa/>
-            <h2>Crear Nueva Nota</h2>
-            <form onSubmit={handleCreateNote} className="create-note-form">
-                <input
-                type="text"
-                placeholder="Título de la nota"
-                value={newNoteTitle}
-                onChange={(e) => setNewNoteTitle(e.target.value)}
-                className="note-input"
-                />
-                <textarea
-                placeholder="Contenido de la nota"
-                value={newNoteContent}
-                onChange={(e) => setNewNoteContent(e.target.value)}
-                className="note-textarea"
-                rows={4}
-                />
-                <button type="submit" className="create-btn">
-                Crear Nota
-                </button>
-            </form>
+            
             </section>
 
             {error && <div className="error-message">{error}</div>}

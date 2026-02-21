@@ -91,7 +91,7 @@ export const obtenerPsicologosVinculados = async (idPaciente) => {
  */
 export const obtenerMensajes = async (idPsicologo, idPaciente) => {
     try {
-        const response = await clienteAxios.get(`/mensajes/${idPsicologo}/${idPaciente}`, {
+        const response = await clienteAxios.get(`/chat/${idPsicologo}/${idPaciente}`, {
             withCredentials: true // IMPORTANTE: envía las cookies HttpOnly
         });
         return response.data;
