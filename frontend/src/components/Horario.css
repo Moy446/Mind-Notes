@@ -27,7 +27,7 @@
 @media (max-width: 1024px) {
 
     .horario {
-        padding: 24px;
+        padding: 25px;
     }
 
     .titleHorario {
@@ -35,23 +35,25 @@
     }
 
 }
-/*  */
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
 @media (max-width: 768px) {
 
     .horario {
-        padding: 20px;
+        padding: 25px;
+        margin-bottom: 10%;
     }
 
     .titleHorario {
-        font-size: 21px;
+        font-size: 25px;
     }
 
 }
-/*  */
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
 @media (max-width: 480px) {
 
     .horario {
-        padding: 16px;
+        padding: 20px;
+        margin-bottom: 15%;
     }
 
     .titleHorario {
