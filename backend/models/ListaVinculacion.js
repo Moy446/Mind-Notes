@@ -11,8 +11,19 @@ class ListaVinculacion {
     async create(idPsicologo, idPaciente){
         try{
             const usuario = new Usuario();
+            
+            // Buscar ambos usuarios
             const dataPsicologo = await usuario.findById(idPsicologo)
             const dataPaciente = await usuario.findById(idPaciente)
+            
+            // Validar que ambos usuarios existan
+            if (!dataPsicologo) {
+                throw new Error(`El psicólogo con ID ${idPsicologo} no existe`);
+            }
+            if (!dataPaciente) {
+                throw new Error(`El paciente con ID ${idPaciente} no existe`);
+            }
+            
             const chat = new Chat();
             const vinculacion = {  
                 idVinculacion: new ObjectId(),

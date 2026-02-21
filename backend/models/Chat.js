@@ -105,6 +105,20 @@ class Chat {
         }   
     }
 
+    async insertMensaje(idPsicologo, idPaciente, mensajeObj) {
+        try {
+            const resultado = await this.colChat.updateOne({
+                idPaciente: new ObjectId(idPaciente),
+                idPsicologo: new ObjectId(idPsicologo)
+            }, {
+                $push: { mensajes: mensajeObj }
+            });
+            return resultado;
+        } catch (error) {
+            throw new Error('Error al insertar mensaje: ' + error.message);
+        }
+    }
+
 }
 
 export default Chat;

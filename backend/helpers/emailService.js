@@ -93,7 +93,7 @@ class EmailService {
                     .header { text-align: center; margin-bottom: 30px; }
                     .logo { font-size: 28px; font-weight: bold; color: #6366f1; }
                     .content { color: #333; line-height: 1.6; }
-                    .button { display: inline-block; background: #6366f1; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin: 20px 0; }
+                    .button { display: inline-block; background: #48A6A7; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin: 20px 0; }
                     .footer { text-align: center; margin-top: 30px; color: #999; font-size: 12px; }
                     .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 5px; margin: 20px 0; color: #856404; }
                 </style>
@@ -146,7 +146,7 @@ class EmailService {
                     .container { max-width: 600px; margin: 0 auto; background: #f5f5f5; padding: 20px; }
                     .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
                     .header { text-align: center; margin-bottom: 30px; }
-                    .logo { font-size: 28px; font-weight: bold; color: #6366f1; }
+                    .logo { font-size: 28px; font-weight: bold; color: #2973B2; }
                     .content { color: #333; line-height: 1.6; }
                     .button { display: inline-block; background: #ef4444; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin: 20px 0; }
                     .footer { text-align: center; margin-top: 30px; color: #999; font-size: 12px; }

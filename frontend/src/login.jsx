@@ -5,6 +5,7 @@ import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
 import './login.css'
+import Swal from 'sweetalert2';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function Login() {
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('');
-    const [isPsicologo, setIsPsicologo] = useState(false);
+    const [isPsicologo, setIsPsicologo] = useState(false); // Solo para registro
     const [registerError, setRegisterError] = useState('');
     const [registerLoading, setRegisterLoading] = useState(false);
 
@@ -32,7 +33,17 @@ export default function Login() {
     const [recoverySuccess, setRecoverySuccess] = useState('');
     const [recoveryLoading, setRecoveryLoading] = useState(false);
 
+    //Función de expresion regular para validar contraseña
+    const validarPassword = (password) =>{
+        const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
 
+    //Función Login con Google
+    const handleGoogleLogin = () => {
+        // Redirigir directamente a la ruta de autenticación de Google en el backend
+        window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+    };
 
 
     // Función para manejar login
@@ -42,11 +53,11 @@ export default function Login() {
         setLoginLoading(true);
 
         try {
-            const result = await login(loginEmail, loginPassword, isPsicologo ? 'psicologo' : 'paciente');
+            const result = await login(loginEmail, loginPassword);
 
             if (result && result.success) {
-                // Redirigir según el tipo de usuario
-                navigate(isPsicologo ? '/psicologo' : '/paciente');
+                // Redirigir según el tipo de usuario detectado automáticamente
+                navigate(result.role === 'psicologo' ? '/psicologo' : '/paciente');
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }
@@ -70,6 +81,11 @@ export default function Login() {
         }
 
         try {
+            if(!validarPassword(registerPassword)){
+                setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
+                setRegisterLoading(false);
+                return;
+            }
             const result = isPsicologo
                 ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
                 : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
@@ -79,7 +95,12 @@ export default function Login() {
                 setModo('login'); // Cambiar a formulario de login
                 setLoginEmail(registerEmail);
                 setLoginPassword('');
-                alert('Registro exitoso. Por favor inicia sesión');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: 'Por favor inicia sesión',
+                    confirmButtonColor: '#2973B2'
+                });
             } else {
                 setRegisterError(result.message);
             }
@@ -100,6 +121,12 @@ export default function Login() {
             const result = await emailAuthService.solicitarRecuperacion(recoveryEmail);
             if (result.success) {
                 setRecoverySuccess('Correo de recuperación enviado. Revisa tu bandeja de entrada.');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo enviado',
+                    text: 'Se ha enviado un correo para reestablecer tu contraseña. Revisa tu bandeja de entrada.',
+                    confirmButtonColor: '#2973B2'
+                });
             } else {
                 setRecoveryError(result.message || 'Error al solicitar recuperación de contraseña');
             }
@@ -111,8 +138,13 @@ export default function Login() {
     };
 
 
+
+
     return (
         <div className={`loginContainer ${modo}`}>
+
+{/* ---------------------------LOGIN--------------------------- */}
+
             <div className='formBox login'>
                 <form onSubmit={handleLogin}>
                     <h1 className='login-title'>MindNotes</h1>
@@ -166,11 +198,19 @@ export default function Login() {
                             </Link>
                         </div>
                     </div>
-
-                    <p>O ingresa con:</p>
+                     <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
-                    </div>
+                        <button 
+                            type='button'
+                            className='google-button' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
+                        </button>
+                    </div>           
                 </form>
             </div>
 
@@ -222,6 +262,8 @@ export default function Login() {
                         />
                     </div>
 
+                    
+
                     <p className='p-switch'>¿Eres psicólogo?</p>
                     <div className='div-buttons'>
                     <Switch
@@ -237,8 +279,21 @@ export default function Login() {
                     
                     <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
+                        <button 
+                            type='button'
+                            className='google-button' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
+                        </button>
                     </div>
+
+                    <button type='submit' className='btn register' disabled={registerLoading}>
+                        {registerLoading ? 'Registrando...' : 'Registrarse'}
+                    </button>
                 </form>
             </div>
 
