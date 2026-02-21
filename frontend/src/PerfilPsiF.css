@@ -12,7 +12,6 @@
 {
     position: absolute;
     display: none;
-
 }
 
 .showDelMenuP
@@ -21,4 +20,21 @@
     z-index: 10;
     top: 250px;
     left: 200px;
+    
+}
+/* ------------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+    .perfilPsiF {
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+
+    .showDelMenuP {
+        top: 180px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
 }

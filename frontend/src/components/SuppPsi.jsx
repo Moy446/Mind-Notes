@@ -37,7 +37,7 @@ export default function SuppPsi(props) {
             return (
                 <div className='matApo'>
                     {
-                        props.materialAdjunto.map((m, i) => {
+                        props.expedientes?.map((e, i) => {
                             const { _id, type, nombre, path } = m;
                             const documentType = type;
                             if (documentType === "pdf" || documentType === "docx" || documentType === "doc" || documentType === "txt") {
@@ -79,7 +79,7 @@ export default function SuppPsi(props) {
             <div className='matApo'>
                 {
                      //e contiene {_id,type,nombre,path}
-                    props.expedientes.map((e, i) => {
+                    props.expedientes?.map((e, i) =>  {
                         const { _id, type, nombre, path } = e;
                         return (
                             <Link to={`/psicologo/doc/${_id}`} className='itemsmatApo btnSuppPsi'>
@@ -95,7 +95,7 @@ export default function SuppPsi(props) {
                 }
                 {
                      //e contiene {_id,type,nombre,path}
-                    props.grabaciones.map((g, i) => {
+                    props.expedientes?.map((e, i) => {
                         const { _id, type, nombre, path } = g;
                         return (
                             <Link to={`/psicologo/doc/${_id}`} className='itemsmatApo btnSuppPsi'>

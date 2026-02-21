@@ -23,3 +23,39 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+/*  */
+@media (max-width: 1024px) {
+
+    .horario {
+        padding: 24px;
+    }
+
+    .titleHorario {
+        font-size: 30px;
+    }
+
+}
+/*  */
+@media (max-width: 768px) {
+
+    .horario {
+        padding: 20px;
+    }
+
+    .titleHorario {
+        font-size: 21px;
+    }
+
+}
+/*  */
+@media (max-width: 480px) {
+
+    .horario {
+        padding: 16px;
+    }
+
+    .titleHorario {
+        font-size: 19px;
+    }
+
+}
