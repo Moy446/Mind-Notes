@@ -19,11 +19,13 @@ class Cita {
                 idPsicologo: new ObjectId(datosCita.idPsicologo),
                 nombrePaciente: datosCita.nombrePaciente,
                 nombrePsicologo: datosCita.nombrePsicologo,
+                emailPaciente: datosCita.emailPaciente,
                 fechaCita: new Date(datosCita.fechaCita),
                 horaInicio: datosCita.horaInicio,
                 horaFin: datosCita.horaFin,
                 duracion: datosCita.duracion,
                 estado: datosCita.estado || 'programada',
+                notificado: false,
                 createdAt: new Date(),
                 updatedAt: new Date()
             };
@@ -77,6 +79,39 @@ class Cita {
             return resultado;
         }catch(error){
             throw new Error('Error al editar la cita: ' + error.message);
+        }
+    }
+
+    async updateStatus(idCita, status){
+        try {
+            if (!ObjectId.isValid(idCita)) {
+                throw new Error('ID de cita no válido');
+            }
+            const resultado = await this.colCitas.updateOne(
+                {_id: new ObjectId(idCita)},
+                { $set: { estado: status, updatedAt: new Date() } }
+            );
+            if (resultado.matchedCount === 0) {
+                throw new Error("No se encontró la cita");
+            }
+            return resultado;
+        } catch (error) {
+            throw new Error('Error al editar la cita: ' + error.message);
+        }
+    }
+            
+
+    async searchByDate(fechaInicio, fechaFin){
+        try {
+            const citas = await this.colCitas.find({
+                fechaCita: {
+                    $gte: fechaInicio,
+                    $lt: fechaFin
+                }
+            }).toArray();
+            return citas;
+        } catch (error) {
+            throw new Error("Error al buscar citas por fecha: " + error);
         }
     }
 }

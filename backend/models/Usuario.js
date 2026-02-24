@@ -85,6 +85,15 @@ class Usuario {
             throw new Error('Error al obtener el nombre del usuario: ' + error.message);
         }   
     }
+    
+    async findEmailById(idUsuario){
+        try {
+            const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
+            return usuario ? usuario.email : null;
+        } catch (error) {
+            throw new Error('Error al obtener el email del usuario: ' + error.message);
+        }   
+    }
 
     /**
      * Buscar un usuario por email
