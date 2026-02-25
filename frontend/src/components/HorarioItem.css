@@ -67,6 +67,7 @@
 @media (max-width: 480px) {
 
     .horarioItem {
+        width: 80%;
         font-size: 20px;
         margin-right: -20vw;
     }
