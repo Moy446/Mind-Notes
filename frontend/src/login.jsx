@@ -3,7 +3,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
 import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
+import { emailAuthService } from './services/emailAuthService';
 import './login.css'
+import Swal from 'sweetalert2';
 
 export default function Login() {
     const navigate = useNavigate();
@@ -21,9 +23,28 @@ export default function Login() {
     const [registerEmail, setRegisterEmail] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerPasswordConfirm, setRegisterPasswordConfirm] = useState('');
-    const [isPsicologo, setIsPsicologo] = useState(false);
+    const [isPsicologo, setIsPsicologo] = useState(false); // Solo para registro
     const [registerError, setRegisterError] = useState('');
     const [registerLoading, setRegisterLoading] = useState(false);
+
+    // Estado para recuperación de contraseña
+    const [recoveryEmail, setRecoveryEmail] = useState('');
+    const [recoveryError, setRecoveryError] = useState('');
+    const [recoverySuccess, setRecoverySuccess] = useState('');
+    const [recoveryLoading, setRecoveryLoading] = useState(false);
+
+    //Función de expresion regular para validar contraseña
+    const validarPassword = (password) =>{
+        const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        return regex.test(password);
+    }
+
+    //Función Login con Google
+    const handleGoogleLogin = () => {
+        // Redirigir directamente a la ruta de autenticación de Google en el backend
+        window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+    };
+
 
     // Función para manejar login
     const handleLogin = async (e) => {
@@ -32,11 +53,11 @@ export default function Login() {
         setLoginLoading(true);
 
         try {
-            const result = await login(loginEmail, loginPassword, isPsicologo ? 'psicologo' : 'paciente');
+            const result = await login(loginEmail, loginPassword);
 
             if (result && result.success) {
-                // Redirigir según el tipo de usuario
-                navigate(isPsicologo ? '/psicologo' : '/paciente');
+                // Redirigir según el tipo de usuario detectado automáticamente
+                navigate(result.role === 'psicologo' ? '/psicologo' : '/paciente');
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }
@@ -60,6 +81,11 @@ export default function Login() {
         }
 
         try {
+            if(!validarPassword(registerPassword)){
+                setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
+                setRegisterLoading(false);
+                return;
+            }
             const result = isPsicologo
                 ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
                 : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
@@ -69,7 +95,12 @@ export default function Login() {
                 setModo('login'); // Cambiar a formulario de login
                 setLoginEmail(registerEmail);
                 setLoginPassword('');
-                alert('Registro exitoso. Por favor inicia sesión');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: 'Por favor inicia sesión',
+                    confirmButtonColor: '#2973B2'
+                });
             } else {
                 setRegisterError(result.message);
             }
@@ -80,8 +111,40 @@ export default function Login() {
         }
     };
 
+    // Función para manejar recuperación de contraseña
+    const handleRecovery = async (e) => {
+        e.preventDefault();
+        setRecoveryError('');
+        setRecoverySuccess('');
+        setRecoveryLoading(true);
+        try {
+            const result = await emailAuthService.solicitarRecuperacion(recoveryEmail);
+            if (result.success) {
+                setRecoverySuccess('Correo de recuperación enviado. Revisa tu bandeja de entrada.');
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Correo enviado',
+                    text: 'Se ha enviado un correo para reestablecer tu contraseña. Revisa tu bandeja de entrada.',
+                    confirmButtonColor: '#2973B2'
+                });
+            } else {
+                setRecoveryError(result.message || 'Error al solicitar recuperación de contraseña');
+            }
+        } catch (error) {
+            setRecoveryError('Error al solicitar recuperación de contraseña');
+        } finally { 
+            setRecoveryLoading(false);
+        }
+    };
+
+
+
+
     return (
         <div className={`loginContainer ${modo}`}>
+
+{/* ---------------------------LOGIN--------------------------- */}
+
             <div className='formBox login'>
                 <form onSubmit={handleLogin}>
                     <h1 className='login-title'>MindNotes</h1>
@@ -135,11 +198,19 @@ export default function Login() {
                             </Link>
                         </div>
                     </div>
-
-                    <p>O ingresa con:</p>
+                     <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
-                    </div>
+                        <button 
+                            type='button'
+                            className='google-button' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
+                        </button>
+                    </div>           
                 </form>
             </div>
 
@@ -191,6 +262,8 @@ export default function Login() {
                         />
                     </div>
 
+                    
+
                     <p className='p-switch'>¿Eres psicólogo?</p>
                     <div className='div-buttons'>
                     <Switch
@@ -202,29 +275,64 @@ export default function Login() {
                     <button type='submit' className='btn register' disabled={registerLoading}>
                         {registerLoading ? 'Registrando...' : 'Registrarse'}
                     </button>
+                    </div>
+                    
                     <p>O ingresa con:</p>
                     <div className='div-google'>
-                        <a href="https://www.google.com" className='google-icon'><i className="fa-brands fa-google"></i></a>
+                        <button 
+                            type='button'
+                            className='google-button' 
+                            onClick={handleGoogleLogin}
+                        >
+                            <span className='google-icon' aria-hidden="true">
+                                <i className="fa-brands fa-google"></i>
+                            </span>
+                            <span className='google-text'>Continuar con Google</span>
+                        </button>
                     </div>
+
+                    <button type='submit' className='btn register' disabled={registerLoading}>
+                        {registerLoading ? 'Registrando...' : 'Registrarse'}
+                    </button>
                 </form>
             </div>
 
 
 {/* ---------------------------Recuperar contraseña--------------------------- */}
             <div className='formBox password'>
-                <form action="form-password">
+                <form onSubmit={handleRecovery}>
                     <div className='div-titlePassword'>
                         <h1 className='password-title'>Reestablecer contraseña</h1>
                     </div>
 
+                    {recoveryError && <div className='error-message' style={{color: 'red', marginBottom: '10px'}}>{recoveryError}</div>}
+                    {recoverySuccess && <div className='success-message' style={{color: 'green', marginBottom: '10px'}}>{recoverySuccess}</div>}
+
                     <div className='inputBox'>
-                        <input type="email" placeholder='Ingresa tu correo electronico' required />
+                        <input type="email" 
+                        placeholder='Ingresa tu correo electronico' 
+                        required 
+                        value={recoveryEmail}
+                        onChange={(e) => setRecoveryEmail(e.target.value)}
+                        />
                     </div>
 
-                    <button type='submit' className='btn password'>Solicitar cambio de contraseña</button>
+                    <button type='submit' className='btn password' disabled={recoveryLoading}>
+                        {recoveryLoading ? 'Enviando...' : 'Enviar correo de recuperación'}
+                    </button>
+
+                    <div className='forgotLink'>
+                        <Link to=""
+                            className="link-login"
+                            onClick={(e) => {
+                                e.preventDefault()
+                                setModo('login')
+                            }}
+                        >
+                        </Link>
+                    </div>
                 </form>
             </div>
-
 
 {/* -----------------------------Panel de color------------------------------- */}
         <div className="toggle-box">

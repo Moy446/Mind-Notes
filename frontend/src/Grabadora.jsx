@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./Grabadora.css";
 import AudioMenu from "./components/AudioMenu";
+import clienteAxios from "./services/axios";
+import Swal from "sweetalert2";
 
 export default function Grabadora(props) {
     const [record, setRecord] = useState(false);
@@ -11,8 +13,19 @@ export default function Grabadora(props) {
     const analyserRef = useRef(null);
     const streamRef = useRef(null);
     const animationRef = useRef(null);
-
-    const handleClick = useCallback(async () => {
+    //variables for recording audio
+    const mediaRecorderRef = useRef(null);
+    const audioChunksRef = useRef([]);
+    const [pacientData, setPatientData] = useState({
+        idPaciente: '',
+        nombrePaciente: '',
+        resume: true,
+        grabacion: false,
+        audio: null
+    });
+    
+    const handleClick = useCallback(async (pacientData) => {
+        setPatientData(pacientData);
         if (!record) {
             await startVisualizer();
             setRecord(true);
@@ -65,6 +78,15 @@ export default function Grabadora(props) {
     const startVisualizer = async () => {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         streamRef.current = stream;
+
+        //set up mediaRecorder
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunksRef.current = [];
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunksRef.current.push(event.data);
+        };
+
 
         const audioCtx = new AudioContext();
         const analyser = audioCtx.createAnalyser();
@@ -142,16 +164,47 @@ export default function Grabadora(props) {
 
             }
         };
-
         draw();
+        mediaRecorder.start();
     };
 
     const stopVisualizer = () => {
         cancelAnimationFrame(animationRef.current);
 
+        if (mediaRecorderRef.current){
+            mediaRecorderRef.current.stop();
+            mediaRecorderRef.current.onstop = () => {
+                const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'grabacion.wav');
+                formData.append('idPaciente', pacientData.idPaciente);
+                formData.append('nombrePaciente', pacientData.nombrePaciente);
+                formData.append('resume', pacientData.resume);
+                formData.append('grabacion', pacientData.grabacion);
+                clienteAxios.post('/psicologo/grabacion', formData,{
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(res => {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'La grabacion se esta procesando',
+                        text: 'Se le enviará un mensaje por correo cuando el documento este listo',
+                    });
+                }).catch(e =>{
+                    Swal.fire({
+                        title: 'Hubo un problema para guardar el audio',
+                        text: 'Disculpe las molestias, intenta de nuevo mas tarde',
+                        icon: 'error'
+                    });
+                })
+            }
+        }
+
         streamRef.current?.getTracks().forEach(track => track.stop());
         audioCtxRef.current?.close();
 
+        mediaRecorderRef.current = null;
         streamRef.current = null;
         audioCtxRef.current = null;
         analyserRef.current = null;

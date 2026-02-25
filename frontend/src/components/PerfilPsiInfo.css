@@ -87,7 +87,7 @@
 {
     font-family: 'Saira';
     font-weight: 700;
-    font-size: 16px;
+    font-size: 20px;
     color: black;
 }
 
@@ -103,7 +103,7 @@
 {
     font-family: 'Saira';
     font-weight: 400;
-    font-size: 16px;
+    font-size: 18px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -128,6 +128,7 @@
 .bottomPerfil
 {
     width: 440px;
+    margin-top: 15%;
     display: flex;
     justify-content: center;
 }
@@ -139,4 +140,14 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900; 
+}
+
+/* --------------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .perfilPsiI{
+        width: 100%;
+        height: 100%;
+        border-right: hidden;
+        border-bottom: 5px solid #2973B2;
+    }
 }

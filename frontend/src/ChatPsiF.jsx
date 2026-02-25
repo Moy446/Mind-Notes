@@ -13,6 +13,7 @@ import { useOutletContext, useParams } from 'react-router-dom';
 import socket from './services/socketService'; // NUEVO: Import del socket
 import { AuthContext } from './context/AuthContext';
 import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
+import clienteAxios from './services/axios';
 
 export default function ChatPsiF(props){
 
@@ -22,23 +23,25 @@ export default function ChatPsiF(props){
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
-    const [selectedChat, setSelectedChat] = useState(id || null);
+    const [selectedChat, setSelectedChat] = useState(null);
     const idUser = user?.id; // Usa el ID del contexto
-    const [n, setN] = useState('Paciente');
+    const [n, setN] = useState('Usuario no seleccionado');
+    const [image, setImage] = useState('/src/images/pimg2.png');
+    const [patientData, setPatientData] = useState({});
 
     const fetchSelectedName = useCallback(async () => {
         if(!selectedChat) {
-            setN('Paciente');
+            setN('Usuario no seleccionado');
             return;     
         }
         try {
             const data = await obtenerPacientesVinculados(idUser);
             const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
             const paciente = lista.find(p => p.idPaciente === selectedChat);
-            setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Paciente');
+            setN(paciente ? paciente.nombrePaciente ||  paciente?.nombre : 'Usuario no seleccionado');
+            setImage(paciente ? paciente.fotoPerfilPaciente : '/src/images/pimg2.png');
         } catch (error) {
-            console.error('Error al obtener el nombre del paciente:', error);
-            setN('Paciente');
+            setN('Usuario no seleccionado');
         }
     }, [idUser, selectedChat]);
 
@@ -54,10 +57,10 @@ export default function ChatPsiF(props){
         setOpenSupp(!suppOpen)
     }, [suppOpen])
 
-    const [infoOpen, setOpneInfo] = useState(false)
+    const [infoOpen, setOpenInfo] = useState(false)
         
     const handleOpenInfo = useCallback(() => {
-        setOpneInfo(!infoOpen)
+        setOpenInfo(!infoOpen)
     }, [infoOpen])
 
     const [delOpen, setOpenDel] = useState(false)
@@ -75,7 +78,6 @@ export default function ChatPsiF(props){
     // NUEVO: Efecto para conectar al chat cuando se selecciona un paciente
     useEffect(() => {
         if (selectedChat) {
-        console.log('🔌 Uniéndose al chat:', selectedChat);
         
         // Cargar mensajes existentes
         const loadMessages = async () => {
@@ -84,7 +86,6 @@ export default function ChatPsiF(props){
                 const mensajes = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
                 setMessages(mensajes);
             } catch (error) {
-                console.error('Error al cargar mensajes:', error);
                 setMessages([]);
             }
         };
@@ -98,6 +99,7 @@ export default function ChatPsiF(props){
 
         // Escuchar mensajes nuevos
         socket.on('receiveMessage', (newMessage) => {
+            console.log('📨 Nuevo mensaje recibido:', newMessage);
             setMessages((prevMessages) => [...prevMessages, newMessage]);
         });
 
@@ -105,7 +107,7 @@ export default function ChatPsiF(props){
             socket.off('receiveMessage');
         };
     }
-    }, [selectedChat]);
+    }, [selectedChat, idUser]);
 
     // NUEVO: Función para enviar mensajes
     const handleSendMessage = (message) => {
@@ -121,13 +123,30 @@ export default function ChatPsiF(props){
 
     // NUEVO: Función para seleccionar un chat
     const handleSelectChat = (chatId) => {
+        // Evitar volver a seleccionar el mismo chat
+        if (chatId === selectedChat) {
+            return;
+        }
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
+        getInformationChat(chatId);
         console.log('💬 Chat seleccionado:', chatId);
     };
 
+    //cargar informacion en el sidebar del paciente
+    const getInformationChat = async (pacienteId) => {
+        try {
+            const idPsicologo = id;
+            const response = await clienteAxios.get(`/chat/info/${idPsicologo}/${pacienteId}`);
+            setPatientData(response.data.patientData);
+        } catch (error) {
+            console.error('Error al obtener la información del chat:', error);
+            setPatientData({});
+        }
+    }
+
     return(
-        <div className='chatPsiF'>
+        <div className='chatPsiF'>  
             <ChatSelector 
                 qrOpen={qrOpen} 
                 handleOpen={handleOpen} 
@@ -137,34 +156,50 @@ export default function ChatPsiF(props){
                 refreshKey={refreshKey}
             />
             <div className='nameVarCon'>
-                <NameBar img = "/src/images/pimg1.png" name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>
+                {selectedChat && <NameBar img = {image} name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>}
                 <div className='chatCon'>
                     <div className='chatView'>
                         <div className='bubbles'>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
-                            {messages.length === 0 ? (
-                                // Mensajes de prueba existentes (se mostrarán si no hay mensajes reales)
-                                <>
-                                    <BubbleChat text = "Manda un mensaje para comenzar el chat" type = "send"/>
-                                    
-                                </>
-                            ) : (
+                             {!selectedChat ? (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    color: '#999',
+                                    fontSize: '18px'
+                                }}>
+                                    Selecciona un psicólogo para comenzar a chatear
+                                </div>
+                            ) : messages.length === 0 ? (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    height: '100%',
+                                    color: '#999',
+                                    fontSize: '16px'
+                                }}>
+                                    No hay mensajes aún
+                                </div>
+                            ) :(
                                 // Mensajes reales del socket
                                 messages.map((msg, index) => (
                                     <BubbleChat 
                                         key={index}
                                         text={msg.mensaje}
-                                        type={msg.remitente === 'psicologo' ? 'send' : ''}
+                                        type={msg.remitente === 'psicologo' ? 'send' : 'receive'}
                                     />
                                 ))
                             )}
                         </div>
                         <div className='textBarChat'>
-                            <MessageField 
+                            { selectedChat && <MessageField 
                                 suppOpen={suppOpen} 
                                 handleOpen={handleOpenSupp}
                                 onSendMessage={handleSendMessage} // NUEVO: Pasar función de envío
-                            />
+                            />}
                             <div className={suppOpen ? 'showSuppMenu' : 'hideSuppMenu'}>
                                 <SupportMenu suppOpen = {suppOpen} handleOpen = {handleOpenSupp}/>
                             </div>     
@@ -172,8 +207,17 @@ export default function ChatPsiF(props){
                     </div>
                     <div className={infoOpen ? '' : 'hiddeInfo'}>
                         {suppInfoOpen 
-                            ? <SuppPsi suppInfO = {suppInfoOpen} handleSuppInfo = {handleOpenInfoSupp}/>
-                            : <InfoPsi img = "/src/images/pimg1.png" name = "Teisel" 
+                            ? <SuppPsi 
+                                suppInfO = {suppInfoOpen} 
+                                handleSuppInfo = {handleOpenInfoSupp} 
+                                expedientes = {patientData.expedientes} 
+                                materialAdjunto = {patientData.materialAdjunto} 
+                                grabaciones = {patientData.grabaciones}
+                                />
+                            : <InfoPsi 
+                                img = {image} 
+                                name = {patientData.nombre} 
+                                materialAdjunto = {patientData.materialAdjunto}
                                 open = {infoOpen} handleOpen = {handleOpenInfo} 
                                 del = {delOpen} handleDel = {handleOpenDel} 
                                 suppInfO = {suppInfoOpen} handleSuppInfo = {handleOpenInfoSupp}
@@ -181,7 +225,7 @@ export default function ChatPsiF(props){
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title = "¿Esta seguro de eliminar al paciente Teisel? " subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
+                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${patientData.nombre}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
                     </div>
                 </div>
             </div>

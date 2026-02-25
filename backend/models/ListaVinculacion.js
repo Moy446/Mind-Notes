@@ -1,5 +1,6 @@
 import dbClient from "../config/dbClient.js";
 import Usuario from "./Usuario.js";
+import Chat from "./Chat.js";
 import { ObjectId } from "mongodb";
 
 
@@ -9,17 +10,42 @@ class ListaVinculacion {
     }
     async create(idPsicologo, idPaciente){
         try{
+            const usuario = new Usuario();
+            
+            // Buscar ambos usuarios
+            const dataPsicologo = await usuario.findById(idPsicologo)
+            const dataPaciente = await usuario.findById(idPaciente)
+            
+            // Validar que ambos usuarios existan
+            if (!dataPsicologo) {
+                throw new Error(`El psicólogo con ID ${idPsicologo} no existe`);
+            }
+            if (!dataPaciente) {
+                throw new Error(`El paciente con ID ${idPaciente} no existe`);
+            }
+            
+            const chat = new Chat();
             const vinculacion = {  
                 idVinculacion: new ObjectId(),
                 idPsicologo: new ObjectId(idPsicologo),
                 idPaciente: new ObjectId(idPaciente),
-                nombrePsicologo: await new Usuario().findNameById(idPsicologo),
-                nombrePaciente: await new Usuario().findNameById(idPaciente),
-                fotoPerfilPsicologo: null,
-                fotoPerfilPaciente: null,
+                nombrePsicologo: dataPsicologo.nombre,
+                nombrePaciente: dataPaciente.nombre,
+                fotoPerfilPsicologo: dataPsicologo.fotoPerfil || "/src/images/userDefault.png",
+                fotoPerfilPaciente: dataPaciente.fotoPerfil || "/src/images/userDefault.png",
             };
-            const resultado = await this.colListaVinculacion.insertOne(vinculacion);
-            return resultado;
+            const datosChat ={
+                idPaciente: idPaciente,
+                idPsicologo: idPsicologo,
+                nombrePaciente: dataPaciente.nombre,
+                nombrePsicologo: dataPsicologo.nombre,
+            }
+            const resVinculacion = await this.colListaVinculacion.insertOne(vinculacion);
+            const resChat = await chat.create(datosChat);
+            if(!resVinculacion || !resChat){
+                throw new Error('Error al crear la vinculacion o el chat');
+            }
+            return resVinculacion;
         }
         catch (error) {
             console.error("Error al crear la lista de vinculacion:", error);

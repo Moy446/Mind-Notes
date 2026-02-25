@@ -1,6 +1,24 @@
 import clienteAxios from '../services/axios'
 
 export const authService = {
+  async login(email, password) {
+    try {
+      const response = await clienteAxios.post('/login', { email, password }, {
+        withCredentials: true, // importante: permite enviar/recibir cookies
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = response.data;
+      // No guardas token en localStorage, confías en la cookie HttpOnly
+      return { success: true, ...data };
+    } catch (error) {
+      return { success: false, message: error.response?.data?.message || error.message };
+    }
+  },
+
+  // DEPRECATED: Este método puede ser eliminado, usar login() en su lugar
   async loginPaciente(email, password) {
     try {
       const response = await clienteAxios.post('/loginPaciente', { email, password }, {
@@ -18,6 +36,7 @@ export const authService = {
     }
   },
 
+  // DEPRECATED: Este método puede ser eliminado, usar login() en su lugar
   async loginPsicologo(email, password) {
     try {
       const response = await clienteAxios.post('/loginPsicologo', { email, password }, {
@@ -43,7 +62,7 @@ export const authService = {
 
       return { success: true, ...data };
     } catch (error) {
-      return { success: false, message: error.message };
+      return { success: false, message: error.response?.data?.message || error.message };
     }
   },
 
@@ -58,7 +77,7 @@ export const authService = {
 
       return { success: true, ...data };
     } catch (error) {
-      return { success: false, message: error.message };
+      return { success: false, message: error.response?.data?.message || error.message };
     }
   },
 

@@ -1,6 +1,7 @@
 import { ObjectId } from "mongodb";
 import dbClient from "../config/dbClient.js";
 import bcrypt from 'bcryptjs';
+import { u } from "framer-motion/client";
 
 /*
 Modelo unificado de datos para Usuarios (Psicólogos y Pacientes)
@@ -17,16 +18,23 @@ class Usuario {
 
     async create(datosUsuario, esPsicologo = false){
         try {
+            // Preparar password: null si viene de Google, hasheado si viene de registro normal
+            let passwordHash = null;
+            if (datosUsuario.password) {
+                passwordHash = await bcrypt.hash(datosUsuario.password, 10);
+            }
+
             const usuario = {
                 idUsuario: new ObjectId(),
                 esPsicologo: esPsicologo,
-                password: await bcrypt.hash(datosUsuario.password || datosUsuario.Password, 10),
+                password: passwordHash,
                 nombre: datosUsuario.nombre || datosUsuario.Nombre,
                 email: datosUsuario.email || datosUsuario.Eemail,
                 fotoPerfil: datosUsuario.fotoPerfil || datosUsuario.FotoPerfil || null,
                 telefono: datosUsuario.telefono || datosUsuario.Telefono || null,
+                googleId: datosUsuario.googleId || null,
                 fechaCreacion: new Date(),
-                verificado: false,
+                verificado: datosUsuario.verificado || false,
                 tokenVerificacion: null,
                 tokenRecuperacion: null,
                 tokenExpiracion: null,
@@ -39,6 +47,7 @@ class Usuario {
                 usuario.fechaFin = datosUsuario.fechaFin || datosUsuario.FechaFin;
                 usuario.socketId = datosUsuario.socketId || datosUsuario.SocketId || null;
                 usuario.statusChat = datosUsuario.statusChat || datosUsuario.StatusChat || 'offline';
+                
             } 
             // Campos específicos de Paciente
 
@@ -54,6 +63,10 @@ class Usuario {
      */
     async findById(idUsuario){
         try {
+            // Validar que el ID sea un ObjectId válido
+            if (!ObjectId.isValid(idUsuario)) {
+                throw new Error('ID de usuario inválido');
+            }
             const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
             return usuario;
         } catch (error) {
@@ -82,6 +95,18 @@ class Usuario {
             return usuario;
         } catch (error) {
             throw new Error('Error al buscar el usuario por email: ' + error.message);
+        }
+    }
+
+    /**
+     * Buscar un usuario por Google ID
+     */
+    async findByGoogleId(googleId){
+        try {
+            const usuario = await this.colUsuarios.findOne({ googleId: googleId });
+            return usuario;
+        } catch (error) {
+            throw new Error('Error al buscar usuario por Google ID: ' + error.message);
         }
     }
 
@@ -165,6 +190,7 @@ class Usuario {
                     } 
                 }
             );
+            console.log('Token de recuperación actualizado para usuario:', idUsuario);
         } catch (error) {
             throw new Error('Error al actualizar token de recuperación: ' + error.message);
         }
@@ -243,6 +269,59 @@ class Usuario {
             );
         } catch (error) {
             throw new Error('Error al invalidar token de recuperación: ' + error.message);
+        }
+    }
+
+    /**
+     * Actualizar información del perfil del usuario
+     */
+    async actualizarPerfil(idUsuario, datosActualizar) {
+        try {
+            const camposPermitidos = {};
+            
+            if (datosActualizar.nombre !== undefined) {
+                camposPermitidos.nombre = datosActualizar.nombre;
+            }
+            if (datosActualizar.email !== undefined) {
+                camposPermitidos.email = datosActualizar.email;
+            }
+            if (datosActualizar.telefono !== undefined) {
+                camposPermitidos.telefono = datosActualizar.telefono;
+            }
+            if (datosActualizar.fotoPerfil !== undefined) {
+                camposPermitidos.fotoPerfil = datosActualizar.fotoPerfil;
+            }
+            if (datosActualizar.apellido !== undefined) {
+                camposPermitidos.apellido = datosActualizar.apellido;
+            }
+
+            if (Object.keys(camposPermitidos).length === 0) {
+                throw new Error('No hay campos para actualizar');
+            }
+
+            const result = await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: camposPermitidos }
+            );
+
+            return result.modifiedCount > 0;
+        } catch (error) {
+            throw new Error('Error al actualizar perfil: ' + error.message);
+        }
+    }
+
+    /**
+     * Actualizar Google ID de un usuario
+     */
+    async actualizarGoogleId(idUsuario, googleId) {
+        try {
+            const result = await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { googleId: googleId } }
+            );
+            return result.modifiedCount > 0;
+        } catch (error) {
+            throw new Error('Error al actualizar Google ID: ' + error.message);
         }
     }
 }

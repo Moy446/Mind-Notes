@@ -1,5 +1,7 @@
 import express from 'express';
 import authController from '../controllers/authController.js';
+import passport from 'passport';
+import cookieCtrl from '../helpers/cookiesControll.js';
 
 const router = express.Router();
 
@@ -19,7 +21,7 @@ router.post('/solicitar-recuperacion', (req, res) =>
  * Body: { token: string, newPassword: string, confirmPassword: string }
  * Response: { success: boolean, message: string }
  */
-router.post('/cambiar-password', (req, res) => 
+router.post('/cambiar-password/', (req, res) => 
     authController.cambiarPasswordConToken(req, res)
 );
 
@@ -41,6 +43,68 @@ router.get('/verificar-cuenta/:token', (req, res) =>
  */
 router.post('/reenviar-verificacion', (req, res) => 
     authController.reenviarVerificacion(req, res)
+);
+
+/**
+ * GET /api/auth/google
+ * Inicia autenticación con Google
+ */
+router.get('/google', 
+    passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+/**
+ * GET /api/auth/google/callback
+ * Callback de Google OAuth2
+ */
+router.get('/google/callback',
+    passport.authenticate('google', { 
+        failureRedirect: process.env.FRONTEND_URL + '/login?error=google_auth_failed',
+        session: true  // Cambiar a true temporalmente para el callback
+    }),
+    (req, res) => {
+        try {
+            const usuario = req.user;
+            const role = usuario.esPsicologo ? 'psicologo' : 'paciente';
+            
+            // Generar tokens y establecer cookies
+            const accessToken = cookieCtrl.signAccess({ 
+                id: usuario.idUsuario, 
+                role 
+            });
+            const refreshToken = cookieCtrl.signRefresh({ 
+                id: usuario.idUsuario, 
+                role 
+            });
+            
+            // Establecer cookies en la respuesta
+            cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+            
+            // Limpiar la sesión de Passport después de establecer las cookies
+            req.logout((err) => {
+                if (err) {
+                    console.error('Error al limpiar sesión de Passport:', err);
+                }
+                
+                // Destruir la sesión temporal de autenticación
+                if (req.session) {
+                    req.session.destroy((err) => {
+                        if (err) {
+                            console.error('Error al destruir sesión:', err);
+                        }
+                    });
+                }
+                
+                // Redirigir al frontend según el rol (sin tokens en URL por seguridad)
+                const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+                res.redirect(`${frontendUrl}/${role}`);
+            });
+        } catch (error) {
+            console.error('Error en Google callback:', error);
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+            res.redirect(`${frontendUrl}/login?error=callback_error`);
+        }
+    }
 );
 
 export default router;
