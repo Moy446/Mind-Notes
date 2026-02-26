@@ -5,7 +5,7 @@
   gap: 12px;
   width: 100%;
   padding: 10px 12px;
-  background-color: #F2F4F7;
+  background-color: #9ACBD0;
   border: 1px solid #E2E8F0;
   border-radius: 28px;
   box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
@@ -39,17 +39,17 @@
   padding: 0 14px;
   border: 1px solid transparent;
   border-radius: 20px;
-  background-color: #FFFFFF;
+  background-color: #9ACBD0;
   font-family: 'Saira';
   outline: none;
   font-size: 16px;
   line-height: 40px;
-  color: #1F2937;
+  color: #000;
 }
 
 .message-text::placeholder
 {
-  color: #94A3B8;
+  color: #585f69;
 }
 
 .message-text:focus
@@ -91,6 +91,15 @@
   cursor: not-allowed;
   box-shadow: none;
   transform: none;
+}
+
+.btn-no-stylish
+{
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
 }
 
 @font-face {
