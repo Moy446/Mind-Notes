@@ -88,8 +88,7 @@
     transition: all 0.4s;
 }
 
-.showDelMenu
-{
+.showDelMenu{
     position: absolute;
     transform: translateY(250px) translateX(100px);
 }
@@ -97,32 +96,51 @@
 /* ----------------------------------------------------------------------------------------------------------------------------------- */
 @media (max-width: 768px) {
 
-        .bubbles {
+    .sidebar {
+        display: contents;
+    }
+
+    .hidden-movile{
+        display: none;
+    }
+
+    .nameVarCon{
+        background-color: #F2EFE7;
+    }
+
+    .chatCon{
+        display: block;
+    }
+
+    .bubbles {
         max-height: 75%;
     }
 
-        .textBarChat {
+    .textBarChat {
         bottom: -10vw;
         background-color: #F2EFE7;
     }
 
-        .chatView {
+    .chatView {
         height: 100%;
         padding-left: 10px;
         padding-right: 14px;
     }
 
-        .showSuppMenu {
+    .showSuppMenu {
         transform: translateY(-140px) translateX(0);
+    }
+    .showDelMenu{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 /* ------------------------------------------------------------------------------------------------------------------------------------ */
 @media (max-width: 480px) {
-    nameVarCon{
-        background-color: #dda406;
-    }
 
-        .chatView {
+    .chatView {
         width: 100%;
         height: 100%;
         padding-left: 10px;

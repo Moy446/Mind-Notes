@@ -101,3 +101,68 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+
+/*Responsive 768*/
+@media only screen and (max-width: 768px) {
+    .deletemenu{
+        width: 550px;
+        height: auto;
+    }
+    .acceptBtnD{
+    width: 100px;
+    height: auto;
+    background-color: #48A6A7;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Saira';
+    font-size: 16px;
+    color: white;
+    font-weight: 800;
+    padding: 5px 10px;
+    margin-left: 10px;
+  }
+  .title-deletemenu{
+    font-family: 'Saira';
+    font-size: 20px;
+    color: black;
+    font-weight: 400;
+    margin-top: 15px;
+    align-self: flex-start;
+  }
+  .subtutle{
+    font-family: 'Saira';
+    font-size: 15px;
+    color: black;
+    font-weight: 200;
+    margin-bottom: 35px;
+    align-self: flex-start;
+  }
+  .cancel-button
+{
+    width: 100px;
+    height: auto;
+    background-color: transparent;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Saira';
+    font-size: 16px;
+    color: black;
+    font-weight: 400;
+    padding: 5px 10px;
+  }
+  .buttons{
+    align-self: center;
+    margin-bottom: 10px;
+    gap: 20px;
+  }
+}
+
+/* Responsive 480*/
+@media only screen and (max-width: 480px) {
+    .deletemenu{
+        width: 300px;
+        height: auto;
+    }
+}

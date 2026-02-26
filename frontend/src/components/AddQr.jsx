@@ -253,8 +253,10 @@ export default function AddQr(props){
                         </div>
                         <p className='qr-userid'>ID: {props.userId}</p>
                     </div>
-                    <button className='btn-volver btnefect' onClick={handleVolver}>Atrás</button>
-                    <button className='cancel-addqr' onClick={handleCerrar}>Cerrar</button>
+                    <div className='QRsbtn'>
+                        <button className='btn-volver btnefect' onClick={handleVolver}>Atrás</button>
+                        <button className='cancel-addqr' onClick={handleCerrar}>Cerrar</button>
+                    </div>
                 </>
             )}
 
@@ -286,9 +288,10 @@ export default function AddQr(props){
                             ⏳ Vinculando...
                         </div>
                     )}
-
-                    <button className='btn-volver btnefect' onClick={handleVolver} disabled={loading}>Atrás</button>
-                    <button className='cancel-addqr' onClick={handleCerrar} disabled={loading}>Cerrar</button>
+                    <div className='QRsbtn'>
+                        <button className='btn-volver btnefect' onClick={handleVolver} disabled={loading}>Atrás</button>
+                        <button className='cancel-addqr' onClick={handleCerrar} disabled={loading}>Cerrar</button>
+                    </div>
                 </>
             )}
         </div>
