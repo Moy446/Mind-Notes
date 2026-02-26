@@ -16,6 +16,7 @@ import chatSocket from './sockets/chatSocket.js';
 import dbClient from './config/dbClient.js';
 import bodyParser from 'body-parser';
 import cookieCtrl from './helpers/cookiesControll.js';
+import enviarNotificaciones from './jobs/notificaciones.js';
 
 
 const app = express();
@@ -51,7 +52,7 @@ async function startServer() {
         throw new Error('SESSION_SECRET is required for express-session');
     }
 
-    // Configurar sesi3n para Passport
+    // Configurar sesion para Passport
     app.use(session({
         secret: sessionSecret,
         resave: false,
@@ -90,7 +91,8 @@ async function startServer() {
     
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
 
-
+    // Iniciar el job de notificaciones
+    enviarNotificaciones();
 
     // Routes
     app.use('/api', webRoutes);
