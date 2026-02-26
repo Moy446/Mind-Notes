@@ -124,13 +124,14 @@
     margin-left: 25%;
 }
 
-@media only screen and (max-width: 940px) {
+@media only screen and (max-width: 768px) {
     .infopsi{
+        display: contents;
         background-color: #F2EFE7;
-
     }
     .imgInfoPsi{
-        width: 35%;
+        width: 25%;
+        margin-bottom: 10px;
     }
     .svgInfopsi{
         width: 10%;
@@ -157,3 +158,4 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+

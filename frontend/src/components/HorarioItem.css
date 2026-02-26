@@ -5,7 +5,7 @@
     align-self: center;
     font-family: 'Saira';
     font-weight: 400;
-    font-size: 13px;
+    font-size: 20px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -34,5 +34,47 @@
   src: url('../fonts/Saira.ttf') format('truetype');
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900; 
+  font-weight: 100 900;
+}
+
+/*  */
+@media (max-width: 1024px) {
+
+    .horarioItem {
+        font-size: 20px;
+    }
+
+    .showTime,
+    .hideTime {
+        width: 65%;
+    }
+
+}
+/*  */
+@media (max-width: 768px) {
+
+    .horarioItem {
+        font-size: 20px;
+    }
+
+    .showTime,
+    .hideTime {
+        width: 70%;
+    }
+
+}
+/*  */
+@media (max-width: 480px) {
+
+    .horarioItem {
+        width: 80%;
+        font-size: 20px;
+        margin-right: -20vw;
+    }
+
+    .showTime,
+    .hideTime {
+        width: 5%;
+    }
+
 }

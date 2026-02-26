@@ -32,3 +32,34 @@
     transform: translateY(740px) translateX(125px);
     z-index: 100; 
 }
+
+/* Responsive 768 */
+@media only screen and (max-width: 768px) {
+    .showUID{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-20%, 100%);
+    }
+    .showQr{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); 
+    }
+}
+/* Responsive 480 */
+@media only screen and (max-width: 480px) {
+    .showUID{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, 100%);
+    }
+    .showQr{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); 
+    }
+}

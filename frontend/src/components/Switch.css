@@ -43,3 +43,10 @@ input[type='checkbox']:checked + .div-switch
     position: absolute;
     left: -9999999999999999999px;
 }
+
+/* ------------------------------------------------------------------------------------------------------------------------------------ */
+/* @media (max-width: 768px) {
+    .div-switchContainer{
+        width: 99%;
+    }
+} */

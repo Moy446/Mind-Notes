@@ -2,6 +2,7 @@ import express from 'express';
 import UserController from '../controllers/usuarioController.js';
 import protector from '../helpers/routesProtect.js';
 import chatController from '../controllers/chatController.js';
+import calendarController from "../controllers/calendarioController.js";
 
 const router = express.Router();
 
@@ -23,6 +24,9 @@ router.post('/vincularPsicologo/:idPaciente', protector, UserController.vincular
 router.get('/pacientes/:idPsicologo', protector, UserController.obtenerPacientesVinculados);
 router.get('/psicologos/:idPaciente', protector, UserController.obtenerPsicologosVinculados);
 router.get('/mensajes/:idPsicologo/:idPaciente', protector, chatController.obtenerMensajes);
+
+//confirmar cita
+router.get('/confirmar-cita/:id', calendarController.confirmarCita);
 
 //Rutas de autenticación
 router.get('/me', protector, UserController.getMe);

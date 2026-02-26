@@ -8,7 +8,7 @@ import BubbleChat from './components/BubbleChat';
 import SupportMenu from './components/SupportMenu';
 import InfoPsi from './components/InfoPsi';
 import DeleteMenu from './components/DeleteMenu';
-import SuppPsi from './components/SuppPsi';
+import SuppPa from './components/SuppPa';
 import { useOutletContext, useParams } from 'react-router-dom';
 import socket from './services/socketService'; // NUEVO: Import del socket
 import { AuthContext } from './context/AuthContext';
@@ -142,21 +142,27 @@ export default function ChatPsiF(props){
             setPatientData({});
         }
     }
+    const handleOpenChatSelector = useCallback(() => {
+        setSelectedChat(null);
+        setOpenInfo(false);
+    }, []);
 
     return(
         <div className='chatPsiF'>  
-            <ChatSelector 
-                qrOpen={qrOpen} 
-                handleOpen={handleOpen} 
-                uidOpen={uidOpen} 
-                handleOpenUID={handleOpenUID}
-                onSelectChat={handleSelectChat} // NUEVO: Pasar función de selección
-                refreshKey={refreshKey}
-            />
-            <div className='nameVarCon'>
-                {selectedChat && <NameBar img = {image} name ={n} open = {infoOpen} handleOpen={handleOpenInfo}/>}
+            <div className={`sidebar ${selectedChat ? 'hidden-movile' : ''}`}>
+                <ChatSelector 
+                    qrOpen={qrOpen} 
+                    handleOpen={handleOpen} 
+                    uidOpen={uidOpen} 
+                    handleOpenUID={handleOpenUID}
+                    onSelectChat={handleSelectChat} // NUEVO: Pasar función de selección
+                    refreshKey={refreshKey}
+                />
+            </div>
+            <div className={`nameVarCon ${!selectedChat ? 'hidden-movile' : ''}`}>
+                {selectedChat && <NameBar img={image} name={n} open={infoOpen} handleOpen={handleOpenInfo} openChat = {handleOpenChatSelector} />}
                 <div className='chatCon'>
-                    <div className='chatView'>
+                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`}>
                         <div className='bubbles'>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
                             {!selectedChat ? (
@@ -205,12 +211,10 @@ export default function ChatPsiF(props){
                     </div>
                     <div className={infoOpen ? '' : 'hiddeInfo'}>
                         {suppInfoOpen 
-                            ? <SuppPsi 
+                            ? <SuppPa 
                                 suppInfO = {suppInfoOpen} 
                                 handleSuppInfo = {handleOpenInfoSupp} 
-                                expedientes = {patientData.expedientes} 
                                 materialAdjunto = {patientData.materialAdjunto} 
-                                grabaciones = {patientData.grabaciones}
                                 />
                             : <InfoPsi 
                                 img = {image} 

@@ -52,3 +52,77 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+
+/* ------------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+
+    .chatbox,
+    .chatbox-activo {
+        height: 80px;
+    }
+
+    .text-chatbox-name {
+        font-size: 22px;
+    }
+
+    .text-chatbox-message {
+        font-size: 18px;
+    }
+
+    .img-chatbox {
+        margin-left: 12px;
+        max-height: 75%;
+    }
+
+    .div-textchatbox {
+        margin-left: 12px;
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+    .chatbox,
+    .chatbox-activo {
+        height: 75px;
+    }
+
+    .text-chatbox-name {
+        font-size: 20px;
+    }
+
+    .text-chatbox-message {
+        font-size: 16px;
+    }
+
+    .img-chatbox {
+        margin-left: 10px;
+        max-height: 70%;
+    }
+
+    .div-textchatbox {
+        margin-left: 10px;
+    }
+}
+
+/* ------------------------------------------------------------------------------------------------------------------------------------- */
+/* @media (max-width: 480px) {
+
+    .chatbox,
+    .chatbox-activo {
+        height: 70px;
+    }
+
+    .text-chatbox-name {
+        font-size: 18px;
+    }
+
+    .text-chatbox-message {
+        font-size: 15px;
+    }
+
+    .img-chatbox {
+        max-height: 65%;
+    }
+} */
+

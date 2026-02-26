@@ -176,3 +176,114 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+
+    .meetMenu {
+        width: 600px;
+        height: auto;
+        padding-left: 60px;
+        padding-right: 60px;
+        padding-top: 35px;
+    }
+
+    .btnMeet {
+        font-size: 22px;
+        height: 56px;
+        margin-bottom: 3vw;
+        margin-top: -5vw;
+    }
+
+    .custom-selectM,
+    .dateIn {
+        height: 56px;
+    }
+
+    .avatarM {
+        width: 10%;
+        height: 10%;
+    }
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+/* -----------------------------------------------------------------------------------------------------------------------------------  */
+@media (max-width: 768px) {
+
+    .meetMenu {
+        width: 90%;
+        height: auto;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 30px;
+    }
+
+    div.meetMenu{
+        width: 100%;
+    }
+
+    .meetbtns {
+        gap: 15px;
+    }
+
+    .btnMeet {
+        width: 48%;
+        height: 54px;
+        font-size: 20px;
+    }
+
+    .custom-selectM,
+    .dateIn {
+        height: 54px;
+    }
+
+    .avatarM {
+        width: 12%;
+        height: 12%;
+    }
+
+    .marginDivTime {
+        margin-bottom: 50px;
+    }
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+
+    .meetMenu {
+        width: 95%;
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 30px;
+    }
+
+    div.meetMenu{
+        width: 100%;
+    }
+
+    .meetbtns {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btnMeet {
+        width: 95%;
+        height: 52px;
+        font-size: 18px;
+        margin-top: -3vw;
+    }
+
+    .custom-selectM,
+    .dateIn {
+        height: 52px;
+    }
+
+    .avatarM {
+        width: 14%;
+        height: 14%;
+    }
+
+    .marginDivTime {
+        margin-bottom: 35px;
+    }
+}
+
