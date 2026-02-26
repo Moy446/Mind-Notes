@@ -98,3 +98,59 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+/* @media (max-width: 1024px) {
+.paTitle
+{
+    font-size: 30px;
+    text-align: left;
+    justify-content: space-between;
+}
+
+.perfilInfo
+{
+    width: 80%;
+    margin: 1vw;
+}
+
+.imgPerfilPa
+{
+    width: 25vw;
+    height: 25vw;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.svgimgPerfilPa
+{
+    position: absolute;   
+    bottom: 0px;
+    right: 230px;
+}
+
+.svgPerfilPa
+{
+    border-radius: 10px;
+    width: 40px;
+    height: 40px;
+}
+
+.svgPerfilPa:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.svgPerfilPa:active {
+  transform: translateY(0);
+}
+
+} */
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+
+
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
