@@ -28,13 +28,14 @@
 
 .chatView
 {
-    height: 100vh;
+    height: 100%;
     width: 100%;
     margin: 0;
     background-color: #F2EFE7;
     padding-left: 20px;
     padding-right: 20px;
-    padding-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 63px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -73,7 +74,7 @@
     flex-grow: 1;
     min-height: 0;
     overflow-y: auto;
-    max-height: 88%;
+    padding-bottom: 20px;
 }
 
 .bubbles::-webkit-scrollbar

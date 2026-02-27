@@ -64,6 +64,21 @@ class Chat {
             throw new Error('Error al insertar los materiales adjuntos: ' + error.message);
         }   
     }
+
+    async eliminarMaterialAdjunto(idPsicologo, idPaciente, archivoId) {
+        try {
+            const resultado = await this.colChat.updateOne({
+                idPaciente: new ObjectId(idPaciente),
+                idPsicologo: new ObjectId(idPsicologo)
+            }, {
+                $pull: { materialAdjunto: { _id: new ObjectId(archivoId) }}
+            });
+            return resultado;
+        } catch (error) {
+            throw new Error('Error al eliminar los materiales adjuntos: ' + error.message);
+        }
+    }
+
     async insertExpediente(idPsicologo,idPaciente, expedientePath){
         try {
             const resultado = await this.colChat.updateOne({

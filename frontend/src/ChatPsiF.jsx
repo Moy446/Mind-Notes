@@ -5,14 +5,16 @@ import NameBar from './components/NameBar';
 import ChatSelector from './components/ChatSelector';
 import MessageField from './components/MessageField';
 import BubbleChat from './components/BubbleChat';
+import ArchivoItem from './components/ArchivoItem';
 import SupportMenu from './components/SupportMenu';
 import InfoPsi from './components/InfoPsi';
 import DeleteMenu from './components/DeleteMenu';
 import SuppPsi from './components/SuppPsi';
 import { useOutletContext, useParams } from 'react-router-dom';
-import socket from './services/socketService'; // NUEVO: Import del socket
+import socket from './services/socketService';
 import { AuthContext } from './context/AuthContext';
-import { obtenerPacientesVinculados , obtenerMensajes } from './services/vinculacionService';
+import { obtenerPacientesVinculados } from './services/vinculacionService';
+import { obtenerMensajes, obtenerInformacionChat } from './services/chatService';
 import clienteAxios from './services/axios';
 import { tr } from 'framer-motion/client';
 
@@ -29,6 +31,7 @@ export default function ChatPsiF(props){
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState('/src/images/pimg2.png');
     const [patientData, setPatientData] = useState({});
+    const [archivos, setArchivos] = useState([]);
 
     const fetchSelectedName = useCallback(async () => {
         if (!selectedChat) {
@@ -110,6 +113,16 @@ export default function ChatPsiF(props){
         }
     }, [selectedChat, idUser]);
 
+    // Auto-scroll al final de los mensajes
+    useEffect(() => {
+        const bubblesContainer = document.querySelector('.bubbles');
+        if (bubblesContainer) {
+            setTimeout(() => {
+                bubblesContainer.scrollTop = bubblesContainer.scrollHeight;
+            }, 0);
+        }
+    }, [messages]);
+
     // NUEVO: Función para enviar mensajes
     const handleSendMessage = (message) => {
         if (message.trim() && selectedChat) {
@@ -138,13 +151,25 @@ export default function ChatPsiF(props){
     const getInformationChat = async (pacienteId) => {
         try {
             const idPsicologo = id;
-            const response = await clienteAxios.get(`/chat/info/${idPsicologo}/${pacienteId}`);
-            setPatientData(response.data.patientData);
+            const response = await obtenerInformacionChat(idPsicologo, pacienteId);
+            setPatientData(response.patientData);
+            setArchivos(response.patientData.materialAdjunto || []);
         } catch (error) {
             console.error('Error al obtener la información del chat:', error);
             setPatientData({});
+            setArchivos([]);
         }
     }
+
+    const handleArchivoSubido = (nuevoArchivo) => {
+        if (selectedChat) {
+            getInformationChat(selectedChat);
+        }
+    };
+
+    const handleArchivoEliminado = (archivoId) => {
+        setArchivos(archivos.filter(a => a._id !== archivoId));
+    };
 
     const handleOpenChatSelector = useCallback(() => {
         setSelectedChat(null);
@@ -166,8 +191,8 @@ export default function ChatPsiF(props){
             <div className={`nameVarCon ${!selectedChat ? 'hidden-movile' : ''}`}>
                 {selectedChat && <NameBar img={image} name={n} open={infoOpen} handleOpen={handleOpenInfo} openChat = {handleOpenChatSelector} />}
                 <div className='chatCon'>
-                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`}>
-                        <div className='bubbles'>
+                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <div className='bubbles' style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', flex: 1 }}>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
                             {!selectedChat ? (
                                 <div style={{
@@ -209,7 +234,13 @@ export default function ChatPsiF(props){
                                 onSendMessage={handleSendMessage} // NUEVO: Pasar función de envío
                             />}
                             <div className={suppOpen ? 'showSuppMenu' : 'hideSuppMenu'}>
-                                <SupportMenu suppOpen={suppOpen} handleOpen={handleOpenSupp} />
+                                <SupportMenu 
+                                    suppOpen={suppOpen} 
+                                    handleOpen={handleOpenSupp}
+                                    idPsicologo={idUser}
+                                    idPaciente={selectedChat}
+                                    onFileUploaded={handleArchivoSubido}
+                                />
                             </div>
                         </div>
                     </div>
