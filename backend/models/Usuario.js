@@ -381,6 +381,18 @@ class Usuario {
             throw new Error('Error al actualizar suscripcion: ' + error.message);
         }
     }
+
+    async cambiarFotoPerfil(idUsuario, nuevaFotoPath){
+        try {
+            const resultado = await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { fotoPerfil: nuevaFotoPath } }
+            );
+            return resultado.modifiedCount > 0;
+        } catch (error) {
+            throw new Error('Error al cambiar foto de perfil: ' + error.message);
+        }
+    }
 }
 
 // Exportar la clase Usuario 
