@@ -42,3 +42,25 @@ export const obtenerPerfil = async (userId) => {
         throw error;
     }
 };
+
+// Funcion obtener horario de un psicologo
+export const obtenerHorario = async (userId) => {
+    try {
+        const response = await axios.get(`/psicologo/horario/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener horario:', error);
+        throw error;
+    }
+};
+
+// Función para actualizar el horario del psicólogo
+export const actualizarHorario = async (userId, horario) => {
+    try {
+        const response = await axios.post(`/psicologo/horario`, { horario });
+        return response.data;
+    } catch (error) {
+        console.error('Error al actualizar horario:', error);
+        throw error;
+    }
+};

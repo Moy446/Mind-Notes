@@ -643,9 +643,73 @@ class UsuarioController {
         }   
     }
 
-    /**
-     * Obtener perfil del usuario
-     */
+    //Guadar Horario del psicologo
+    async guardarHorario(req,res){
+        const usuarioModel = new Usuario();
+        try {
+            const idUsuario = req.user?.idUsuario;
+            const { horario } = req.body;
+        if (!idUsuario || !horario) {
+            return res.status(400).json({
+                success: false,
+                message: 'ID de usuario y horario son requeridos'
+            });
+        }
+        const ok = await usuarioModel.actualizarPerfil(idUsuario, {horario});
+        if (ok) {
+            return res.status(200).json({
+                success: true,
+                message: 'Horario guardado exitosamente'
+            });
+        } else {
+            console.error('Error al guardar el horario: No se pudo actualizar el perfil');  
+            return res.status(400).json({
+                success: false,
+                message: 'No se pudo guardar el horario'
+            });
+        }
+        } catch (error) {
+            console.error('Error al guardar el horario:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al guardar el horario: ' + error.message
+            });
+        }
+    }
+    // Obtener el horario de un psicólogo
+    async obtenerHorario(req, res) {
+        const usuarioModel = new Usuario();
+        try {
+            const idUsuario = req.params.idUsuario;
+            if (!idUsuario) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'ID de usuario es requerido'
+                });
+            }
+            const horario = await usuarioModel.obtenerHorario(idUsuario);
+            if (horario) {
+                return res.status(200).json({
+                    success: true,
+                    data: {
+                        horario: horario
+                    }
+                });
+            } else {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Horario no encontrado para el usuario'
+                });
+            }
+        } catch (error) {
+            console.error('Error al obtener horario:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener horario: ' + error.message
+            });
+        }
+    }
+    // Obtener perfil de un usuario por ID
     async obtenerPerfil(req, res) {
         try {
             const { id } = req.params;

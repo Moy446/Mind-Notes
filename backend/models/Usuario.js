@@ -53,8 +53,9 @@ class Usuario {
                     estado: 'inactiva',
                     fechaInicio: null,
                     fechaFin: null,
-                    stripeSubscriptionId: null
+                    stripeSubscriptionId: null,
                 };
+                usuario.horario = datosUsuario.horario || null;
                 
             } 
             // Campos específicos de Paciente
@@ -311,6 +312,9 @@ class Usuario {
             if (datosActualizar.apellido !== undefined) {
                 camposPermitidos.apellido = datosActualizar.apellido;
             }
+            if (datosActualizar.horario !== undefined) {
+            camposPermitidos.horario = datosActualizar.horario;
+            }
 
             if (Object.keys(camposPermitidos).length === 0) {
                 throw new Error('No hay campos para actualizar');
@@ -382,6 +386,16 @@ class Usuario {
         }
     }
 
+    // funcion obtener horario de un psicologo
+    async obtenerHorario(idUsuario) {
+        try {   
+            const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
+            return usuario ? usuario.horario : null;
+        } catch (error) {
+            throw new Error('Error al obtener el horario: ' + error.message);
+        }   
+    }
+    
     async cambiarFotoPerfil(idUsuario, nuevaFotoPath){
         try {
             const resultado = await this.colUsuarios.updateOne(

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { descargarArchivo, eliminarArchivo } from '../services/chatService';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal from 'sweetalert2';
 
 export default function ArchivoItem({ archivo, idPsicologo, idPaciente, onDelete }) {
     const [isDeleting, setIsDeleting] = useState(false);

@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
+import Tooltipe from './components/Tooltipe'
 import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
@@ -243,6 +244,7 @@ export default function Login() {
                     </div>
 
                     <div className='inputBox'>
+                        <Tooltipe text="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales como @, $, !, %, *, ?, &">
                         <input 
                             type="password" 
                             placeholder='Contraseña' 
@@ -250,6 +252,7 @@ export default function Login() {
                             value={registerPassword}
                             onChange={(e) => setRegisterPassword(e.target.value)}
                         />
+                        </Tooltipe>
                     </div>
 
                     <div className='inputBox'>

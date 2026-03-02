@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import Swal from 'sweetalert2';
 import './SupportMenu.css'
 import { subirArchivo } from '../services/chatService';
 

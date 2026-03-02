@@ -24,6 +24,8 @@ router.post('/vincularPsicologo/:idPaciente', protector, UserController.vincular
 router.get('/pacientes/:idPsicologo', protector, UserController.obtenerPacientesVinculados);
 router.get('/psicologos/:idPaciente', protector, UserController.obtenerPsicologosVinculados);
 router.get('/mensajes/:idPsicologo/:idPaciente', protector, chatController.obtenerMensajes);
+router.post('/psicologo/horario', protector, UserController.guardarHorario);
+router.get('/psicologo/horario/:idUsuario', protector, UserController.obtenerHorario);
 
 //confirmar cita
 router.get('/confirmar-cita/:id', calendarController.confirmarCita);
