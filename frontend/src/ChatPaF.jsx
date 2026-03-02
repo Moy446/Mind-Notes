@@ -22,6 +22,7 @@ export default function ChatPsiF(props){
     const {qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey} = useOutletContext();
     const { id } = useParams(); // NUEVO: Obtener el ID del chat de la URL
     const { user } = useContext(AuthContext); // Obtén el usuario del contexto
+    
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
@@ -31,6 +32,9 @@ export default function ChatPsiF(props){
     const [image, setImage] = useState('/src/images/pimg2.png');
     const [patientData, setPatientData] = useState({});
     const [archivos, setArchivos] = useState([]);
+    const nombreMostrado = n !== 'Usuario no seleccionado'
+        ? n
+        : (patientData?.nombre || 'Usuario no seleccionado');
 
     const fetchSelectedName = useCallback(async () => {
     if(!selectedChat) {
@@ -264,7 +268,7 @@ export default function ChatPsiF(props){
                                 />
                             : <InfoPsi 
                                 img = {image} 
-                                name = {patientData.nombre} 
+                                name = {nombreMostrado} 
                                 materialAdjunto = {patientData.materialAdjunto}
                                 open = {infoOpen} handleOpen = {handleOpenInfo} 
                                 del = {delOpen} handleDel = {handleOpenDel} 
@@ -273,7 +277,7 @@ export default function ChatPsiF(props){
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${patientData.nombre}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
+                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
                     </div>
                 </div>
             </div>

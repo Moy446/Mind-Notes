@@ -32,7 +32,10 @@ export default function ChatPsiF(props) {
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState('/src/images/pimg2.png');
     const [patientData, setPatientData] = useState({});
-    const [archivos, setArchivos] = useState([]);
+    const [archivos, setArchivos] = useState([]);;
+    const nombreMostrado = n !== 'Usuario no seleccionado'
+        ? n
+        : (patientData?.nombre || 'Usuario no seleccionado');
 
 const fetchSelectedName = useCallback(async () => {
     if (!selectedChat) {
@@ -271,7 +274,7 @@ const fetchSelectedName = useCallback(async () => {
                             />
                             : <InfoPsi
                                 img={image}
-                                name={patientData.nombre}
+                                name={nombreMostrado}
                                 materialAdjunto={patientData.materialAdjunto}
                                 open={infoOpen} handleOpen={handleOpenInfo}
                                 del={delOpen} handleDel={handleOpenDel}
@@ -280,7 +283,7 @@ const fetchSelectedName = useCallback(async () => {
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title={`¿Esta seguro de eliminar al paciente ${patientData.nombre}? `} subtitle="Todos los datos se perderan" del={delOpen} handleDel={handleOpenDel} />
+                        <DeleteMenu title={`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} subtitle="Todos los datos se perderan" del={delOpen} handleDel={handleOpenDel} />
                     </div>
                 </div>
             </div>

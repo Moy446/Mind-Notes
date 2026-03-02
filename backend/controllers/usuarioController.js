@@ -764,16 +764,18 @@ class UsuarioController {
 
             // ELIMINAR FOTO ANTERIOR SI EXISTE
             if (usuario?.fotoPerfil && !usuario.fotoPerfil.startsWith('http')) {
+                console.log('Intentando eliminar foto anterior:', usuario.fotoPerfil);
                 const fotoAnterior = path.join(path.resolve(), usuario.fotoPerfil);
 
-                if (fs.existsSync(fotoAnterior)) {
-                    try {
-                        fs.unlinkSync(fotoAnterior);
-                    } catch (err) {
-                        console.error('Error al eliminar foto anterior:', err);
-                    }
+               try {
+                await fs.promises.unlink(fotoAnterior);
+                console.log('Foto anterior eliminada:', fotoAnterior);
+               } catch (error) {
+                if(error.code === 'ENOENT') {
+                    console.warn('Foto anterior no encontrada, no se pudo eliminar:', fotoAnterior);
                 }
             }
+        }
 
             const relativePath = path.relative(path.resolve(), req.file.path).replace(/\\/g, '/');
             const actualizado = await usuarioModel.cambiarFotoPerfil(idUsuario, relativePath);

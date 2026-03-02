@@ -294,9 +294,7 @@ export default function Login() {
                         </button>
                     </div>
 
-                    <button type='submit' className='btn register' disabled={registerLoading}>
-                        {registerLoading ? 'Registrando...' : 'Registrarse'}
-                    </button>
+                    
                 </form>
             </div>
 
