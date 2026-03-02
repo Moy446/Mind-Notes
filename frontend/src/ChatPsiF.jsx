@@ -17,10 +17,11 @@ import { obtenerPacientesVinculados } from './services/vinculacionService';
 import { obtenerMensajes, obtenerInformacionChat } from './services/chatService';
 import clienteAxios from './services/axios';
 import { tr } from 'framer-motion/client';
+import { getImageUrl } from './utils/imageHelper';
 
-export default function ChatPsiF(props){
+export default function ChatPsiF(props) {
 
-    const { qrOpen, handleOpen, uidOpen, handleOpenUID, refreshKey} = useOutletContext();
+    const { qrOpen, handleOpen, uidOpen, handleOpenUID, refreshKey } = useOutletContext();
     const { id } = useParams(); // NUEVO: Obtener el ID del chat de la URL
     const { user } = useContext(AuthContext); // Obtén el usuario del contexto
 
@@ -33,21 +34,36 @@ export default function ChatPsiF(props){
     const [patientData, setPatientData] = useState({});
     const [archivos, setArchivos] = useState([]);
 
-    const fetchSelectedName = useCallback(async () => {
-        if (!selectedChat) {
+const fetchSelectedName = useCallback(async () => {
+    if (!selectedChat) {
+        setN('Usuario no seleccionado');
+        setImage('/src/images/pimg2.png');
+        return;
+    }
+    try {
+        const data = await obtenerPacientesVinculados(idUser);
+        const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+        const paciente = lista.find(p => p.idPaciente === selectedChat);
+        
+        if (paciente) {
+            setN(paciente.nombrePaciente || paciente?.nombre);
+            
+            // Normalizar la foto: si no empieza con http ni con /, construir URL completa
+            let fotoUrl = paciente.fotoPerfilPaciente || '/src/images/pimg2.png';
+            if (fotoUrl && fotoUrl !== '/src/images/pimg2.png' && !fotoUrl.startsWith('http') && !fotoUrl.startsWith('/')) {
+                fotoUrl = `http://localhost:5000/${fotoUrl}`;
+            }
+            setImage(fotoUrl);
+        } else {
             setN('Usuario no seleccionado');
-            return;
+            setImage('/src/images/pimg2.png');
         }
-        try {
-            const data = await obtenerPacientesVinculados(idUser);
-            const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
-            const paciente = lista.find(p => p.idPaciente === selectedChat);
-            setN(paciente ? paciente.nombrePaciente || paciente?.nombre : 'Usuario no seleccionado');
-            setImage(paciente ? paciente.fotoPerfilPaciente : '/src/images/pimg2.png');
-        } catch (error) {
-            setN('Usuario no seleccionado');
-        }
-    }, [idUser, selectedChat]);
+    } catch (error) {
+        console.error('Error al obtener pacientes:', error);
+        setN('Usuario no seleccionado');
+        setImage('/src/images/pimg2.png');
+    }
+}, [idUser, selectedChat]);
 
 
     useEffect(() => {
@@ -189,7 +205,7 @@ export default function ChatPsiF(props){
                 />
             </div>
             <div className={`nameVarCon ${!selectedChat ? 'hidden-movile' : ''}`}>
-                {selectedChat && <NameBar img={image} name={n} open={infoOpen} handleOpen={handleOpenInfo} openChat = {handleOpenChatSelector} />}
+                {selectedChat && <NameBar img={image} name={n} open={infoOpen} handleOpen={handleOpenInfo} openChat={handleOpenChatSelector} />}
                 <div className='chatCon'>
                     <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <div className='bubbles' style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', flex: 1 }}>
@@ -234,8 +250,8 @@ export default function ChatPsiF(props){
                                 onSendMessage={handleSendMessage} // NUEVO: Pasar función de envío
                             />}
                             <div className={suppOpen ? 'showSuppMenu' : 'hideSuppMenu'}>
-                                <SupportMenu 
-                                    suppOpen={suppOpen} 
+                                <SupportMenu
+                                    suppOpen={suppOpen}
                                     handleOpen={handleOpenSupp}
                                     idPsicologo={idUser}
                                     idPaciente={selectedChat}

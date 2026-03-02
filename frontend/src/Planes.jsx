@@ -3,6 +3,7 @@ import './Planes.css'
 import SubBtn from './components/SubBtn';
 import EliminarBtn from './components/EliminarBtn';
 import { AuthContext } from './context/AuthContext';
+import Swal from 'sweetalert2';
 
 export default function PerfilPsiF(props) {
     const [loading, setLoading] = useState(false);
@@ -40,10 +41,18 @@ export default function PerfilPsiF(props) {
                 return;
             }
 
-            alert(data.error || 'No se pudo iniciar el pago');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al iniciar el pago',
+                text: data.error || 'No se pudo iniciar el pago'
+            });
         } catch (error) {
             console.error('Error al crear sesion de pago:', error);
-            alert('Error al procesar el pago');
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al procesar el pago',
+                text: 'Ocurrió un error al procesar el pago'
+            });
         } finally {
             setLoading(false);
         }

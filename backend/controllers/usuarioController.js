@@ -8,6 +8,9 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import 'dotenv/config';
 import { li } from "framer-motion/client";
+import path from 'path';
+import fs from 'fs';
+
 
 class UsuarioController {
 
@@ -139,9 +142,9 @@ class UsuarioController {
 
             // Verificar que la cuenta esté verificada
             if (!usuario.verificado) {
-                return res.status(403).json({ 
-                    success: false, 
-                    message: 'Debes verificar tu correo antes de acceder' 
+                return res.status(403).json({
+                    success: false,
+                    message: 'Debes verificar tu correo antes de acceder'
                 });
             }
 
@@ -240,9 +243,9 @@ class UsuarioController {
 
             // Verificar que la cuenta esté verificada
             if (!usuario.verificado) {
-                return res.status(403).json({ 
-                    success: false, 
-                    message: 'Debes verificar tu correo antes de acceder' 
+                return res.status(403).json({
+                    success: false,
+                    message: 'Debes verificar tu correo antes de acceder'
                 });
             }
 
@@ -318,7 +321,7 @@ class UsuarioController {
         const idPsicologo = req.params.idPsicologo;
         const { idPaciente } = req.body;
         const listaVinculacionModel = new ListaVinculacion();
-        
+
         try {
             // Validar que ambos IDs estén presentes
             if (!idPsicologo || !idPaciente) {
@@ -327,7 +330,7 @@ class UsuarioController {
                     message: 'ID del psicólogo y del paciente son requeridos'
                 });
             }
-            
+
             // Validar que no exista vinculación previa
             const vinculacionExistente = await listaVinculacionModel.findVinculacion(idPsicologo, idPaciente);
             if (vinculacionExistente) {
@@ -344,7 +347,7 @@ class UsuarioController {
             });
         } catch (error) {
             console.error('Error en vincularPacientes:', error);
-            
+
             // Validar si es un error por ID inválido
             if (error.message.includes('ID') || error.message.includes('inválido')) {
                 return res.status(400).json({
@@ -352,7 +355,7 @@ class UsuarioController {
                     message: error.message
                 });
             }
-            
+
             res.status(500).json({
                 success: false,
                 message: 'Error al vincular el paciente: ' + error.message
@@ -367,7 +370,7 @@ class UsuarioController {
         const idPaciente = req.params.idPaciente;
         const { idPsicologo } = req.body;
         const listaVinculacionModel = new ListaVinculacion();
-        
+
         try {
             // Validar que ambos IDs estén presentes
             if (!idPaciente || !idPsicologo) {
@@ -376,7 +379,7 @@ class UsuarioController {
                     message: 'ID del paciente y del psicólogo son requeridos'
                 });
             }
-            
+
             // Validar que no exista vinculación previa
             const vinculacionExistente = await listaVinculacionModel.findVinculacion(idPsicologo, idPaciente);
             if (vinculacionExistente) {
@@ -393,7 +396,7 @@ class UsuarioController {
             });
         } catch (error) {
             console.error('Error en vincularPsicologo:', error);
-            
+
             // Validar si es un error por ID inválido
             if (error.message.includes('ID') || error.message.includes('inválido')) {
                 return res.status(400).json({
@@ -401,7 +404,7 @@ class UsuarioController {
                     message: error.message
                 });
             }
-            
+
             res.status(500).json({
                 success: false,
                 message: 'Error al vincular el psicologo: ' + error.message
@@ -493,7 +496,7 @@ class UsuarioController {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
             res.clearCookie('connect.sid'); // Cookie de sesión de Passport
-            
+
             // Logout de Passport si el usuario está autenticado
             if (typeof req.logout === 'function' && req.session) {
                 req.logout((err) => {
@@ -511,7 +514,7 @@ class UsuarioController {
                     }
                 });
             }
-            
+
             res.status(200).json({ success: true, message: 'Sesión cerrada' });
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
@@ -564,9 +567,9 @@ class UsuarioController {
 
             // Validar que el usuario esté actualizando su propio perfil
             if (userIdFromToken !== id.toString()) {
-                return res.status(403).json({ 
-                    success: false, 
-                    message: 'No tienes permiso para actualizar este perfil' 
+                return res.status(403).json({
+                    success: false,
+                    message: 'No tienes permiso para actualizar este perfil'
                 });
             }
 
@@ -576,9 +579,9 @@ class UsuarioController {
             if (datosActualizar.email) {
                 const emailExistente = await usuarioModel.findByEmail(datosActualizar.email);
                 if (emailExistente && emailExistente.idUsuario.toString() !== id) {
-                    return res.status(400).json({ 
-                        success: false, 
-                        message: 'El correo ya está en uso' 
+                    return res.status(400).json({
+                        success: false,
+                        message: 'El correo ya está en uso'
                     });
                 }
             }
@@ -589,8 +592,8 @@ class UsuarioController {
 
             if (actualizado) {
                 const usuarioActualizado = await usuarioModel.findById(id);
-                return res.status(200).json({ 
-                    success: true, 
+                return res.status(200).json({
+                    success: true,
                     message: 'Perfil actualizado exitosamente',
                     data: {
                         id: usuarioActualizado.idUsuario,
@@ -602,17 +605,17 @@ class UsuarioController {
                     }
                 });
             } else {
-                return res.status(400).json({ 
-                    success: false, 
-                    message: 'No se pudo actualizar el perfil' 
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar el perfil'
                 });
             }
 
         } catch (error) {
             console.error('Error al actualizar perfil:', error);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error al actualizar perfil: ' + error.message 
+            return res.status(500).json({
+                success: false,
+                message: 'Error al actualizar perfil: ' + error.message
             });
         }
     }
@@ -624,9 +627,9 @@ class UsuarioController {
             const listaVinculacionModel = new ListaVinculacion();
             const actualizado = await listaVinculacionModel.actualizarVinculacion(idPsicologo, idPaciente);
 
-            if (actualizado) {  
-                return res.status(200).json({ 
-                    success: true, 
+            if (actualizado) {
+                return res.status(200).json({
+                    success: true,
                     message: 'Lista de vinculacion actualizada exitosamente'
                 });
             } else {
@@ -634,40 +637,40 @@ class UsuarioController {
                     success: false,
                     message: 'No se pudo actualizar la lista de vinculacion'
                 });
-            }   
+            }
         } catch (error) {
             return res.status(500).json({
                 success: false,
                 message: 'Error al actualizar lista de vinculacion: ' + error.message
             });
-        }   
+        }
     }
 
     //Guadar Horario del psicologo
-    async guardarHorario(req,res){
+    async guardarHorario(req, res) {
         const usuarioModel = new Usuario();
         try {
             const idUsuario = req.user?.idUsuario;
             const { horario } = req.body;
-        if (!idUsuario || !horario) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID de usuario y horario son requeridos'
-            });
-        }
-        const ok = await usuarioModel.actualizarPerfil(idUsuario, {horario});
-        if (ok) {
-            return res.status(200).json({
-                success: true,
-                message: 'Horario guardado exitosamente'
-            });
-        } else {
-            console.error('Error al guardar el horario: No se pudo actualizar el perfil');  
-            return res.status(400).json({
-                success: false,
-                message: 'No se pudo guardar el horario'
-            });
-        }
+            if (!idUsuario || !horario) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'ID de usuario y horario son requeridos'
+                });
+            }
+            const ok = await usuarioModel.actualizarPerfil(idUsuario, { horario });
+            if (!ok) {
+                console.error('Error al guardar el horario: No se pudo actualizar el perfil');
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo guardar el horario'
+                });
+            } else {
+                return res.status(200).json({
+                    success: true,
+                    message: 'Horario guardado exitosamente'
+                });
+            }
         } catch (error) {
             console.error('Error al guardar el horario:', error);
             return res.status(500).json({
@@ -718,14 +721,14 @@ class UsuarioController {
             const usuario = await usuarioModel.findById(id);
 
             if (!usuario) {
-                return res.status(404).json({ 
-                    success: false, 
-                    message: 'Usuario no encontrado' 
+                return res.status(404).json({
+                    success: false,
+                    message: 'Usuario no encontrado'
                 });
             }
 
-            return res.status(200).json({ 
-                success: true, 
+            return res.status(200).json({
+                success: true,
                 data: {
                     id: usuario.idUsuario,
                     nombre: usuario.nombre,
@@ -738,12 +741,67 @@ class UsuarioController {
             });
         } catch (error) {
             console.error('Error al obtener perfil:', error);
-            return res.status(500).json({ 
-                success: false, 
-                message: 'Error al obtener perfil: ' + error.message 
+            return res.status(500).json({
+                success: false,
+                message: 'Error al obtener perfil: ' + error.message
             });
         }
     }
+
+    // Actualizar foto de perfil
+    async cambiarFotoPerfil(req, res) {
+        try {
+            const idUsuario = req.user?.idUsuario;
+            if (!req.file) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se proporcionó una imagen'
+                });
+            }
+
+            const usuarioModel = new Usuario();
+            const usuario = await usuarioModel.findById(idUsuario);
+
+            // ELIMINAR FOTO ANTERIOR SI EXISTE
+            if (usuario?.fotoPerfil && !usuario.fotoPerfil.startsWith('http')) {
+                const fotoAnterior = path.join(path.resolve(), usuario.fotoPerfil);
+
+                if (fs.existsSync(fotoAnterior)) {
+                    try {
+                        fs.unlinkSync(fotoAnterior);
+                    } catch (err) {
+                        console.error('Error al eliminar foto anterior:', err);
+                    }
+                }
+            }
+
+            const relativePath = path.relative(path.resolve(), req.file.path).replace(/\\/g, '/');
+            const actualizado = await usuarioModel.cambiarFotoPerfil(idUsuario, relativePath);
+            const listaVinculacionModel = new ListaVinculacion();
+            await listaVinculacionModel.actualizarFotoEnVinculaciones(idUsuario, relativePath);
+            if (actualizado) {
+                return res.status(200).json({
+                    success: true,
+                    message: 'Foto de perfil actualizada exitosamente',
+                    fotoPerfil: relativePath
+                });
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo actualizar la foto de perfil'
+                });
+            }
+        }
+        catch (error) {
+            console.error('Error al actualizar foto de perfil:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al actualizar foto de perfil: ' + error.message
+            });
+        }
+    }
+
+
 }
 
 export default new UsuarioController;

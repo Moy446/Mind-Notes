@@ -24,7 +24,7 @@ export default function PerfilPsiF(props) {
     const handleGuardarHorario = useCallback(async (horario) => {
         try {
             const response = await actualizarHorario(userId, horario);
-            if (response.status === 200) {
+            if (response?.success) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Horario guardado',
@@ -34,16 +34,15 @@ export default function PerfilPsiF(props) {
             } else {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Error al guardar el horario',
-                    text: 'No se pudo guardar el horario.',
+                    title: 'Error al guardar horario',
+                    text: response?.message || 'No se pudo guardar el horario.',
                     confirmButtonColor: '#2973B2'
                 });
             }
         } catch (error) {
-            console.error('Error al guardar el horario:', error);
             Swal.fire({
                 icon: 'error',
-                title: 'Error al guardar el horario',
+                title: 'Error al guardar horario',
                 text: 'No se pudo guardar el horario.',
                 confirmButtonColor: '#2973B2'
             });

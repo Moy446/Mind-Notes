@@ -1,8 +1,11 @@
 import axios from './axios';
+/*
+* Servicio para manejar las operaciones relacionadas con el usuario, 
+* como actualizar perfil, cambiar foto, obtener información, etc.
+* Cada función hace una llamada a la API correspondiente y maneja errores de forma centralizada.
+*/
 
-/**
- * Actualizar información del usuario
- */
+// Actualizar información del usuario
 export const actualizarPerfil = async (userId, datos) => {
     try {
         const response = await axios.put(`/usuario/${userId}`, datos);
@@ -13,26 +16,20 @@ export const actualizarPerfil = async (userId, datos) => {
     }
 };
 
-/**
- * Actualizar foto de perfil
- */
-export const actualizarFotoPerfil = async (userId, formData) => {
+//Actualizar foto de perfil
+export const cambiarFotoPerfil = async (formData) => {
     try {
-        const response = await axios.put(`/usuario/${userId}/foto`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
+        const response = await axios.put('/usuario/foto', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
     } catch (error) {
-        console.error('Error al actualizar foto de perfil:', error);
+        console.error('Error al cambiar foto:', error);
         throw error;
     }
 };
 
-/**
- * Obtener información del usuario
- */
+// Obtener información del usuario
 export const obtenerPerfil = async (userId) => {
     try {
         const response = await axios.get(`/usuario/${userId}`);

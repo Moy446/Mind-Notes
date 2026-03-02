@@ -5,7 +5,11 @@ import Switch from './Switch';
 export default function HorarioItem(props) {
 
     const handleSwitchChange = (nuevoValor) => {
-        props.onCambio({ ...props.valor, activo: nuevoValor });
+        props.onCambio({
+            activo: nuevoValor,
+            inicio: nuevoValor ? props.valor.inicio : '',
+            fin: nuevoValor ? props.valor.fin : ''
+        });
     };
 
     const handleInicioChange = (e) => {
@@ -17,6 +21,8 @@ export default function HorarioItem(props) {
         const nuevoFin = e.target.value;
         props.onCambio({ ...props.valor, fin: nuevoFin });
     };
+
+
 
     return (
         <div className="horarioItem">

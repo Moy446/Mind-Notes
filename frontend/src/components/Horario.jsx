@@ -58,6 +58,7 @@ export default function Horario(props) {
     const handleGuardar = () => {
         props.onGuardar({ dom, lun, mar, mie, jue, vie, sab });
     };
+    
 
     if (loading) return <div className="horario"><div className='titleHorario'>Cargando horario...</div></div>;
 

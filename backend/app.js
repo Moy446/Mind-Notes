@@ -86,6 +86,7 @@ async function startServer() {
     app.use('/api/chat', routesChat);
     app.use('/api/psicologo', routesPsicologo);
     app.use('/api/auth', routesAuth);
+    app.use('/uploads', express.static('uploads'));
 
     // Inicializar Socket.IO
     chatSocket(io);
