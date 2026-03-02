@@ -29,6 +29,22 @@
     height: 60px;
 }
 
+.dateIn-psi{
+    background-color: rgba(41, 115, 178, 0.5);
+    height: 60px;
+    font-family: 'Saira';
+    font-size: 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.dateIn-psi::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
+}
+
 @font-face {
   font-family: 'Saira';
   src: url('../fonts/Saira.ttf') format('truetype');
@@ -68,13 +84,20 @@
 
     .horarioItem {
         width: 80%;
-        font-size: 20px;
-        margin-right: -20vw;
+        font-size: 17px;
+        justify-content: start;
+        padding: 0 5px ;
+        margin: 2px 0;
     }
 
     .showTime,
     .hideTime {
-        width: 5%;
+        width: 70%;
     }
 
+    .dateIn-psi{
+        width: 55%;
+        height: 45px;
+        font-size: 13px;
+    }
 }
