@@ -132,7 +132,7 @@ export default function ReestablecerPassword() {
 
                     <button 
                         type='submit' 
-                        className='btn'
+                        className='btn reestablecer'
                         disabled={loading}
                     >
                         {loading ? 'Actualizando...' : 'Restablecer contraseña'}
