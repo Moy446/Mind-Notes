@@ -24,7 +24,6 @@ import ReestablecerPassword from './ReestablecerPassword.jsx'
 import VerificarCuenta from './VerificarCuenta.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import GoogleCallback from './GoogleCallback.jsx'
-import componentsPruebas from './componentsPruebas.jsx'
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
