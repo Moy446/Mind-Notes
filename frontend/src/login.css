@@ -396,7 +396,7 @@ text-decoration: none;
     .formBox{
         bottom: 0;
         width: 100%;
-        height: 70%;
+        height: 10%;
     }
 
     .formBox.login{
@@ -467,11 +467,11 @@ text-decoration: none;
     }
 
     h1.title-saludo{
-        font-size: 55px;
+        font-size: 45px;
     }
 
     .toggle-panel p{
-        font-size: 30px;
+        font-size: 25px;
         margin-bottom: 2%;
     }
 
@@ -503,8 +503,9 @@ text-decoration: none;
 
     /* FORM LOGIN */
     h1.login-title{
-    font-size: 55px;
+    font-size: 45px;
     align-items: center;
+    margin-top: 3vw;
     }
 
     .div-titleLogin{
@@ -718,6 +719,7 @@ text-decoration: none;
 .h1.register-title{
     font-size: 30px;
     align-items: center;
+    margin-bottom: 50vw;
 }
 
 .div-titleRegister{
