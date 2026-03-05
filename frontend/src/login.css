@@ -552,7 +552,7 @@ text-decoration: none;
 }
 
 .div-links{
-    margin-top: 5%;
+    margin-top: 1%;
 }
 
 /* Registro */
@@ -574,11 +574,11 @@ text-decoration: none;
     .formBox{
         bottom: 0;
         width: 100%;
-        height: 80%;
+        height: 70%;
     }
 
     .formBox.login{
-        height: 75%;
+        height: 50%;
     }
 
     /* Mueve el form de registro hacia arriba */
@@ -674,6 +674,7 @@ text-decoration: none;
     h1.login-title{
     font-size: 45px;
     align-items: center;
+    margin-top: -20%;
     }
 
     .div-titleLogin{
@@ -697,7 +698,7 @@ text-decoration: none;
     #formLogin{
         width: 100%;
         color: #000;
-        margin-top: 8vw;
+        margin: 0;
     }
 
 
@@ -706,7 +707,7 @@ text-decoration: none;
     }
 
 .div-links{
-    margin-top: 8%;
+    margin-top: 5%;
     margin-bottom: 15%;
 }
 
@@ -753,5 +754,13 @@ h1.password-title{
     width: 65%;
     height: 80px;
     font-size: 25px;
+}
+
+.loginContainer p{
+}
+
+.google-button{
+    margin-top: -14vw;
+    margin-bottom: 25vw;
 }
 }
