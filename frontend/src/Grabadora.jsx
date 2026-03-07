@@ -181,6 +181,11 @@ export default function Grabadora(props) {
                 formData.append('nombrePaciente', pacientData.nombrePaciente);
                 formData.append('resume', pacientData.resume);
                 formData.append('grabacion', pacientData.grabacion);
+                Swal.fire({
+                        icon: 'warning',
+                        title: 'Procesando grabación...',
+                        text: 'Se le enviará un mensaje por correo cuando el documento este listo',
+                    });
                 clienteAxios.post('/psicologo/grabacion', formData,{
                     headers: {
                         'Content-Type': 'multipart/form-data'

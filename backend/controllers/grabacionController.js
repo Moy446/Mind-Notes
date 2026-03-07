@@ -3,6 +3,7 @@ import Chat from "../models/Chat.js";
 import consumeAI from "../helpers/consumeAI.js";
 import fs from "fs";
 import emailService from "../helpers/emailService.js";
+import path from "path";
 
 class GrabacionController {
     constructor() {
@@ -29,12 +30,11 @@ class GrabacionController {
             //archivo de prueba
             const filePath = "uploads/audio/test.mp3";
             const docPath = "uploads/docs/recetas.docx";
-
             //const diarization = await consumeAI.diarize(/*req.file.path*/ filePath);
             const text = await consumeAI.transcribe(/*req.file.path*/ filePath);
             const summaClassi = await consumeAI.classify(text.data.transcription);
             const {VIDA_LABORAL: vidaLaboral, VIDA_PERSONAL: vidaPersonal, VIDA_AMOROSA: vidaAmorosa, VIDA_FAMILIAR: vidaFamiliar, resumen} = summaClassi.clasificacion;
-            
+            console.log(vidaLaboral, vidaPersonal, vidaAmorosa, vidaFamiliar, resumen);
             //Enviar datos para la elaboracion del archivo
             console.log(vidaLaboral);
             console.log(vidaPersonal);
@@ -53,9 +53,9 @@ class GrabacionController {
                 if (resultadoGrabacion.modifiedCount !== 1) {
                     return res.status(500).json({ success: false, message: 'Error al guardar la grabación' });
                 }
-            }
-            if (!grabacion) {
-                fs.unlinkSync(req.file.path);
+            }else{
+                const filePath = path.resolve(req.file.path);
+                fs.unlinkSync(filePath);
             }
 
             //enviar correo al psicologo notificando que el expediente esta listo
