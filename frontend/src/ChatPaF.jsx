@@ -5,14 +5,16 @@ import NameBar from './components/NameBar';
 import ChatSelector from './components/ChatSelector';
 import MessageField from './components/MessageField';
 import BubbleChat from './components/BubbleChat';
+import ArchivoItem from './components/ArchivoItem';
 import SupportMenu from './components/SupportMenu';
 import InfoPsi from './components/InfoPsi';
 import DeleteMenu from './components/DeleteMenu';
 import SuppPa from './components/SuppPa';
 import { useOutletContext, useParams } from 'react-router-dom';
-import socket from './services/socketService'; // NUEVO: Import del socket
+import socket from './services/socketService';
 import { AuthContext } from './context/AuthContext';
-import { obtenerPsicologosVinculados , obtenerMensajes } from './services/vinculacionService';
+import { obtenerPsicologosVinculados } from './services/vinculacionService';
+import { obtenerMensajes, obtenerInformacionChat } from './services/chatService';
 import clienteAxios from './services/axios';
 
 export default function ChatPsiF(props){
@@ -20,6 +22,7 @@ export default function ChatPsiF(props){
     const {qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey} = useOutletContext();
     const { id } = useParams(); // NUEVO: Obtener el ID del chat de la URL
     const { user } = useContext(AuthContext); // Obtén el usuario del contexto
+    
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
@@ -28,23 +31,41 @@ export default function ChatPsiF(props){
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState('/src/images/pimg2.png');
     const [patientData, setPatientData] = useState({});
+    const [archivos, setArchivos] = useState([]);
+    const nombreMostrado = n !== 'Usuario no seleccionado'
+        ? n
+        : (patientData?.nombre || 'Usuario no seleccionado');
 
     const fetchSelectedName = useCallback(async () => {
-        if(!selectedChat) {
+    if(!selectedChat) {
+        setN('Usuario no seleccionado');
+        setImage('/src/images/pimg2.png');
+        return;     
+    }
+    try {
+        const data = await obtenerPsicologosVinculados(idUser);
+        const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
+        const psicologo = lista.find(p => p.idPsicologo === selectedChat);
+        
+        if (psicologo) {
+            setN(psicologo.nombrePsicologo || psicologo?.nombre);
+            
+            // Normalizar la foto: si no empieza con http ni con /, construir URL completa
+            let fotoUrl = psicologo.fotoPerfilPsicologo || '/src/images/pimg2.png';
+            if (fotoUrl && fotoUrl !== '/src/images/pimg2.png' && !fotoUrl.startsWith('http') && !fotoUrl.startsWith('/')) {
+                fotoUrl = `http://localhost:5000/${fotoUrl}`;
+            }
+            setImage(fotoUrl);
+        } else {
             setN('Usuario no seleccionado');
-            return;     
+            setImage('/src/images/pimg2.png');
         }
-        try {
-            const data = await obtenerPsicologosVinculados(idUser);
-            const lista = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
-            const psicologo = lista.find(p => p.idPsicologo === selectedChat);
-            setN(psicologo ? psicologo.nombrePsicologo ||  psicologo?.nombre : 'Usuario no seleccionado');
-            setImage(psicologo ? psicologo.fotoPerfilPsicologo : '/src/images/pimg2.png');
-        } catch (error) {
-            setN('Usuario no seleccionado');
-        }
-    }, [idUser, selectedChat]);
-
+    } catch (error) {
+        console.error('Error al obtener psicólogos:', error);
+        setN('Usuario no seleccionado');
+        setImage('/src/images/pimg2.png');
+    }
+}, [idUser, selectedChat]);
 
     useEffect(() => {
         fetchSelectedName();
@@ -108,6 +129,16 @@ export default function ChatPsiF(props){
     }
     }, [selectedChat, idUser]);
 
+    // Auto-scroll al final de los mensajes
+    useEffect(() => {
+        const bubblesContainer = document.querySelector('.bubbles');
+        if (bubblesContainer) {
+            setTimeout(() => {
+                bubblesContainer.scrollTop = bubblesContainer.scrollHeight;
+            }, 0);
+        }
+    }, [messages]);
+
     // NUEVO: Función para enviar mensajes
     const handleSendMessage = (message) => {
         if (message.trim() && selectedChat) {
@@ -135,13 +166,26 @@ export default function ChatPsiF(props){
     const getInformationChat = async (chatId) => {
         try {
             const idPaciente = idUser;
-            const response = await clienteAxios.get(`/chat/info/${chatId}/${idPaciente}`);
-            setPatientData(response.data.patientData);
+            const response = await obtenerInformacionChat(chatId, idPaciente);
+            setPatientData(response.patientData);
+            setArchivos(response.patientData.materialAdjunto || []);
         } catch (error) {
             console.error('Error al obtener la información del chat:', error);
             setPatientData({});
+            setArchivos([]);
         }
     }
+
+    const handleArchivoSubido = (nuevoArchivo) => {
+        if (selectedChat) {
+            getInformationChat(selectedChat);
+        }
+    };
+
+    const handleArchivoEliminado = (archivoId) => {
+        setArchivos(archivos.filter(a => a._id !== archivoId));
+    };
+
     const handleOpenChatSelector = useCallback(() => {
         setSelectedChat(null);
         setOpenInfo(false);
@@ -162,8 +206,8 @@ export default function ChatPsiF(props){
             <div className={`nameVarCon ${!selectedChat ? 'hidden-movile' : ''}`}>
                 {selectedChat && <NameBar img={image} name={n} open={infoOpen} handleOpen={handleOpenInfo} openChat = {handleOpenChatSelector} />}
                 <div className='chatCon'>
-                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`}>
-                        <div className='bubbles'>
+                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <div className='bubbles' style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', flex: 1 }}>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
                             {!selectedChat ? (
                                 <div style={{
@@ -205,7 +249,13 @@ export default function ChatPsiF(props){
                                 onSendMessage={handleSendMessage} // NUEVO: Pasar función de envío
                             />}
                             <div className={suppOpen ? 'showSuppMenu' : 'hideSuppMenu'}>
-                                <SupportMenu suppOpen = {suppOpen} handleOpen = {handleOpenSupp}/>
+                                <SupportMenu 
+                                    suppOpen={suppOpen} 
+                                    handleOpen={handleOpenSupp}
+                                    idPsicologo={selectedChat}
+                                    idPaciente={idUser}
+                                    onFileUploaded={handleArchivoSubido}
+                                />
                             </div>     
                         </div>
                     </div>
@@ -218,7 +268,7 @@ export default function ChatPsiF(props){
                                 />
                             : <InfoPsi 
                                 img = {image} 
-                                name = {patientData.nombre} 
+                                name = {nombreMostrado} 
                                 materialAdjunto = {patientData.materialAdjunto}
                                 open = {infoOpen} handleOpen = {handleOpenInfo} 
                                 del = {delOpen} handleDel = {handleOpenDel} 
@@ -227,7 +277,7 @@ export default function ChatPsiF(props){
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${patientData.nombre}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
+                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
                     </div>
                 </div>
             </div>
