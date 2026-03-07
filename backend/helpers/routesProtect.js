@@ -6,7 +6,7 @@ export default async function protector(req, res, next) {
     // Soporta tokens de pacientes (cookie `token`) y de psicólogos (cookie `accessToken`).
     const legacyToken = req.cookies.token;
     const accessToken = req.cookies.accessToken;
-    const token = legacyToken || accessToken;
+    const token =  accessToken || legacyToken;
 
  
 

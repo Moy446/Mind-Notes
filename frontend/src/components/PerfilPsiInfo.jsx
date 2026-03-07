@@ -89,24 +89,6 @@ export default function PerfilPsiInfo(props) {
             });
             return;
         }
-        if (file.size > 5 * 1024 * 1024) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Solo se permiten imágenes',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-            return;
-        }
-        if (file.size > 5 * 1024 * 1024) {
-            Swal.fire({
-                title: 'Error',
-                text: 'La imagen debe pesar menos de 5MB',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-            return;
-        }
 
         const formData = new FormData();
         formData.append('foto', file);

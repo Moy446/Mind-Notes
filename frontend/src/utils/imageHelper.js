@@ -8,5 +8,5 @@ export const getImageUrl = (relativePath, defaultImage = '/src/images/testimg.pn
     if (relativePath.startsWith('/')) return relativePath;
     
     // Construye la URL completa
-    return `http://localhost:5000/${relativePath}`;
+    return `${process.env.REACT_APP_API_URL}/${relativePath}`;
 };

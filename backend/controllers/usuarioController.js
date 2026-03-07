@@ -2,7 +2,6 @@ import Usuario from "../models/Usuario.js";
 import ListaVinculacion from "../models/ListaVinculacion.js";
 import Bcrypt from 'bcryptjs';
 import cookieCtrl from "../helpers/cookiesControll.js";
-import jwtControl from "../helpers/jwtControl.js";
 import emailService from "../helpers/emailService.js";
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
@@ -91,16 +90,15 @@ class UsuarioController {
                         mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
                     });
                 } else {
-                    const jwt = new jwtControl();
-                    const token = await jwt.generateToken(user.idUsuario.toString(), nombre, role);
-                    const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
-                    const sameSite = useSecure ? 'None' : 'Lax';
-                    res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
+                    const accessToken = cookieCtrl.signAccess({ id: user.idUsuario, role });
+                    const refreshToken = cookieCtrl.signRefresh({ id: user.idUsuario, role });
+                    cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                    // Limpia cookie legacy por compatibilidad hacia atrás
+                    res.clearCookie('token');
                     res.status(201).json({
                         success: true,
                         idPaciente: user.idUsuario,
                         idUsuario: user.idUsuario,
-                        token,
                         mensaje: 'Registro exitoso. Verifica tu correo para activar tu cuenta'
                     });
                 }
@@ -196,31 +194,16 @@ class UsuarioController {
                     });
                 }
 
-                const jwt = new jwtControl();
-                const token = await jwt.generateToken(usuario.idUsuario.toString(), usuario.nombre, role);
-                const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
-                const sameSite = useSecure ? 'None' : 'Lax';
-                res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
+                const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role: 'paciente' });
+                const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role: 'paciente' });
+                cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                res.clearCookie('token');
                 return res.status(200).json({
                     success: true,
                     idPaciente: usuario.idUsuario,
                     idUsuario: usuario.idUsuario,
-                    token
                 });
             };
-
-            if (typeof req.login === 'function') {
-                return req.login(usuario, (err) => {
-                    if (err) {
-                        return res.status(500).json({
-                            success: false,
-                            message: 'Error al iniciar sesión'
-                        });
-                    }
-
-                    return respond();
-                });
-            }
 
             return respond();
         } catch (error) {
@@ -281,16 +264,14 @@ class UsuarioController {
                 });
             }
 
-            const jwt = new jwtControl();
-            const token = await jwt.generateToken(usuario.idUsuario.toString(), usuario.nombre, role);
-            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
-            const sameSite = useSecure ? 'None' : 'Lax';
-            res.cookie('token', token, { httpOnly: true, secure: useSecure, sameSite });
+            const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role: 'paciente' });
+            const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role: 'paciente' });
+            cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+            res.clearCookie('token');
             return res.status(200).json({
                 success: true,
                 idPaciente: usuario.idUsuario,
                 idUsuario: usuario.idUsuario,
-                token,
                 role: 'paciente'
             });
         } catch (error) {
@@ -496,24 +477,6 @@ class UsuarioController {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
             res.clearCookie('connect.sid'); // Cookie de sesión de Passport
-
-            // Logout de Passport si el usuario está autenticado
-            if (typeof req.logout === 'function' && req.session) {
-                req.logout((err) => {
-                    if (err) {
-                        console.error('Error en logout de Passport:', err);
-                    }
-                });
-            }
-
-            // Destruir sesión de Passport si existe
-            if (req.session) {
-                req.session.destroy((err) => {
-                    if (err) {
-                        console.error('Error al destruir sesión:', err);
-                    }
-                });
-            }
 
             res.status(200).json({ success: true, message: 'Sesión cerrada' });
         } catch (error) {
@@ -767,15 +730,15 @@ class UsuarioController {
                 console.log('Intentando eliminar foto anterior:', usuario.fotoPerfil);
                 const fotoAnterior = path.join(path.resolve(), usuario.fotoPerfil);
 
-               try {
-                await fs.promises.unlink(fotoAnterior);
-                console.log('Foto anterior eliminada:', fotoAnterior);
-               } catch (error) {
-                if(error.code === 'ENOENT') {
-                    console.warn('Foto anterior no encontrada, no se pudo eliminar:', fotoAnterior);
+                try {
+                    await fs.promises.unlink(fotoAnterior);
+                    console.log('Foto anterior eliminada:', fotoAnterior);
+                } catch (error) {
+                    if (error.code === 'ENOENT') {
+                        console.warn('Foto anterior no encontrada, no se pudo eliminar:', fotoAnterior);
+                    }
                 }
             }
-        }
 
             const relativePath = path.relative(path.resolve(), req.file.path).replace(/\\/g, '/');
             const actualizado = await usuarioModel.cambiarFotoPerfil(idUsuario, relativePath);
