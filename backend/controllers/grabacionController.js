@@ -36,6 +36,11 @@ class GrabacionController {
             const {VIDA_LABORAL: vidaLaboral, VIDA_PERSONAL: vidaPersonal, VIDA_AMOROSA: vidaAmorosa, VIDA_FAMILIAR: vidaFamiliar, resumen} = summaClassi.clasificacion;
             
             //Enviar datos para la elaboracion del archivo
+            console.log(vidaLaboral);
+            console.log(vidaPersonal);
+            console.log(vidaAmorosa);
+            console.log(vidaFamiliar);
+            console.log(resumen);
                 
             //subir archivo a la base de datos
             const chat = new Chat();

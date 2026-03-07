@@ -3,6 +3,7 @@ import multer from "multer";
 import calendarController from "../controllers/calendarioController.js";
 import grabacionController from "../controllers/grabacionController.js";
 import protector from "../helpers/routesProtect.js";
+import htmlToDocx from "html-to-docx";
 
 const router = express.Router();
 
@@ -50,5 +51,31 @@ const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 router.get("/grabacion", protector, grabacionController.loadPacientes);
 router.post("/grabacion",protector,upload.single("audio"),grabacionController.guardarGrabacion);
+
+/*Documentos*/
+router.post("/export-docx", async (req, res) => {
+  try {
+    console.log("POST /export-docx");
+
+    const { html } = req.body;
+    if (!html) {
+      return res.status(400).send("HTML vacío");
+    }
+
+    const buffer = await htmlToDocx(html);
+
+    res.set({
+      "Content-Type":
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "Content-Disposition": "attachment; filename=documento.docx",
+      "Content-Length": buffer.length,
+    });
+
+    res.end(buffer);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error generando DOCX");
+  }
+});
 
 export default router;
