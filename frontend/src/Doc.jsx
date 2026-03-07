@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Doc.css'
 import Tiptap from './components/TipTap';
+import clienteAxios from "./services/axios";
 
 export default function Doc(props) {
 
@@ -10,22 +11,50 @@ export default function Doc(props) {
 
     const [pencil, setPencil] = useState(true);
     const [brush, setBrush] = useState(false);
+    const [editor, setEditor] = useState(null);
 
     const handleClick = () => {
         setPencil(!pencil);
         setBrush(!brush);
     };
 
-    const saveDoc = () => {
+    const closeDoc = () => {
         navigate('/psicologo/perfil:id');
+    }
+
+    const saveDoc = async () => {
+        if (!editor) {
+            return;
+        }
+
+        const html = editor.getHTML();
+        console.log("Exportando a:", "http://localhost:5000/export-docx");
+        const response = await clienteAxios.post('/psicologo/export-docx', { html },
+                {
+                    responseType: "blob",
+                })
+
+        const blob = new Blob([response.data], {
+            type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        })
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "documento.docx";
+        document.body.appendChild(a);
+        a.click();
+
+        a.remove();
+        window.URL.revokeObjectURL(url);
     }
 
     return (
         <div className={`doc ${brush ? "cursorbrush" : ""}`}>
-            <Tiptap />
+            <Tiptap onReady={setEditor} />
             <div className='btnsDoc'>
                 <button className="docBtn efectBtn" onClick={saveDoc}>Guardar</button>
-                <button className="docBtn efectBtn" onClick={saveDoc}>Cerrar</button>
+                <button className="docBtn efectBtn" onClick={closeDoc}>Cerrar</button>
             </div>
             <div className='switchDoc'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="black" class="size-6" className='svgDoc1 efectBtn' onClick={handleClick}>
