@@ -6,7 +6,9 @@ export default async function protector(req, res, next) {
     // Soporta tokens de pacientes (cookie `token`) y de psicólogos (cookie `accessToken`).
     const legacyToken = req.cookies.token;
     const accessToken = req.cookies.accessToken;
-    const token = legacyToken || accessToken;
+    const token =  accessToken || legacyToken;
+
+ 
 
     if (!token) {
         return res.status(401).json({ success: false, message: 'Acceso denegado. Token no proporcionado.' });
@@ -31,6 +33,7 @@ export default async function protector(req, res, next) {
         }
 
         // Verificar que el rol coincida con el tipo de usuario
+        
         if (decoded.role === 'paciente' && user.esPsicologo) {
             res.clearCookie('token');
             res.clearCookie('accessToken');

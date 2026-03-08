@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import calendarController from "../controllers/calendarioController.js";
 import grabacionController from "../controllers/grabacionController.js";
+import paymentController from "../controllers/paymentController.js";
 import protector from "../helpers/routesProtect.js";
 import htmlToDocx from "html-to-docx";
 
@@ -77,5 +78,8 @@ router.post("/export-docx", async (req, res) => {
     res.status(500).send("Error generando DOCX");
   }
 });
+// Pagos (Stripe)
+router.post("/checkout", protector, paymentController.sesionPago);
+router.get("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
 
 export default router;
