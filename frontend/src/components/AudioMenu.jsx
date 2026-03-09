@@ -14,7 +14,7 @@ export default function AudioMenu(props) {
         nombrePaciente: '',
         resume: true,
         grabacion: false
-    });
+    },[]);
 
     const cargarPacientes = async () => {
         try {
@@ -26,9 +26,9 @@ export default function AudioMenu(props) {
                     nombre: p.nombrePaciente,
                     id: p.idPaciente,
                     fotoPerfil: (() => {
-                        let foto = p.fotoPerfilPaciente || '/src/images/pimg2.png';
-                        if (foto && foto !== '/src/images/pimg2.png' && !foto.startsWith('http') && !foto.startsWith('/')) {
-                            return `http://localhost:5000/${foto}`;
+                        let foto = p.fotoPerfilPaciente || '/src/images/userDefault.png';
+                        if (foto && foto !== '/src/images/userDefault.png' && !foto.startsWith('http') && !foto.startsWith('/')) {
+                            return `${process.env.VITE_BACKEND_URL_NoAPI}/${foto}`;
                         }
                         return foto;
                     })()
@@ -49,8 +49,8 @@ export default function AudioMenu(props) {
     const actualizarDatosPaciente = (e) => {
         setPatientData({
             ...patientData,
-            "idPaciente": e.idPaciente,
-            "nombrePaciente": e.nombrePaciente
+            "idPaciente": e.id,
+            "nombrePaciente": e.nombre
         });
     }
 
@@ -80,14 +80,14 @@ export default function AudioMenu(props) {
                     options={patients}
                     maxMenuHeight={200}
                     isSearchable={true}
-                    getOptionLabel={(p) => p.nombrePaciente}
-                    getOptionValue={(p) => p.idPaciente}
+                    getOptionLabel={(p) => p.nombre}
+                    getOptionValue={(p) => p.id}
                     components={{ IndicatorSeparator: () => null }}
                     onChange={actualizarDatosPaciente}
                     formatOptionLabel={(p) => (
-                        <div className='optionContentM' key={p.idPaciente}>
+                        <div className='optionContentM' key={p.id}>
                             <img src={p.fotoPerfil} className="avatarM" />
-                            <span>{p.nombrePaciente}</span>
+                            <span>{p.nombre}</span>
                         </div>
                     )} />
             </div>
