@@ -26,12 +26,13 @@ export default function PerfilPaF(props){
     const [editModal, setEditModal] = useState({ open: false, field: '', title: '', value: '' });
 
     const handleOpenDel = useCallback(() => {
-            openDelMenu(!delMenu)
-        }, [delMenu])
+            openDelMenu((prev) => !prev)
+        }, [])
 
     const handleEliminarCuenta = async () => {
         try {
-            Swal.fire({
+            openDelMenu(false);
+            const result = await Swal.fire({
                 title: '¿Estás seguro?',
                 text: "Esta acción no se puede deshacer",
                 icon: 'warning',
@@ -40,15 +41,17 @@ export default function PerfilPaF(props){
                 cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar'
-            }).then(async (result) => {
-                if (result.isConfirmed) {
-                    const deleteResult = await eliminarCuenta(user.id);
-                    if (deleteResult.success) {
-                        logout();
-                        navigate('/login');
-                    }
-                }
             });
+
+            if (!result.isConfirmed) {
+                return;
+            }
+
+            const deleteResult = await eliminarCuenta(user.id);
+            if (deleteResult.success) {
+                logout();
+                navigate('/login');
+            }
         } catch (error) {
             Swal.fire({
                 title: 'Error al eliminar la cuenta',
@@ -198,7 +201,13 @@ export default function PerfilPaF(props){
                 <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {handleOpenDel}/>
             </div>
             <div className={delMenu ? "showDelMenuPa" : "hiddeDelMenuPa"}>
-               <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan" del={delMenu} handleDel={handleEliminarCuenta}/>
+               <DeleteMenu
+                    title = "¿Esta seguro de eliminar su cuenta?"
+                    subtitle = "Todos los datos se perderan"
+                    del={delMenu}
+                    onCancel={handleOpenDel}
+                    onConfirm={handleEliminarCuenta}
+                />
             </div>
             <EditModal
                 open={editModal.open}
