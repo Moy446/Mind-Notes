@@ -30,36 +30,51 @@ export default function PerfilPaF(props){
         }, [])
 
     const handleEliminarCuenta = async () => {
-        try {
-            openDelMenu(false);
-            const result = await Swal.fire({
-                title: '¿Estás seguro?',
-                text: "Esta acción no se puede deshacer",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            });
-
-            if (!result.isConfirmed) {
-                return;
+            try {
+                openDelMenu(false);
+                const result = await Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                });
+    
+                if (!result.isConfirmed) {
+                    return;
+                }
+    
+                const deleteResult = await eliminarCuenta(user.id);
+                if (deleteResult.success) {
+                    await Swal.fire({
+                        title: 'Cuenta eliminada',
+                        text: 'Tu cuenta ha sido eliminada exitosamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#2973B2'
+                    });
+    
+                    // Redirigir al login después de eliminar la cuenta
+                    window.location.href = '/login';
+                } else {
+                    Swal.fire({
+                        title: 'Error al eliminar la cuenta',
+                        text: deleteResult?.message || 'No se pudo eliminar la cuenta.',
+                        icon: 'error',
+                        confirmButtonColor: '#2973B2'
+                    });
+                    }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error al eliminar la cuenta',
+                    text: 'No se pudo eliminar la cuenta.',
+                    icon: 'error',
+                    confirmButtonColor: '#2973B2'
+                });
             }
-
-            const deleteResult = await eliminarCuenta(user.id);
-            if (deleteResult.success) {
-                logout();
-                navigate('/login');
-            }
-        } catch (error) {
-            Swal.fire({
-                title: 'Error al eliminar la cuenta',
-                icon: 'error',
-                confirmButtonText: 'Aceptar'
-            });
-        }
-    };
+        };
     const handleOpenEdit = (field, title, value) => {
         setEditModal({ open: true, field, title, value });
     };
