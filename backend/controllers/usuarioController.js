@@ -766,6 +766,43 @@ class UsuarioController {
         }
     }
 
+    async eliminarCuenta(req, res) {
+        try {
+            const idUsuario = req.user?.idUsuario;
+            const usuarioModel = new Usuario();
+            if (!idUsuario) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'ID de usuario es requerido'
+                });
+            }
+            const eliminado = await usuarioModel.eliminarCuenta(idUsuario);
+            if (eliminado) {
+                // Limpiar cookies de autenticación
+                res.clearCookie('token');
+                res.clearCookie('accessToken');
+                res.clearCookie('refreshToken');
+                res.clearCookie('connect.sid'); // Cookie de sesión de Passport
+                return res.status(200).json({
+                    success: true,
+                    message: 'Cuenta eliminada exitosamente'
+                });
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo eliminar la cuenta'
+                });
+            }
+        
+        } catch (error) {
+            console.error('Error al eliminar cuenta:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al eliminar cuenta: ' + error.message
+            });
+        }
+    }
+
 
 }
 

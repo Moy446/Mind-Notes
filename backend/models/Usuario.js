@@ -407,6 +407,16 @@ class Usuario {
             throw new Error('Error al cambiar foto de perfil: ' + error.message);
         }
     }
+
+    async eliminarCuenta(idUsuario) {
+        try {
+            const resultado = await this.colUsuarios.deleteOne({ idUsuario: new ObjectId(idUsuario) });
+            return resultado.deletedCount > 0;
+        } catch (error) {
+            throw new Error('Error al eliminar cuenta: ' + error.message);
+
+        }
+    }
 }
 
 // Exportar la clase Usuario 

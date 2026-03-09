@@ -61,3 +61,13 @@ export const actualizarHorario = async (userId, horario) => {
         throw error;
     }
 };
+
+export const eliminarCuenta = async (userId) => {
+    try {
+        const response = await axios.post('/deleteAccount', { userId });
+        return response.data;
+    } catch (error) {
+        console.error('Error al eliminar cuenta:', error);
+        throw error;
+    }
+};
