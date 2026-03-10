@@ -5,7 +5,7 @@ import fs from "fs";
 import emailService from "../helpers/emailService.js";
 import path from "path";
 import { Document, Packer, Paragraph, TextRun } from "docx";
-import FileSaver from "file-saver";
+import { fileURLToPath } from 'url';
 
 class GrabacionController {
     constructor() {
@@ -39,26 +39,48 @@ class GrabacionController {
             console.log(vidaLaboral, vidaPersonal, vidaAmorosa, vidaFamiliar, resumen);
 
             //Enviar datos para la elaboracion del archivo
-            console.log(vidaLaboral);
-            console.log(vidaPersonal);
-            console.log(vidaAmorosa);
-            console.log(vidaFamiliar);
-            console.log(resumen);
-            console.log(text);
+            const __filename = fileURLToPath(import.meta.url);
+            const __dirname = path.dirname(__filename);
 
             const doc = new Document({
                 sections: [{
                     children: [
-                        new Paragraph({
-                            children: [new TextRun(text)],
-                        }),
-                    ],
-                }],
+                        new Paragraph({ children: [new TextRun("Resumen")] }),
+                        new Paragraph({ children: [new TextRun(resumen)] }),
+                        new Paragraph({ children: [new TextRun("")] }), // Espacio
+
+                        new Paragraph({ children: [new TextRun("Vida laboral")] }),
+                        new Paragraph({ children: [new TextRun(vidaLaboral + "")] }),
+                        new Paragraph({ children: [new TextRun("")] }),
+
+                        new Paragraph({ children: [new TextRun("Vida personal")] }),
+                        new Paragraph({ children: [new TextRun(vidaPersonal + "")] }),
+                        new Paragraph({ children: [new TextRun("")] }),
+
+                        new Paragraph({ children: [new TextRun("Vida amorosa")] }),
+                        new Paragraph({ children: [new TextRun(vidaAmorosa + "")] }),
+                        new Paragraph({ children: [new TextRun("")] }),
+
+                        new Paragraph({ children: [new TextRun("Vida familiar")] }),
+                        new Paragraph({ children: [new TextRun(vidaFamiliar + "")] })
+                    ]
+                }]
             });
 
-            Packer.toBlob(doc).then((blob) => {
-                FileSaver.saveAs(blob, "ejemplo.docx");
-            });
+            const buffer = await Packer.toBuffer(doc);
+            const nombreArchivo = 'prueba.docx';
+
+            const rutaGuardado = path.join(__dirname, '..', 'uploads', 'docs', nombreArchivo);
+
+            const dir = path.dirname(rutaGuardado);
+            if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir, { recursive: true });
+            }
+
+            // Guardar el archivo
+            fs.writeFileSync(rutaGuardado, buffer);
+
+            console.log(`Documento guardado en: ${rutaGuardado}`);
 
             //subir archivo a la base de datos
             const chat = new Chat();
