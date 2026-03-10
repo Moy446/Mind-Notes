@@ -50,6 +50,7 @@ router.get('/psicologos/:idPaciente', protector, UserController.obtenerPsicologo
 router.get('/mensajes/:idPsicologo/:idPaciente', protector, chatController.obtenerMensajes);
 router.post('/psicologo/horario', protector, UserController.guardarHorario);
 router.get('/psicologo/horario/:idUsuario', protector, UserController.obtenerHorario);
+router.post('/deleteAccount', protector, UserController.eliminarCuenta);
 
 //confirmar cita
 router.get('/confirmar-cita/:id', calendarController.confirmarCita);

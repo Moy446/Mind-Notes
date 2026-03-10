@@ -50,6 +50,21 @@ router.post('/reenviar-verificacion', (req, res) =>
  * Inicia autenticación con Google
  */
 router.get('/google', 
+    (req, res, next) => {
+        const requestedRole = req.query.role === 'psicologo' ? 'psicologo' : 'paciente';
+        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+        const sameSite = useSecure ? 'None' : 'Lax';
+
+        // Guarda el rol seleccionado para usarlo al crear cuentas nuevas por Google.
+        res.cookie('google_role', requestedRole, {
+            httpOnly: true,
+            secure: useSecure,
+            sameSite,
+            maxAge: 10 * 60 * 1000
+        });
+
+        next();
+    },
     passport.authenticate('google', { scope: ['profile', 'email'], session: false })
 );
 
@@ -64,6 +79,10 @@ router.get('/google/callback',
     }),
     (req, res) => {
         try {
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const sameSite = useSecure ? 'None' : 'Lax';
+            res.clearCookie('google_role', { httpOnly: true, secure: useSecure, sameSite });
+
             const usuario = req.user;
             const role = usuario.esPsicologo ? 'psicologo' : 'paciente';
             
