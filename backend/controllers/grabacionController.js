@@ -27,13 +27,12 @@ class GrabacionController {
     async guardarGrabacion(req, res) {
         const { idPaciente, nombrePaciente, resume, grabacion } = req.body;
         const idPsicologo = req.user.idUsuario;
-
         try {
             //archivo de prueba
-            const filePath = "uploads/audio/test.mp3";
-            const docPath = "uploads/docs/recetas.docx";
-            //const diarization = await consumeAI.diarize(/*req.file.path*/ filePath);
-            const text = await consumeAI.transcribe(/*req.file.path*/ filePath);
+            //const filePath = "uploads/audio/test.mp3";
+            //const docPath = "uploads/docs/recetas.docx";
+            //const diarization = await consumeAI.diarize(req.file.path /*filePath*/);
+            const text = await consumeAI.transcribe(req.file.path /*filePath*/);
             const summaClassi = await consumeAI.classify(text.data.transcription);
             const { VIDA_LABORAL: vidaLaboral, VIDA_PERSONAL: vidaPersonal, VIDA_AMOROSA: vidaAmorosa, VIDA_FAMILIAR: vidaFamiliar, resumen } = summaClassi.clasificacion;
             console.log(vidaLaboral, vidaPersonal, vidaAmorosa, vidaFamiliar, resumen);
@@ -41,7 +40,6 @@ class GrabacionController {
             //Enviar datos para la elaboracion del archivo
             const __filename = fileURLToPath(import.meta.url);
             const __dirname = path.dirname(__filename);
-
             const doc = new Document({
                 sections: [{
                     children: [
@@ -68,39 +66,44 @@ class GrabacionController {
             });
 
             const buffer = await Packer.toBuffer(doc);
-            const nombreArchivo = 'prueba.docx';
 
-            const rutaGuardado = path.join(__dirname, '..', 'uploads', 'docs', nombreArchivo);
+            const nombreArchivo = new Date().toLocaleDateString('sv');
+            const rutaGuardado = path.join(__dirname, '..', 'uploads', 'docs', idPsicologo + "", idPaciente + "", nombreArchivo + ".doc");
+            const rutaGrabacion = path.join(__dirname, '..', 'uploads', 'audio', idPsicologo + "", idPaciente + "", nombreArchivo + ".wav");
 
             const dir = path.dirname(rutaGuardado);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
 
+            const dirGra = path.dirname(rutaGrabacion);
+            if (!fs.existsSync(dirGra)) {
+                fs.mkdirSync(dirGra, { recursive: true });
+            }
+
             // Guardar el archivo
             fs.writeFileSync(rutaGuardado, buffer);
-
-            console.log(`Documento guardado en: ${rutaGuardado}`);
+            fs.renameSync(req.file.path, rutaGrabacion);
 
             //subir archivo a la base de datos
             const chat = new Chat();
-            const resultadoExpediente = await chat.insertExpediente(idPsicologo, idPaciente, docPath);
+            const resultadoExpediente = await chat.insertExpediente(idPsicologo, idPaciente, rutaGuardado);
             if (resultadoExpediente.modifiedCount !== 1) {
                 return res.status(500).json({ success: false, message: 'Error al guardar el archivo' });
             }
             if (grabacion) {
-                const resultadoGrabacion = await chat.insertGrabacion(idPsicologo, idPaciente, filePath);
+                const resultadoGrabacion = await chat.insertGrabacion(idPsicologo, idPaciente, rutaGrabacion);
                 if (resultadoGrabacion.modifiedCount !== 1) {
                     return res.status(500).json({ success: false, message: 'Error al guardar la grabación' });
                 }
             } else {
                 const filePath = path.resolve(req.file.path);
-                fs.unlinkSync(filePath);
+                fs.unlinkSync(rutaGrabacion);
             }
 
             //enviar correo al psicologo notificando que el expediente esta listo
             const { nombre, email: emailPsicologo } = req.user;
-            await emailService.enviarInforme(emailPsicologo, nombre, docPath);
+            await emailService.enviarInforme(emailPsicologo, nombre, rutaGuardado);
             res.status(200).json({ success: true, message: 'Grabación guardada correctamente' });
         } catch (error) {
             console.log("Error al procesar la grabación:", error);
