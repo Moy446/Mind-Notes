@@ -82,21 +82,3 @@ export const obtenerPsicologosVinculados = async (idPaciente) => {
         throw error;
     }
 };
-
-/**
- * Obtener el historial de chat entre un psicólogo y un paciente
- * @param {string} idPsicologo - ID del psicólogo
- * @param {string} idPaciente - ID del paciente
- * @returns {Promise} Historial de chat
- */
-export const obtenerMensajes = async (idPsicologo, idPaciente) => {
-    try {
-        const response = await clienteAxios.get(`/chat/${idPsicologo}/${idPaciente}`, {
-            withCredentials: true // IMPORTANTE: envía las cookies HttpOnly
-        });
-        return response.data;
-    } catch (error) {
-        console.error('Error al obtener mensajes:', error);
-        throw error;
-    }
-};

@@ -201,6 +201,128 @@ class EmailService {
             return false;
         }
     }
+
+    async enviarInforme(email, nombre, informeId) {
+        try {
+            const informeUrl = `${process.env.FRONTEND_URL}/psicologo/doc/${encodeURIComponent(informeId)}`;
+            const mailOptions = {
+                from: process.env.EMAIL_FROM,
+                to: email,
+                subject: 'Informe terminado correctamente',
+                html: this.__plantillaInforme(nombre, informeUrl)
+            };
+            await this.transporter.sendMail(mailOptions);
+        } catch (error) {
+            console.error('Error al enviar correo de informe:', error);
+        }
+    }
+    __plantillaInforme(nombre, informeUrl) {
+        return `
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+                    .container { max-width: 600px; margin: 0 auto; background: #f5f5f5; padding: 20px; }
+                    .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    .header { text-align: center; margin-bottom: 30px; }
+                    .logo { font-size: 28px; font-weight: bold; color: #2973B2; }
+                    .content { color: #333; line-height: 1.6; }
+                    .button { display: inline-block; background: #92e9a5; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin: 20px 0; }
+                    .footer { text-align: center; margin-top: 30px; color: #999; font-size: 12px; }
+                    .warning { background: #fee2e2; border: 1px solid #fecaca; padding: 10px; border-radius: 5px; margin: 20px 0; color: #991b1b; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="card">
+                        <div class="header">
+                            <div class="logo">MindNotes</div>
+                        </div>
+                        
+                        <div class="content">
+                            <h2>Informe terminado correctamente</h2>
+                            <p>Hola ${nombre},</p>
+                            <p>El informe ha sido elaborado correctamente. Haz clic en el botón de abajo para verlo:</p>
+                            
+                            <center>
+                                <a href="${informeUrl}" class="button">Ver informe</a>
+                            </center>
+                            
+                            <p>O copia y pega este enlace:</p>
+                            <p style="word-break: break-all;">${informeUrl}</p>
+                        </div>
+
+                        <div class="footer">
+                            <p>© ${new Date().getFullYear()} MindNotes. Todos los derechos reservados.</p>
+                            <p>Este es un correo automático, no respondas a este mensaje.</p>
+                        </div>
+                    </div>
+                </div>
+            </body>
+            </html>`;
+    }
+    async confirmarCita(email, nombre, fechaCita,cita, nombrePsicologo) {
+        try {
+            const confirmadoUrl = `${process.env.FRONTEND_URL}/confirmar-cita/${cita}?status=confirmada`;
+            const canceladoUrl = `${process.env.FRONTEND_URL}/confirmar-cita/${cita}?status=cancelada`;
+             const mailOptions = {
+                from: process.env.EMAIL_FROM,
+                to: email,
+                subject: 'Confirmación de cita Mind Notes',
+                html: this.__plantillaConfirmacion(nombre, confirmadoUrl, canceladoUrl,fechaCita, nombrePsicologo)
+            };
+            await this.transporter.sendMail(mailOptions);
+        } catch (error) {
+            console.error('Error al enviar correo de confirmación de cita:', error);
+        }
+    }
+    
+    __plantillaConfirmacion(nombre, confirmadoUrl, canceladoUrl, fechaCita, nombrePsicologo) {
+        return `
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+                    .container { max-width: 600px; margin: 0 auto; background: #f5f5f5; padding: 20px; }
+                    .card { background: white; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    .header { text-align: center; margin-bottom: 30px; }
+                    .logo { font-size: 28px; font-weight: bold; color: #2973B2; }
+                    .content { color: #333; line-height: 1.6; }
+                    .button { display: inline-block; background: #92e9a5; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin: 20px 0; }
+                    .button2 { display: inline-block; background: #e99292; color: white; padding: 12px 30px; border-radius: 5px; text-decoration: none; margin: 20px 0; }
+                    .footer { text-align: center; margin-top: 30px; color: #999; font-size: 12px; }
+                    .warning { background: #fee2e2; border: 1px solid #fecaca; padding: 10px; border-radius: 5px; margin: 20px 0; color: #991b1b; }
+                </style>
+            </head>
+                <body>
+                    <div class="container">
+                        <div class="card">
+                            <div class="header">
+                                <div class="logo">MindNotes</div>
+                            </div>
+                            
+                            <div class="content">
+                                <h2>Confirmación de cita Mind Notes con ${nombrePsicologo}</h2>
+                                <p>Hola ${nombre},</p>
+                                <p>Por favor confirma tu cita del dia ${fechaCita} con el psicólogo ${nombrePsicologo}. Haz clic en el botón de abajo para confirmar o cancelar tu cita:</p>
+                                
+                                <center>
+                                    <a href="${confirmadoUrl}" class="button">Confirmar cita</a>
+                                    <a href="${canceladoUrl}" class="button2">Cancelar cita</a>
+                                </center>
+                            </div>
+
+                            <div class="footer">
+                                <p>© ${new Date().getFullYear()} MindNotes. Todos los derechos reservados.</p>
+                                <p>Este es un correo automático, no respondas a este mensaje.</p>
+                            </div>
+                        </div>
+                    </div>
+                </body>
+            </html>`;
+        }
 }
 
 export default new EmailService();
