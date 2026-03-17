@@ -9,11 +9,14 @@ export default function setupPassport(passport) {
     passport.use(new GoogleStrategy({
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: process.env.GOOGLE_CALLBACK_URL
+        callbackURL: process.env.GOOGLE_CALLBACK_URL,
+        passReqToCallback: true
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
         try {
             const usuarioModel = new Usuario();
+            const requestedRole = req.cookies?.google_role === 'psicologo' ? 'psicologo' : 'paciente';
+            const createAsPsicologo = requestedRole === 'psicologo';
             
             let usuario = await usuarioModel.findByGoogleId(profile.id);
             
@@ -30,7 +33,7 @@ export default function setupPassport(passport) {
                         googleId: profile.id,
                         password: null,
                         verificado: true
-                    }, false);
+                    }, createAsPsicologo);
                 }
             }
             

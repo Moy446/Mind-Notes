@@ -6,7 +6,7 @@ import DataPsi from './components/DataPsi';
 import EditModal from './components/EditModal';
 import { useNavigate } from 'react-router-dom'; 
 import { AuthContext } from './context/AuthContext';
-import { actualizarPerfil, cambiarFotoPerfil } from './services/usuarioService';    
+import { actualizarPerfil, cambiarFotoPerfil, eliminarCuenta } from './services/usuarioService';    
 import { getImageUrl } from './utils/imageHelper';
 import Swal from 'sweetalert2';
 
@@ -26,9 +26,55 @@ export default function PerfilPaF(props){
     const [editModal, setEditModal] = useState({ open: false, field: '', title: '', value: '' });
 
     const handleOpenDel = useCallback(() => {
-            openDelMenu(!delMenu)
-        }, [delMenu])
+            openDelMenu((prev) => !prev)
+        }, [])
 
+    const handleEliminarCuenta = async () => {
+            try {
+                openDelMenu(false);
+                const result = await Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Esta acción no se puede deshacer",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Sí, eliminar',
+                    cancelButtonText: 'Cancelar'
+                });
+    
+                if (!result.isConfirmed) {
+                    return;
+                }
+    
+                const deleteResult = await eliminarCuenta(user.id);
+                if (deleteResult.success) {
+                    await Swal.fire({
+                        title: 'Cuenta eliminada',
+                        text: 'Tu cuenta ha sido eliminada exitosamente.',
+                        icon: 'success',
+                        confirmButtonColor: '#2973B2'
+                    });
+    
+                    // Redirigir al login después de eliminar la cuenta
+                    window.location.href = '/login';
+                } else {
+                    Swal.fire({
+                        title: 'Error al eliminar la cuenta',
+                        text: deleteResult?.message || 'No se pudo eliminar la cuenta.',
+                        icon: 'error',
+                        confirmButtonColor: '#2973B2'
+                    });
+                    }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error al eliminar la cuenta',
+                    text: 'No se pudo eliminar la cuenta.',
+                    icon: 'error',
+                    confirmButtonColor: '#2973B2'
+                });
+            }
+        };
     const handleOpenEdit = (field, title, value) => {
         setEditModal({ open: true, field, title, value });
     };
@@ -170,7 +216,13 @@ export default function PerfilPaF(props){
                 <EliminarBtn texto = "Eliminar cuenta" img = "1" handleDel = {handleOpenDel}/>
             </div>
             <div className={delMenu ? "showDelMenuPa" : "hiddeDelMenuPa"}>
-               <DeleteMenu title = "¿Esta seguro de eliminar su cuenta?" subtitle = "Todos los datos se perderan" del={delMenu} handleDel={handleOpenDel}/>
+               <DeleteMenu
+                    title = "¿Esta seguro de eliminar su cuenta?"
+                    subtitle = "Todos los datos se perderan"
+                    del={delMenu}
+                    onCancel={handleOpenDel}
+                    onConfirm={handleEliminarCuenta}
+                />
             </div>
             <EditModal
                 open={editModal.open}

@@ -10,6 +10,7 @@ import routesPsicologo from './routes/routesPsicologoApp.js';
 import routesAuth from './routes/routesAuth.js';
 import cookieParser from 'cookie-parser';
 import csrf from 'csurf';
+import multer from 'multer';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import chatSocket from './sockets/chatSocket.js';

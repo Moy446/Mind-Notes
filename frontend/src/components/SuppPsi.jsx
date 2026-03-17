@@ -1,8 +1,7 @@
-import React, { act, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './SuppPsi.css'
-import clienteAxios from '../services/axios.js';
 
 export default function SuppPsi(props) {
 

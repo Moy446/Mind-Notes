@@ -66,11 +66,10 @@ class ChatController {
             if (!req.file) {
                 return res.status(400).json({ success: false, message: 'No se recibió ningún archivo' });
             }
-
             const chatModel = new Chat();
             const relativePath = path.relative(path.resolve(), req.file.path);
             
-            const resultado = await chatModel.insertMaterialAdjunto(idPsicologo, idPaciente, relativePath);
+            const resultado = await chatModel.insertMaterialAdjunto(idPsicologo, idPaciente, req.file.path.replace(/\\/g, "/"));
             
             if (resultado.modifiedCount !== 1) {
                 return res.status(500).json({ success: false, message: 'Error al guardar el archivo en el chat' });

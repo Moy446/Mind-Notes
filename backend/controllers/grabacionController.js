@@ -66,12 +66,12 @@ class GrabacionController {
             });
 
             const buffer = await Packer.toBuffer(doc);
-
-            const nombreArchivo = new Date().toLocaleDateString('sv');
-            const rutaGuardado = path.join(__dirname, '..', 'uploads', 'docs', idPsicologo + "", idPaciente + "", nombreArchivo + "-" + nombrePaciente + ".doc");
-            const rutaGrabacion = path.join(__dirname, '..', 'uploads', 'audio', idPsicologo + "", idPaciente + "", nombreArchivo + "-" + nombrePaciente + ".wav");
+            const rutaGuardado = `./uploads/docs/${idPsicologo}/${idPaciente}/resumen-${Date.now()}.docx`;
+            const rutaGrabacion = `./uploads/audio/${idPsicologo}/${idPaciente}/grabacion-${Date.now()}.wav`;
+            
 
             const dir = path.dirname(rutaGuardado);
+            console.log("Ruta de guardado:", dir);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
             }
@@ -82,28 +82,28 @@ class GrabacionController {
             }
 
             // Guardar el archivo
-            fs.writeFileSync(rutaGuardado, buffer);
-            fs.renameSync(req.file.path, rutaGrabacion);
+            fs.writeFileSync(`${rutaGuardado}`, buffer);
+            fs.renameSync(req.file.path, `${rutaGrabacion}`);
 
             //subir archivo a la base de datos
             const chat = new Chat();
-            const resultadoExpediente = await chat.insertExpediente(idPsicologo, idPaciente, rutaGuardado);
+            const resultadoExpediente = await chat.insertExpediente(idPsicologo, idPaciente, `${rutaGuardado}`);
             if (resultadoExpediente.modifiedCount !== 1) {
                 return res.status(500).json({ success: false, message: 'Error al guardar el archivo' });
             }
             if (grabacion) {
-                const resultadoGrabacion = await chat.insertGrabacion(idPsicologo, idPaciente, rutaGrabacion);
+                const resultadoGrabacion = await chat.insertGrabacion(idPsicologo, idPaciente, `${rutaGrabacion}`);
                 if (resultadoGrabacion.modifiedCount !== 1) {
                     return res.status(500).json({ success: false, message: 'Error al guardar la grabación' });
                 }
             } else {
                 const filePath = path.resolve(req.file.path);
-                fs.unlinkSync(rutaGrabacion);
+                fs.unlinkSync(`${rutaGrabacion}/${nombreGrabacion}`);
             }
 
             //enviar correo al psicologo notificando que el expediente esta listo
             const { nombre, email: emailPsicologo } = req.user;
-            await emailService.enviarInforme(emailPsicologo, nombre, rutaGuardado);
+            await emailService.enviarInforme(emailPsicologo, nombre, `${rutaGuardado}`);
             res.status(200).json({ success: true, message: 'Grabación guardada correctamente' });
         } catch (error) {
             console.log("Error al procesar la grabación:", error);

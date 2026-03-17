@@ -41,9 +41,40 @@ export default function Login() {
     }
 
     //Función Login con Google
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = (googleRole = null) => {
+        const baseUrl = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+        if (googleRole) {
+            window.location.href = `${baseUrl}?role=${googleRole}`;
+            return;
+        }
+
         // Redirigir directamente a la ruta de autenticación de Google en el backend
-        window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+        window.location.href = baseUrl;
+    };
+
+    // Confirmar el tipo de cuenta antes de registrar con Google.
+    const handleGoogleRegister = async () => {
+        const role = isPsicologo ? 'psicologo' : 'paciente';
+        const roleLabel = isPsicologo ? 'Psicologo' : 'Paciente';
+        const switchHint = isPsicologo
+            ? 'Si no eres psicologo, desactiva el switch antes de continuar.'
+            : 'Si eres psicologo, activa el switch antes de continuar.';
+
+        const result = await Swal.fire({
+            icon: 'warning',
+            title: `Te registraras como ${roleLabel}`,
+            text: switchHint,
+            showCancelButton: true,
+            confirmButtonText: 'Continuar con Google',
+            cancelButtonText: 'Revisar switch',
+            confirmButtonColor: '#2973B2'
+        });
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        handleGoogleLogin(role);
     };
 
 
@@ -204,7 +235,7 @@ export default function Login() {
                         <button 
                             type='button'
                             className='google-button' 
-                            onClick={handleGoogleLogin}
+                            onClick={() => handleGoogleLogin()}
                         >
                             <span className='google-icon' aria-hidden="true">
                                 <i className="fa-brands fa-google"></i>
@@ -285,7 +316,7 @@ export default function Login() {
                         <button 
                             type='button'
                             className='google-button' 
-                            onClick={handleGoogleLogin}
+                            onClick={handleGoogleRegister}
                         >
                             <span className='google-icon' aria-hidden="true">
                                 <i className="fa-brands fa-google"></i>
