@@ -221,8 +221,8 @@ export default function Login() {
                     <h1 className='register-title'>Registrar</h1>
 
                     {registerError && <div className='error-message' style={{color: 'red', marginBottom: '10px'}}>{registerError}</div>}
-
-                    <div className='inputBox'>
+                                
+                    <div className='inputBox registerInput'>
                         <input 
                             type="text" 
                             placeholder='Nombre completo' 
@@ -232,7 +232,7 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className='inputBox'>
+                    <div className='inputBox registerInput'>
                         <input 
                             type="email" 
                             placeholder='Correo electronico' 
@@ -242,7 +242,7 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className='inputBox'>
+                    <div className='inputBox registerInput'>
                         <input 
                             type="password" 
                             placeholder='Contraseña' 
@@ -252,7 +252,7 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className='inputBox'>
+                    <div className='inputBox registerInput'>
                         <input 
                             type="password" 
                             placeholder='Confirmar contraseña' 
@@ -272,7 +272,7 @@ export default function Login() {
                         onCambio={setIsPsicologo}
                     />
 
-                    <button type='submit' className='btn register' disabled={registerLoading}>
+                    <button type='submit' className='btn register' id="btnFormRegister" disabled={registerLoading}>
                         {registerLoading ? 'Registrando...' : 'Registrarse'}
                     </button>
                     </div>
@@ -281,7 +281,7 @@ export default function Login() {
                     <div className='div-google'>
                         <button 
                             type='button'
-                            className='google-button' 
+                            className='google-button register-googlebtn' 
                             onClick={handleGoogleLogin}
                         >
                             <span className='google-icon' aria-hidden="true">
@@ -290,10 +290,7 @@ export default function Login() {
                             <span className='google-text'>Continuar con Google</span>
                         </button>
                     </div>
-
-                    <button type='submit' className='btn register' disabled={registerLoading}>
-                        {registerLoading ? 'Registrando...' : 'Registrarse'}
-                    </button>
+ 
                 </form>
             </div>
 
