@@ -30,7 +30,7 @@ function MenuPsiF() {
     return (
         <div className='menuFullCon'>
             <MenuPsi/>
-            <Outlet context={{qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey}}/>
+            <Outlet context={{qrOpen , handleOpen, uidOpen, handleOpenUID, refreshKey, userId: user?.id}}/>
             <div className={qrOpen ? 'showQr' : 'hidenMenu'}>
                 <AddQr 
                     title = "Agregar Paciente" 
