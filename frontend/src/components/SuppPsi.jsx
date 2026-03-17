@@ -87,7 +87,8 @@ export default function SuppPsi(props) {
             <hr className={activo ? 'lineDown2' : 'lineDown'} />
 
             <div className='matApo'>
-                {currentItems.map((item) => (
+                {currentItems.map((item) => 
+                (
                     <Link
                         key={item._id}
                         to={`/psicologo/doc/${item._id}`}

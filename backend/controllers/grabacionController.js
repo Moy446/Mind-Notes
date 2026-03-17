@@ -68,8 +68,8 @@ class GrabacionController {
             const buffer = await Packer.toBuffer(doc);
 
             const nombreArchivo = new Date().toLocaleDateString('sv');
-            const rutaGuardado = path.join(__dirname, '..', 'uploads', 'docs', idPsicologo + "", idPaciente + "", nombreArchivo + ".doc");
-            const rutaGrabacion = path.join(__dirname, '..', 'uploads', 'audio', idPsicologo + "", idPaciente + "", nombreArchivo + ".wav");
+            const rutaGuardado = path.join(__dirname, '..', 'uploads', 'docs', idPsicologo + "", idPaciente + "", nombreArchivo + "-" + nombrePaciente + ".doc");
+            const rutaGrabacion = path.join(__dirname, '..', 'uploads', 'audio', idPsicologo + "", idPaciente + "", nombreArchivo + "-" + nombrePaciente + ".wav");
 
             const dir = path.dirname(rutaGuardado);
             if (!fs.existsSync(dir)) {
