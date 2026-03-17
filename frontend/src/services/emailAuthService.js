@@ -1,4 +1,4 @@
-import axios from 'axios';
+import clienteAxios from '../services/axios'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -10,7 +10,7 @@ export const emailAuthService = {
      */
     async solicitarRecuperacion(email) {
         try {
-            const response = await axios.post(`${API_URL}/auth/solicitar-recuperacion`, {
+            const response = await clienteAxios.post(`/auth/solicitar-recuperacion`, {
                 email
             });
             return response.data;
@@ -39,7 +39,7 @@ export const emailAuthService = {
             };
         }
         try {
-            const response = await axios.post(`${API_URL}/auth/cambiar-password/`, {
+            const response = await clienteAxios.post(`/auth/cambiar-password/`, {
                 token,
                 newPassword,
                 confirmPassword
@@ -61,7 +61,7 @@ export const emailAuthService = {
      */
     async verificarCuenta(token) {
         try {
-            const response = await axios.get(`${API_URL}/auth/verificar-cuenta/${token}`);
+            const response = await clienteAxios.get(`/auth/verificar-cuenta/${token}`);
             return response.data;
         } catch (error) {
             return {
@@ -78,7 +78,7 @@ export const emailAuthService = {
      */
     async reenviarVerificacion(email) {
         try {
-            const response = await axios.post(`${API_URL}/auth/reenviar-verificacion`, {
+            const response = await clienteAxios.post(`/auth/reenviar-verificacion`, {
                 email
             });
             return response.data;
