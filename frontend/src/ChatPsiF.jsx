@@ -222,7 +222,7 @@ const fetchSelectedName = useCallback(async () => {
                                     color: '#999',
                                     fontSize: '18px'
                                 }}>
-                                    Selecciona un psicólogo para comenzar a chatear
+                                    Selecciona un paciente para comenzar a chatear
                                 </div>
                             ) : messages.length === 0 ? (
                                 <div style={{
