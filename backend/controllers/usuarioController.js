@@ -186,11 +186,13 @@ class UsuarioController {
                     const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role });
                     const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role });
                     cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                    console.log(usuario);
                     return res.status(200).json({
                         success: true,
                         idPsicologo: usuario.idUsuario,
                         idUsuario: usuario.idUsuario,
-                        nombre: usuario.nombre
+                        nombre: usuario.nombre,
+                        suscripcion: usuario.suscripcion?.plan || 'Plan Gratuito',
                     });
                 }
 
@@ -202,6 +204,7 @@ class UsuarioController {
                     success: true,
                     idPaciente: usuario.idUsuario,
                     idUsuario: usuario.idUsuario,
+                    nombre: usuario.nombre,
                 });
             };
 
@@ -255,12 +258,16 @@ class UsuarioController {
                 const accessToken = cookieCtrl.signAccess({ id: usuario.idUsuario, role });
                 const refreshToken = cookieCtrl.signRefresh({ id: usuario.idUsuario, role });
                 cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+                console.log(usuario.suscripcion?.plan);
+
                 return res.status(200).json({
                     success: true,
                     idPsicologo: usuario.idUsuario,
                     idUsuario: usuario.idUsuario,
                     nombre: usuario.nombre,
-                    role: 'psicologo'
+                    role: 'psicologo',
+                    suscripcion: usuario.suscripcion?.plan || 'Plan Gratuito',
+
                 });
             }
 
@@ -453,8 +460,7 @@ class UsuarioController {
                 fotoPerfil: userSafe.fotoPerfil,
                 telefono: userSafe.telefono,
                 role: userSafe.esPsicologo ? 'psicologo' : 'paciente',
-                plan: userSafe.plan || 'Plan Gratuito',
-                apellido: userSafe.apellido,
+                plan: userSafe.suscripcion?.plan || 'Plan Gratuito',
                 cedula: userSafe.cedula
             };
 
@@ -793,7 +799,7 @@ class UsuarioController {
                     message: 'No se pudo eliminar la cuenta'
                 });
             }
-        
+
         } catch (error) {
             console.error('Error al eliminar cuenta:', error);
             return res.status(500).json({

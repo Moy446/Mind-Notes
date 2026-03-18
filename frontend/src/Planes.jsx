@@ -4,6 +4,10 @@ import SubBtn from './components/SubBtn';
 import EliminarBtn from './components/EliminarBtn';
 import { AuthContext } from './context/AuthContext';
 import Swal from 'sweetalert2';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 
 export default function PerfilPsiF(props) {
     const [loading, setLoading] = useState(false);
@@ -14,27 +18,20 @@ export default function PerfilPsiF(props) {
             return;
         }
 
-        const idUsuario = user?.id || null;
-        if (!authenticated || !idUsuario) {
+        if (!authenticated || !user?.id) {
             alert('Debes iniciar sesion para comprar un plan');
             return;
         }
 
         try {
             setLoading(true);
-            const response = await fetch('/api/psicologo/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    idUsuario,
-                    plan
-                })
+            const response = await axios.post(`${API_URL}/psicologo/checkout`, {
+                plan
+            }, {
+                withCredentials: true
             });
 
-            const data = await response.json();
+            const data = await response.data;
 
             if (data.success && data.url) {
                 window.location.href = data.url;
@@ -55,6 +52,59 @@ export default function PerfilPsiF(props) {
             });
         } finally {
             setLoading(false);
+        }
+    };
+
+    const cancelSubscription = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${API_URL}/psicologo/cancel-subscription`, {}, {
+                withCredentials: true
+            });
+            const data = await response.data;
+
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Suscripción cancelada',
+                    text: data.message || 'Tu suscripción ha sido cancelada'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.error || 'Ocurrió un error al cancelar la suscripción'
+                });
+            }
+        } catch (error) {
+            console.error('Error al cancelar suscripción:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Ocurrió un error al cancelar la suscripción'
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancelSubscription = async () => {
+        try {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Deseas cancelar tu suscripción? Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, cancelar',
+                cancelButtonText: 'No, mantener'
+            });
+
+            if (result.isConfirmed) {
+                await cancelSubscription();
+            }
+
+        } catch (error) {
+            console.error('Error al cancelar suscripción:', error);
         }
     };
 
@@ -88,7 +138,11 @@ export default function PerfilPsiF(props) {
                 />
             </div>
             <div className='cancelSubBtn'>
-                <EliminarBtn texto = "Cancelar suscripccion"/>
+                <EliminarBtn
+                    texto="Cancelar suscripccion"
+                    onClick={() => handleCancelSubscription()}
+                    disabled={loading || authLoading}
+                />
             </div>
         </div>
     );
