@@ -4,11 +4,16 @@ import './DeleteMenu.css'
 export default function DeleteMenu(props){
 
     const ref = useRef(null);
+
+    const handleCancel = props.onCancel || props.handleDel;
+    const handleConfirm = props.onConfirm || props.handleDel;
     
     useEffect(() => {
             function handleClickOutside(event) {
                 if (props.del && ref.current && !ref.current.contains(event.target)) {
-                    props.handleDel();
+                    if (handleCancel) {
+                        handleCancel();
+                    }
                 }
         }
     
@@ -16,7 +21,7 @@ export default function DeleteMenu(props){
         return () => {
           document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [props.handleDel]);
+        }, [props.del, handleCancel]);
     
     if (!props.del) return null;
 
@@ -25,8 +30,8 @@ export default function DeleteMenu(props){
             <span className='title-deletemenu'>{props.title}</span>
             <span className='subtutle'>{props.subtitle}</span>
             <div className='buttons'>
-                <button className='cancel-button' onClick={props.handleDel}>Cancelar</button>
-                <button className='acceptBtnD' onClick={props.handleDel}>Aceptar</button>
+                <button className='cancel-button' onClick={handleCancel}>Cancelar</button>
+                <button className='acceptBtnD' onClick={handleConfirm}>Aceptar</button>
             </div>
             
         </div>

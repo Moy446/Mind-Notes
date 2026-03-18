@@ -38,7 +38,13 @@ export default function SubBtn(props){
     }
 
     return (
-        <div className={styleRender(props.price)}>
+        <div
+            className={styleRender(props.price)}
+            onClick={props.onClick}
+            role={props.onClick ? 'button' : undefined}
+            aria-disabled={props.disabled ? 'true' : undefined}
+            style={props.onClick ? { cursor: props.disabled ? 'not-allowed' : 'pointer' } : undefined}
+        >
             <div className='txt-cont'>
                 <a className={props.time == "30 Días" || props.time == "1 Mes" ? 'time' : 'time time2'}>
                     {props.time}
@@ -49,7 +55,7 @@ export default function SubBtn(props){
             </div>
             {imgRender(props.price)}
             <div className='des-cont free'>
-                    {props.des}
+                {props.des}
             </div>
         </div>
     );

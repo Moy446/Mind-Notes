@@ -52,6 +52,9 @@ class CalendarioController {
             const psicologoData = req.user;
             const idUsuario = psicologoData.idUsuario;
             const nombreUsuario = psicologoData.nombre;
+            //obtener correo paciente
+            const usuario = new Usuario();
+            const pacienteEmail = await usuario.findEmailById(idPaciente);
             //validar que no haya citas en el mismo horario
             const agenda = new Agenda();
             const citasDelDia =  await agenda.searchByDayAndPsychologist(fechaCita, idUsuario);
@@ -60,6 +63,7 @@ class CalendarioController {
                     throw new Error('Ya existe una cita en el mismo horario');
                 }
             }
+
             const cita = new Cita();
             const listaVinculacion = new ListaVinculacion();
             const datos = await listaVinculacion.findVinculacion(idUsuario,idPaciente);
@@ -68,6 +72,7 @@ class CalendarioController {
                 idPsicologo : idUsuario,/*req.params.idPsicologo,*/
                 nombrePaciente,
                 nombrePsicologo : nombreUsuario,/*req.params.nombrePsicologo,*/
+                emailPaciente: pacienteEmail,
                 fechaCita,
                 horaInicio,
                 horaFin,
@@ -104,6 +109,9 @@ class CalendarioController {
             const psicologoData = req.user;
             const idUsuario = psicologoData.idUsuario;
             const nombreUsuario = psicologoData.nombre;
+            
+            const usuario = new Usuario();
+            const pacienteEmail = await usuario.findEmailById(idPaciente);
 
             const agenda = new Agenda();
             //validar que no haya citas en el mismo horario
@@ -121,11 +129,13 @@ class CalendarioController {
                 idPsicologo : idUsuario,
                 nombrePaciente,
                 nombrePsicologo : nombreUsuario,
+                correoPaciente: pacienteEmail,
                 fechaCita,
                 horaInicio,
                 horaFin,
                 duracion,
                 estado: 'reagendada'
+                
             } 
             const resultadoCita = await cita.editCita(idCita, datosActualizados);  
             const nuevaAgenda = {
@@ -199,6 +209,20 @@ class CalendarioController {
             res.status(200).json({success:true, nombresPacientes });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error al cargar la lista de pacientes: ' + error.message });    
+        }
+    }
+
+    async confirmarCita(req,res){
+        try {
+            const {id} = req.params;
+            const {status} = req.query;
+            const cita = new Cita();
+            const agenda = new Agenda();
+            await cita.updateStatus(id, status);
+            await agenda.updateStatus(id, status);
+            res.status(200).json({ success: true, message: 'Cita confirmada exitosamente' });
+        } catch (error) {
+            res.status(500).json({ success: false, message: 'Error al confirmar la cita: ' + error.message });
         }
     }
 

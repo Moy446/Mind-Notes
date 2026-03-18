@@ -56,6 +56,16 @@ class Agenda {
             throw error;
         }
     }
+
+    async updateStatus(idCita, status){
+        try {
+            const agendaActualizada = await this.colAgenda.updateOne({idCita: new ObjectId(idCita)}, {$set: {status: status, updatedAt: new Date()}});
+            return agendaActualizada;
+        } catch (error) {
+            console.error("Error al actualizar el estado de la agenda:", error);
+            throw error;
+        }
+    }
     async searchByDayAndPsychologist(fechaCita, idPsicologo){
         try {
             const datesOfDay = await this.colAgenda.find({idPsicologo:new ObjectId(idPsicologo),fechaCita:new Date(fechaCita)}).toArray();

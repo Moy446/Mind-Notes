@@ -50,7 +50,22 @@ router.post('/reenviar-verificacion', (req, res) =>
  * Inicia autenticación con Google
  */
 router.get('/google', 
-    passport.authenticate('google', { scope: ['profile', 'email'] })
+    (req, res, next) => {
+        const requestedRole = req.query.role === 'psicologo' ? 'psicologo' : 'paciente';
+        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+        const sameSite = useSecure ? 'None' : 'Lax';
+
+        // Guarda el rol seleccionado para usarlo al crear cuentas nuevas por Google.
+        res.cookie('google_role', requestedRole, {
+            httpOnly: true,
+            secure: useSecure,
+            sameSite,
+            maxAge: 10 * 60 * 1000
+        });
+
+        next();
+    },
+    passport.authenticate('google', { scope: ['profile', 'email'], session: false })
 );
 
 /**
@@ -60,10 +75,14 @@ router.get('/google',
 router.get('/google/callback',
     passport.authenticate('google', { 
         failureRedirect: process.env.FRONTEND_URL + '/login?error=google_auth_failed',
-        session: true  // Cambiar a true temporalmente para el callback
+        session: false
     }),
     (req, res) => {
         try {
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const sameSite = useSecure ? 'None' : 'Lax';
+            res.clearCookie('google_role', { httpOnly: true, secure: useSecure, sameSite });
+
             const usuario = req.user;
             const role = usuario.esPsicologo ? 'psicologo' : 'paciente';
             
@@ -79,26 +98,10 @@ router.get('/google/callback',
             
             // Establecer cookies en la respuesta
             cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
-            
-            // Limpiar la sesión de Passport después de establecer las cookies
-            req.logout((err) => {
-                if (err) {
-                    console.error('Error al limpiar sesión de Passport:', err);
-                }
-                
-                // Destruir la sesión temporal de autenticación
-                if (req.session) {
-                    req.session.destroy((err) => {
-                        if (err) {
-                            console.error('Error al destruir sesión:', err);
-                        }
-                    });
-                }
-                
-                // Redirigir al frontend según el rol (sin tokens en URL por seguridad)
-                const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-                res.redirect(`${frontendUrl}/${role}`);
-            });
+
+            // Redirigir al frontend según el rol (sin tokens en URL por seguridad)
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+            res.redirect(`${frontendUrl}/${role}`);
         } catch (error) {
             console.error('Error en Google callback:', error);
             const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
