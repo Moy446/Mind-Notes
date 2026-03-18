@@ -27,11 +27,16 @@
     justify-self: center;
     margin: 20px;
     cursor: pointer;
+    border-radius: 50px;
 }
 
 .svg-namebar
 {
-
+    max-height: 80%;
+    align-self: center;
+    justify-self: center;
+    margin: 20px;
+    cursor: pointer;
 }
 
 .svg-namebar:hover {
@@ -60,6 +65,9 @@
     font-size: large;
     margin-left: 20px;
 }
+.show-mobile{
+    display: none;
+}
 
 @font-face {
   font-family: 'Saira';
@@ -67,4 +75,13 @@
   font-style: normal;
   font-display: swap;
   font-weight: 100 900; 
+}
+
+@media (max-width: 768px) {
+    .show-mobile{
+        display: block;
+    }
+    .svg-namebar{
+        width: 15%;
+    }
 }

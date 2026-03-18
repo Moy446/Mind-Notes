@@ -5,17 +5,17 @@ import { ObjectId } from "mongodb";
 
 
 class ListaVinculacion {
-    constructor(){
+    constructor() {
         this.colListaVinculacion = dbClient.db?.collection('listaVinculacion');
     }
-    async create(idPsicologo, idPaciente){
-        try{
+    async create(idPsicologo, idPaciente) {
+        try {
             const usuario = new Usuario();
-            
+
             // Buscar ambos usuarios
             const dataPsicologo = await usuario.findById(idPsicologo)
             const dataPaciente = await usuario.findById(idPaciente)
-            
+
             // Validar que ambos usuarios existan
             if (!dataPsicologo) {
                 throw new Error(`El psicólogo con ID ${idPsicologo} no existe`);
@@ -23,9 +23,9 @@ class ListaVinculacion {
             if (!dataPaciente) {
                 throw new Error(`El paciente con ID ${idPaciente} no existe`);
             }
-            
+
             const chat = new Chat();
-            const vinculacion = {  
+            const vinculacion = {
                 idVinculacion: new ObjectId(),
                 idPsicologo: new ObjectId(idPsicologo),
                 idPaciente: new ObjectId(idPaciente),
@@ -34,7 +34,7 @@ class ListaVinculacion {
                 fotoPerfilPsicologo: dataPsicologo.fotoPerfil || "/src/images/userDefault.png",
                 fotoPerfilPaciente: dataPaciente.fotoPerfil || "/src/images/userDefault.png",
             };
-            const datosChat ={
+            const datosChat = {
                 idPaciente: idPaciente,
                 idPsicologo: idPsicologo,
                 nombrePaciente: dataPaciente.nombre,
@@ -42,7 +42,7 @@ class ListaVinculacion {
             }
             const resVinculacion = await this.colListaVinculacion.insertOne(vinculacion);
             const resChat = await chat.create(datosChat);
-            if(!resVinculacion || !resChat){
+            if (!resVinculacion || !resChat) {
                 throw new Error('Error al crear la vinculacion o el chat');
             }
             return resVinculacion;
@@ -50,12 +50,12 @@ class ListaVinculacion {
         catch (error) {
             console.error("Error al crear la lista de vinculacion:", error);
             throw error;
-        }   
+        }
 
     }
-    async findVinculacion(idPsicologo, idPaciente){
+    async findVinculacion(idPsicologo, idPaciente) {
         try {
-            const vinculacion = await this.colListaVinculacion.findOne({idPsicologo: new ObjectId(idPsicologo), idPaciente: new ObjectId(idPaciente)}); 
+            const vinculacion = await this.colListaVinculacion.findOne({ idPsicologo: new ObjectId(idPsicologo), idPaciente: new ObjectId(idPaciente) });
             return vinculacion;
         }
         catch (error) {
@@ -63,48 +63,96 @@ class ListaVinculacion {
         }
     }
 
-   async findByPsicologo(idPsicologo){
+    async findByPsicologo(idPsicologo) {
         try {
-            return this.colListaVinculacion.find({idPsicologo: new ObjectId(idPsicologo)}).toArray(); 
+            return this.colListaVinculacion.find({ idPsicologo: new ObjectId(idPsicologo) }).toArray();
         } catch (error) {
             throw new Error('Error al obtener las vinculaciones por psicologo: ' + error.message);
         }
     }
 
-   async findByPaciente(idPaciente){
+    async findByPaciente(idPaciente) {
         try {
-            return this.colListaVinculacion.find({idPaciente: new ObjectId(idPaciente)}).toArray();   
+            return this.colListaVinculacion.find({ idPaciente: new ObjectId(idPaciente) }).toArray();
         } catch (error) {
             throw new Error('Error al obtener las vinculaciones por paciente: ' + error.message);
         }
-    }   
-
-    async getAllPacientes(idPsicologo){
-        try{
-            const vinculaciones = await this.colListaVinculacion.find({idPsicologo: new ObjectId(idPsicologo)}).toArray();    
-            return vinculaciones;
-        }catch(error){
-            throw new Error('Error al obtener todos los pacientes vinculados: ' + error.message);
-        }   
     }
 
-    getAllPsicologos(idPaciente){
-        try{
-            return this.colListaVinculacion.find({idPaciente: new ObjectId(idPaciente)}).toArray();   
-        }catch(error){
+    async getAllPacientes(idPsicologo) {
+        try {
+            const vinculaciones = await this.colListaVinculacion.find({ idPsicologo: new ObjectId(idPsicologo) }).toArray();
+            return vinculaciones;
+        } catch (error) {
+            throw new Error('Error al obtener todos los pacientes vinculados: ' + error.message);
+        }
+    }
+
+    getAllPsicologos(idPaciente) {
+        try {
+            return this.colListaVinculacion.find({ idPaciente: new ObjectId(idPaciente) }).toArray();
+        } catch (error) {
             throw new Error('Error al obtener todos los psicologos vinculados: ' + error.message);
         }
-    }   
+    }
 
+    async actualizarNombreEnVinculaciones(idUsuario, nuevoNombre) {
+        console.log('Actualizando nombre en vinculaciones para usuario:', idUsuario, 'Nuevo nombre:', nuevoNombre);
+        try {
+            await this.colListaVinculacion.updateMany(
+                { $or: [{ idPsicologo: new ObjectId(idUsuario) }, { idPaciente: new ObjectId(idUsuario) }] },
+                [
+                    {
+                        $set: {
+                            nombrePsicologo: { $cond: [{ $eq: ["$idPsicologo", new ObjectId(idUsuario)] }, nuevoNombre, "$nombrePsicologo"] },
+                            nombrePaciente: { $cond: [{ $eq: ["$idPaciente", new ObjectId(idUsuario)] }, nuevoNombre, "$nombrePaciente"] }
+                        }
+                    }
+                ]
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar el nombre en las vinculaciones: ' + error.message);
+        }
+    }
 
-   async getAll(){
+    async actualizarFotoEnVinculaciones(idUsuario, nuevaFotoPerfil) {
+        try {
+            await this.colListaVinculacion.updateMany(
+                { $or: [{ idPsicologo: new ObjectId(idUsuario) }, { idPaciente: new ObjectId(idUsuario) }] },
+                [
+                    {
+                        $set: {
+                            fotoPerfilPsicologo: {
+                                $cond: [
+                                    { $eq: ["$idPsicologo", new ObjectId(idUsuario)] },
+                                    nuevaFotoPerfil,
+                                    "$fotoPerfilPsicologo"
+                                ]
+                            },
+                            fotoPerfilPaciente: {
+                                $cond: [
+                                    { $eq: ["$idPaciente", new ObjectId(idUsuario)] },
+                                    nuevaFotoPerfil,
+                                    "$fotoPerfilPaciente"
+                                ]
+                            }
+                        }
+                    }
+                ]
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar la foto en las vinculaciones: ' + error.message);
+        }
+    }
+
+    async getAll() {
         try {
             const vinculaciones = await this.colListaVinculacion.find().toArray();
             return vinculaciones;
         } catch (error) {
             throw new Error('Error al obtener todas las vinculaciones: ' + error.message);
-        }   
+        }
     }
 
-}   
+}
 export default ListaVinculacion;

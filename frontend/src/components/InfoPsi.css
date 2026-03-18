@@ -1,6 +1,6 @@
 .infopsi
 {
-    height: 94%;
+    height: 100%;
     width: 465px;
     background-color: #2973B2;
     display: flex;
@@ -32,6 +32,7 @@
 {
     width: 50%;
     align-self: center;
+    border-radius: 50%;
 }
 
 .nameInfoPsi
@@ -124,13 +125,14 @@
     margin-left: 25%;
 }
 
-@media only screen and (max-width: 940px) {
+@media only screen and (max-width: 768px) {
     .infopsi{
+        display: contents;
         background-color: #F2EFE7;
-
     }
     .imgInfoPsi{
-        width: 35%;
+        width: 25%;
+        margin-bottom: 10px;
     }
     .svgInfopsi{
         width: 10%;

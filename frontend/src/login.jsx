@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
+import Tooltipe from './components/Tooltipe'
 import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
@@ -40,9 +41,40 @@ export default function Login() {
     }
 
     //Función Login con Google
-    const handleGoogleLogin = () => {
+    const handleGoogleLogin = (googleRole = null) => {
+        const baseUrl = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+        if (googleRole) {
+            window.location.href = `${baseUrl}?role=${googleRole}`;
+            return;
+        }
+
         // Redirigir directamente a la ruta de autenticación de Google en el backend
-        window.location.href = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+        window.location.href = baseUrl;
+    };
+
+    // Confirmar el tipo de cuenta antes de registrar con Google.
+    const handleGoogleRegister = async () => {
+        const role = isPsicologo ? 'psicologo' : 'paciente';
+        const roleLabel = isPsicologo ? 'Psicologo' : 'Paciente';
+        const switchHint = isPsicologo
+            ? 'Si no eres psicologo, desactiva el switch antes de continuar.'
+            : 'Si eres psicologo, activa el switch antes de continuar.';
+
+        const result = await Swal.fire({
+            icon: 'warning',
+            title: `Te registraras como ${roleLabel}`,
+            text: switchHint,
+            showCancelButton: true,
+            confirmButtonText: 'Continuar con Google',
+            cancelButtonText: 'Revisar switch',
+            confirmButtonColor: '#2973B2'
+        });
+
+        if (!result.isConfirmed) {
+            return;
+        }
+
+        handleGoogleLogin(role);
     };
 
 
@@ -203,7 +235,7 @@ export default function Login() {
                         <button 
                             type='button'
                             className='google-button' 
-                            onClick={handleGoogleLogin}
+                            onClick={() => handleGoogleLogin()}
                         >
                             <span className='google-icon' aria-hidden="true">
                                 <i className="fa-brands fa-google"></i>
@@ -221,8 +253,8 @@ export default function Login() {
                     <h1 className='register-title'>Registrar</h1>
 
                     {registerError && <div className='error-message' style={{color: 'red', marginBottom: '10px'}}>{registerError}</div>}
-
-                    <div className='inputBox'>
+                                
+                    <div className='inputBox registerInput'>
                         <input 
                             type="text" 
                             placeholder='Nombre completo' 
@@ -232,7 +264,7 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className='inputBox'>
+                    <div className='inputBox registerInput'>
                         <input 
                             type="email" 
                             placeholder='Correo electronico' 
@@ -243,6 +275,7 @@ export default function Login() {
                     </div>
 
                     <div className='inputBox'>
+                        <Tooltipe text="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales como @, $, !, %, *, ?, &">
                         <input 
                             type="password" 
                             placeholder='Contraseña' 
@@ -250,9 +283,10 @@ export default function Login() {
                             value={registerPassword}
                             onChange={(e) => setRegisterPassword(e.target.value)}
                         />
+                        </Tooltipe>
                     </div>
 
-                    <div className='inputBox'>
+                    <div className='inputBox registerInput'>
                         <input 
                             type="password" 
                             placeholder='Confirmar contraseña' 
@@ -272,7 +306,7 @@ export default function Login() {
                         onCambio={setIsPsicologo}
                     />
 
-                    <button type='submit' className='btn register' disabled={registerLoading}>
+                    <button type='submit' className='btn register' id="btnFormRegister" disabled={registerLoading}>
                         {registerLoading ? 'Registrando...' : 'Registrarse'}
                     </button>
                     </div>
@@ -281,8 +315,8 @@ export default function Login() {
                     <div className='div-google'>
                         <button 
                             type='button'
-                            className='google-button' 
-                            onClick={handleGoogleLogin}
+                            className='google-button register-googlebtn' 
+                            onClick={handleGoogleRegister}
                         >
                             <span className='google-icon' aria-hidden="true">
                                 <i className="fa-brands fa-google"></i>
@@ -290,10 +324,7 @@ export default function Login() {
                             <span className='google-text'>Continuar con Google</span>
                         </button>
                     </div>
-
-                    <button type='submit' className='btn register' disabled={registerLoading}>
-                        {registerLoading ? 'Registrando...' : 'Registrarse'}
-                    </button>
+ 
                 </form>
             </div>
 

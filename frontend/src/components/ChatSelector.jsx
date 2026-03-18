@@ -7,9 +7,10 @@ import AddBtnsMenu from './AddBtnsMenu';
 import { obtenerPacientesVinculados } from '../services/vinculacionService';
 import { obtenerPsicologosVinculados } from '../services/vinculacionService';
 import { AuthContext } from '../context/AuthContext';
+import { getImageUrl } from '../utils/imageHelper';
 
 
-export default function ChatSelector(props){
+export default function ChatSelector(props) {
 
     const { user } = useContext(AuthContext); // Obtén el usuario del contexto
     const [selectedId, setSelectedId] = useState(null);
@@ -62,7 +63,7 @@ export default function ChatSelector(props){
     const filteredContacts = contacts.filter((contact) => {
         if (!contact) return false;
         const userRole = user?.role;
-        const displayName = userRole === 'psicologo' 
+        const displayName = userRole === 'psicologo'
             ? (contact.nombrePaciente || contact.nombre || '')
             : (contact.nombrePsicologo || contact.nombre || '');
         return displayName.toLowerCase().includes(searchTerm.toLowerCase());
@@ -75,8 +76,8 @@ export default function ChatSelector(props){
         <div className='chatselec'>
             <div className='wiwiwiCS'>
                 <p className='textCS'>MindNotes</p>
-                <SearchBar 
-                    searchTerm={searchTerm} 
+                <SearchBar
+                    searchTerm={searchTerm}
                     onSearchChange={handleSearchChange}
                     placeholder={searchPlaceholder}
                 />
@@ -93,22 +94,23 @@ export default function ChatSelector(props){
                         const contactId = userRole === 'psicologo' ? (contact.idPaciente || contact._id || contact.id || idx) : (contact.idPsicologo || contact._id || contact.id || idx);
                         const displayName = userRole === 'psicologo' ? (contact.nombrePaciente || contact.nombre || 'Contacto') : (contact.nombrePsicologo || contact.nombre || 'Contacto');
                         const lastMsg = contact.ultimoMensaje || contact.ultimoMensajeTexto || '';
-                        const profileImg = userRole === 'psicologo' ? (contact.fotoPerfilPaciente || '/src/images/pimg1.png') : (contact.fotoPerfilPsicologo || '/src/images/pimg1.png');
-                        return (
-                            <ChatBox
-                                key={contactId}
-                                img={profileImg}
-                                name={displayName}
-                                message={lastMsg}
-                                isSelected={selectedId === contactId}
-                                onSelect={() => handleSelect(contactId)}
-                            />
-                        );
+                        const profileImg = userRole === 'psicologo'
+                            ? getImageUrl(contact.fotoPerfilPaciente, '/src/images/pimg1.png')
+                            : getImageUrl(contact.fotoPerfilPsicologo, '/src/images/pimg1.png'); return (
+                                <ChatBox
+                                    key={contactId}
+                                    img={profileImg}
+                                    name={displayName}
+                                    message={lastMsg}
+                                    isSelected={selectedId === contactId}
+                                    onSelect={() => handleSelect(contactId)}
+                                />
+                            );
                     })}
                 </div>
             </div>
             <div className='addDivCS'>
-                <AddBtnsMenu qrOpen = {props.qrOpen} handleOpen = {props.handleOpen} uidOpen = {props.uidOpen} handleOpenUID = {props.handleOpenUID}/>
+                <AddBtnsMenu qrOpen={props.qrOpen} handleOpen={props.handleOpen} uidOpen={props.uidOpen} handleOpenUID={props.handleOpenUID} />
             </div>
         </div>
     );

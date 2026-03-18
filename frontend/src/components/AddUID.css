@@ -8,6 +8,7 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    /* margin-bottom: -10vw; */
 }
 
 .row1{
@@ -41,6 +42,7 @@ input::-webkit-inner-spin-button {
 {
     font-family: 'Saira';
     background-color: #48A6A7;
+    color: black;
     font-weight: 400;
     font-size: 20px;
     border-radius: 20px;
@@ -79,3 +81,57 @@ input::-webkit-inner-spin-button {
   font-display: swap;
   font-weight: 100 900; 
 }
+/* Responsive 768 */
+@media only screen and (max-width: 768px) {
+  .Adduid{
+      width: 100%;
+      height: 150px;
+  }
+  .txtuid{
+    font-size: 13px;
+    border: none;
+    width: 185px;
+    height: 38px;
+    margin-left: 5px;
+  }
+  .btnuid{
+    color: black;
+    font-size: 18px;
+    width: 116px;
+    height: 38px;
+    margin-right: 5px;
+  }
+  .btnqr{
+    font-size: 18px;
+    width: 90%;
+    height: 38px;
+  }
+}
+/* ------------------------------------------------------------------------------------------------------------------------------ */
+/* Responsive 480 */
+@media only screen and (max-width: 480px) {
+  .Adduid{
+      width: 100%;
+      height: 150px;
+  }
+  .txtuid{
+    font-size: 12px;
+    border: none;
+    width: 185px;
+    height: 38px;
+    margin-left: 5px;
+  }
+  .btnuid{
+    color: black;
+    font-size: 15px;
+    width: 116px;
+    height: 38px;
+    margin-right: 5px;
+  }
+  .btnqr{
+    font-size: 15px;
+    width: 90%;
+    height: 38px;
+  }
+}
+/* ------------------------------------------------------------------------------------------------------------------------------ */

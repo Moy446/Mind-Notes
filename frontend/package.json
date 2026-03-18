@@ -23,6 +23,7 @@
     "@tiptap/pm": "^3.18.0",
     "@tiptap/react": "^3.19.0",
     "@tiptap/starter-kit": "^3.19.0",
+    "all": "^0.0.0",
     "axios": "^1.13.2",
     "file-saver": "^2.0.5",
     "framer-motion": "^12.34.0",
@@ -36,7 +37,8 @@
     "react-router-dom": "^7.11.0",
     "react-select": "^5.10.2",
     "socket.io-client": "^4.8.3",
-    "sweetalert2": "^11.26.17"
+    "sweetalert2": "^11.26.17",
+    "tiptap": "^0.15.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^5.0.4",

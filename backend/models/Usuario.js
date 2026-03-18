@@ -47,6 +47,15 @@ class Usuario {
                 usuario.fechaFin = datosUsuario.fechaFin || datosUsuario.FechaFin;
                 usuario.socketId = datosUsuario.socketId || datosUsuario.SocketId || null;
                 usuario.statusChat = datosUsuario.statusChat || datosUsuario.StatusChat || 'offline';
+                usuario.stripeCustomerId = datosUsuario.stripeCustomerId || null;
+                usuario.suscripcion = {
+                    plan: null,
+                    estado: 'inactiva',
+                    fechaInicio: null,
+                    fechaFin: null,
+                    stripeSubscriptionId: null,
+                };
+                usuario.horario = datosUsuario.horario || null;
                 
             } 
             // Campos específicos de Paciente
@@ -303,6 +312,9 @@ class Usuario {
             if (datosActualizar.apellido !== undefined) {
                 camposPermitidos.apellido = datosActualizar.apellido;
             }
+            if (datosActualizar.horario !== undefined) {
+            camposPermitidos.horario = datosActualizar.horario;
+            }
 
             if (Object.keys(camposPermitidos).length === 0) {
                 throw new Error('No hay campos para actualizar');
@@ -331,6 +343,78 @@ class Usuario {
             return result.modifiedCount > 0;
         } catch (error) {
             throw new Error('Error al actualizar Google ID: ' + error.message);
+        }
+    }
+
+    async updateStripeCustomerId(idUsuario, stripeCustomerId) {
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { stripeCustomerId: stripeCustomerId } }
+            );
+        } catch (error) {
+            throw new Error('Error al actualizar Stripe Customer ID: ' + error.message);
+        }
+    }
+
+    async activarPlan(idUsuario, plan, sessionId) {
+        const ahora = new Date();
+        let fechaFin = new Date(ahora.getTime() + 30 * 24 * 60 * 60 * 1000);
+
+        if (plan === 'seisMeses') {
+            fechaFin = new Date(ahora.getTime() + 6 * 30 * 24 * 60 * 60 * 1000);
+        } else if (plan === 'unYear') {
+            fechaFin = new Date(ahora.getTime() + 12 * 30 * 24 * 60 * 60 * 1000);
+        }
+
+        try {
+            await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                {
+                    $set: {
+                        'suscripcion.plan': plan,
+                        'suscripcion.estado': 'activa',
+                        'suscripcion.fechaInicio': ahora,
+                        'suscripcion.fechaFin': fechaFin,
+                        'suscripcion.stripeSubscriptionId': sessionId
+                    }
+                }
+            );
+            return true;
+        } catch (error) {
+            throw new Error('Error al actualizar suscripcion: ' + error.message);
+        }
+    }
+
+    // funcion obtener horario de un psicologo
+    async obtenerHorario(idUsuario) {
+        try {   
+            const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
+            return usuario ? usuario.horario : null;
+        } catch (error) {
+            throw new Error('Error al obtener el horario: ' + error.message);
+        }   
+    }
+    
+    async cambiarFotoPerfil(idUsuario, nuevaFotoPath){
+        try {
+            const resultado = await this.colUsuarios.updateOne(
+                { idUsuario: new ObjectId(idUsuario) },
+                { $set: { fotoPerfil: nuevaFotoPath } }
+            );
+            return resultado.modifiedCount > 0;
+        } catch (error) {
+            throw new Error('Error al cambiar foto de perfil: ' + error.message);
+        }
+    }
+
+    async eliminarCuenta(idUsuario) {
+        try {
+            const resultado = await this.colUsuarios.deleteOne({ idUsuario: new ObjectId(idUsuario) });
+            return resultado.deletedCount > 0;
+        } catch (error) {
+            throw new Error('Error al eliminar cuenta: ' + error.message);
+
         }
     }
 }
