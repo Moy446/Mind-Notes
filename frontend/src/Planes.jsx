@@ -3,6 +3,7 @@ import './Planes.css'
 import SubBtn from './components/SubBtn';
 import EliminarBtn from './components/EliminarBtn';
 import { AuthContext } from './context/AuthContext';
+import { checkout, cancelSubscription } from './services/stripeService';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 
@@ -24,18 +25,13 @@ export default function PerfilPsiF(props) {
         }
 
         try {
-            setLoading(true);
-            const response = await axios.post(`${API_URL}/psicologo/checkout`, {
-                plan
-            }, {
-                withCredentials: true
-            });
-
-            const data = await response.data;
-
-            if (data.success && data.url) {
-                window.location.href = data.url;
-                return;
+            const data = await checkout(user.id, plan);
+            if (data.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pago exitoso',
+                    text: data.message || 'Tu pago ha sido procesado correctamente'
+                });
             }
 
             Swal.fire({
@@ -55,41 +51,11 @@ export default function PerfilPsiF(props) {
         }
     };
 
-    const cancelSubscription = async () => {
-        try {
-            setLoading(true);
-            const response = await axios.post(`${API_URL}/psicologo/cancel-subscription`, {}, {
-                withCredentials: true
-            });
-            const data = await response.data;
-
-            if (data.success) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Suscripción cancelada',
-                    text: data.message || 'Tu suscripción ha sido cancelada'
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.error || 'Ocurrió un error al cancelar la suscripción'
-                });
-            }
-        } catch (error) {
-            console.error('Error al cancelar suscripción:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Ocurrió un error al cancelar la suscripción'
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+    
 
     const handleCancelSubscription = async () => {
         try {
+            setLoading(true);
             const result = await Swal.fire({
                 title: '¿Estás seguro?',
                 text: '¿Deseas cancelar tu suscripción? Esta acción no se puede deshacer.',
@@ -100,11 +66,13 @@ export default function PerfilPsiF(props) {
             });
 
             if (result.isConfirmed) {
-                await cancelSubscription();
+                await cancelSubscription(user.id);
             }
 
         } catch (error) {
             console.error('Error al cancelar suscripción:', error);
+        } finally {
+            setLoading(false);
         }
     };
 

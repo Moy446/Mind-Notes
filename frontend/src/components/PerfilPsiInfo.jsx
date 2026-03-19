@@ -25,7 +25,7 @@ export default function PerfilPsiInfo(props) {
             setUserData({
                 nombre: user.nombre || user.name || 'Usuario',
                 email: user.email || 'correo@ejemplo.com',
-                plan: user.plan === 'seisMeses' ? 'Plan Seis Meses' : user.plan === 'unMes' ? 'Plan Un Mes' : user.plan === 'unYear' ? 'Plan Un Año' : 'Plan Gratuito',
+                plan: user.plan || 'Plan Gratuito',
                 fotoPerfil: user.fotoPerfil || '/src/images/testimg.png'
 
             });
@@ -120,7 +120,6 @@ export default function PerfilPsiInfo(props) {
             });
         }
     };
-
 
     if (loading) {
         return (
