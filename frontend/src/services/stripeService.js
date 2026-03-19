@@ -1,11 +1,8 @@
-import axios from 'axios';
+import clienteAxios from './axios.js';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-export const checkout = async (idUsuario, plan) => {
+export const checkout = async (plan) => {
     try {
-        const response = await axios.post(`${API_URL}/psicologo/checkout`, {
-            idUsuario,
+        const response = await clienteAxios.post(`/psicologo/checkout`, {
             plan
         }, {
             withCredentials: true
@@ -20,7 +17,7 @@ export const checkout = async (idUsuario, plan) => {
 
 export const cancelSubscription = async () => {
     try {
-        const response = await axios.post(`${API_URL}/psicologo/cancel-subscription`, {}, {
+        const response = await clienteAxios.post(`/psicologo/cancel-subscription`, {}, {
             withCredentials: true
         });
         const data = await response.data;

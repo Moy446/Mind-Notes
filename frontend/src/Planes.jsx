@@ -5,10 +5,6 @@ import EliminarBtn from './components/EliminarBtn';
 import { AuthContext } from './context/AuthContext';
 import { checkout, cancelSubscription } from './services/stripeService';
 import Swal from 'sweetalert2';
-import axios from 'axios';
-
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
 
 export default function PerfilPsiF(props) {
     const [loading, setLoading] = useState(false);
@@ -25,20 +21,18 @@ export default function PerfilPsiF(props) {
         }
 
         try {
-            const data = await checkout(user.id, plan);
-            if (data.success) {
+            setLoading(true);
+            const data = await checkout(plan);
+            if (data.success && data.url) {
+                window.location.assign(data.url);
+                return;
+            } else {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'Pago exitoso',
-                    text: data.message || 'Tu pago ha sido procesado correctamente'
+                    icon: 'error',
+                    title: 'Error al procesar el pago',
+                    text: data.error || 'Ocurrió un error al procesar el pago'
                 });
             }
-
-            Swal.fire({
-                icon: 'error',
-                title: 'Error al iniciar el pago',
-                text: data.error || 'No se pudo iniciar el pago'
-            });
         } catch (error) {
             console.error('Error al crear sesion de pago:', error);
             Swal.fire({

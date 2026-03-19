@@ -1,4 +1,4 @@
-import axios from './axios';
+import clienteAxios from './axios';
 /*
 * Servicio para manejar las operaciones relacionadas con el usuario, 
 * como actualizar perfil, cambiar foto, obtener información, etc.
@@ -8,7 +8,7 @@ import axios from './axios';
 // Actualizar información del usuario
 export const actualizarPerfil = async (userId, datos) => {
     try {
-        const response = await axios.put(`/usuario/${userId}`, datos);
+        const response = await clienteAxios.put(`/usuario/${userId}`, datos);
         return response.data;
     } catch (error) {
         console.error('Error al actualizar perfil:', error);
@@ -19,7 +19,7 @@ export const actualizarPerfil = async (userId, datos) => {
 //Actualizar foto de perfil
 export const cambiarFotoPerfil = async (formData) => {
     try {
-        const response = await axios.put('/usuario/foto', formData, {
+        const response = await clienteAxios.put('/usuario/foto', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
@@ -32,7 +32,7 @@ export const cambiarFotoPerfil = async (formData) => {
 // Obtener información del usuario
 export const obtenerPerfil = async (userId) => {
     try {
-        const response = await axios.get(`/usuario/${userId}`);
+        const response = await clienteAxios.get(`/usuario/${userId}`);
         return response.data;
     } catch (error) {
         console.error('Error al obtener perfil:', error);
@@ -43,7 +43,7 @@ export const obtenerPerfil = async (userId) => {
 // Funcion obtener horario de un psicologo
 export const obtenerHorario = async (userId) => {
     try {
-        const response = await axios.get(`/psicologo/horario/${userId}`);
+        const response = await clienteAxios.get(`/psicologo/horario/${userId}`);
         return response.data;
     } catch (error) {
         console.error('Error al obtener horario:', error);
@@ -54,7 +54,7 @@ export const obtenerHorario = async (userId) => {
 // Función para actualizar el horario del psicólogo
 export const actualizarHorario = async (userId, horario) => {
     try {
-        const response = await axios.post(`/psicologo/horario`, { horario });
+        const response = await clienteAxios.post(`/psicologo/horario`, { horario });
         return response.data;
     } catch (error) {
         console.error('Error al actualizar horario:', error);
@@ -64,7 +64,7 @@ export const actualizarHorario = async (userId, horario) => {
 
 export const eliminarCuenta = async (userId) => {
     try {
-        const response = await axios.post('/deleteAccount', { userId });
+        const response = await clienteAxios.post('/deleteAccount', { userId });
         return response.data;
     } catch (error) {
         console.error('Error al eliminar cuenta:', error);
