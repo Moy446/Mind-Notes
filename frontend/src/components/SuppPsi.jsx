@@ -90,7 +90,7 @@ export default function SuppPsi(props) {
                 (
                     <Link
                         key={item._id}
-                        to={`/psicologo/doc/${item._id}`}
+                        to={`/psicologo/doc/${props.idPaciente}/${item._id}`}
                         className='itemsmatApo btnSuppPsi'
                     >
                         {renderIcon(item.type)}
