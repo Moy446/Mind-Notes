@@ -295,11 +295,19 @@ class PaymentController {
                     error: 'Usuario no encontrado'
                 });
             }
+            
+            if (usuario.suscripcion?.estado === 'activa') {
+                return res.status(200).json({
+                    success: true,
+                    suscripcion: true
+                });
+            } else{
+                return res.status(200).json({
+                    success: true,
+                    suscripcion: false
+                });
+            }
 
-            return res.status(200).json({
-                success: true,
-                suscripcion: usuario.suscripcion
-            });
         } catch (error) {
             console.error('Error al obtener suscripcion:', error);
             return res.status(500).json({
@@ -357,7 +365,7 @@ class PaymentController {
                 success: false,
                 error: 'Error al cancelar suscripción'
             });
-        }   
+        }
     }
 }
 

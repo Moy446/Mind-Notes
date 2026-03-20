@@ -3,7 +3,7 @@ import './Planes.css'
 import SubBtn from './components/SubBtn';
 import EliminarBtn from './components/EliminarBtn';
 import { AuthContext } from './context/AuthContext';
-import { checkout, cancelSubscription } from './services/stripeService';
+import { checkout, cancelSubscription, getSubscriptionStatus } from './services/stripeService';
 import Swal from 'sweetalert2';
 
 export default function PerfilPsiF(props) {
@@ -45,26 +45,44 @@ export default function PerfilPsiF(props) {
         }
     };
 
-    
+
 
     const handleCancelSubscription = async () => {
         try {
-            setLoading(true);
-            const result = await Swal.fire({
-                title: '¿Estás seguro?',
-                text: '¿Deseas cancelar tu suscripción? Esta acción no se puede deshacer.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Sí, cancelar',
-                cancelButtonText: 'No, mantener'
-            });
+            if (!authenticated || !user?.id) {
+                alert('Debes iniciar sesion para cancelar tu suscripción');
+                return;
+            }
+            else {
+                const subscriptionStatus = await getSubscriptionStatus(user.id);
+                if (!subscriptionStatus) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Información',
+                        text: 'No tienes una suscripción activa para cancelar'
+                    });
+                    return;
+                }
+                const result = await Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: '¿Deseas cancelar tu suscripción? Esta acción no se puede deshacer.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, cancelar',
+                    cancelButtonText: 'No, mantener'
+                });
+                if (result.isConfirmed) {
+                    await cancelSubscription(user.id);
+                }
 
-            if (result.isConfirmed) {
-                await cancelSubscription(user.id);
             }
 
         } catch (error) {
-            console.error('Error al cancelar suscripción:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al cancelar suscripción',
+                text: error.message || 'Ocurrió un error al cancelar la suscripción'
+            });
         } finally {
             setLoading(false);
         }

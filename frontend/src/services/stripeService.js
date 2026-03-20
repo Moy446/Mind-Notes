@@ -28,3 +28,17 @@ export const cancelSubscription = async () => {
     }
 };
 
+export const getSubscriptionStatus = async (userId) => {
+    try {
+        const response = await clienteAxios.post(`/psicologo/suscripcion/${userId}`, {
+            withCredentials: true
+        });
+        const data = await response.data;
+        return data;
+    }
+    catch (error) {
+        console.error('Error al obtener el estado de la suscripción:', error);
+        throw new Error(error.response?.data?.error || 'Error al obtener el estado de la suscripción');
+    }
+};
+
