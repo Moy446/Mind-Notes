@@ -58,8 +58,10 @@
 @media (max-width: 768px) {
 
     .horario {
+        display: block;
         padding: 25px;
         margin-bottom: 10%;
+        align-items: start;
     }
 
     .titleHorario {

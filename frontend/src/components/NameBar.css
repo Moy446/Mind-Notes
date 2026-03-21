@@ -27,6 +27,7 @@
     justify-self: center;
     margin: 20px;
     cursor: pointer;
+    border-radius: 50px;
 }
 
 .svg-namebar
