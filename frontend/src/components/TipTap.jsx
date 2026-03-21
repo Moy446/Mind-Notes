@@ -4,7 +4,7 @@ import mammoth from "mammoth";
 import { useEffect } from 'react';
 import '/src/Doc.css'
 
-export default function TipTap({ onReady }) {
+export default function TipTap({ onReady, document }) {
   const editor = useEditor({
     extensions: [StarterKit],
     content: "<p>Empieza a escribir…</p>",
@@ -16,9 +16,17 @@ export default function TipTap({ onReady }) {
     editor.commands.setContent(result.value);
   };
 
+  const blobToFile = (blob, filename) => {
+    return new File([blob], filename, { type: blob.type });
+  };
+
   useEffect(() => {
     if (editor && onReady) {
       onReady(editor);
+    }
+    if (document) {
+      const file = blobToFile(document, "documento.docx");
+      importDocx(file);
     }
   }, [editor, onReady]);
 

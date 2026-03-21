@@ -3,6 +3,7 @@ import multer from "multer";
 import calendarController from "../controllers/calendarioController.js";
 import grabacionController from "../controllers/grabacionController.js";
 import paymentController from "../controllers/paymentController.js";
+import chatController from "../controllers/chatController.js";
 import protector from "../helpers/routesProtect.js";
 import htmlToDocx from "html-to-docx";
 

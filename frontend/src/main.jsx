@@ -37,7 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           {/*-- Rutas protegidas para psicólogos --*/}
         <Route path='/psicologo' element={<ProtectedRoute requiredRole="psicologo"><MenuPsiF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
-          <Route path='doc/:id' element={<Doc/>}/>
+          <Route path='doc/:idP/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<CalendarioF/>}/>
           <Route path='perfil' element={<PerfilPsiF/>}/>
