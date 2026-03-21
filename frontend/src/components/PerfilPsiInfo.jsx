@@ -170,7 +170,7 @@ export default function PerfilPsiInfo(props) {
                     title="Correo"
                     click={() => handleOpenEdit('email', 'Correo', userData.email)}
                 />
-                <DataPsi data={userData.plan} title="Plan" click={changePlan} />
+                <DataPsi data={userData.plan === 'unMes' ? '1 Mes' : userData.plan === 'seisMeses' ? '6 Meses' : userData.plan === 'unYear' ? '1 Año' : 'Gratis'} title="Plan" click={changePlan} />
             </div>
             <div className='bottomPerfil'>
                 <EliminarBtn texto="Eliminar cuenta" img="1" handleDel={props.handleDel} />
