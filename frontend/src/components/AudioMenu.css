@@ -1,0 +1,290 @@
+.AudioMenu
+{
+    height: 396px;
+    width: 694px;
+    border-radius: 20px;
+    background-color: #9ACBD0;
+    display: flex;
+    flex-direction: column;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 40px;
+    margin-bottom: -10vw;
+}
+
+.titleAudio
+{
+    font-family: 'Saira';
+    font-size: 25px;
+    font-weight: 400;
+    color: black;
+}
+
+.custom-select {
+    position: relative;
+    display: block;
+    align-items: center;
+    font-family: 'Saira';
+    height: 60px;
+    border: none;
+    outline: none;
+    border-radius: 22px;
+    background-color: rgba(41, 115, 178, 0.5);
+    padding-left: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding-top: 2%;
+}
+
+/*Funciones SELECT*/
+.selectM__control {
+  display: block;
+  height: 100%;
+  width: 95%;
+  align-items: center;
+  gap: 10px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+.selectM__control *{
+  cursor: pointer;
+}
+
+.selectM__menu {
+  background: rgb(41, 114, 178);
+  width: 90%;
+  margin-top: 5px;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.selectM__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: transparent;
+}
+
+.selectM__option *{
+  cursor: pointer;
+}
+/* hover para ver cual esta seleccionando*/
+.selectM__option--is-focused {
+  background-color: #48A6A7;
+}
+
+/*Marca la opcion seleccionada*/
+.selectM__option--is-selected {
+  background-color: #dceeff;
+}
+
+.optionContentM {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/*IMAGEN DEL OPTION*/
+.avatarM {
+  height: 9%;
+  width: 9%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.radioBtns
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 60px;
+    z-index: 0;
+}
+
+.accept-button{
+    width: 40%;
+    height: 73px;
+    background-color: #2973B2;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Saira';
+    font-size: 25px;
+    color: white;
+    font-weight: 800;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-left: 10px;
+    align-self: center;
+}
+
+.accept-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.accept-button:active {
+  transform: translateY(0);
+}
+
+.offScreen{
+    position: absolute;
+    left: -999999999999999999px;
+}
+
+.radioA
+{
+    width: 43px;
+    height: 43px;
+    background-color: #F2EFE7;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radioA::after
+{
+    content: '';
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: all 0.4s;
+}
+
+input[type='checkbox']:checked + .radioA::after
+{
+    background-color: #2973B2;
+}
+
+input[type='checkbox']:checked + .radioA
+{
+    background-color: #F2EFE7;
+}
+
+.radioBtn{
+    display: flex;
+    gap: 10px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
+
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+
+    .AudioMenu {
+        width: 600px;
+        height: auto;
+        padding-left: 60px;
+        padding-right: 60px;
+        padding-top: 35px;
+    }
+
+    .titleAudio {
+        font-size: 23px;
+    }
+
+    .custom-select {
+        height: 56px;
+    }
+
+    .avatarM {
+        width: 10%;
+        height: 10%;
+    }
+
+    .accept-button {
+        height: 68px;
+        font-size: 23px;
+    }
+
+    .radioBtns {
+        margin-bottom: 45px;
+    }
+}
+/* ------------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+    .AudioMenu {
+        width: 90%;
+        height: auto;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 30px;
+    }
+
+    .titleAudio {
+        font-size: 21px;
+    }
+
+    .radioBtns {
+        gap: 15px;
+    }
+
+    .accept-button {
+        width: 48%;
+        height: 64px;
+        font-size: 21px;
+        margin-left: 0;
+    }
+
+    .custom-select {
+        height: 54px;
+    }
+
+    .avatarM {
+        width: 12%;
+        height: 12%;
+    }
+}
+/* ------------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+
+    .AudioMenu {
+        width: 95%;
+        padding-left: 25px;
+        padding-right: 25px;
+        padding-top: 25px;
+    }
+
+    .radioBtns {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 30px;
+    }
+
+    .accept-button {
+        width: 100%;
+        height: 60px;
+        font-size: 19px;
+    }
+
+    .custom-select {
+        height: 52px;
+    }
+
+    .titleAudio {
+        font-size: 19px;
+    }
+
+    .avatarM {
+        width: 14%;
+        height: 14%;
+    }
+}

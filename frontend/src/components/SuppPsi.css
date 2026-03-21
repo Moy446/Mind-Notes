@@ -1,0 +1,228 @@
+.suppPsi
+{
+    width: 465px;
+    height: 100%;
+    background-color: #2973B2;
+    display: flex;
+    flex-direction: column;
+}
+.headerSuppPsi {
+    margin: 0;
+    background-color: #2973B2;
+    padding: 0;
+}
+
+.svgsuppPsi
+{
+    width: 13%;
+}
+
+.btnSuppPsi:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btnSuppPsi:active {
+  transform: translateY(0);
+}
+
+.suppPsiOp
+{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+.activeOp
+{
+    display: flex;
+    font-family: 'Saira';
+    font-size: 15px;
+    font-weight: 400;
+    color: #9ACBD0;
+    justify-content: center;
+    width: 40%;
+    pointer-events: none;
+}
+
+.inactiveOp
+{
+    display: flex;
+    font-family: 'Saira';
+    font-size: 15px;
+    font-weight: 400;
+    color: white;
+    justify-content: center;
+    width: 40%;
+}
+
+.lineDown {
+    background-color: #9ACBD0;
+    height: 5px;
+    width: 50%;
+    border: none;
+    transition: all 0.4s;
+}
+
+.lineDown2
+{
+    transform: translateX(100%);
+    background-color: #9ACBD0;
+    height: 5px;
+    width: 50%;
+    border: none;
+    transition: all 0.4s;
+}
+
+.matApo{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    justify-content: space-around;
+    gap: 15px;
+    margin: 20px;
+}
+
+.itemsmatApo{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    margin: 0 8px;
+    justify-content: center;
+    color: white;
+    font-family: 'Saira';
+    font-size: 15px;
+    width: 80px;
+    height: 30%;
+}
+.pMatApo{
+    color: white;
+    font-family: 'Saira';
+    font-size: 10px;
+    text-align: center;
+}
+
+.unique
+{
+    background-color: #9ACBD0;
+    height: 5px;
+    width: 100%;
+    border: none;
+    transition: all 0.4s;
+}
+
+.paginatorSuppPsi{
+    display: flex;
+    width: 40%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    bottom: 3%;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.textPaginator{
+    font-family: 'Saira';
+    font-size: 18px;
+    font-weight: 400;
+    color: white;
+}
+
+.btnPaginator{
+    background-color: #9ACBD0;
+    border: none;
+    border-radius: 5px;
+    padding: 2px 5px;
+    font-family: 'Saira';
+    font-size: 16px;
+    font-weight: 600;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.btnPaginator:hover{
+
+    background-color: #8cb8bd;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+}
+
+/*Responsive*/
+@media only screen and (min-width: 1440px) {
+    .paginatorSuppPsi{
+        width: 27%;
+        bottom: 5%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .suppPsi{
+        background-color: #F2EFE7;
+        width: auto;
+        height: auto;
+    }
+    .headerSuppPsi {
+        margin: 0px;
+        background-color: #2973B2;
+        padding: 0 10px;
+        display: flex;
+        align-items: center;
+    }
+    .svgsuppPsi{
+        width: 8%;
+        stroke: white;
+    }
+    .suppPsiOp{
+        width: 100%;
+    }
+    .matApo {
+        grid-template-columns: repeat(4, minmax(80px, 1fr));
+        align-items: center;
+        justify-items: center;
+        margin: 10px;
+    }
+    .itemsmatApo{
+        color: black;
+        width: 50px;
+    }
+    .pMatApo{
+        color: black;
+    }
+    .paginatorSuppPsi{
+        width: 100%;
+    }
+    .textPaginator{
+        color: black;
+    }
+}
+
+@media only screen and (max-width: 480px) {
+    .matApo {
+        grid-template-columns: repeat(3, minmax(80px, 1fr));
+        align-items: center;
+        justify-items: center;
+        margin: 10px;
+    }
+    .itemsmatApo{
+        color: black;
+        width: 30px;
+    }
+    .pMatApo{
+        color: black;
+        font-family: 'Saira';
+        font-size: 13px;
+        text-align: center;
+    }
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}

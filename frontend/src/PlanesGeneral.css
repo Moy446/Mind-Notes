@@ -1,0 +1,144 @@
+.PlanesGeneral {
+    min-height: 100vh;
+    background: #F2EFE7;
+}
+
+.div-planes{
+    padding: 3%;
+}
+
+h1{
+    color: #2973B2;
+    font-family: Saira;
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+.div-planesGeneral{
+    display: flex; 
+    flex-direction: row;
+    height: auto;
+    width: 100%;
+    font-family: 'Saira';
+    padding: 1vw;
+    gap: 5%;
+    justify-content: center;
+}
+
+.img-planesGeneral{
+    width: 147px;
+    height: 147px;
+    aspect-ratio: 26/21;
+    
+}
+
+.div-planCard{
+    width: 259px;
+    height: auto;
+    border-radius: 20px;
+    background: #2973B2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.p-duracion{
+    color: #FFF;
+    text-align: center;
+    font-family: Saira;
+    font-size: 36px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.btn-planesGeneral{
+    width: 100%;
+    border-radius: 20px;
+    border: 10px solid #2973B2;
+    background: #9ACBD0;
+
+    color: #2973B2;
+    text-align: center;
+    font-family: Saira;
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+
+    h1 {
+        font-size: 64px;
+        text-align: center;
+    }
+
+    .div-planesGeneral {
+        gap: 40px;
+    }
+
+    .btn-planesGeneral {
+        font-size: 36px;
+    }
+
+    .p-duracion {
+        font-size: 28px;
+    }
+}
+
+/* =============================================================== */
+@media (max-width: 768px) {
+
+    .div-planesGeneral {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .div-planCard {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .img-planesGeneral {
+        width: 120px;
+        height: 120px;
+    }
+
+    h1 {
+        font-size: 48px;
+        text-align: center;
+    }
+
+    .p-duracion {
+        font-size: 24px;
+    }
+
+    .btn-planesGeneral {
+        font-size: 32px;
+        border-width: 6px;
+    }
+}
+
+/* =============================================================== */
+@media (max-width: 480px) {
+
+    h1 {
+        font-size: 36px;
+    }
+
+    .btn-planesGeneral {
+        font-size: 28px;
+    }
+
+    .p-duracion {
+        font-size: 22px;
+    }
+}

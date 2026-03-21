@@ -7,6 +7,7 @@ backend/node_modules/
 mobile/node_modules/
 .pnp/
 .pnp.js
+venv/
 
 #build 
 dist/
@@ -23,6 +24,13 @@ coverage/
 Thumbs.db
 *.pem
 
+#mp3 files
+*.mp3
+backend/uploads/audio/*
+backend/uploads/docs/*
+backend/uploads/files/*
+
+
 # debug
 npm-debug.log
 yarn-debug.log
@@ -36,3 +44,8 @@ pnpm-debug.log
 # IDEs
 .vscode/
 .idea/
+
+#models
+services/nlp/trainingModel/bert-finetuned/
+services/nlp/trainingModel/bert-ner/
+

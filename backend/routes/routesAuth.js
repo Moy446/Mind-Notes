@@ -1,0 +1,113 @@
+import express from 'express';
+import authController from '../controllers/authController.js';
+import passport from 'passport';
+import cookieCtrl from '../helpers/cookiesControll.js';
+
+const router = express.Router();
+
+/**
+ * POST /api/auth/solicitar-recuperacion
+ * Solicita recuperación de contraseña
+ * Body: { email: string }
+ * Response: { success: boolean, message: string }
+ */
+router.post('/solicitar-recuperacion', (req, res) => 
+    authController.solicitarRecuperacion(req, res)
+);
+
+/**
+ * POST /api/auth/cambiar-password
+ * Cambia la contraseña con token válido
+ * Body: { token: string, newPassword: string, confirmPassword: string }
+ * Response: { success: boolean, message: string }
+ */
+router.post('/cambiar-password/', (req, res) => 
+    authController.cambiarPasswordConToken(req, res)
+);
+
+/**
+ * GET /api/auth/verificar-cuenta/:token
+ * Verifica la cuenta del usuario
+ * Params: token (string)
+ * Response: { success: boolean, message: string }
+ */
+router.get('/verificar-cuenta/:token', (req, res) => 
+    authController.verificarCuenta(req, res)
+);
+
+/**
+ * POST /api/auth/reenviar-verificacion
+ * Reenvía el correo de verificación
+ * Body: { email: string }
+ * Response: { success: boolean, message: string }
+ */
+router.post('/reenviar-verificacion', (req, res) => 
+    authController.reenviarVerificacion(req, res)
+);
+
+/**
+ * GET /api/auth/google
+ * Inicia autenticación con Google
+ */
+router.get('/google', 
+    (req, res, next) => {
+        const requestedRole = req.query.role === 'psicologo' ? 'psicologo' : 'paciente';
+        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+        const sameSite = useSecure ? 'None' : 'Lax';
+
+        // Guarda el rol seleccionado para usarlo al crear cuentas nuevas por Google.
+        res.cookie('google_role', requestedRole, {
+            httpOnly: true,
+            secure: useSecure,
+            sameSite,
+            maxAge: 10 * 60 * 1000
+        });
+
+        next();
+    },
+    passport.authenticate('google', { scope: ['profile', 'email'], session: false })
+);
+
+/**
+ * GET /api/auth/google/callback
+ * Callback de Google OAuth2
+ */
+router.get('/google/callback',
+    passport.authenticate('google', { 
+        failureRedirect: process.env.FRONTEND_URL + '/login?error=google_auth_failed',
+        session: false
+    }),
+    (req, res) => {
+        try {
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const sameSite = useSecure ? 'None' : 'Lax';
+            res.clearCookie('google_role', { httpOnly: true, secure: useSecure, sameSite });
+
+            const usuario = req.user;
+            const role = usuario.esPsicologo ? 'psicologo' : 'paciente';
+            
+            // Generar tokens y establecer cookies
+            const accessToken = cookieCtrl.signAccess({ 
+                id: usuario.idUsuario, 
+                role 
+            });
+            const refreshToken = cookieCtrl.signRefresh({ 
+                id: usuario.idUsuario, 
+                role 
+            });
+            
+            // Establecer cookies en la respuesta
+            cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
+
+            // Redirigir al frontend según el rol (sin tokens en URL por seguridad)
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+            res.redirect(`${frontendUrl}/${role}`);
+        } catch (error) {
+            console.error('Error en Google callback:', error);
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+            res.redirect(`${frontendUrl}/login?error=callback_error`);
+        }
+    }
+);
+
+export default router;

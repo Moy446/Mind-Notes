@@ -1,0 +1,108 @@
+import clienteAxios from './axios';
+
+
+export const emailAuthService = {
+    /**
+     * Solicita recuperación de contraseña
+     * @param {string} email - Email del usuario
+     * @returns {Promise<Object>} { success: boolean, message: string }
+     */
+    async solicitarRecuperacion(email) {
+        try {
+            const response = await clienteAxios.post(`/auth/solicitar-recuperacion`, {
+                email
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al procesar la solicitud'
+            };
+        }
+    },
+
+    /**
+     * Cambia la contraseña con token
+\     * @param {string} newPassword - Nueva contraseña
+     * @param {string} confirmPassword - Confirmación de contraseña
+     * @returns {Promise<Object>} { success: boolean, message: string }
+     */
+    async cambiarPassword(token, newPassword, confirmPassword) {
+        console.log('Token en el servicio:', token);
+        console.log('Nueva contraseña en el servicio:', newPassword);
+
+        if(newPassword !== confirmPassword) {
+            return {
+                success: false,
+                message: 'Las contraseñas no coinciden'
+            };
+        }
+        try {
+            const response = await clienteAxios.post(`/auth/cambiar-password/`, {
+                token,
+                newPassword,
+                confirmPassword
+                
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al cambiar la contraseña'
+            };
+        }
+    },
+
+    /**
+     * Verifica la cuenta con token
+     * @param {string} token - Token de verificación
+     * @returns {Promise<Object>} { success: boolean, message: string }
+     */
+    async verificarCuenta(token) {
+        try {
+            const response = await clienteAxios.get(`/auth/verificar-cuenta/${token}`);
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al verificar la cuenta'
+            };
+        }
+    },
+
+    /**
+     * Reenvía el correo de verificación
+     * @param {string} email - Email del usuario
+     * @returns {Promise<Object>} { success: boolean, message: string }
+     */
+    async reenviarVerificacion(email) {
+        try {
+            const response = await clienteAxios.post(`/auth/reenviar-verificacion`, {
+                email
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al reenviar el correo'
+            };
+        }
+    },
+
+    async comentarios(nombre, email, mensaje) {
+        try {
+            const response = await clienteAxios.post(`/comentarios`, {
+                nombre,
+                email,
+                mensaje
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al enviar el comentario'
+            };
+        }
+    }
+};
+

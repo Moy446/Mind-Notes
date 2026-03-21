@@ -1,0 +1,289 @@
+.meetMenu
+{
+    height: 396px;
+    width: 694px;
+    border-radius: 20px;
+    background-color: #F2EFE7;
+    box-shadow: 0px 4px 4px #48A6A7;
+    display: flex;
+    flex-direction: column;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 40px;
+}
+
+.custom-selectM {
+    position: relative;
+    display: block;
+    align-items: center;
+    font-family: 'Saira';
+    height: 60px;
+    border: none;
+    outline: none;
+    border-radius: 22px;
+    background-color: rgba(41, 115, 178, 0.5);
+    padding-left: 15px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding-top: 2%;
+}
+
+/*Funciones SELECT*/
+.selectM__control {
+  display: block;
+  height: 100%;
+  width: 95%;
+  align-items: center;
+  gap: 10px;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+.selectM__control *{
+  cursor: pointer;
+}
+
+
+.selectM__menu {
+  background: rgb(41, 114, 178);
+  width: 90%;
+  margin-top: 5px;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 10;
+  cursor: pointer;
+}
+
+
+.selectM__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: transparent;
+}
+
+.selectM__option *{
+  cursor: pointer;
+}
+/* hover para ver cual esta seleccionando*/
+.selectM__option--is-focused {
+  background-color: #48A6A7;
+}
+
+/*Marca la opcion seleccionada*/
+.selectM__option--is-selected {
+  background-color: #dceeff;
+}
+
+.optionContentM {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+
+/*IMAGEN DEL OPTION*/
+.avatarM {
+  height: 9%;
+  width: 9%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.btnMeet
+{
+    width: 40%;
+    height: 60px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-family: 'Saira';
+    font-size: 25px;
+    color: white;
+    font-weight: 800;
+}
+
+.btnMeet:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btnMeet:active {
+  transform: translateY(0);
+}
+
+.acceptBtnM{
+    background-color: #2973B2;
+}
+
+.acceptBtnM:disabled{
+    background-color: #91abc2;
+}
+
+.cancelBtnM{
+    background-color: #48A6A7;
+}
+
+.meetbtns{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.dateIn{
+    background-color: rgba(41, 115, 178, 0.5);
+    height: 60px;
+    font-family: 'Saira';
+    font-size: 15px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.divTime
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.marginDivTime
+{
+    margin-bottom: 80px;
+}
+
+.line
+{
+    background-color: rgba(41, 115, 178, 0.5);
+    height: 4px;
+    width: 30px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: none;
+    outline: none;
+}
+
+
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
+
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+
+    .meetMenu {
+        width: 600px;
+        height: auto;
+        padding-left: 60px;
+        padding-right: 60px;
+        padding-top: 35px;
+    }
+
+    .btnMeet {
+        font-size: 22px;
+        height: 56px;
+        margin-bottom: 3vw;
+        margin-top: -5vw;
+    }
+
+    .custom-selectM,
+    .dateIn {
+        height: 56px;
+    }
+
+    .avatarM {
+        width: 10%;
+        height: 10%;
+    }
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+/* -----------------------------------------------------------------------------------------------------------------------------------  */
+@media (max-width: 768px) {
+
+    .meetMenu {
+        width: 90%;
+        height: auto;
+        padding-left: 40px;
+        padding-right: 40px;
+        padding-top: 30px;
+    }
+
+    div.meetMenu{
+        width: 100%;
+    }
+
+    .meetbtns {
+        gap: 15px;
+    }
+
+    .btnMeet {
+        width: 48%;
+        height: 54px;
+        font-size: 20px;
+    }
+
+    .custom-selectM,
+    .dateIn {
+        height: 54px;
+    }
+
+    .avatarM {
+        width: 12%;
+        height: 12%;
+    }
+
+    .marginDivTime {
+        margin-bottom: 50px;
+    }
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+
+    .meetMenu {
+        width: 95%;
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 30px;
+    }
+
+    div.meetMenu{
+        width: 100%;
+    }
+
+    .meetbtns {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .btnMeet {
+        width: 95%;
+        height: 52px;
+        font-size: 18px;
+        margin-top: -3vw;
+    }
+
+    .custom-selectM,
+    .dateIn {
+        height: 52px;
+    }
+
+    .avatarM {
+        width: 14%;
+        height: 14%;
+    }
+
+    .marginDivTime {
+        margin-bottom: 35px;
+    }
+}
+

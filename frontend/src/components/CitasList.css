@@ -1,0 +1,93 @@
+.citas
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 189px;
+    background-color: rgba(41, 115, 178, 80%);
+    border-radius: 20px;
+    overflow-y: auto;
+    padding: 5px;
+    gap: 10px;
+    font-size: 12px;
+}
+
+.citas::-webkit-scrollbar
+{
+    width: 0px; 
+    height: 0px; 
+}
+
+
+.newCita
+{
+    width: 100%;
+    height: 56px;
+    background-color: rgba(242, 239, 231, 60%);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.newCita:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.newCita:active {
+  transform: translateY(0);
+}
+
+.cita
+{
+    display: flex;
+    flex-direction: row;
+    font-family: 'Saira';
+    color: #F2EFE7;
+    font-weight: 600;
+    width: 100%;
+    height: 56px;
+    background-color: #2973B2;
+    border-radius: 20px;
+    align-items: center;
+    padding-left: 10px;
+    gap: 10px;
+}
+
+.svgCita
+{
+    fill: rgba(242, 239, 231, 100%);
+}
+
+.imgcita
+{
+    height: 80%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
+
+@media (max-width: 1024px) {
+    .cita{
+        font-size: 10px;
+    }
+    .imgcita{
+        height: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .imgcita{
+        height: 40%;
+    }
+}
+

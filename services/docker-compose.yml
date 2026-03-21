@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  # nlp:
+  #   container_name: nlp_service
+  #   build:
+  #     context: ./nlp
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "9001:8000"
+  #   environment:
+  #     - ENV=production
+  #   deploy:
+  #       resources:
+  #         limits:
+  #           cpus: "2.0"
+  #           memory: 4G
+
+  #   restart: always
+  
+  # pyannote:
+  #   container_name: diarization_service
+  #   build:
+  #     context: ./pyannote  
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "9002:8000"
+  #   environment:
+  #     - ENV=production
+  #   deploy:
+  #       resources:
+  #         limits:
+  #           cpus: "1.0"
+  #           memory: 4G
+    
+  #   restart: always
+
+  whisper:
+    container_name: transcription_service
+    build:
+      context: ./whisper
+      dockerfile: Dockerfile
+    expose:
+      - "8000"
+    environment:
+      - ENV=production
+    deploy:
+        resources:
+          limits:
+            cpus: "2.0"
+            memory: 4G
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_server
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/mindNotes.com.conf
+    depends_on:
+      - fastapi
+    networks:
+      - app-network
+      

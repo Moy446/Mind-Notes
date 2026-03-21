@@ -1,0 +1,84 @@
+.horario
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    justify-content: space-between;
+    padding: 30px;
+}
+
+.btnGuardarHorario{
+    width: 300px;
+    height: 70px;
+    border-radius: 20px;
+    opacity: 0.7;
+    background: var(--Btn1, #48A6A7);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    border: none;
+    margin: 0 auto;
+
+    color: #000;
+    text-align: center;
+    font-family: Saira;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.titleHorario
+{
+    font-family: 'Saira';
+    font-weight: 800;
+    color: black;
+    font-size: 25px;
+}
+
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira.ttf') format('truetype');
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900; 
+}
+/*  */
+@media (max-width: 1024px) {
+
+    .horario {
+        padding: 25px;
+    }
+
+    .titleHorario {
+        font-size: 30px;
+    }
+
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+    .horario {
+        display: block;
+        padding: 25px;
+        margin-bottom: 10%;
+        align-items: start;
+    }
+
+    .titleHorario {
+        font-size: 25px;
+    }
+
+}
+/* ----------------------------------------------------------------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+
+    .horario {
+        padding: 20px;
+        margin-bottom: 15%;
+    }
+
+    .titleHorario {
+        font-size: 19px;
+    }
+
+}
