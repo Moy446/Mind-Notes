@@ -20,7 +20,7 @@ class Cita {
                 nombrePaciente: datosCita.nombrePaciente,
                 nombrePsicologo: datosCita.nombrePsicologo,
                 emailPaciente: datosCita.emailPaciente,
-                fechaCita: new Date(datosCita.fechaCita),
+                fechaCita: new Date(datosCita.fechaCita + "T00:00:00"),
                 horaInicio: datosCita.horaInicio,
                 horaFin: datosCita.horaFin,
                 duracion: datosCita.duracion,
@@ -70,7 +70,7 @@ class Cita {
             }
             datosCitaActualizados.idPaciente = new ObjectId(datosCitaActualizados.idPaciente);
             datosCitaActualizados.idPsicologo = new ObjectId(datosCitaActualizados.idPsicologo);
-            datosCitaActualizados.fechaCita = new Date(datosCitaActualizados.fechaCita);
+            datosCitaActualizados.fechaCita = new Date(datosCitaActualizados.fechaCita + "T00:00:00");
             const resultado = await this.colCitas.updateOne({_id: new ObjectId(idCita)}, { $set: {...datosCitaActualizados, updatedAt: new Date()}
             });
             if (resultado.matchedCount === 0) {
