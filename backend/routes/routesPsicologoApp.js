@@ -3,6 +3,7 @@ import multer from "multer";
 import calendarController from "../controllers/calendarioController.js";
 import grabacionController from "../controllers/grabacionController.js";
 import paymentController from "../controllers/paymentController.js";
+import chatController from "../controllers/chatController.js";
 import protector from "../helpers/routesProtect.js";
 import htmlToDocx from "html-to-docx";
 
@@ -81,6 +82,7 @@ router.post("/export-docx", async (req, res) => {
 });
 // Pagos (Stripe)
 router.post("/checkout", protector, paymentController.sesionPago);
-router.get("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
+router.post("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
+router.post("/cancel-subscription", protector, paymentController.cancelarSuscripcion);
 
 export default router;

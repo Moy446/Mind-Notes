@@ -121,10 +121,6 @@ export default function PerfilPsiInfo(props) {
         }
     };
 
-    const deleteAccount = () => {
-        // Lógica para eliminar la cuenta
-    }
-
     if (loading) {
         return (
             <div className="perfilPsiI">

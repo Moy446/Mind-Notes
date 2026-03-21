@@ -12,11 +12,11 @@ Ignorar validaciones y logica de negocio, estas se manejan en los controladores
 */
 
 class Usuario {
-    constructor(){
+    constructor() {
         this.colUsuarios = dbClient.db.collection('usuarios');
     }
 
-    async create(datosUsuario, esPsicologo = false){
+    async create(datosUsuario, esPsicologo = false) {
         try {
             // Preparar password: null si viene de Google, hasheado si viene de registro normal
             let passwordHash = null;
@@ -56,8 +56,8 @@ class Usuario {
                     stripeSubscriptionId: null,
                 };
                 usuario.horario = datosUsuario.horario || null;
-                
-            } 
+
+            }
             // Campos específicos de Paciente
 
             await this.colUsuarios.insertOne(usuario);
@@ -66,11 +66,11 @@ class Usuario {
             throw new Error('Error al crear el usuario: ' + error.message);
         }
     }
-    
+
     /**
      * Buscar un usuario por su ID
      */
-    async findById(idUsuario){
+    async findById(idUsuario) {
         try {
             // Validar que el ID sea un ObjectId válido
             if (!ObjectId.isValid(idUsuario)) {
@@ -82,32 +82,32 @@ class Usuario {
             throw new Error('Error al buscar el usuario por ID: ' + error.message);
         }
     }
-  
+
     /**
      * Obtener el nombre del usuario por su ID
      */
-    async findNameById(idUsuario){
+    async findNameById(idUsuario) {
         try {
             const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
             return usuario ? usuario.nombre : null;
         } catch (error) {
             throw new Error('Error al obtener el nombre del usuario: ' + error.message);
-        }   
+        }
     }
-    
-    async findEmailById(idUsuario){
+
+    async findEmailById(idUsuario) {
         try {
             const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
             return usuario ? usuario.email : null;
         } catch (error) {
             throw new Error('Error al obtener el email del usuario: ' + error.message);
-        }   
+        }
     }
 
     /**
      * Buscar un usuario por email
      */
-    async findByEmail(email){
+    async findByEmail(email) {
         try {
             const usuario = await this.colUsuarios.findOne({ email: email });
             return usuario;
@@ -119,7 +119,7 @@ class Usuario {
     /**
      * Buscar un usuario por Google ID
      */
-    async findByGoogleId(googleId){
+    async findByGoogleId(googleId) {
         try {
             const usuario = await this.colUsuarios.findOne({ googleId: googleId });
             return usuario;
@@ -131,7 +131,7 @@ class Usuario {
     /**
      * Buscar todos los psicólogos
      */
-    async findAllPsicologos(){
+    async findAllPsicologos() {
         try {
             const psicologos = await this.colUsuarios.find({ esPsicologo: true }).toArray();
             return psicologos;
@@ -143,7 +143,7 @@ class Usuario {
     /**
      * Buscar todos los pacientes
      */
-    async findAllPacientes(){
+    async findAllPacientes() {
         try {
             const pacientes = await this.colUsuarios.find({ esPsicologo: false }).toArray();
             return pacientes;
@@ -155,7 +155,7 @@ class Usuario {
     /**
      * Actualizar socketId de un usuario (principalmente para psicólogos)
      */
-    async updateSocketId(idUsuario, socketId){
+    async updateSocketId(idUsuario, socketId) {
         try {
             await this.colUsuarios.updateOne(
                 { idUsuario: new ObjectId(idUsuario) },
@@ -169,7 +169,7 @@ class Usuario {
     /**
      * Actualizar status de chat de un usuario (principalmente para psicólogos)
      */
-    async updateStatusChat(idUsuario, status){
+    async updateStatusChat(idUsuario, status) {
         try {
             await this.colUsuarios.updateOne(
                 { idUsuario: new ObjectId(idUsuario) },
@@ -201,11 +201,11 @@ class Usuario {
         try {
             await this.colUsuarios.updateOne(
                 { idUsuario: new ObjectId(idUsuario) },
-                { 
-                    $set: { 
+                {
+                    $set: {
                         tokenRecuperacion: tokenHash,
                         tokenExpiracion: expiracion
-                    } 
+                    }
                 }
             );
             console.log('Token de recuperación actualizado para usuario:', idUsuario);
@@ -245,11 +245,11 @@ class Usuario {
         try {
             await this.colUsuarios.updateOne(
                 { idUsuario: new ObjectId(idUsuario) },
-                { 
-                    $set: { 
+                {
+                    $set: {
                         verificado: true,
                         tokenVerificacion: null
-                    } 
+                    }
                 }
             );
         } catch (error) {
@@ -278,11 +278,11 @@ class Usuario {
         try {
             await this.colUsuarios.updateOne(
                 { idUsuario: new ObjectId(idUsuario) },
-                { 
-                    $set: { 
+                {
+                    $set: {
                         tokenRecuperacion: null,
                         tokenExpiracion: null
-                    } 
+                    }
                 }
             );
         } catch (error) {
@@ -296,7 +296,7 @@ class Usuario {
     async actualizarPerfil(idUsuario, datosActualizar) {
         try {
             const camposPermitidos = {};
-            
+
             if (datosActualizar.nombre !== undefined) {
                 camposPermitidos.nombre = datosActualizar.nombre;
             }
@@ -313,7 +313,7 @@ class Usuario {
                 camposPermitidos.apellido = datosActualizar.apellido;
             }
             if (datosActualizar.horario !== undefined) {
-            camposPermitidos.horario = datosActualizar.horario;
+                camposPermitidos.horario = datosActualizar.horario;
             }
 
             if (Object.keys(camposPermitidos).length === 0) {
@@ -367,36 +367,69 @@ class Usuario {
             fechaFin = new Date(ahora.getTime() + 12 * 30 * 24 * 60 * 60 * 1000);
         }
 
-        try {
-            await this.colUsuarios.updateOne(
-                { idUsuario: new ObjectId(idUsuario) },
-                {
-                    $set: {
-                        'suscripcion.plan': plan,
-                        'suscripcion.estado': 'activa',
-                        'suscripcion.fechaInicio': ahora,
-                        'suscripcion.fechaFin': fechaFin,
-                        'suscripcion.stripeSubscriptionId': sessionId
-                    }
-                }
-            );
-            return true;
-        } catch (error) {
-            throw new Error('Error al actualizar suscripcion: ' + error.message);
+        const filtro = [];
+        if (ObjectId.isValid(idUsuario)) {
+            filtro.push({ idUsuario: new ObjectId(idUsuario) });
         }
+        filtro.push({ idUsuario: idUsuario }); // por si en algunos docs está como string
+
+        const result = await this.colUsuarios.updateOne(
+            { $or: filtro },
+            {
+                $set: {
+                    'suscripcion.plan': plan,
+                    'suscripcion.estado': 'activa',
+                    'suscripcion.fechaInicio': ahora,
+                    'suscripcion.fechaFin': fechaFin,
+                    'suscripcion.stripeSubscriptionId': sessionId
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            throw new Error(`No se encontró usuario para activar plan. idUsuario=${idUsuario}`);
+        }
+
+        return result; // devuelve matched/modified para debug
+
+    }
+
+    async cancelarPlan(idUsuario) {
+        const filtro = [];
+        if (ObjectId.isValid(idUsuario)) {
+            filtro.push({ idUsuario: new ObjectId(idUsuario) });
+        }
+        filtro.push({ idUsuario: idUsuario });
+
+        const result = await this.colUsuarios.updateOne(
+            { $or: filtro },
+            {
+                $set: {
+                    'suscripcion.estado': 'inactiva',
+                    'suscripcion.fechaFin': new Date(),
+                    'suscripcion.stripeSubscriptionId': null
+                }
+            }
+        );
+
+        if (result.matchedCount === 0) {
+            throw new Error(`No se encontró usuario para cancelar plan. idUsuario=${idUsuario}`);
+        }
+
+        return result;
     }
 
     // funcion obtener horario de un psicologo
     async obtenerHorario(idUsuario) {
-        try {   
+        try {
             const usuario = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
             return usuario ? usuario.horario : null;
         } catch (error) {
             throw new Error('Error al obtener el horario: ' + error.message);
-        }   
+        }
     }
-    
-    async cambiarFotoPerfil(idUsuario, nuevaFotoPath){
+
+    async cambiarFotoPerfil(idUsuario, nuevaFotoPath) {
         try {
             const resultado = await this.colUsuarios.updateOne(
                 { idUsuario: new ObjectId(idUsuario) },
