@@ -82,6 +82,7 @@ router.post("/export-docx", async (req, res) => {
 });
 // Pagos (Stripe)
 router.post("/checkout", protector, paymentController.sesionPago);
+router.post("/checkout/confirm-session", protector, paymentController.confirmarSesionCheckout);
 router.post("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
 router.post("/cancel-subscription", protector, paymentController.cancelarSuscripcion);
 

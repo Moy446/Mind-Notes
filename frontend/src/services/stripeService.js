@@ -28,13 +28,28 @@ export const cancelSubscription = async () => {
     }
 };
 
+export const confirmCheckoutSession = async (sessionId) => {
+    try {
+        const response = await clienteAxios.post('/psicologo/checkout/confirm-session', {
+            session_id: sessionId
+        }, {
+            withCredentials: true
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Error al confirmar sesión de checkout:', error);
+        throw new Error(error.response?.data?.error || 'Error al confirmar sesión de checkout');
+    }
+};
+
 export const getSubscriptionStatus = async (userId) => {
     try {
-        const response = await clienteAxios.post(`/psicologo/suscripcion/${userId}`, {
+        const response = await clienteAxios.post(`/psicologo/suscripcion/${userId}`, {}, {
             withCredentials: true
         });
         const data = await response.data;
-        return data;
+        return data?.suscripcion === true;
     }
     catch (error) {
         console.error('Error al obtener el estado de la suscripción:', error);
