@@ -87,6 +87,22 @@ export const emailAuthService = {
                 message: error.response?.data?.message || 'Error al reenviar el correo'
             };
         }
+    },
+
+    async comentarios(nombre, email, mensaje) {
+        try {
+            const response = await clienteAxios.post(`/comentarios`, {
+                nombre,
+                email,
+                mensaje
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al enviar el comentario'
+            };
+        }
     }
 };
 
