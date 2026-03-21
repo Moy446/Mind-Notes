@@ -450,6 +450,16 @@ class Usuario {
 
         }
     }
+
+    async getHorarioPsicologo(idUsuario){
+        try {
+            const resultado = await this.colUsuarios.findOne({ idUsuario: new ObjectId(idUsuario) });
+            const {horario} = resultado
+            return horario
+        } catch (error) {
+           throw new Error('Error al obtener el horario del psicologo ' + error.message);
+        }
+    }
 }
 
 // Exportar la clase Usuario 

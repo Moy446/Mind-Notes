@@ -458,10 +458,11 @@ class UsuarioController {
                 nombre: userSafe.nombre,
                 email: userSafe.email,
                 fotoPerfil: userSafe.fotoPerfil,
-                telefono: userSafe.telefono,
+                // telefono: userSafe.telefono,
                 role: userSafe.esPsicologo ? 'psicologo' : 'paciente',
-                plan: userSafe.suscripcion?.plan || 'Plan Gratuito',
-                cedula: userSafe.cedula
+                plan: userSafe.plan || 'Plan Gratuito',
+                // apellido: userSafe.apellido,
+                // cedula: userSafe.cedula
             };
 
             res.status(200).json({

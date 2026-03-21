@@ -17,6 +17,10 @@
   "author": "Mind-Notes Team",
   "license": "ISC",
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.20",
+    "@fullcalendar/list": "^6.1.20",
+    "@fullcalendar/react": "^6.1.20",
+    "@fullcalendar/timegrid": "^6.1.20",
     "@react-oauth/google": "^0.13.4",
     "@syncfusion/ej2-react-documenteditor": "^32.1.25",
     "@tiptap/extensions": "^3.18.0",

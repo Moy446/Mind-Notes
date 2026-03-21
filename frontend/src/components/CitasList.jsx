@@ -4,24 +4,32 @@ import Cita from './Cita';
 
 export default function CitasList(props) {
 
-    function citasDia()
-    {
+    function citasDia() {
         const citasMostradas = [];
 
-        for (const cita of props.citas)
-        {
-            const day = new Date(cita.año, cita.mes, cita.dia);
-            props.current.setHours(0, 0, 0, 0);
-            day.setHours(0, 0, 0, 0);
+        const today = new Date(props.current);
+        today.setHours(0, 0, 0, 0);
 
-            if (day.getTime() === props.current.getTime()) {
-                const hora = Math.trunc(cita.horaI) <10 ? "0"+Math.trunc(cita.horaI) : Math.trunc(cita.horaI);
-                let minutes = Math.round((cita.horaI - Math.trunc(cita.horaI))*60);
-                let time
-                if (minutes <= 10 ) { time = hora + ":0"+minutes ;}
-                else { time = hora + ":" + minutes;}
+        for (const cita of props.citas) {
+            const citaDate = new Date(cita.start);
+            citaDate.setHours(0, 0, 0, 0);
+
+            if (citaDate.getTime() === today.getTime()) {
+
+                const horaDate = new Date(cita.start);
+                const hora = horaDate.getHours().toString().padStart(2, '0');
+                const minutes = horaDate.getMinutes().toString().padStart(2, '0');
+
+                const time = `${hora}:${minutes}`;
+
                 citasMostradas.push(
-                    <Cita name={cita.nombre} hora={time} img={cita.img} handleEdit={() => props.handleEdit(cita.id)} />
+                    <Cita
+                        id ={cita.id}
+                        name={cita.title}
+                        hora={time}
+                        img={cita.extendedProps.img}
+                        handleEdit={() => props.handleEdit(cita.id)}
+                    />
                 );
             }
         }

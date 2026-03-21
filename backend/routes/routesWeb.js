@@ -34,9 +34,10 @@ const router = express.Router();
 router.get('/', UserController.probarConexion);
 router.post('/login', UserController.loginUnificado); // Login unificado
 // DEPRECATED: Las siguientes rutas pueden ser eliminadas, usar /login en su lugar
-router.get('/me', protector, UserController.getMe);
-router.post('/logout', UserController.logout);
-router.post('/refresh', UserController.refresh);
+router.post('/loginPsicologo', UserController.loginPsicologo);
+router.post('/loginPaciente', UserController.loginPaciente);
+router.post('/registrarPsicologo', UserController.registrarPsicologoBD);
+router.post('/registrarPaciente', UserController.registrarPacienteBD);
 router.put('/usuario/foto',protector, uploadImage.single('foto'), UserController.cambiarFotoPerfil); 
 router.get('/usuario/:id', protector, UserController.obtenerPerfil);
 router.post('/vincularPacientes/:idPsicologo', protector, UserController.vincularPacientes);
