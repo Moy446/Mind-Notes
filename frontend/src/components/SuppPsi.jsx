@@ -20,7 +20,7 @@ export default function SuppPsi(props) {
     const indexOfLastItem = paginador * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = currentData.slice(indexOfFirstItem, indexOfLastItem);
-
+    console.log(currentItems);
     const handleClick = () => {
         setActivo(!activo);
     };
