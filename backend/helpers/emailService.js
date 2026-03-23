@@ -6,7 +6,7 @@ class EmailService {
         // Validar variables de entorno requeridas
         const requiredEnv = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASSWORD', 'EMAIL_FROM'];
         const missing = requiredEnv.filter(env => !process.env[env]);
-        
+
         if (missing.length > 0) {
             console.warn(`⚠️  Variables de entorno faltantes para email: ${missing.join(', ')}`);
         }
@@ -23,17 +23,10 @@ class EmailService {
         });
     }
 
-    /**
-     * Envía correo de verificación de cuenta
-     * @param {string} email - Email del usuario
-     * @param {string} nombre - Nombre del usuario
-     * @param {string} tokenVerificacion - Token único para verificar
-     * @param {string} frontendUrl - URL del frontend
-     */
     async enviarVerificacion(email, nombre, tokenVerificacion, frontendUrl) {
         try {
             const linkVerificacion = `${frontendUrl}/verificar-cuenta/${tokenVerificacion}`;
-            
+
             const mailOptions = {
                 from: process.env.EMAIL_FROM,
                 to: email,
@@ -50,17 +43,11 @@ class EmailService {
         }
     }
 
-    /**
-     * Envía correo de recuperación de contraseña
-     * @param {string} email - Email del usuario
-     * @param {string} nombre - Nombre del usuario
-     * @param {string} tokenRecuperacion - Token único para resetear
-     * @param {string} frontendUrl - URL del frontend
-     */
+
     async enviarRecuperacion(email, nombre, tokenRecuperacion, frontendUrl) {
         try {
             const linkRecuperacion = `${frontendUrl}/resetear-password/${tokenRecuperacion}`;
-            
+
             const mailOptions = {
                 from: process.env.EMAIL_FROM,
                 to: email,
@@ -188,9 +175,7 @@ class EmailService {
         `;
     }
 
-    /**
-     * Prueba la conexión SMTP
-     */
+
     async verificarConexion() {
         try {
             await this.transporter.verify();
@@ -262,22 +247,22 @@ class EmailService {
             </body>
             </html>`;
     }
-    async confirmarCita(email, nombre, fechaCita,cita, nombrePsicologo) {
+    async confirmarCita(email, nombre, fechaCita, cita, nombrePsicologo) {
         try {
             const confirmadoUrl = `${process.env.FRONTEND_URL}/confirmar-cita/${cita}?status=confirmada`;
             const canceladoUrl = `${process.env.FRONTEND_URL}/confirmar-cita/${cita}?status=cancelada`;
-             const mailOptions = {
+            const mailOptions = {
                 from: process.env.EMAIL_FROM,
                 to: email,
                 subject: 'Confirmación de cita Mind Notes',
-                html: this.__plantillaConfirmacion(nombre, confirmadoUrl, canceladoUrl,fechaCita, nombrePsicologo)
+                html: this.__plantillaConfirmacion(nombre, confirmadoUrl, canceladoUrl, fechaCita, nombrePsicologo)
             };
             await this.transporter.sendMail(mailOptions);
         } catch (error) {
             console.error('Error al enviar correo de confirmación de cita:', error);
         }
     }
-    
+
     __plantillaConfirmacion(nombre, confirmadoUrl, canceladoUrl, fechaCita, nombrePsicologo) {
         return `
             <html>
@@ -322,7 +307,61 @@ class EmailService {
                     </div>
                 </body>
             </html>`;
+    }
+
+    async enviarComentario(nombre, email, mensaje) {
+        try {
+            const mailOptions = {
+                from: process.env.EMAIL_FROM,
+                to: email,
+                subject: `Nuevo mensaje de contacto - ${nombre}`,
+                html: this.__plantillaContacto(nombre, email, mensaje)
+            };
+
+            const info = await this.transporter.sendMail(mailOptions);
+            console.log(`✅ Comentario de contacto enviado por ${email}`);
+            return { success: true, messageId: info.messageId };
+        } catch (error) {
+            console.error('❌ Error enviando comentario de contacto:', error.message);
+            return { success: false, error: error.message };
         }
+    }
+
+    __plantillaContacto(nombre, email, mensaje) {
+        return `
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f7f9fc; }
+                        .container { max-width: 640px; margin: 20px auto; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; }
+                        .header { background: #2973B2; color: #fff; padding: 16px 20px; border-radius: 8px 8px 0 0; }
+                        .content { padding: 24px 20px; color: #111827; line-height: 1.6; }
+                        .title { margin: 0 0 12px 0; font-size: 22px; }
+                        .footer { padding: 0 20px 20px 20px; color: #6b7280; font-size: 13px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <strong>Mind Notes</strong>
+                        </div>
+
+                        <div class="content">
+                            <h2 class="title">Hola ${nombre}, gracias por comunicarte con nosotros</h2>
+                            <p>Hemos recibido tu mensaje correctamente.</p>
+                            <p>Pronto nos pondremos en contacto con usted.</p>
+                        </div>
+
+                        <div class="footer">
+                            © 2026 MindNotes. Todos los derechos reservados.
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+    }
+
 }
 
 export default new EmailService();

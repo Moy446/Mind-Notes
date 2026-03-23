@@ -3,6 +3,7 @@ import UserController from '../controllers/usuarioController.js';
 import protector from '../helpers/routesProtect.js';
 import chatController from '../controllers/chatController.js';
 import calendarController from "../controllers/calendarioController.js";
+import emailController from "../controllers/emailController.js";
 import multer from 'multer';
 import path from 'path';
 
@@ -38,9 +39,6 @@ router.post('/loginPsicologo', UserController.loginPsicologo);
 router.post('/loginPaciente', UserController.loginPaciente);
 router.post('/registrarPsicologo', UserController.registrarPsicologoBD);
 router.post('/registrarPaciente', UserController.registrarPacienteBD);
-router.get('/me', protector, UserController.getMe);
-router.post('/logout', UserController.logout);
-router.post('/refresh', UserController.refresh);
 router.put('/usuario/foto',protector, uploadImage.single('foto'), UserController.cambiarFotoPerfil); 
 router.get('/usuario/:id', protector, UserController.obtenerPerfil);
 router.post('/vincularPacientes/:idPsicologo', protector, UserController.vincularPacientes);
@@ -59,5 +57,8 @@ router.get('/confirmar-cita/:id', calendarController.confirmarCita);
 router.get('/me', protector, UserController.getMe);
 router.post('/logout', UserController.logout);
 router.post('/refresh', UserController.refresh);
+
+// Ruta comentarios
+router.post('/comentarios', emailController.enviarComentario);
 
 export default router;

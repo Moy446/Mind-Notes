@@ -3,19 +3,20 @@ import multer from "multer";
 import calendarController from "../controllers/calendarioController.js";
 import grabacionController from "../controllers/grabacionController.js";
 import paymentController from "../controllers/paymentController.js";
+import chatController from "../controllers/chatController.js";
 import protector from "../helpers/routesProtect.js";
 import htmlToDocx from "html-to-docx";
 
 const router = express.Router();
 
 
-/*calendario */
+/*calendario psicologo*/
 router.get("/calendario", protector, calendarController.loadCalendar);
 router.get("/calendario/:idCita", protector, calendarController.cargarCita);
 router.post("/calendario", protector, calendarController.crearCita);
 router.put("/calendario/:idCita", protector, calendarController.editarCita);
 router.delete("/calendario/:idCita", protector, calendarController.eliminarCita);
-router.get("/calendario/pacientes/lista", protector, calendarController.cargarPacientes);
+router.get("/calendario/pacientes/lista", protector, calendarController.cargarUsuarios);
 
 /*grabacion */
 //configuracion multer
@@ -81,6 +82,8 @@ router.post("/export-docx", async (req, res) => {
 });
 // Pagos (Stripe)
 router.post("/checkout", protector, paymentController.sesionPago);
-router.get("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
+router.post("/checkout/confirm-session", protector, paymentController.confirmarSesionCheckout);
+router.post("/suscripcion/:idUsuario", protector, paymentController.obtenerSuscripcion);
+router.post("/cancel-subscription", protector, paymentController.cancelarSuscripcion);
 
 export default router;

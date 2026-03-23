@@ -1,6 +1,5 @@
-import clienteAxios from '../services/axios'
+import clienteAxios from './axios';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const emailAuthService = {
     /**
@@ -86,6 +85,22 @@ export const emailAuthService = {
             return {
                 success: false,
                 message: error.response?.data?.message || 'Error al reenviar el correo'
+            };
+        }
+    },
+
+    async comentarios(nombre, email, mensaje) {
+        try {
+            const response = await clienteAxios.post(`/comentarios`, {
+                nombre,
+                email,
+                mensaje
+            });
+            return response.data;
+        } catch (error) {
+            return {
+                success: false,
+                message: error.response?.data?.message || 'Error al enviar el comentario'
             };
         }
     }

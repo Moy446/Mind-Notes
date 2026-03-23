@@ -10,7 +10,7 @@ import Doc from './Doc.jsx'
 import Grabadora from './Grabadora.jsx'
 import PerfilPsiF from './PerfilPsiF.jsx'
 import Planes from './Planes.jsx'
-import CalendarioF from './CalenndarioF.jsx'
+import Calendario from './Calendario.jsx'
 import MenuPaF from './MenuPaF.jsx'
 import PerfilPaF from './PerfilPaF.jsx'
 import ChatPaF from './ChatPaF.jsx'
@@ -37,15 +37,16 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           {/*-- Rutas protegidas para psicólogos --*/}
         <Route path='/psicologo' element={<ProtectedRoute requiredRole="psicologo"><MenuPsiF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
-          <Route path='doc/:id' element={<Doc/>}/>
+          <Route path='doc/:idP/:id' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
-          <Route path='calendario' element={<CalendarioF/>}/>
+          <Route path='calendario' element={<Calendario/>}/>
           <Route path='perfil' element={<PerfilPsiF/>}/>
           <Route path='planes' element={<Planes/>}/>
         </Route>
         {/*-- Rutas protegidas para pacientes --*/}
         <Route path='/paciente' element={<ProtectedRoute requiredRole="paciente"><MenuPaF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPaF/>}/>
+          <Route path='calendario' element={<Calendario/>}/>
           <Route path='perfil/:id' element={<PerfilPaF/>}/>
           <Route path='chat:id' element={<ChatPaF/>}/>
           <Route path='perfil:id' element={<PerfilPaF/>}/>
