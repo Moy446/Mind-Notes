@@ -88,14 +88,21 @@ export default function SuppPsi(props) {
             <div className='matApo'>
                 {currentItems.map((item) => 
                 (
-                    <Link
+                    ["pdf", "docx", "doc", "txt"].includes(item.type) 
+                        ? 
+                        <Link
                         key={item._id}
                         to={`/psicologo/doc/${props.idPaciente}/${item._id}`}
                         className='itemsmatApo btnSuppPsi'
-                    >
+                        >
                         {renderIcon(item.type)}
                         <p className='pMatApo'>{item.nombre}</p>
-                    </Link>
+                        </Link>
+                        :
+                        <div className='itemsmatApo'>
+                            {renderIcon(item.type)}
+                            <p className='pMatApo'>{item.nombre}</p>
+                        </div>
                 ))}
             </div>
 

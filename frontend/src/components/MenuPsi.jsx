@@ -5,15 +5,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import clienteAxios from '../services/axios';
 
-export default function MenuPsi(){
+export default function MenuPsi() {
 
     const navigate = useNavigate();
 
     const [selectedId, setSelectedId] = useState(null);
     const [datos, setDatos] = useState({});
-    useEffect(()=>{
+    useEffect(() => {
         const loadPsicologistData = async () => {
-            
+
             try {
                 const data = await authService.getSession();
                 setDatos(data.user.id);
@@ -24,21 +24,18 @@ export default function MenuPsi(){
         }
 
         loadPsicologistData();
-    },[])
+    }, [])
 
     return (
         <div className='menuPsi'>
             <div className='psiMendiv'>
-                <Link to="" className='svgPsi'>
-                    <img src="/src/images/logowithe.png" className='imgMPsi'/>
-                </Link>
-
+                <img src="/src/images/logowithe.png" className='imgMPsi' />
                 <Link to="grabadora" className='svgPsi'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`size-6 ${selectedId === "1" ? 'selectedPsi' : ''}`} onClick={() => setSelectedId("1")}>
                         <path d="M8.25 4.5a3.75 3.75 0 1 1 7.5 0v8.25a3.75 3.75 0 1 1-7.5 0V4.5Z" />
                         <path d="M6 10.5a.75.75 0 0 1 .75.75v1.5a5.25 5.25 0 1 0 10.5 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6.751 6.751 0 0 1-6 6.709v2.291h3a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1 0-1.5h3v-2.291a6.751 6.751 0 0 1-6-6.709v-1.5A.75.75 0 0 1 6 10.5Z" />
                     </svg>
-                </Link>     
+                </Link>
                 <Link to="/psicologo/calendario" className='svgPsi'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="size-6" key="2" className={selectedId === "2" ? 'selectedPsi' : ''} onClick={() => setSelectedId("2")}>
                         <path fillRule="evenodd" d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z" clipRule="evenodd" />
