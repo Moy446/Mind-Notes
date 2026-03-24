@@ -89,7 +89,12 @@ export default function Login() {
 
             if (result && result.success) {
                 // Redirigir según el tipo de usuario detectado automáticamente
-                navigate(result.role === 'psicologo' ? '/psicologo' : '/paciente');
+                const userId = result?.user?.id;
+                navigate(
+                    result.role === 'psicologo'
+                        ? `/psicologo/chat/${userId}`
+                        : `/paciente/chat/${userId}`
+                );
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }
