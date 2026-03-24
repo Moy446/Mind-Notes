@@ -111,6 +111,9 @@ class CalendarioController {
             }
 
             //validar que no haya citas en el mismo horario
+            if (horaInicio >= horaFin) {
+                throw new Error('La hora de inicio debe ser menor que la hora de fin');
+            }
             const agenda = new Agenda();
             let citasDelDia = []
             if (esPsicologo){
