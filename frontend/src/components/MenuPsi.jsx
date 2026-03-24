@@ -30,9 +30,11 @@ export default function MenuPsi() {
     return (
         <div className='menuPsi'>
             <div className='psiMendiv'>
-                    <Tooltipe text="Mind Notes">
-                        <img src="/src/images/logowithe.png" className='imgMPsi'/>
-                    </Tooltipe>
+                <Tooltipe text="Mind Notes">
+                    <div className="toolTip"> 
+                          <img src="/src/images/logowithe.png" className='imgMPsi' />
+                    </div>  
+                </Tooltipe>
 
                 <Link to="grabadora" className='svgPsi'>
                     <Tooltipe text="Gabadora de audio">
@@ -41,7 +43,7 @@ export default function MenuPsi() {
                             <path d="M6 10.5a.75.75 0 0 1 .75.75v1.5a5.25 5.25 0 1 0 10.5 0v-1.5a.75.75 0 0 1 1.5 0v1.5a6.751 6.751 0 0 1-6 6.709v2.291h3a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1 0-1.5h3v-2.291a6.751 6.751 0 0 1-6-6.709v-1.5A.75.75 0 0 1 6 10.5Z" />
                         </svg>
                     </Tooltipe>
-                </Link>     
+                </Link>
                 <Link to="/psicologo/calendario" className='svgPsi'>
                     <Tooltipe text="Calendario">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" class="size-6" key="2" className={selectedId === "2" ? 'selectedPsi' : ''} onClick={() => setSelectedId("2")}>

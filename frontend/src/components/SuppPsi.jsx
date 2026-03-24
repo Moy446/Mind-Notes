@@ -33,6 +33,7 @@ export default function SuppPsi(props) {
         }
     };
     const renderIcon = (type) => {
+        console.log("renderizando svgs")
         if (["pdf", "docx", "doc", "txt"].includes(type)) {
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -43,7 +44,7 @@ export default function SuppPsi(props) {
             );
         }
 
-        if (["mp4", "mov", "avi"].includes(type)) {
+        if (["mp4", "mov", "avi", "wav"].includes(type)) {
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -99,7 +100,7 @@ export default function SuppPsi(props) {
                         <p className='pMatApo'>{item.nombre}</p>
                         </Link>
                         :
-                        <div className='itemsmatApo'>
+                        <div className='itemsmatApo' key={item._id}>
                             {renderIcon(item.type)}
                             <p className='pMatApo'>{item.nombre}</p>
                         </div>
