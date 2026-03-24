@@ -1,8 +1,7 @@
-import React, { act, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './SuppPsi.css'
-import clienteAxios from '../services/axios.js';
 
 export default function SuppPsi(props) {
 
@@ -87,10 +86,11 @@ export default function SuppPsi(props) {
             <hr className={activo ? 'lineDown2' : 'lineDown'} />
 
             <div className='matApo'>
-                {currentItems.map((item) => (
+                {currentItems.map((item) => 
+                (
                     <Link
                         key={item._id}
-                        to={`/psicologo/doc/${item._id}`}
+                        to={`/psicologo/doc/${props.idPaciente}/${item._id}`}
                         className='itemsmatApo btnSuppPsi'
                     >
                         {renderIcon(item.type)}

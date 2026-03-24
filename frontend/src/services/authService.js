@@ -18,39 +18,6 @@ export const authService = {
     }
   },
 
-  // DEPRECATED: Este método puede ser eliminado, usar login() en su lugar
-  async loginPaciente(email, password) {
-    try {
-      const response = await clienteAxios.post('/loginPaciente', { email, password }, {
-        withCredentials: true, // importante: permite enviar/recibir cookies
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      const data = response.data;
-      // No guardas token en localStorage, confías en la cookie HttpOnly
-      return { success: true, ...data };
-    } catch (error) {
-      return { success: false, message: error.response?.data?.message || error.message };
-    }
-  },
-
-  // DEPRECATED: Este método puede ser eliminado, usar login() en su lugar
-  async loginPsicologo(email, password) {
-    try {
-      const response = await clienteAxios.post('/loginPsicologo', { email, password }, {
-        withCredentials: true, // permite enviar/recibir cookies
-      });
-
-      const data = response.data;
-      // No guardas token en localStorage, confías en la cookie HttpOnly
-      return { success: true, ...data };
-    } catch (error) {
-      return { success: false, message: error.response?.data?.message || error.message };
-    }
-  },
-
   async registrarPaciente(nombre, email, password, passwordConfirm) {
     try {
       const response = await clienteAxios.post('/registrarPaciente', { nombre, email, password, passwordConfirm });
@@ -105,27 +72,7 @@ export const authService = {
   async logout() {
     await clienteAxios.post('/logout', {}, { withCredentials: true }).catch(() => {});
   },
-
-  getToken() {
-    // Ya no usas localStorage, solo verificas con getSession()
-    return null;
-  },
-
-  getUserType() {
-    // Usa getSession() para obtener el rol desde el servidor
-    return null;
-  },
-
-  getUserId() {
-    // Usa getSession() para obtener el id desde el servidor
-    return null;
-  },
-
-  getUserRole() {
-    // Usa getSession() para obtener el rol desde el servidor
-    return null;
-  },
-
+  
   isAuthenticated() {
     // Llama a getSession() en lugar de revisar localStorage
     return this.getSession().then(session => session.authenticated);

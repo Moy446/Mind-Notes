@@ -2,6 +2,8 @@ import React from 'react'
 import './EliminarBtn.css'
 
 export default function EliminarBtn(props) {
+    const clickHandler = props.onClick || props.handleDel;
+
     const svgRender = (img) => {
         switch (img) {
             case "1":
@@ -27,7 +29,12 @@ export default function EliminarBtn(props) {
     };
 
     return (
-        <button type="submit" className="eliminar-btn" onClick={props.handleDel}>
+        <button
+            type="button"
+            className="eliminar-btn"
+            onClick={clickHandler}
+            disabled={props.disabled}
+        >
             {svgRender(props.img)}
             <div className='eliminartxt'>
                 {props.texto}

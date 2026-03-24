@@ -2,13 +2,14 @@
 {
     display: flex;
     flex-direction: column;
-    height: 90%;
+    height: 100%;
     width: 189px;
     background-color: rgba(41, 115, 178, 80%);
     border-radius: 20px;
     overflow-y: auto;
     padding: 5px;
     gap: 10px;
+    font-size: 12px;
 }
 
 .citas::-webkit-scrollbar
@@ -25,6 +26,7 @@
     background-color: rgba(242, 239, 231, 60%);
     border-radius: 20px;
     display: flex;
+    justify-content: center;
 }
 
 .newCita:hover {
@@ -73,3 +75,19 @@
   font-display: swap;
   font-weight: 100 900; 
 }
+
+@media (max-width: 1024px) {
+    .cita{
+        font-size: 10px;
+    }
+    .imgcita{
+        height: 50%;
+    }
+}
+
+@media (max-width: 480px) {
+    .imgcita{
+        height: 40%;
+    }
+}
+
