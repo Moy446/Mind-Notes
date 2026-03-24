@@ -65,7 +65,58 @@ class ListaVinculacion {
 
     async findByPsicologo(idPsicologo) {
         try {
-            return this.colListaVinculacion.find({ idPsicologo: new ObjectId(idPsicologo) }).toArray();
+            const pipeline = [
+                { $match: { idPsicologo: new ObjectId(idPsicologo) } },
+                {
+                    $lookup: {
+                        from: 'chat',
+                        let: { pid: '$idPaciente', psid: '$idPsicologo' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ['$idPaciente', '$$pid'] },
+                                            { $eq: ['$idPsicologo', '$$psid'] }
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                $project: {
+                                    _id: 0,
+                                    mensajes: 1
+                                }
+                            }
+                        ],
+                        as: 'chatData'
+                    }
+                },
+                {
+                    $addFields: {
+                        ultimoMensaje: {
+                            $arrayElemAt: [
+                                {
+                                    $ifNull: [
+                                        { $arrayElemAt: ['$chatData.mensajes', 0] },
+                                        []
+                                    ]
+                                },
+                                -1
+                            ]
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        ultimoMensajeFecha: '$ultimoMensaje.timestamp'
+                    }
+                },
+                { $sort: { ultimoMensajeFecha: -1, idVinculacion: -1 } },
+                { $project: { chatData: 0 } }
+            ];
+
+            return this.colListaVinculacion.aggregate(pipeline).toArray();
         } catch (error) {
             throw new Error('Error al obtener las vinculaciones por psicologo: ' + error.message);
         }
@@ -73,7 +124,58 @@ class ListaVinculacion {
 
     async findByPaciente(idPaciente) {
         try {
-            return this.colListaVinculacion.find({ idPaciente: new ObjectId(idPaciente) }).toArray();
+            const pipeline = [
+                { $match: { idPaciente: new ObjectId(idPaciente) } },
+                {
+                    $lookup: {
+                        from: 'chat',
+                        let: { pid: '$idPaciente', psid: '$idPsicologo' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $expr: {
+                                        $and: [
+                                            { $eq: ['$idPaciente', '$$pid'] },
+                                            { $eq: ['$idPsicologo', '$$psid'] }
+                                        ]
+                                    }
+                                }
+                            },
+                            {
+                                $project: {
+                                    _id: 0,
+                                    mensajes: 1
+                                }
+                            }
+                        ],
+                        as: 'chatData'
+                    }
+                },
+                {
+                    $addFields: {
+                        ultimoMensaje: {
+                            $arrayElemAt: [
+                                {
+                                    $ifNull: [
+                                        { $arrayElemAt: ['$chatData.mensajes', 0] },
+                                        []
+                                    ]
+                                },
+                                -1
+                            ]
+                        }
+                    }
+                },
+                {
+                    $addFields: {
+                        ultimoMensajeFecha: '$ultimoMensaje.timestamp'
+                    }
+                },
+                { $sort: { ultimoMensajeFecha: -1, idVinculacion: -1 } },
+                { $project: { chatData: 0 } }
+            ];
+
+            return this.colListaVinculacion.aggregate(pipeline).toArray();
         } catch (error) {
             throw new Error('Error al obtener las vinculaciones por paciente: ' + error.message);
         }
