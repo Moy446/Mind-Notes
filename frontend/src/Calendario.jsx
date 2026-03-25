@@ -48,6 +48,7 @@ export default function Calendario() {
                     fotoPerfil: psicologo.fotoPerfilPsicologo
                 })))
                 setIsLoading(false)
+                return
             }
 
             if (res.data.success) {
