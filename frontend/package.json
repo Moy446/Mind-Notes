@@ -36,6 +36,7 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.11.0",
     "react-select": "^5.10.2",
+    "signature": "^0.0.2",
     "socket.io-client": "^4.8.3",
     "sweetalert2": "^11.26.17",
     "tiptap": "^0.15.0"

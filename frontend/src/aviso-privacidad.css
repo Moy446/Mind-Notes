@@ -1,0 +1,196 @@
+.aviso-container {
+	min-height: 100vh;
+	padding: 0 0 0;
+	background: linear-gradient(180deg, #f2efe7 0%, #dcebf1 100%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.aviso-page-header,
+.aviso-page-footer {
+	width: 100%;
+}
+
+.aviso-card {
+	width: min(920px, calc(100% - 32px));
+	max-width: 920px;
+	margin: 24px 0;
+	background: #f2efe7;
+	border: 2px solid #9acbd0;
+	border-radius: 14px;
+	padding: 28px;
+	box-shadow: 0 10px 25px rgba(41, 115, 178, 0.2);
+	color: #1f2937;
+	line-height: 1.65;
+	overflow-wrap: break-word;
+}
+
+.aviso-card,
+.aviso-card * {
+	box-sizing: border-box;
+}
+
+.aviso-card h1 {
+	margin: 0 0 8px;
+	font-size: 1.8rem;
+	line-height: 1.25;
+	color: #2973b2;
+}
+
+.aviso-fecha {
+	margin: 0 0 20px;
+	color: #48a6a7;
+	font-weight: 600;
+}
+
+.aviso-card h2 {
+	margin: 22px 0 8px;
+	font-size: 1.15rem;
+	color: #2973b2;
+}
+
+.aviso-card h3 {
+	margin: 14px 0 8px;
+	font-size: 1rem;
+	color: #2973b2;
+}
+
+.aviso-card p {
+	margin: 0 0 10px;
+	text-align: justify;
+	text-justify: inter-word;
+	word-break: break-word;
+}
+
+.aviso-card ul {
+	margin: 0 0 10px;
+	padding-left: 20px;
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+.aviso-card li {
+	margin-bottom: 6px;
+	text-align: justify;
+	text-justify: inter-word;
+	word-break: break-word;
+	display: list-item;
+}
+
+.aviso-card li::marker {
+	color: #2973b2;
+}
+
+.aviso-card section {
+	padding: 10px 12px;
+	border-left: 4px solid #48a6a7;
+	background-color: rgba(154, 203, 208, 0.2);
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+.aviso-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 18px;
+}
+
+.aviso-btn {
+	background-color: #2973b2;
+	color: #f2efe7;
+	border: 1px solid #2973b2;
+	border-radius: 8px;
+	padding: 10px 18px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.aviso-btn:hover {
+	background-color: #48a6a7;
+	border-color: #48a6a7;
+	transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+	.aviso-container {
+		padding: 0 0 16px;
+	}
+
+	.aviso-card {
+		width: calc(100% - 20px);
+		margin: 16px 0;
+		padding: 18px;
+	}
+
+	.aviso-card h1 {
+		font-size: 1.45rem;
+	}
+
+	.aviso-card h2 {
+		font-size: 1.05rem;
+	}
+
+	.aviso-actions {
+		justify-content: center;
+	}
+}
+
+/* Estilos personalizados para checkboxes */
+.aviso-card input[type="checkbox"] {
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	width: 20px;
+	height: 20px;
+	border: 2px solid #2973b2;
+	border-radius: 4px;
+	background-color: white;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	margin-right: 8px;
+	vertical-align: middle;
+	position: relative;
+}
+
+.aviso-card input[type="checkbox"]:hover {
+	border-color: #48a6a7;
+	box-shadow: 0 0 8px rgba(72, 166, 167, 0.3);
+}
+
+.aviso-card input[type="checkbox"]:checked {
+	background-color: #2973b2;
+	border-color: #2973b2;
+	box-shadow: 0 0 10px rgba(41, 115, 178, 0.4);
+}
+
+.aviso-card input[type="checkbox"]:checked::after {
+	content: '✓';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	color: white;
+	font-size: 13px;
+	font-weight: bold;
+}
+
+.aviso-card input[type="checkbox"]:focus {
+	outline: 2px solid #48a6a7;
+	outline-offset: 2px;
+}
+
+.aviso-card label {
+	cursor: pointer;
+	user-select: none;
+	display: inline-block;
+	margin-bottom: 0;
+	transition: color 0.2s ease;
+	color: #1f2937;
+}
+
+.aviso-card input[type="checkbox"]:checked + label {
+	color: #2973b2;
+	font-weight: 500;
+}

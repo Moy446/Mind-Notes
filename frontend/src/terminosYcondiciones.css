@@ -1,0 +1,132 @@
+.terminos-container {
+	min-height: 100vh;
+	padding: 0 0 0;
+	background: linear-gradient(180deg, #f2efe7 0%, #dcebf1 100%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.terminos-page-header,
+.terminos-page-footer {
+	width: 100%;
+}
+
+.terminos-card {
+	width: min(920px, calc(100% - 32px));
+	max-width: 920px;
+	margin: 24px 0;
+	background: #f2efe7;
+	border: 2px solid #9acbd0;
+	border-radius: 14px;
+	padding: 28px;
+	box-shadow: 0 10px 25px rgba(41, 115, 178, 0.2);
+	color: #1f2937;
+	line-height: 1.65;
+	overflow-wrap: break-word;
+}
+
+.terminos-card,
+.terminos-card * {
+	box-sizing: border-box;
+}
+
+.terminos-card h1 {
+	margin: 0 0 8px;
+	font-size: 1.8rem;
+	line-height: 1.25;
+	color: #2973b2;
+}
+
+.terminos-fecha {
+	margin: 0 0 20px;
+	color: #48a6a7;
+	font-weight: 600;
+}
+
+.terminos-card h2 {
+	margin: 22px 0 8px;
+	font-size: 1.15rem;
+	color: #2973b2;
+}
+
+.terminos-card p {
+	margin: 0 0 10px;
+	text-align: justify;
+	text-justify: inter-word;
+	word-break: break-word;
+}
+
+.terminos-card ul {
+	margin: 0 0 10px;
+	padding-left: 20px;
+	list-style-type: disc;
+	list-style-position: outside;
+}
+
+.terminos-card li {
+	margin-bottom: 6px;
+	text-align: justify;
+	text-justify: inter-word;
+	word-break: break-word;
+	display: list-item;
+}
+
+.terminos-card li::marker {
+	color: #2973b2;
+}
+
+.terminos-card section {
+	padding: 10px 12px;
+	border-left: 4px solid #48a6a7;
+	background-color: rgba(154, 203, 208, 0.2);
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+.terminos-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 18px;
+}
+
+.terminos-btn {
+	background-color: #2973b2;
+	color: #f2efe7;
+	border: 1px solid #2973b2;
+	border-radius: 8px;
+	padding: 10px 18px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.terminos-btn:hover {
+	background-color: #48a6a7;
+	border-color: #48a6a7;
+	transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+	.terminos-container {
+		padding: 0 0 16px;
+	}
+
+	.terminos-card {
+		width: calc(100% - 20px);
+		margin: 16px 0;
+		padding: 18px;
+	}
+
+	.terminos-card h1 {
+		font-size: 1.45rem;
+	}
+
+	.terminos-card h2 {
+		font-size: 1.05rem;
+	}
+
+	.terminos-actions {
+		justify-content: center;
+	}
+}

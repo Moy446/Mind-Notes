@@ -15,6 +15,8 @@ import MenuPaF from './MenuPaF.jsx'
 import PerfilPaF from './PerfilPaF.jsx'
 import ChatPaF from './ChatPaF.jsx'
 import Error from './Error.jsx'
+import TerminosYCondiciones from './terminosYcondiciones.jsx'
+import AvisoPrivacidad from './aviso-privacidad.jsx'
 
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
@@ -53,6 +55,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         {/*-- Rutas públicas --*/}
         <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
+        <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
+        <Route path="/aviso-privacidad" element={<AvisoPrivacidad />} />
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/Login' element={<Login/>}/>
