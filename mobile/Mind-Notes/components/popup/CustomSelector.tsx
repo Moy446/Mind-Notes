@@ -1,3 +1,4 @@
+import { calendarPopUpStyle } from "@/styles/popup/calendar.popUpStyle";
 import { useState } from "react";
 import { Image, Text, View } from "react-native"
 import { Dropdown } from "react-native-element-dropdown";
@@ -18,7 +19,7 @@ const CustomSelector = ({ data }: Props) => {
 
     return (
         <Dropdown
-            style={{ height: 50, borderRadius: 10, paddingHorizontal: 10 }}
+            style={calendarPopUpStyle.selector}
             data={data || []}
             labelField="name"
             valueField="id"

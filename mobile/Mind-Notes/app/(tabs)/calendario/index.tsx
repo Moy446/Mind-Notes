@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from 'react-native'
+import { FlatList, Modal, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CalendarComponent from '@/components/calendar/calendario'
 import AddNewDateComponent from '@/components/calendar/AddNewDate'
@@ -6,6 +6,7 @@ import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
 import { useCalendar } from '@/hooks/useCalendar'
 import ViewDatesComponent from '@/components/calendar/ViewDates'
 import CalendarPopUp from '@/components/popup/CalendarPopUp'
+import { calendarPopUpStyle } from '@/styles/popup/calendar.popUpStyle'
 
 interface Cita {
   id: string,
@@ -24,6 +25,7 @@ const CalendarioScreen = () => {
     
     const [date, setDate] = useState(new Date())
     const formattedDate = date.toISOString().split('T')[0] // Formato YYYY-MM-DD
+    const [showPopup, setShowPopup] = useState(false);
 
     useEffect(() => {
         cargarCitas()
@@ -40,8 +42,8 @@ const CalendarioScreen = () => {
         }}
         ListHeaderComponent={
           <>
-            <Text style={calendarioStyle.txtDate}>{formattedDate }</Text>
-            <AddNewDateComponent onPress={addEvent} />
+            <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
+            <AddNewDateComponent onPress={() => setShowPopup(true)} />
           </>
         }
         renderItem={({item}) => (
@@ -52,6 +54,13 @@ const CalendarioScreen = () => {
           />
         )}
       />
+      <Modal visible={showPopup} transparent animationType="slide">
+        <View style={calendarioStyle.darkThemeModal}>
+          <View style={calendarioStyle.modalContainer}>
+            <CalendarPopUp onClose={() => setShowPopup(false)} />
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

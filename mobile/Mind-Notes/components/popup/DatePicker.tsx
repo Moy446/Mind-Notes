@@ -1,3 +1,4 @@
+import { calendarPopUpStyle } from "@/styles/popup/calendar.popUpStyle";
 import React, { useState } from "react";
 import { View, Text, Modal, Pressable } from "react-native";
 import { Calendar } from "react-native-calendars";
@@ -25,11 +26,7 @@ const DatePicker = ({ value, onChange }: Props) => {
         <View>
             <Pressable
                 onPress={() => setVisible(true)}
-                style={{
-                    padding: 12,
-                    borderWidth: 1,
-                    borderRadius: 8,
-                }}
+                style={calendarPopUpStyle.datePicker}
             >
                 <Text>
                     {value ? value : "Seleccionar fecha"}

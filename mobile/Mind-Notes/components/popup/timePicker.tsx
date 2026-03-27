@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, Platform } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { calendarPopUpStyle } from "@/styles/popup/calendar.popUpStyle";
 
 interface Props {
     start: string;
@@ -17,11 +18,11 @@ const TimeRangePicker = ({ start, end, onChange }: Props) => {
     };
 
     return (
-        <View style={{ gap: 10 }}>
+        <View style={calendarPopUpStyle.timePickerContainer}>
             {/* Hora inicio */}
             <Pressable
                 onPress={() => setShowStart(true)}
-                style={{ padding: 12, borderWidth: 1, borderRadius: 8 }}
+                style={calendarPopUpStyle.timePicker}
             >
                 <Text>{start || "Hora inicio"}</Text>
             </Pressable>
@@ -45,7 +46,7 @@ const TimeRangePicker = ({ start, end, onChange }: Props) => {
             {/* Hora fin */}
             <Pressable
                 onPress={() => setShowEnd(true)}
-                style={{ padding: 12, borderWidth: 1, borderRadius: 8 }}
+                style={calendarPopUpStyle.timePicker}
             >
                 <Text>{end || "Hora fin"}</Text>
             </Pressable>

@@ -76,5 +76,20 @@ export const calendarioStyle = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'Saira-Medium'
     },
-
+    darkThemeModal:{
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",  
+    },
+    modalContainer:{
+        width: "85%",
+        backgroundColor: Colors.background,
+        borderRadius: 12,
+        padding: 16,
+        elevation: 5,
+        shadowColor: "#000", 
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+    },
 })

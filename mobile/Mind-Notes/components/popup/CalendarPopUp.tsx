@@ -1,10 +1,17 @@
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { Pressable, Text, View } from 'react-native'
 import CustomSelector from './CustomSelector'
 import DatePicker from './DatePicker'
 import TimeRangePicker from './timePicker'
+import { calendarPopUpStyle } from '@/styles/popup/calendar.popUpStyle'
+import { Colors } from '@/constants/theme'
 
-const CalendarPopUp = () => {
+interface Props {
+    onClose: () => void;
+
+}
+
+const CalendarPopUp = ({onClose}: Props) => {
 
     const [date, setDate] = useState("");
     const [start, setStart] = useState("");
@@ -25,6 +32,14 @@ const CalendarPopUp = () => {
                     setEnd(e);
                 }}
             />
+            <View style={calendarPopUpStyle.btnContainer}>
+                <Pressable style={{...calendarPopUpStyle.btn, backgroundColor: Colors.secondaryButton}} onPress={onClose}>
+                    <Text style={calendarPopUpStyle.btnText}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={{...calendarPopUpStyle.btn, backgroundColor: Colors.primaryButton}}>
+                    <Text style={calendarPopUpStyle.btnText}>Aceptar</Text>
+                </Pressable>
+            </View>
         </View>
     )
 }
