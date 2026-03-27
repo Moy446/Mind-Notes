@@ -33,7 +33,6 @@ const TabBarButton = ({icon, children, route ,...props}: Props) => {
                 ...(isActive && tabStyle.selectedButton)
             })}
             onPress={(e) => {
-                console.log(isActive);
                 Haptics.selectionAsync()
                 props.onPress?.(e)
             }}
