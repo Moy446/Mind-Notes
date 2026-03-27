@@ -47,8 +47,7 @@ export const calendarioStyle = StyleSheet.create({
     txtDate:{
         color: Colors.principal,
         fontSize: 13,
-        fontWeight: 'bold',
-        fontFamily: 'Saira-Medium'
+        fontFamily: 'SairaBold',
     },
     infoDateContainer:{
         display: 'flex',
@@ -73,8 +72,7 @@ export const calendarioStyle = StyleSheet.create({
     infoDateContainer_text :{
         color: Colors.white,
         fontSize: 12,
-        fontWeight: 'bold',
-        fontFamily: 'Saira-Medium'
+        fontFamily: 'SairaBold'
     },
     darkThemeModal:{
         flex: 1,

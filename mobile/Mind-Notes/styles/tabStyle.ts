@@ -25,7 +25,7 @@ export const tabStyle = StyleSheet.create({
     },
     fontTab:{
         color: '#ffffff',
-        fontFamily: 'Saira-medium',
+        fontFamily: 'SairaMedium',
         fontSize: 10,
     }
 })

@@ -6,7 +6,7 @@ export const calendarPopUpStyle = StyleSheet.create({
 
     selector:{
         backgroundColor: Colors.secondaryButton,
-        fontFamily: 'Saira-Medium',
+        fontFamily: 'SairaMedium',
         margin:10,
         height:50,
         paddingHorizontal:10,
@@ -17,7 +17,7 @@ export const calendarPopUpStyle = StyleSheet.create({
 
     datePicker:{
         backgroundColor: Colors.secondaryButton,
-        fontFamily: 'Saira-Medium',
+        fontFamily: 'SairaMedium',
         borderRadius: 8,
         borderWidth: 1,
         borderColor: Colors.principal,
@@ -33,7 +33,7 @@ export const calendarPopUpStyle = StyleSheet.create({
     timePicker:{
         width:'40%',
         backgroundColor: Colors.secondaryButton,
-        fontFamily: 'Saira-Medium',
+        fontFamily: 'SairaMedium',
         borderRadius: 8,
         borderWidth: 1,
         borderColor: Colors.principal,
@@ -55,8 +55,7 @@ export const calendarPopUpStyle = StyleSheet.create({
     btnText:{
         color: Colors.principal,
         fontSize: 14,
-        fontWeight: 'bold',
-        fontFamily: 'Saira-Medium',
+        fontFamily: 'SairaBold',
     },
     
 })
