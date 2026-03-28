@@ -42,7 +42,7 @@ export default function FooterMenu(props){
                     </div>
 
                     <div className='four'>
-                        <h4>Contactanos</h4>
+                        <h4>Contáctanos</h4>
                         <form>
                             <ul>
                                 <li><input placeholder='Asunto' class= "input-footer" type="text" ></input></li>
