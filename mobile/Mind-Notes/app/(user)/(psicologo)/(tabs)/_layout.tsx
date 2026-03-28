@@ -1,12 +1,13 @@
 //Archivo creado para manejar los tabs que se creen
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { tabStyle } from '../../styles/tabStyle';
+import { tabStyle } from '../../../../styles/tabStyle';
 import TabBarButton from '@/components/tabs/TabBarButton';
-import { Image } from 'react-native';
+import {  Image } from 'react-native';
 import { Colors } from '@/constants/theme';
 
-const _layout = () => {
+const tabsPsicologo = () => {
+  
   return (
     <Tabs
       screenOptions={{
@@ -14,7 +15,7 @@ const _layout = () => {
         headerTitle: '',
         headerLeft: () => (
           <Image
-          source={require('../../assets/images/logocolor.png')}
+          source={require('@/assets/images/logocolor.png')}
           style={{ width: 50, height: 50, marginLeft: 15 }}
           />
         ),
@@ -92,4 +93,4 @@ const _layout = () => {
   )
 }
 
-export default _layout
+export default tabsPsicologo
