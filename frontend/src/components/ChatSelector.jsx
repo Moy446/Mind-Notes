@@ -59,6 +59,39 @@ export default function ChatSelector(props) {
         setSearchTerm(term);
     };
 
+    const parseDateToMs = (value) => {
+        if (!value) return 0;
+        const ms = new Date(value).getTime();
+        return Number.isNaN(ms) ? 0 : ms;
+    };
+
+    const objectIdToMs = (value) => {
+        const id = typeof value === 'string' ? value : '';
+        const hex = id.slice(0, 8);
+        if (!/^[0-9a-fA-F]{8}$/.test(hex)) return 0;
+        return parseInt(hex, 16) * 1000;
+    };
+
+    const getLastActivityMs = (contact) => {
+        const candidates = [
+            contact?.ultimoMensajeFecha,
+            contact?.fechaUltimoMensaje,
+            contact?.updatedAt,
+            contact?.ultimoMensaje?.timestamp,
+            contact?.ultimoMensaje?.createdAt,
+            contact?.ultimoMensaje?.fecha,
+            contact?.ultimoMensajeTimestamp,
+            contact?.timestamp
+        ];
+
+        for (const candidate of candidates) {
+            const parsed = parseDateToMs(candidate);
+            if (parsed > 0) return parsed;
+        }
+
+        return objectIdToMs(String(contact?.idVinculacion || contact?._id || ''));
+    };
+
     // Filtrar contactos basándose en el término de búsqueda
     const filteredContacts = contacts.filter((contact) => {
         if (!contact) return false;
@@ -68,6 +101,10 @@ export default function ChatSelector(props) {
             : (contact.nombrePsicologo || contact.nombre || '');
         return displayName.toLowerCase().includes(searchTerm.toLowerCase());
     });
+
+    const sortedContacts = [...filteredContacts].sort(
+        (a, b) => getLastActivityMs(b) - getLastActivityMs(a)
+    );
 
     const userRole = user?.role;
     const searchPlaceholder = userRole === 'psicologo' ? 'Buscar paciente' : 'Buscar psicólogo';
@@ -89,17 +126,20 @@ export default function ChatSelector(props) {
                     {!loading && filteredContacts.length === 0 && contacts.length > 0 && (
                         <span className='text-chatbox-message'>No se encontraron resultados</span>
                     )}
-                    {!loading && filteredContacts.map((contact, idx) => {
+                    {!loading && sortedContacts.map((contact, idx) => {
                         const userRole = user?.role;
                         const contactId = userRole === 'psicologo' ? (contact.idPaciente || contact._id || contact.id || idx) : (contact.idPsicologo || contact._id || contact.id || idx);
                         const displayName = userRole === 'psicologo' ? (contact.nombrePaciente || contact.nombre || 'Contacto') : (contact.nombrePsicologo || contact.nombre || 'Contacto');
-                        const lastMsg = contact.ultimoMensaje || contact.ultimoMensajeTexto || '';
-                        const profileImg = userRole === 'psicologo'
+                        const lastMsg = typeof contact.ultimoMensaje === 'object'
+                            ? (contact.ultimoMensaje?.mensaje || '')
+                            : (contact.ultimoMensaje || contact.ultimoMensajeTexto || '');
+                        const imagenFinal = userRole === 'psicologo'
                             ? getImageUrl(contact.fotoPerfilPaciente, '/src/images/pimg1.png')
-                            : getImageUrl(contact.fotoPerfilPsicologo, '/src/images/pimg1.png'); return (
+                            : getImageUrl(contact.fotoPerfilPsicologo, '/src/images/pimg1.png'); 
+                            return (
                                 <ChatBox
                                     key={contactId}
-                                    img={profileImg}
+                                    img={imagenFinal}
                                     name={displayName}
                                     message={lastMsg}
                                     isSelected={selectedId === contactId}

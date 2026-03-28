@@ -1,13 +1,17 @@
 .bubble
 {
-    height: auto;
-    width: auto;
-    max-width: 60%;
+     height: auto;
+    width: fit-content;
+    max-width: min(70%, 520px);
     border-radius: 20px;
-    display: flex;
     padding: 10px;
-    margin-bottom: 10px;
-    margin-top: 10px;
+    margin: 10px 0;
+
+    /* Clave para evitar desborde de cadenas largas */
+    white-space: pre-wrap;      /* respeta saltos y permite envolver */
+    overflow-wrap: anywhere;    /* corta aunque no haya espacios */
+    word-break: break-word;     /* fallback */
+    line-height: 1.35;
 }
 
 .send
@@ -17,8 +21,9 @@
     font-family: 'Saira';
     font-weight: 400;
     font-size: 20px;
-    align-self: end;
-    justify-content: end;
+    align-self: flex-end;
+    margin-left: auto;
+    text-align: left;
 }
 
 .received
@@ -27,8 +32,10 @@
     color: black;
     font-family: 'Saira';
     font-weight: 400;
-    align-self: start;
     font-size: 20px;
+    align-self: flex-start;
+    margin-right: auto;
+    text-align: left;
 }
 
 @font-face {
