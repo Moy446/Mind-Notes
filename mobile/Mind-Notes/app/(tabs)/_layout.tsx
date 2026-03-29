@@ -1,1 +1,0 @@
-//Archivo creado para manejar los tabs que se creen

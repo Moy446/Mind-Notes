@@ -262,12 +262,13 @@ class UsuarioController {
 
                 return res.status(200).json({
                     success: true,
-                    idPsicologo: usuario.idUsuario,
+                    //idPsicologo: usuario.idUsuario,
                     idUsuario: usuario.idUsuario,
+                    email: email,
                     nombre: usuario.nombre,
                     role: 'psicologo',
                     suscripcion: usuario.suscripcion?.plan || 'Plan Gratuito',
-
+                    token: accessToken,
                 });
             }
 
@@ -277,9 +278,12 @@ class UsuarioController {
             res.clearCookie('token');
             return res.status(200).json({
                 success: true,
-                idPaciente: usuario.idUsuario,
+                //idPaciente: usuario.idUsuario,
                 idUsuario: usuario.idUsuario,
-                role: 'paciente'
+                email: email,
+                nombre: usuario.nombre,
+                role: 'paciente',
+                token: accessToken,
             });
         } catch (error) {
             res.status(500).json({ success: false, message: 'Error en el servidor: ' + error.message });
