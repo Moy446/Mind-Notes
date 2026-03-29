@@ -1,7 +1,7 @@
 //Archivo creado para manejar los tabs que se creen
 import React from 'react';
 import { Tabs } from 'expo-router';
-import { tabStyle } from '../../../../styles/tabStyle';
+import { tabStyle } from '../../../styles/tabStyle';
 import TabBarButton from '@/components/tabs/TabBarButton';
 import {  Image } from 'react-native';
 import { Colors } from '@/constants/theme';

@@ -1,11 +1,35 @@
-import { View, Text, Image } from 'react-native'
-import React from 'react'
-import { Tabs } from 'expo-router'
+import { View, Text, Image, ActivityIndicator } from 'react-native'
+import React, { useEffect } from 'react'
+import { Redirect, Tabs } from 'expo-router'
 import { tabStyle } from '@/styles/tabStyle'
 import { Colors } from '@/constants/theme'
 import TabBarButton from '@/components/tabs/TabBarButton'
+import { UseAuthStore } from '@/store/auth/UseAuthStore'
 
 const tabsLayout = () => {
+    
+        const { user , status, checkStatus } = UseAuthStore();
+    
+        useEffect(() => {
+            checkStatus();
+        }, []);
+    
+        if(status === 'checking'){
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator />
+                </View>
+            )
+        }
+    
+        if (status === 'unauthenticated') {
+            return <Redirect href={'/auth/login'} />;
+        }
+    
+        if (user?.role === 'psicologo') {
+            return <Redirect href={'/(psicologo)/(tabs)/chat'} />
+        }
+        
     return (
         <Tabs
             screenOptions={{

@@ -19,7 +19,7 @@ export interface AuthState {
     login: (email: string, password: string) => Promise<AuthResponse>;
     logout: () => Promise<void>;
     changeStatus: (token?: string, user?: User) => boolean;
-    checkStatus: () => Promise<boolean>;
+    checkStatus: () => Promise<void>;
 }
 
 export const UseAuthStore = create<AuthState>()((set,get) => ({
@@ -66,20 +66,7 @@ export const UseAuthStore = create<AuthState>()((set,get) => ({
     },
     checkStatus: async () => {
         const resp = await checkSessionStatus();
-        if (resp) {
-            set({
-                status: 'authenticated',
-                user: resp.user,
-                token: resp.token
-            });
-            return true;
-        } 
-        set({
-            status: 'unauthenticated',
-            user: undefined,
-            token: undefined
-        });
-        return false;
+        get().changeStatus(resp?.token, resp?.user);
     }
 }))
 

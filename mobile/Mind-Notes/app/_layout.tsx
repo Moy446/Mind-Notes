@@ -1,6 +1,6 @@
 //archivo central de todo el proyecto, diria no modificar a menos que ocupemos hacer algo que modifique todas las vistas
 import { Colors } from "@/constants/theme";
-import { Slot, SplashScreen } from "expo-router";
+import { Slot, SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { View } from "react-native";
 import { useFonts } from 'expo-font';
