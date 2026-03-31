@@ -2,15 +2,26 @@ import React from 'react'
 import { View, Text, Pressable, PressableProps, Image } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
+
+type Cita = {
+  id: string,
+  title:string,
+  start: Date,
+  end: Date,
+  extendedProps: {
+    estado: string,
+    img: string
+  }
+}
+
 interface Props extends PressableProps{
 
-  name:string
-  hour:string
+  info: Cita
   //methods
   onPress: () => void
 }
 
-const ViewDatesComponent = ({name, hour, onPress, ...props}:Props) => {
+const ViewDatesComponent = ({info, onPress, ...props}:Props) => {
   return (
     <Pressable 
       {...props}
@@ -25,8 +36,8 @@ const ViewDatesComponent = ({name, hour, onPress, ...props}:Props) => {
         <View style={calendarioStyle.infoDateContainer}>
             <Image source={require('../../assets/images/userDefault.png')} alt='ImagenPaciente' style={calendarioStyle.infoDateContainer_img} />
             <View style={calendarioStyle.infoDateContainer_dataPacient}>
-              <Text style={calendarioStyle.infoDateContainer_text}>{name}</Text>
-              <Text style={calendarioStyle.infoDateContainer_text}>{hour}</Text>
+              <Text style={calendarioStyle.infoDateContainer_text}>{info.title}</Text>
+              <Text style={calendarioStyle.infoDateContainer_text}>{info.start.toLocaleTimeString()}</Text>
             </View>
         </View>
     </Pressable>
