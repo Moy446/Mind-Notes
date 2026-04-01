@@ -1,21 +1,23 @@
 import { View, Text, TextInput, Alert, Pressable, KeyboardAvoidingView } from 'react-native'
-import React, { use, useCallback, useState } from 'react'
+import React, { useState } from 'react'
 import { router } from 'expo-router'
 import { UseAuthStore } from '@/store/auth/UseAuthStore'
+//Todo: Hay que ver el token refresh
 
 const LoginScreen = () => {
 
-    const { login } = UseAuthStore();
+    const login = UseAuthStore.getState().login;
 
     const [isPosting, setIsPosting] = useState(false)
     const [form, setForm] = useState({
-        email: 'a22310402@ceti.mx',
-        password: 'Celeste446?',
+        email: '',
+        password: '',
     })
 
 
-    const onLogin = useCallback(async () => {
+    const onLogin = async () => {
         const {email, password} = form;
+        console.log(form)
 
         if(!email || !password) return;
         
@@ -35,7 +37,7 @@ const LoginScreen = () => {
             router.replace('/(psicologo)/chat')
             return;
         }
-    }, [])
+    }
 
   return (
     <KeyboardAvoidingView style={{marginTop: 50, alignItems: 'center'}}>
@@ -44,14 +46,21 @@ const LoginScreen = () => {
             keyboardType='email-address' 
             autoCapitalize='none'
             value={form.email}
-            onChangeText={(value) => setForm({...form, email: value})}
+            onChangeText={(value) => { console.log(form);
+                setForm(prev =>({
+                ...prev, 
+                ["email"]: value
+            }))}}
         />
         <TextInput 
             placeholder="Contraseña" 
             secureTextEntry 
             autoCapitalize='none'
             value={form.password}
-            onChangeText={(value) => setForm({...form, password: value})}
+            onChangeText={(value) => setForm(prev =>({
+                ...prev, 
+                ["password"]: value
+            }))}
         />
         <Pressable onPress={onLogin} disabled={isPosting}>
             <Text>Ingresar</Text>
