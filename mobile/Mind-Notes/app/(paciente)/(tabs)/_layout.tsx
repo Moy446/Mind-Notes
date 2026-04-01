@@ -8,29 +8,29 @@ import { UseAuthStore } from '@/store/auth/UseAuthStore'
 
 const tabsLayout = () => {
     
-        // const user = UseAuthStore(state => state.user);
-        // const status = UseAuthStore(state => state.status);
-        // const { checkStatus } = UseAuthStore();
+        const user = UseAuthStore(state => state.user);
+        const status = UseAuthStore(state => state.status);
+        const { checkStatus } = UseAuthStore();
     
-        // useEffect(() => {
-        //     checkStatus();
-        // }, []);
+        useEffect(() => {
+            checkStatus();
+        }, []);
     
-        // if(status === 'checking'){
-        //     return (
-        //         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        //             <ActivityIndicator />
-        //         </View>
-        //     )
-        // }
+        if(status === 'checking'){
+            return (
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <ActivityIndicator />
+                </View>
+            )
+        }
     
-        // if (status === 'unauthenticated') {
-        //     return <Redirect href={'/auth/login'} />;
-        // }
+        if (status === 'unauthenticated') {
+            return <Redirect href={'/auth/login'} />;
+        }
     
-        // if (user?.role === 'psicologo') {
-        //     return <Redirect href={'/(psicologo)/(tabs)/chat'} />
-        // }
+        if (user?.role === 'psicologo') {
+            return <Redirect href={'/(psicologo)/(tabs)/chat'} />
+        }
         
     return (
         <Tabs

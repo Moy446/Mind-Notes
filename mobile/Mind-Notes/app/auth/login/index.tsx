@@ -17,7 +17,6 @@ const LoginScreen = () => {
 
     const onLogin = async () => {
         const {email, password} = form;
-        console.log(form)
 
         if(!email || !password) return;
         

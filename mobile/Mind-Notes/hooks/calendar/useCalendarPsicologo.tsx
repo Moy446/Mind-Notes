@@ -3,7 +3,7 @@ import { agendarCita, cargarCitasPsicologos, editarCita, loadListPatients } from
 import { formatedPatientList, FormattedAgendum, infoCita } from "@/core/interfaces/Dates";
 import { Alert } from "react-native";
 
-export const useCalendar = () => {
+export const useCalendarPsicologo = () => {
 
   type CitaCalendar = {
     idCita: string;
@@ -42,11 +42,6 @@ export const useCalendar = () => {
     String(date.getDate()).padStart(2, '0');
   };
 
-
-  const loadPacientsEvents = () => {
-
-  }
-
   const cargarCitas = async () => {
     try {
 
@@ -83,18 +78,14 @@ export const useCalendar = () => {
     setCitas(filtered);
   }
 
-  const loadUserList =   (role: string) => {
-    if (role === 'psicologo') {
-      //cargar pacientes 
-      const patients = loadListPatients()
-      patients.then((res) => {
-        setUserList(res)
-      }).catch((err) => {
-        console.log(err)
-      })
-    } else {
-      //TODO: cargar psicologos
-    }
+  const loadUserList = () => {
+    //cargar pacientes 
+    const patients = loadListPatients()
+    patients.then((res) => {
+      setUserList(res)
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 
   const addEvent = async (infoCita: infoCita) => {
@@ -120,7 +111,6 @@ export const useCalendar = () => {
   }
 
   return {
-    loadPacientsEvents,
     loadDateEvents,
     addEvent,
     editEvent,

@@ -13,10 +13,10 @@ interface Props {
     data?: Data[]
     value?: string
     onChange?: (value: Data) => void
+    placeholder: string
 }
 
-
-const CustomSelector = ({ data, value, onChange }: Props) => {
+const CustomSelector = ({ data, value, onChange, placeholder }: Props) => {
     return (
         <Dropdown
             style={calendarPopUpStyle.selector}
@@ -24,9 +24,8 @@ const CustomSelector = ({ data, value, onChange }: Props) => {
             labelField="nombre"
             valueField="id"
             value={ value }
+            placeholder={placeholder}
             onChange={item => {
-                console.log('Selected user:', item);
-                console.log('value:', value);
                 onChange && onChange(item)
             }}
             renderItem={(item) => (

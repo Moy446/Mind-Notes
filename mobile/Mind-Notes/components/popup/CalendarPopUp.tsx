@@ -11,6 +11,7 @@ import { formatedPatientList, infoCita } from '@/core/interfaces/Dates'
 
 interface Props {
     //Atributos
+    placeholder?: string
     patients?: formatedPatientList[]
     selectedCita?: infoCita;
 
@@ -20,7 +21,7 @@ interface Props {
 
 }
 
-const CalendarPopUp = ({patients, selectedCita, onAccept, onClose}: Props) => {
+const CalendarPopUp = ({placeholder, patients, selectedCita, onAccept, onClose}: Props) => {
 
     const [selectedUser, setSelectedUser] = useState<infoCita>({
         idCita: selectedCita?.idCita || '',
@@ -46,6 +47,7 @@ const CalendarPopUp = ({patients, selectedCita, onAccept, onClose}: Props) => {
             <CustomSelector 
                 data={patients || []}
                 value={selectedCita?.idUsuario}
+                placeholder={placeholder || 'Selecciona el paciente'}
                 onChange={(user) => setSelectedUser({...selectedUser, idUsuario: user.id, nombre: user.nombre})}
             />
             <DatePicker

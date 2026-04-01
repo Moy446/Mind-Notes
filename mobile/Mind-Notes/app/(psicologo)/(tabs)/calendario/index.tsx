@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import CalendarComponent from '@/components/calendar/calendario'
 import AddNewDateComponent from '@/components/calendar/AddNewDate'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
-import { useCalendar } from '@/hooks/useCalendar'
+import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import ViewDatesComponent from '@/components/calendar/ViewDates'
 import CalendarPopUp from '@/components/popup/CalendarPopUp'
 import { calendarPopUpStyle } from '@/styles/popup/calendar.popUpStyle'
@@ -25,7 +25,7 @@ const CalendarioScreen = () => {
 
   
 
-  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendar()
+  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
     
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
@@ -41,7 +41,7 @@ const CalendarioScreen = () => {
 
     useEffect(() => {
         cargarCitas()
-        loadUserList('psicologo')
+        loadUserList()
     }, [])
 
     useEffect(() => {
@@ -107,6 +107,7 @@ const CalendarioScreen = () => {
         <View style={calendarioStyle.darkThemeModal}>
           <View style={calendarioStyle.modalContainer}>
             <CalendarPopUp
+              placeholder={"Selecciona un paciente"}
               patients={userList}
               selectedCita={selectedCita}
               onAccept={async (infoCita) => {

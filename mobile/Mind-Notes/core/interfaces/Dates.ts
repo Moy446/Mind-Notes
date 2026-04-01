@@ -45,3 +45,17 @@ export interface infoCita {
     horaInicio: string;
     horaFin: string;
 }
+
+
+
+//Paciente
+export interface ListPsycologist {
+    success: boolean;
+    data:    Datum[];
+}
+
+export interface Datum {
+    idPsicologo:         string;
+    nombrePsicologo:     string;
+    fotoPerfilPsicologo: string;
+}
