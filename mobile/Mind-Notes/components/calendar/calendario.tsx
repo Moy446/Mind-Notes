@@ -68,7 +68,8 @@ const CalendarComponent = ({ citas, onDayPress }: Props) => {
               todayBackgroundColor: Colors.secondaryButton,
           }}
           onDayPress={(day)=>{
-            const selected = new Date(day.dateString);
+            const [year, month, dayNum] = day.dateString.split('-').map(Number);
+            const selected = new Date(year, month - 1, dayNum);
             onDayPress && onDayPress(selected);
           }}    
           markedDates={markedDates}

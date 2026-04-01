@@ -25,10 +25,10 @@ const CalendarioScreen = () => {
 
   
 
-  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList } = useCalendar()
+  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendar()
     
   const [date, setDate] = useState(new Date())
-  const formattedDate = date.toISOString().split('T')[0] // Formato YYYY-MM-DD
+  const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
@@ -87,7 +87,7 @@ const CalendarioScreen = () => {
             info={item}
             onPress={() => {
               const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
-              const fechaCita = date.toISOString().split('T')[0]
+              const fechaCita = formattedDate
               const cita: infoCita = {
                 idCita: item.idCita,
                 idUsuario,
@@ -96,8 +96,7 @@ const CalendarioScreen = () => {
                 horaInicio: horaInicio.toLocaleTimeString().substring(0,5),
                 horaFin:horaFin.toLocaleTimeString().substring(0,5)
               }
-              console.log("Cita info: ", item)
-              console.log("Hora Inicio: ", horaInicio)
+              console.log(cita)
               setSelectedCita(cita)
               setShowPopup(true)
             }}
