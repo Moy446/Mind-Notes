@@ -1,12 +1,13 @@
 import { useState } from "react"
-import { agendarCita, cargarCitasPsicologos, FormattedAgendum, loadListPatients } from "@/core/actions/calendario/psicologos/calendarioPsicologo.actions";
-import { formatedPatientList, infoCita } from "@/core/interfaces/Dates";
+import { agendarCita, cargarCitasPsicologos, editarCita, loadListPatients } from "@/core/actions/calendario/psicologos/calendarioPsicologo.actions";
+import { formatedPatientList, FormattedAgendum, infoCita } from "@/core/interfaces/Dates";
 import { Alert } from "react-native";
 
 export const useCalendar = () => {
 
   type CitaCalendar = {
-    id: string;
+    idCita: string;
+    idUsuario: string;
     title: string;
     start: Date;
     end: Date;
@@ -20,10 +21,27 @@ export const useCalendar = () => {
   const [citas, setCitas] = useState<CitaCalendar[]>([])
   const [error, setError] = useState(null)
   const [userList, setUserList] = useState<formatedPatientList[]>([])
-  const formatDate = (fecha:string) => {
-    const [y, m, d] = fecha.split('-');
-    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+
+  //Formatear fechas
+  const buildLocalDateTime = (fechaISO: string, hora: string) => {
+    const [year, month, day] = fechaISO.split('T')[0].split('-').map(Number);
+    const [hours, minutes] = hora.split(':').map(Number);
+
+    return new Date(
+      year,
+      month - 1,
+      day,
+      hours,
+      minutes
+    );
   };
+
+  const formatLocalDate = (date: Date) => {
+    return date.getFullYear() + '-' +
+    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+    String(date.getDate()).padStart(2, '0');
+  };
+
 
   const loadPacientsEvents = () => {
 
@@ -37,10 +55,11 @@ export const useCalendar = () => {
       if (data) {
 
         const citasFormateadas = data.map((cita: FormattedAgendum) => ({
-        id: cita.id,
+        idCita: cita.id,
+        idUsuario: cita.idPaciente,
         title: cita.nombre,
-        start: new Date(`${formatDate(cita.fecha)}T${cita.horaI}:00`),
-        end: new Date(`${formatDate(cita.fecha)}T${cita.horaF}:00`),
+        start: buildLocalDateTime(cita.fecha, cita.horaI),
+        end: buildLocalDateTime(cita.fecha, cita.horaF),
         extendedProps: {
             estado: cita.estado,
             img: cita.img || './images/userDefault.png'
@@ -56,14 +75,12 @@ export const useCalendar = () => {
   }
 
   const loadDateEvents = (date: Date) => {
-    const selectedDate = formatDate(date.toISOString().split('T')[0]);
+    const selectedDate = formatLocalDate(date);
     const filtered = allDates.filter((cita) => {
-      const citaDate = formatDate(cita.start.toISOString().split('T')[0]);
+      const citaDate = formatLocalDate(cita.start);
       return citaDate === selectedDate;
     });
-
     setCitas(filtered);
-    
   }
 
   const loadUserList =   (role: string) => {
@@ -87,17 +104,29 @@ export const useCalendar = () => {
       Alert.alert('Cita agendada con éxito')
     }catch(error: any){
       Alert.alert('Error', error.response?.data?.message || 'No se pudo agendar la cita');
-    }
-    
-    
+    } 
+  }
+  const editEvent = async (infoCita: infoCita) => {
+    try{
+      if (!infoCita.idCita) {
+        throw new Error('ID de cita no proporcionado para edición');
+      }
+      const result = await editarCita(infoCita, infoCita.idCita);
+      //Todo: mostrar mensaje de exito
+      Alert.alert('Cita editada con éxito')
+    }catch(error: any){
+      Alert.alert('Error', error.response?.data?.message || 'No se pudo editar la cita');
+    } 
   }
 
   return {
     loadPacientsEvents,
     loadDateEvents,
     addEvent,
+    editEvent,
     cargarCitas,
     loadUserList,
+    formatLocalDate,
     allDates,
     citas,
     error,

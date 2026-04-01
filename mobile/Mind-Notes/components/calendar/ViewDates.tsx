@@ -4,7 +4,8 @@ import * as Haptics from 'expo-haptics'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
 
 type Cita = {
-  id: string,
+  idCita: string,
+  idUsuario: string,
   title:string,
   start: Date,
   end: Date,
@@ -37,7 +38,7 @@ const ViewDatesComponent = ({info, onPress, ...props}:Props) => {
             <Image source={require('../../assets/images/userDefault.png')} alt='ImagenPaciente' style={calendarioStyle.infoDateContainer_img} />
             <View style={calendarioStyle.infoDateContainer_dataPacient}>
               <Text style={calendarioStyle.infoDateContainer_text}>{info.title}</Text>
-              <Text style={calendarioStyle.infoDateContainer_text}>{info.start.toLocaleTimeString()}</Text>
+              <Text style={calendarioStyle.infoDateContainer_text}>{info.start.toLocaleTimeString().substring(0, 5)} - {info.end.toLocaleTimeString().substring(0, 5)}</Text>
             </View>
         </View>
     </Pressable>

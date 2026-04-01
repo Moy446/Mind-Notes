@@ -1,20 +1,5 @@
 import { clienteAxios } from "@/core/API/clienteAxios"
-import { formatedPatientList, infoCita, NombresUsuario, PatientList } from "@/core/interfaces/Dates";
-
-export interface PsicologoDates {
-    success:         boolean;
-    formattedAgenda?: FormattedAgendum[];
-}
-
-export interface FormattedAgendum {
-    id:     string;
-    nombre: string;
-    img:    string;
-    horaI:  string;
-    horaF:  string;
-    fecha:  string;
-    estado: string;
-}
+import { formatedPatientList, FormattedAgendum, infoCita, NombresUsuario, PatientList, PsicologoDates } from "@/core/interfaces/Dates";
 
 const returnFormattedAgenda = (data: PsicologoDates): FormattedAgendum[] => {
     if (!data.success || !data.formattedAgenda) {
@@ -63,9 +48,10 @@ export const agendarCita = async (infoCita:infoCita) => {
 }
 
 //TODO :EDITAR CITA
-export const editarCita = async (infoCita:infoCita) => {
+export const editarCita = async (infoCita:infoCita, idCita:string) => {
     try {
-        
+        const res = await clienteAxios.put(`/psicologo/calendario/${idCita}`, infoCita)
+        return res.data.success
     } catch (error) {
         throw(error)
     }

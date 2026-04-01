@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View } from 'react-native'
 import { Calendar } from 'react-native-calendars';
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle';
 import { Colors } from '@/constants/theme';
 
   type CitaCalendar = {
-    id: string;
+    idCita: string;
+    idUsuario: string;
     title: string;
     start: Date;
     end: Date;
@@ -20,11 +21,19 @@ interface Props {
   onDayPress?: (date: Date) => void;
 }
 
+const formatLocaleDate = (date:Date) => {
+    
+    return date.getFullYear() + '-' +
+    String(date.getMonth() + 1).padStart(2, '0') + '-' +
+    String(date.getDate()).padStart(2, '0');
+
+  }
+
+
 const getDate = (citas?: CitaCalendar[]) => {
   const markedDates: { [key: string]: any } = {};
   citas?.forEach((cita) => {
-    const fecha = cita.start;
-    const formattedDate = fecha.toISOString().split('T')[0];
+    const formattedDate = formatLocaleDate(cita.start);
     markedDates[formattedDate] = {
       marked: true,
       dotColor: Colors.principal,
@@ -34,7 +43,8 @@ const getDate = (citas?: CitaCalendar[]) => {
 }
 
 const CalendarComponent = ({ citas, onDayPress }: Props) => {
-    const currentDate = new Date().toISOString().split('T')[0];
+
+    const currentDate = formatLocaleDate(new Date())
     const markedDates = getDate(citas);
   return (
     <View >

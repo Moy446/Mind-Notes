@@ -23,6 +23,7 @@ interface Props {
 const CalendarPopUp = ({patients, selectedCita, onAccept, onClose}: Props) => {
 
     const [selectedUser, setSelectedUser] = useState<infoCita>({
+        idCita: selectedCita?.idCita || '',
         idUsuario: selectedCita?.idUsuario || '',
         nombre: selectedCita?.nombre || '',
         fechaCita: selectedCita?.fechaCita || '',

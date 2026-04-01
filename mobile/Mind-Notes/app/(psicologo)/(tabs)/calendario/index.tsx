@@ -1,5 +1,5 @@
 import { FlatList, Modal, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CalendarComponent from '@/components/calendar/calendario'
 import AddNewDateComponent from '@/components/calendar/AddNewDate'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
@@ -10,7 +10,8 @@ import { calendarPopUpStyle } from '@/styles/popup/calendar.popUpStyle'
 import { infoCita } from '@/core/interfaces/Dates'
 
 interface Cita {
-  id: string,
+  idCita: string,
+  idUsuario: string,
   title:string,
   start: Date,
   end: Date,
@@ -22,18 +23,21 @@ interface Cita {
 
 const CalendarioScreen = () => {
 
-    const { allDates, citas, userList, cargarCitas, addEvent, loadDateEvents, loadUserList } = useCalendar()
+  
+
+  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList } = useCalendar()
     
-    const [date, setDate] = useState(new Date())
-    const formattedDate = date.toISOString().split('T')[0] // Formato YYYY-MM-DD
-    const [showPopup, setShowPopup] = useState(false);
-    const [selectedCita, setSelectedCita] = useState<infoCita>({
-      idUsuario: '',
-      nombre: '',
-      fechaCita: '',
-      horaInicio: '',
-      horaFin: ''
-    });
+  const [date, setDate] = useState(new Date())
+  const formattedDate = date.toISOString().split('T')[0] // Formato YYYY-MM-DD
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedCita, setSelectedCita] = useState<infoCita>({
+    idCita: '',
+    idUsuario: '',
+    nombre: '',
+    fechaCita: '',
+    horaInicio: '',
+    horaFin: ''
+  });
 
     useEffect(() => {
         cargarCitas()
@@ -46,6 +50,17 @@ const CalendarioScreen = () => {
       }
     },[allDates])
 
+    const resetSelectedCita = useCallback(() => {
+      setSelectedCita({
+        idCita: '',
+        idUsuario: '',
+        nombre: '',
+        fechaCita: '',
+        horaInicio: '',
+        horaFin: ''
+      })
+    },[])
+
   return (
     <View style={calendarioStyle.container}>
       
@@ -57,7 +72,7 @@ const CalendarioScreen = () => {
       />
       <FlatList
       data={citas}
-      keyExtractor={( item:Cita ) => item.id.toString()}
+      keyExtractor={( item:Cita ) => item.idCita.toString()}
       contentContainerStyle={{
           ...calendarioStyle.EventsContainer
         }}
@@ -71,15 +86,18 @@ const CalendarioScreen = () => {
           <ViewDatesComponent
             info={item}
             onPress={() => {
-              const {id:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
+              const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
               const fechaCita = date.toISOString().split('T')[0]
               const cita: infoCita = {
+                idCita: item.idCita,
                 idUsuario,
                 nombre,
                 fechaCita,
-                horaInicio: horaInicio.toISOString().split('T')[1].substring(0,5),
-                horaFin: horaFin.toISOString().split('T')[1].substring(0,5)
+                horaInicio: horaInicio.toLocaleTimeString().substring(0,5),
+                horaFin:horaFin.toLocaleTimeString().substring(0,5)
               }
+              console.log("Cita info: ", item)
+              console.log("Hora Inicio: ", horaInicio)
               setSelectedCita(cita)
               setShowPopup(true)
             }}
@@ -93,18 +111,17 @@ const CalendarioScreen = () => {
               patients={userList}
               selectedCita={selectedCita}
               onAccept={async (infoCita) => {
-                await addEvent(infoCita)
+                if(selectedCita.idCita) {
+                  await editEvent(infoCita)
+                }else {
+                  await addEvent(infoCita)
+                }
                 await cargarCitas()
+                resetSelectedCita()
                 setShowPopup(false)
               }} 
               onClose={() => {
-                setSelectedCita({
-                  idUsuario: '',
-                  nombre: '',
-                  fechaCita: '',
-                  horaInicio: '',
-                  horaFin: ''
-                })
+                resetSelectedCita()
                 setShowPopup(false)
               }} 
               />
