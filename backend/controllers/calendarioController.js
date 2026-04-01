@@ -24,6 +24,7 @@ class CalendarioController {
             const datosAgenda = await agenda.getAgenda(idUsuario);
             const formattedAgenda = datosAgenda.map(cita =>({
                 id:cita.idCita,
+                idPaciente: cita.idPaciente,
                 nombre:cita.nombrePaciente,
                 img:cita.fotoPaciente,
                 horaI: cita.horaInicio,

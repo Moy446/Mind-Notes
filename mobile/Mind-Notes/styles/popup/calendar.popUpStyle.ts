@@ -14,6 +14,15 @@ export const calendarPopUpStyle = StyleSheet.create({
         borderColor: Colors.principal,
         borderWidth: 1,
     },
+    renderItemContainer:{
+        flexDirection: "row", 
+        alignItems: "center", 
+        gap: 10,
+        padding: 10,
+        backgroundColor: Colors.secondaryButton,
+        fontFamily: 'SairaMedium',
+        fontSize: 12,
+    },
 
     datePicker:{
         backgroundColor: Colors.secondaryButton,
