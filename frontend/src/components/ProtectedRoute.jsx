@@ -26,7 +26,9 @@ export default function ProtectedRoute({ children, requiredRole }) {
 
   // Si el rol no coincide, redirige a la ruta correcta según su rol
   if (requiredRole && user.role !== requiredRole) {
-    const redirectPath = user.role === 'psicologo' ? '/psicologo' : '/paciente';
+    const redirectPath = user.role === 'psicologo'
+      ? `/psicologo/chat/${user.id}`
+      : `/paciente/chat/${user.id}`;
     return <Navigate to={redirectPath} replace />;
   }
 

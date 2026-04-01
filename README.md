@@ -30,6 +30,7 @@ Mind-Notes/
 │   ├── models/        # modelos de la base de datos
 │   ├── routes/        # rutas del sevidor
 │   ├── app.js         # Servidor principal
+│   ├── DockerFile     # Construye la Imagen docker en la parte del Backend
 │   └── package.json
 ├── mobile/            # Aplicación React Native
 │   ├── src/
@@ -39,6 +40,8 @@ Mind-Notes/
 │   │   └── App.js
 │   └── package.json
 └── package.json       # Scripts de desarrollo
+|
+└── docker-compose.yml       # Administra los dockers del proyecto
 ```
 
 ## 🛠️ Tecnologías
@@ -127,6 +130,46 @@ npm run android
 # o
 cd mobile
 npm run android
+```
+
+## 🐋 Ejecucion con Docker 
+### ✅ ¿CUÁNDO ES NECESARIO REBUILD?
+Haz rebuild ```bash docker compose build``` cuando:
+- Cambias código fuente (Models, Controllers, Imports, Rutas)
+- Corriges errores de paths (como el que tienes)
+- Cambias dependencias (package.json)
+- Cambias el Dockerfile
+
+### ❌ ¿CUÁNDO NO ES NECESARIO?
+NO hace falta rebuild cuando:
+- Solo cambias .env
+- Solo cambias variables de entorno
+- Solo cambias puertos en runtime
+- En ese caso basta con:
+```bash
+docker compose restart
+```
+
+#### Creacion del Docker 
+```bash
+docker compose down  # Termina el Docker en caso de haber uno activo  
+docker compose build --no-cache # Crea el Docker 
+docker compose up -d # Arranca el Docker
+```
+#### Verificacion del Docker 
+##### Verificas si que dockers hay activos
+```bash
+docker ps
+```
+
+#### Ver Logs del Docker
+```bash
+docker logs nombreDocker 
+```
+
+#### Cerrar el Docker 
+```bash
+docker 
 ```
 
 ## 📡 API Endpoints

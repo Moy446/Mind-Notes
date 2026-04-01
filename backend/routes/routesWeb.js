@@ -3,6 +3,7 @@ import UserController from '../controllers/usuarioController.js';
 import protector from '../helpers/routesProtect.js';
 import chatController from '../controllers/chatController.js';
 import calendarController from "../controllers/calendarioController.js";
+import emailController from "../controllers/emailController.js";
 import multer from 'multer';
 import path from 'path';
 
@@ -56,5 +57,8 @@ router.get('/confirmar-cita/:id', calendarController.confirmarCita);
 router.get('/me', protector, UserController.getMe);
 router.post('/logout', UserController.logout);
 router.post('/refresh', UserController.refresh);
+
+// Ruta comentarios
+router.post('/comentarios', emailController.enviarComentario);
 
 export default router;

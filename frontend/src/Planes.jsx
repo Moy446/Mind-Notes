@@ -1,14 +1,50 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './Planes.css'
 import SubBtn from './components/SubBtn';
 import EliminarBtn from './components/EliminarBtn';
 import { AuthContext } from './context/AuthContext';
-import { checkout, cancelSubscription, getSubscriptionStatus } from './services/stripeService';
+import { checkout, cancelSubscription, getSubscriptionStatus, confirmCheckoutSession } from './services/stripeService';
 import Swal from 'sweetalert2';
 
 export default function PerfilPsiF(props) {
     const [loading, setLoading] = useState(false);
     const { user, authenticated, loading: authLoading } = useContext(AuthContext);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+        const sessionId = searchParams.get('session_id');
+
+        if (!sessionId || authLoading || !authenticated) {
+            return;
+        }
+
+        const confirmPayment = async () => {
+            try {
+                const data = await confirmCheckoutSession(sessionId);
+                if (data?.success) {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Pago confirmado',
+                        text: 'Tu plan fue activado correctamente'
+                    });
+
+                    searchParams.delete('session_id');
+                    const cleanQuery = searchParams.toString();
+                    const cleanUrl = `${window.location.pathname}${cleanQuery ? `?${cleanQuery}` : ''}`;
+                    window.history.replaceState({}, document.title, cleanUrl);
+                }
+            } catch (error) {
+                console.error('Error al confirmar sesión de checkout:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Pago no confirmado',
+                    text: error.message || 'No se pudo confirmar el pago en el servidor'
+                });
+            }
+        };
+
+        confirmPayment();
+    }, [authLoading, authenticated]);
 
     const handleCheckout = async (plan) => {
         if (!plan || loading) {
@@ -90,7 +126,7 @@ export default function PerfilPsiF(props) {
 
     return (
         <div className="planes">
-            <div>
+            <div id='PlanesTitle'>
                 Planes
             </div>
             <div className='plaBtns'>
@@ -119,7 +155,7 @@ export default function PerfilPsiF(props) {
             </div>
             <div className='cancelSubBtn'>
                 <EliminarBtn
-                    texto="Cancelar suscripccion"
+                    texto="Cancelar suscripción"
                     onClick={() => handleCancelSubscription()}
                     disabled={loading || authLoading}
                 />

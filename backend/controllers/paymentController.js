@@ -9,6 +9,7 @@ class PaymentController {
     constructor() {
         this.sesionPago = this.sesionPago.bind(this);
         this.confirmarPago = this.confirmarPago.bind(this);
+        this.confirmarSesionCheckout = this.confirmarSesionCheckout.bind(this);
         this.obtenerSuscripcion = this.obtenerSuscripcion.bind(this);
         this.cancelarSuscripcion = this.cancelarSuscripcion.bind(this);
     }
@@ -185,10 +186,17 @@ class PaymentController {
 
     async confirmarPago(req, res) {
         const sig = req.headers['stripe-signature'];
-        const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+        const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
 
         try {
             console.log('Webhook Stripe recibido en /api/psicologo/webhook/stripe');
+
+            if (!Buffer.isBuffer(req.body)) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Webhook body invalido: Stripe requiere body raw (Buffer)'
+                });
+            }
 
             if (!endpointSecret) {
                 return res.status(500).json({
@@ -214,7 +222,7 @@ class PaymentController {
             const event = stripeClient.webhooks.constructEvent(req.body, sig, endpointSecret);
             if (event.type === 'checkout.session.completed') {
                 const session = event.data.object;
-                const { idUsuario, plan } = session.metadata;
+                const { idUsuario, plan } = session.metadata || {};
                 const planesValidos = new Set(['unMes', 'seisMeses', 'unYear']);
 
                 if (session.payment_status !== 'paid') {
@@ -268,8 +276,104 @@ class PaymentController {
 
             res.status(200).json({ received: true });
         } catch (error) {
-            console.error('Error al confirmar el pago:', error);
-            res.status(400).json({ error: 'Error al confirmar el pago' });
+            console.error('Error al confirmar el pago:', {
+                message: error?.message,
+                type: error?.type,
+                code: error?.code,
+                rawCode: error?.raw?.code,
+                rawMessage: error?.raw?.message
+            });
+            res.status(400).json({
+                success: false,
+                error: error?.raw?.message || error?.message || 'Error al confirmar el pago'
+            });
+        }
+    }
+
+    async confirmarSesionCheckout(req, res) {
+        try {
+            const sessionId = req.body?.session_id;
+            const idUsuarioToken = req.user?.idUsuario?.toString?.() || null;
+
+            if (!sessionId || !sessionId.startsWith('cs_')) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'session_id invalido'
+                });
+            }
+
+            if (!idUsuarioToken) {
+                return res.status(401).json({
+                    success: false,
+                    error: 'No autenticado'
+                });
+            }
+
+            const session = await stripeClient.checkout.sessions.retrieve(sessionId);
+            const { idUsuario, plan } = session.metadata || {};
+            const planesValidos = new Set(['unMes', 'seisMeses', 'unYear']);
+
+            if (session.payment_status !== 'paid') {
+                return res.status(409).json({
+                    success: false,
+                    error: 'La sesion aun no esta pagada'
+                });
+            }
+
+            if (!idUsuario || !plan || !planesValidos.has(plan)) {
+                return res.status(400).json({
+                    success: false,
+                    error: 'Metadata de sesion incompleta o invalida'
+                });
+            }
+
+            if (idUsuario !== idUsuarioToken) {
+                return res.status(403).json({
+                    success: false,
+                    error: 'No autorizado para confirmar esta sesion'
+                });
+            }
+
+            const modelUsuario = new Usuario();
+            const usuario = await modelUsuario.findById(idUsuario);
+            if (!usuario || !usuario.esPsicologo) {
+                return res.status(404).json({
+                    success: false,
+                    error: 'Usuario no encontrado'
+                });
+            }
+
+            if (usuario?.suscripcion?.stripeSubscriptionId === session.id && usuario?.suscripcion?.estado === 'activa') {
+                return res.status(200).json({
+                    success: true,
+                    alreadyProcessed: true,
+                    message: 'Sesion ya procesada'
+                });
+            }
+
+            const updateResult = await modelUsuario.activarPlan(idUsuario, plan, session.id);
+
+            return res.status(200).json({
+                success: true,
+                message: 'Pago confirmado y plan activado',
+                updated: {
+                    matchedCount: updateResult.matchedCount,
+                    modifiedCount: updateResult.modifiedCount
+                }
+            });
+        } catch (error) {
+            console.error('Error al confirmar sesion checkout:', {
+                message: error?.message,
+                type: error?.type,
+                code: error?.code,
+                rawCode: error?.raw?.code,
+                rawMessage: error?.raw?.message
+            });
+
+            return res.status(500).json({
+                success: false,
+                error: error?.raw?.message || error?.message || 'Error al confirmar la sesion de pago'
+            });
         }
     }
 
