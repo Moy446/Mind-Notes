@@ -1,15 +1,17 @@
 import { FlatList, Modal, Text, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import CalendarComponent from '@/components/calendar/calendario'
 import AddNewDateComponent from '@/components/calendar/AddNewDate'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
-import { useCalendar } from '@/hooks/useCalendar'
+import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import ViewDatesComponent from '@/components/calendar/ViewDates'
 import CalendarPopUp from '@/components/popup/CalendarPopUp'
 import { calendarPopUpStyle } from '@/styles/popup/calendar.popUpStyle'
+import { infoCita } from '@/core/interfaces/Dates'
 
 interface Cita {
-  id: string,
+  idCita: string,
+  idUsuario: string,
   title:string,
   start: Date,
   end: Date,
@@ -21,23 +23,57 @@ interface Cita {
 
 const CalendarioScreen = () => {
 
-    const { citas, cargarCitas, addEvent } = useCalendar()
+  
+
+  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
     
-    const [date, setDate] = useState(new Date())
-    const formattedDate = date.toISOString().split('T')[0] // Formato YYYY-MM-DD
-    const [showPopup, setShowPopup] = useState(false);
+  const [date, setDate] = useState(new Date())
+  const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedCita, setSelectedCita] = useState<infoCita>({
+    idCita: '',
+    idUsuario: '',
+    nombre: '',
+    fechaCita: '',
+    horaInicio: '',
+    horaFin: ''
+  });
 
     useEffect(() => {
         cargarCitas()
+        loadUserList()
     }, [])
+
+    useEffect(() => {
+      if(allDates.length > 0) {
+        loadDateEvents(date)
+      }
+    },[allDates])
+
+    const resetSelectedCita = useCallback(() => {
+      setSelectedCita({
+        idCita: '',
+        idUsuario: '',
+        nombre: '',
+        fechaCita: '',
+        horaInicio: '',
+        horaFin: ''
+      })
+    },[])
 
   return (
     <View style={calendarioStyle.container}>
-        <CalendarComponent/>
-        <FlatList
-        data={citas}
-        keyExtractor={( item:Cita ) => item.id.toString()}
-        contentContainerStyle={{
+      
+      <CalendarComponent onDayPress={(date) => {
+          setDate(date);
+          loadDateEvents(date);
+        }} 
+        citas={allDates} 
+      />
+      <FlatList
+      data={citas}
+      keyExtractor={( item:Cita ) => item.idCita.toString()}
+      contentContainerStyle={{
           ...calendarioStyle.EventsContainer
         }}
         ListHeaderComponent={
@@ -48,16 +84,47 @@ const CalendarioScreen = () => {
         }
         renderItem={({item}) => (
           <ViewDatesComponent
-            name={item.title}
-            hour={item.start.toLocaleTimeString()}
-            onPress={addEvent}
+            info={item}
+            onPress={() => {
+              const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
+              const fechaCita = formattedDate
+              const cita: infoCita = {
+                idCita: item.idCita,
+                idUsuario,
+                nombre,
+                fechaCita,
+                horaInicio: horaInicio.toLocaleTimeString().substring(0,5),
+                horaFin:horaFin.toLocaleTimeString().substring(0,5)
+              }
+              console.log(cita)
+              setSelectedCita(cita)
+              setShowPopup(true)
+            }}
           />
         )}
       />
       <Modal visible={showPopup} transparent animationType="slide">
         <View style={calendarioStyle.darkThemeModal}>
           <View style={calendarioStyle.modalContainer}>
-            <CalendarPopUp onClose={() => setShowPopup(false)} />
+            <CalendarPopUp
+              placeholder={"Selecciona un paciente"}
+              patients={userList}
+              selectedCita={selectedCita}
+              onAccept={async (infoCita) => {
+                if(selectedCita.idCita) {
+                  await editEvent(infoCita)
+                }else {
+                  await addEvent(infoCita)
+                }
+                await cargarCitas()
+                resetSelectedCita()
+                setShowPopup(false)
+              }} 
+              onClose={() => {
+                resetSelectedCita()
+                setShowPopup(false)
+              }} 
+              />
           </View>
         </View>
       </Modal>

@@ -5,30 +5,33 @@ import { Dropdown } from "react-native-element-dropdown";
 
 interface Data {
     id: string
-    name:string
-    image: string
+    nombre:string
+    img: string
 }
 
 interface Props {
-    data: Data[]
+    data?: Data[]
+    value?: string
+    onChange?: (value: Data) => void
+    placeholder: string
 }
 
-
-const CustomSelector = ({ data }: Props) => {
-    const [value, setValue] = useState(null);
-
+const CustomSelector = ({ data, value, onChange, placeholder }: Props) => {
     return (
         <Dropdown
             style={calendarPopUpStyle.selector}
             data={data || []}
-            labelField="name"
+            labelField="nombre"
             valueField="id"
-            value={value}
-            onChange={item => setValue(item.id)}
+            value={ value }
+            placeholder={placeholder}
+            onChange={item => {
+                onChange && onChange(item)
+            }}
             renderItem={(item) => (
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-                    <Image source={{ uri: item.image }} style={{ width: 24, height: 24 }} />
-                    <Text>{item.name}</Text>
+                <View style={calendarPopUpStyle.renderItemContainer}>
+                    <Image source={{ uri: item.img }} style={{ width: 30, height: 30 }} />
+                    <Text>{item.nombre}</Text>
                 </View>
             )}
         />

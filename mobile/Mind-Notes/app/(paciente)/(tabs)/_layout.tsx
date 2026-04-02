@@ -8,7 +8,9 @@ import { UseAuthStore } from '@/store/auth/UseAuthStore'
 
 const tabsLayout = () => {
     
-        const { user , status, checkStatus } = UseAuthStore();
+        const user = UseAuthStore(state => state.user);
+        const status = UseAuthStore(state => state.status);
+        const { checkStatus } = UseAuthStore();
     
         useEffect(() => {
             checkStatus();

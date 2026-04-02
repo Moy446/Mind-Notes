@@ -22,7 +22,7 @@ export interface AuthState {
     checkStatus: () => Promise<void>;
 }
 
-export const UseAuthStore = create<AuthState>()((set,get) => ({
+export const UseAuthStore = create<AuthState>((set,get) => ({
 
     status: 'checking',
     user: undefined,
@@ -48,6 +48,7 @@ export const UseAuthStore = create<AuthState>()((set,get) => ({
     },
     login: async (email: string, password: string) => {
         const resp = await authLogin(email,password)
+        console.log(resp)
         const success = get().changeStatus(resp?.token, resp?.user);
         return { success, role: resp?.user?.role };
     },    
@@ -66,6 +67,7 @@ export const UseAuthStore = create<AuthState>()((set,get) => ({
     },
     checkStatus: async () => {
         const resp = await checkSessionStatus();
+        console.log(resp)
         get().changeStatus(resp?.token, resp?.user);
     }
 }))
