@@ -5,6 +5,8 @@ import { Colors } from '@/constants/theme';
 interface Props {
     title : string;
     align?: 'left' | 'center' | 'right';
+    textSize?: number;
+    backgroundColor?: string;
 }
 
 const alignStyle={
@@ -14,7 +16,7 @@ const alignStyle={
 }
 
 
-const BarTittle = ({ title, align = 'left' }: Props) => {
+const BarTittle = ({ title, align = 'left', textSize = 30, backgroundColor = Colors.secondaryButton }: Props) => {
   return (
     <View style={{
         ...alignStyle[align], 
@@ -22,9 +24,9 @@ const BarTittle = ({ title, align = 'left' }: Props) => {
         padding: 10, 
         marginTop: 30,
         alignItems: 'center',
-        backgroundColor: Colors.secondaryButton,
+        backgroundColor: backgroundColor,
         }}>
-      <Text style={{ fontSize: 30, fontFamily: 'SairaMedium' }}>{title}</Text>
+      <Text style={{ fontSize: textSize, fontFamily: 'SairaMedium' }}>{title}</Text>
     </View>
   )
 }
