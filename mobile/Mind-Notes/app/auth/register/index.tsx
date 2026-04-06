@@ -1,4 +1,4 @@
-import { View, Text, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { View, Text, KeyboardAvoidingView, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { registerStyle } from '@/styles/auth/registerStyle'
 import BarTittle from '@/components/auth/BarTittle'
@@ -7,15 +7,66 @@ import ThemedSwitch from '@/components/auth/ThemedSwitch'
 import CustomButton from '@/components/auth/CustomButton'
 import GoogleButton from '@/components/auth/GoogleButton'
 import { router } from 'expo-router'
+import UseRegister from '@/hooks/auth/UseRegister'
+import { registerPaciente, registerPsicologo } from '@/core/actions/auth/register.actions'
 
 const RegisterScreen = () => {
+
+  const {validarPassword} = UseRegister()
   const [esPsicologo, setEsPsicologo] = useState(false);
+  const [isPosting, setIsPosting] = useState(false)
   const [form, setForm] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: '',
   })
+  const validations = {
+    length: form.password.length >= 8,
+    upper: /[A-Z]/.test(form.password),
+    lower: /[a-z]/.test(form.password),
+    number: /[0-9]/.test(form.password),
+    special: /[^A-Za-z0-9]/.test(form.password),
+  };
+
+  const renderValidation = (label: string, isValid: boolean) => (
+    <Text style={{ color: isValid ? 'green' : 'red' }}>
+      {isValid ? '✔' : '✖'} {label}
+    </Text>
+  );
+
+  const onRegister = async () => {
+    const {email, fullName, password, confirmPassword} = form
+    if (!email || !fullName || !password || !confirmPassword) {
+      Alert.alert('Error', 'Por favor, completa todos los campos.');
+      return;
+    }
+    if (form.password !== form.confirmPassword) {
+      Alert.alert('Error', 'Las contraseñas no coinciden.');
+      return;
+    }
+    if (!validarPassword(form.password)) {
+      Alert.alert('Error', 'La contraseña no cumple con los requisitos de seguridad.');
+      return;
+    }
+    try {
+      setIsPosting(true)
+      if(esPsicologo) {
+        await registerPsicologo(fullName, email, password, confirmPassword)
+      } else {
+        await registerPaciente(fullName, email, password, confirmPassword)
+      }
+      Alert.alert('Éxito', 'Registro exitoso. Valida tu cuenta a través del correo electrónico.');
+      router.push('/auth/login')
+    } catch (error) {
+      Alert.alert('Error', 'Ocurrió un error al registrar. Por favor, inténtalo de nuevo.');
+      
+    }finally{
+      setIsPosting(false)
+    }
+  }
+
+
   return (
     <ScrollView style={{...registerStyle.container, marginTop: 40}}>
       <BarTittle title='Registrar' />
@@ -54,6 +105,12 @@ const RegisterScreen = () => {
           value={form.confirmPassword}
           onChangeText={(value) => setForm(prev => ({...prev, confirmPassword: value}))}
         />
+        {renderValidation('Mínimo 8 caracteres', validations.length)}
+        {renderValidation('Al menos una mayúscula', validations.upper)}
+        {renderValidation('Al menos una minúscula', validations.lower)}
+        {renderValidation('Al menos un número', validations.number)}
+        {renderValidation('Al menos un carácter especial', validations.special)}
+
       </KeyboardAvoidingView>
       <View style={registerStyle.containerLeft}>
         <Text style={registerStyle.TextLeft}>
@@ -71,7 +128,8 @@ const RegisterScreen = () => {
           text='Registrarse' 
           textColor='black' 
           size='lg'
-          onPress={() => console.log('Registrandose....')}
+          onPress={() => onRegister()}
+          disabled={isPosting}
           />
           <Text style={registerStyle.textStyle}> O ingresa con: </Text>
           <GoogleButton onPress={()=>{console.log('Google login pressed')}} />
