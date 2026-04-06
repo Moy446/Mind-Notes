@@ -1,16 +1,34 @@
 import React, { useState } from 'react'
-import { View, Text, KeyboardAvoidingView } from 'react-native'
+import { View, Text, KeyboardAvoidingView, Alert } from 'react-native'
 import BarTittle from '@/components/auth/BarTittle'
 import { forgotPasswordStyle } from '@/styles/auth/forgotPasswordStyle'
 import CustomButton from '@/components/auth/CustomButton'
 import { router } from 'expo-router'
 import { Colors } from '@/constants/theme'
 import ThemedTextInput from '@/components/auth/ThemedTextInput'
+import { recoverPassword } from '@/core/actions/auth/forgotPassword.action'
 
 const ForgotPassowrdScreen = () => {
 
   const [email, setEmail] = useState('')
   const [isPosting, setIsPosting] = useState(false)
+
+  const onForgotPassword = async () => {
+    if (!email) {
+      Alert.alert('Error', 'Por favor, ingresa tu correo electrónico.');
+      return;
+    }
+    try {
+      setIsPosting(true)
+      const resp = await recoverPassword(email)
+      Alert.alert('Éxito', 'Si el correo existe en nuestro sistema, recibirás un email con instrucciones para restablecer tu contraseña.');
+
+    } catch (error) {
+      Alert.alert('Error', 'Hubo un error al enviarle el correo de recuperación. Inténtalo de nuevo más tarde.');
+    }finally{
+      setIsPosting(false)
+    }
+  }
 
   return (
     <View style={forgotPasswordStyle.container}>
@@ -29,7 +47,7 @@ const ForgotPassowrdScreen = () => {
                 value={email}
                 onChangeText={setEmail}
             />
-            <CustomButton onPress={() => {console.log('se intento recuperar la contraseña')}} disabled={isPosting} text='Recuperar contraseña' size='lg' style={{marginBottom: 10, backgroundColor: Colors.principal}} />
+            <CustomButton onPress={onForgotPassword} disabled={isPosting} text='Recuperar contraseña' size='lg' style={{marginBottom: 10, backgroundColor: Colors.principal}} />
         </KeyboardAvoidingView>
     </View>
   )
