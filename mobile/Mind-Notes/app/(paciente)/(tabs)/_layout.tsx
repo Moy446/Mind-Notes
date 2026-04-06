@@ -6,6 +6,7 @@ import { Colors } from '@/constants/theme'
 import { UseAuthStore } from '@/store/auth/useAuthStore'
 import { Redirect, Tabs } from 'expo-router'
 import TabBarButton from '@/components/tabs/TabBarButton'
+import { UseAuthStore } from '@/store/auth/useAuthStore'
 
 
 const tabsLayout = () => {
