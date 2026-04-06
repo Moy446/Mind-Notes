@@ -8,12 +8,14 @@ import BarTittle from '@/components/auth/BarTittle';
 import ThemedLink from '@/components/auth/ThemedLink';
 import ThemedTextInput from '@/components/auth/ThemedTextInput';
 import GoogleButton from '@/components/auth/GoogleButton';
+import { useGoogleAuth, loginWithGoogle } from '@/services/googleAuthService';
 
 //Todo: Hay que ver el token refresh
 
 const LoginScreen = () => {
 
     const login = UseAuthStore.getState().login;
+    const { promptAsync } = useGoogleAuth();
 
     const [isPosting, setIsPosting] = useState(false)
     const [form, setForm] = useState({
@@ -37,13 +39,34 @@ const LoginScreen = () => {
             return;
         }
         if(wasSuccesful.role === 'paciente'){
-            router.replace('/(paciente)/chat')
+            router.replace('/(paciente)/(tabs)/chat')
             return;
         }else{
-            router.replace('/(psicologo)/chat')
+            router.replace('/(psicologo)/(tabs)/chat')
             return;
         }
     }
+
+    const handleGoogleLogin = async () => {
+        if (!promptAsync) {
+            Alert.alert('Info', 'Google login está disponible solo en build nativo de Android. Para desarrollar en Expo Go, por favor usa email y contraseña.');
+            return;
+        }
+
+        setIsPosting(true);
+        const result = await loginWithGoogle(promptAsync, 'paciente');
+        setIsPosting(false);
+
+        if (result.success) {
+            if (result.role === 'paciente') {
+                router.replace('/(paciente)/(tabs)/chat');
+            } else {
+                router.replace('/(psicologo)/(tabs)/chat');
+            }
+        } else {
+            Alert.alert('Error', result.message || 'Error al iniciar sesión con Google');
+        }
+    };
 
     return (
     <View style={loginStyle.container}>
@@ -82,7 +105,7 @@ const LoginScreen = () => {
             <Text style={loginStyle.textStyle}> ¿Aún no tienes una cuenta? </Text>
             <ThemedLink href={'/auth/register'} style={loginStyle.textStyle}>Registrate</ThemedLink>
             <Text style={loginStyle.textStyle}> O ingresa con: </Text>
-            <GoogleButton onPress={()=>{console.log('Google login pressed')}} />
+            <GoogleButton onPress={handleGoogleLogin} />
 
         </KeyboardAvoidingView>
     </View>

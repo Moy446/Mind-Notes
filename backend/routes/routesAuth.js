@@ -110,4 +110,14 @@ router.get('/google/callback',
     }
 );
 
+/**
+ * POST /api/auth/google/mobile
+ * Autentica usuarios desde la app móvil con Google OAuth
+ * Body: { idToken: string, role: 'paciente' | 'psicologo' }
+ * Response: { success: boolean, accessToken: string, refreshToken: string, role: string, user: object }
+ */
+router.post('/google/mobile', (req, res) =>
+    authController.googleMobileAuth(req, res)
+);
+
 export default router;
