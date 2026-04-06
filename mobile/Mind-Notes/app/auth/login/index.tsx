@@ -1,9 +1,8 @@
-import { View, Text, TextInput, Alert, Pressable, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
 import { UseAuthStore } from '@/store/auth/useAuthStore';
 import { loginStyle } from '@/styles/auth/loginStyle';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '@/components/auth/CustomButton';
 import BarTittle from '@/components/auth/BarTittle';
 import ThemedLink from '@/components/auth/ThemedLink';
