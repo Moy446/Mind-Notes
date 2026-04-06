@@ -1,43 +1,50 @@
 import * as WebBrowser from 'expo-web-browser';
+import Constants from 'expo-constants';
 
 // Lazy load Google auth solo cuando se necesite (evita cargar módulos nativos en Expo Go)
 let Google: any = null;
 
 // Configuración de Google OAuth
-const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB ;
-const ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID ;
-const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:5000';
+const WEB_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB;
+const ANDROID_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID;
+const IOS_CLIENT_ID = process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID_IOS;
+const BACKEND_URL =
+  process.env.EXPO_PUBLIC_BACKEND_URL ||
+  process.env.EXPO_PUBLIC_BACKEND_URL_ANDROID?.replace(/\/api$/, '') ||
+  'http://localhost:5000';
 
 // Cierra automáticamente el navegador web después de autenticación
 WebBrowser.maybeCompleteAuthSession();
 
 export const useGoogleAuth = () => {
   try {
+    if (Constants.appOwnership === 'expo') {
+      return { request: null, response: null, promptAsync: null };
+    }
+
     if (!Google) {
       Google = require('expo-auth-session/providers/google');
     }
-
-    const AuthSession = require('expo-auth-session');
 
     if (!WEB_CLIENT_ID || !ANDROID_CLIENT_ID) {
       console.warn('Faltan EXPO_PUBLIC_GOOGLE_CLIENT_ID_WEB o EXPO_PUBLIC_GOOGLE_CLIENT_ID_ANDROID para Google OAuth');
       return { request: null, response: null, promptAsync: null };
     }
 
-    const redirectUri = AuthSession.makeRedirectUri({
-      scheme: 'mindnotes',
-      path: 'oauthredirect'
-    });
-    
-    const [request, response, promptAsync] = Google.useAuthRequest({
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
       webClientId: WEB_CLIENT_ID,
       androidClientId: ANDROID_CLIENT_ID,
-      redirectUri
+      iosClientId: IOS_CLIENT_ID,
+      scopes: ['openid', 'profile', 'email'],
+      selectAccount: true
+    }, {
+      scheme: 'mindnotes',
+      path: 'oauthredirect'
     });
 
     return { request, response, promptAsync };
   } catch (error) {
-    console.warn('Google Auth no disponible en Expo Go:', error);
+    console.warn('Google Auth no disponible:', error);
     return { request: null, response: null, promptAsync: null };
   }
 };
@@ -94,10 +101,17 @@ export const loginWithGoogle = async (
     const result = await promptAsync();
 
     if (result?.type === 'success') {
-      const { id_token } = result.params;
+      const idToken = result.authentication?.idToken || result.params?.id_token;
+
+      if (!idToken) {
+        return {
+          success: false,
+          message: 'No se pudo obtener el idToken de Google'
+        };
+      }
       
       // Intercambiar el token de Google por tokens del backend
-      const backendResponse = await exchangeGoogleTokenForBackendAuth(id_token, role);
+      const backendResponse = await exchangeGoogleTokenForBackendAuth(idToken, role);
 
       if (backendResponse.success) {
         return {

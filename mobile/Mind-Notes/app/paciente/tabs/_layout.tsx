@@ -31,7 +31,7 @@ const tabsLayout = () => {
         }
     
         if (user?.role === 'psicologo') {
-            return <Redirect href={'/(psicologo)/(tabs)/chat'} />
+            return <Redirect href={'/psicologo/tabs/chat'} />
         }
         
     return (

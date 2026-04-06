@@ -2,10 +2,11 @@ import { io, Socket } from 'socket.io-client';
 import { API_URL } from './clienteAxios';
 
 let socket: Socket | null = null;
+const SOCKET_URL = (API_URL || '').replace(/\/api$/, '');
 
 export const initializeSocket = (token: string): Socket => {
   if (!socket) {
-    socket = io(API_URL, {
+    socket = io(SOCKET_URL, {
       auth: {
         token: `Bearer ${token}`,
       },

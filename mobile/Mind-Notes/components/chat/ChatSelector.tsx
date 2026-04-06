@@ -2,66 +2,91 @@ import React from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Image,
   ActivityIndicator,
 } from 'react-native';
-import { PacienteVinculado } from '@/core/actions/chat/vinculacionService';
+import { MaterialIcons } from '@expo/vector-icons';
+import { chatSelectorStyle } from '@/styles/chat/chatSelectorStyle';
+import { Colors } from '@/constants/theme';
+
+export interface ChatContact {
+  id: string;
+  nombre: string;
+  fotoPerfil?: string;
+  email?: string;
+}
 
 interface ChatSelectorProps {
-  pacientes: PacienteVinculado[];
+  contacts: ChatContact[];
   selectedChat: string | null;
   onSelectChat: (chatId: string) => void;
   loading: boolean;
+  title?: string;
+  emptyText?: string;
+  onPressLink?: () => void;
 }
 
 export const ChatSelector: React.FC<ChatSelectorProps> = ({
-  pacientes,
+  contacts,
   selectedChat,
   onSelectChat,
   loading,
+  title = 'Contactos',
+  emptyText = 'Sin vinculaciones',
+  onPressLink,
 }) => {
   if (loading) {
     return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#6366f1" />
+      <View style={chatSelectorStyle.container}>
+        <ActivityIndicator size="large" color={Colors.principal} />
       </View>
     );
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.title}>Pacientes</Text>
-      {pacientes.length === 0 ? (
-        <Text style={styles.emptyText}>Sin pacientes vinculados</Text>
-      ) : (
-        pacientes.map((paciente) => (
+    <ScrollView style={chatSelectorStyle.container}>
+      <View style={chatSelectorStyle.headerRow}>
+        <Text style={chatSelectorStyle.title}>{title}</Text>
+        {onPressLink ? (
           <TouchableOpacity
-            key={paciente.idPaciente}
-            style={[
-              styles.chatItem,
-              selectedChat === paciente.idPaciente && styles.selectedItem,
-            ]}
-            onPress={() => onSelectChat(paciente.idPaciente)}
+            style={chatSelectorStyle.linkButton}
+            onPress={onPressLink}
+            activeOpacity={0.8}
           >
-            {paciente.fotoPerfilPaciente && (
+            <MaterialIcons name="person-add" size={18} color={Colors.white} />
+            <Text style={chatSelectorStyle.linkButtonText}>Vincular</Text>
+          </TouchableOpacity>
+        ) : null}
+      </View>
+
+      {contacts.length === 0 ? (
+        <Text style={chatSelectorStyle.emptyText}>{emptyText}</Text>
+      ) : (
+        contacts.map((contact) => (
+          <TouchableOpacity
+            key={contact.id}
+            style={[
+              chatSelectorStyle.chatItem,
+              selectedChat === contact.id && chatSelectorStyle.selectedItem,
+            ]}
+            onPress={() => onSelectChat(contact.id)}
+          >
+            {contact.fotoPerfil && (
               <Image
                 source={{
-                  uri: paciente.fotoPerfilPaciente.startsWith('http')
-                    ? paciente.fotoPerfilPaciente
-                    : `http://localhost:5000/${paciente.fotoPerfilPaciente}`,
+                  uri: contact.fotoPerfil.startsWith('http')
+                    ? contact.fotoPerfil
+                    : `http://localhost:5000/${contact.fotoPerfil}`,
                 }}
-                style={styles.avatar}
+                style={chatSelectorStyle.avatar}
               />
             )}
-            <View style={styles.chatInfo}>
-              <Text style={styles.chatName}>
-                {paciente.nombrePaciente || paciente.nombre}
-              </Text>
-              {paciente.email && (
-                <Text style={styles.chatEmail}>{paciente.email}</Text>
+            <View style={chatSelectorStyle.chatInfo}>
+              <Text style={chatSelectorStyle.chatName}>{contact.nombre}</Text>
+              {contact.email && (
+                <Text style={chatSelectorStyle.chatEmail}>{contact.email}</Text>
               )}
             </View>
           </TouchableOpacity>
@@ -70,55 +95,3 @@ export const ChatSelector: React.FC<ChatSelectorProps> = ({
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    padding: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    color: '#000',
-  },
-  chatItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    marginBottom: 8,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 8,
-  },
-  selectedItem: {
-    backgroundColor: '#e0e7ff',
-    borderLeftWidth: 4,
-    borderLeftColor: '#6366f1',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 12,
-  },
-  chatInfo: {
-    flex: 1,
-  },
-  chatName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#000',
-  },
-  chatEmail: {
-    fontSize: 12,
-    color: '#666',
-    marginTop: 4,
-  },
-  emptyText: {
-    textAlign: 'center',
-    color: '#999',
-    fontSize: 14,
-    marginTop: 32,
-  },
-});

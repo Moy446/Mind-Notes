@@ -1,6 +1,7 @@
 import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
+import Constants from 'expo-constants';
 import { UseAuthStore } from '@/store/auth/useAuthStore';
 import { loginStyle } from '@/styles/auth/loginStyle';
 import CustomButton from '@/components/auth/CustomButton';
@@ -15,7 +16,7 @@ import { useGoogleAuth, loginWithGoogle } from '@/services/googleAuthService';
 const LoginScreen = () => {
 
     const login = UseAuthStore.getState().login;
-    const { promptAsync } = useGoogleAuth();
+    const { request, promptAsync } = useGoogleAuth();
 
     const [isPosting, setIsPosting] = useState(false)
     const [form, setForm] = useState({
@@ -39,17 +40,21 @@ const LoginScreen = () => {
             return;
         }
         if(wasSuccesful.role === 'paciente'){
-            router.replace('/(paciente)/(tabs)/chat')
+            router.replace('/paciente/tabs/chat')
             return;
         }else{
-            router.replace('/(psicologo)/(tabs)/chat')
+            router.replace('/psicologo/tabs/chat')
             return;
         }
     }
 
     const handleGoogleLogin = async () => {
-        if (!promptAsync) {
-            Alert.alert('Info', 'Google login está disponible solo en build nativo de Android. Para desarrollar en Expo Go, por favor usa email y contraseña.');
+        if (!request || !promptAsync) {
+            const message = Constants.appOwnership === 'expo'
+                ? 'Google login no funciona en Expo Go. Usa un Dev Build nativo (Android o iOS).'
+                : 'Google login todavía no está listo. Verifica tus variables EXPO_PUBLIC_GOOGLE_CLIENT_ID_* y vuelve a abrir la app.';
+
+            Alert.alert('Info', message);
             return;
         }
 
@@ -59,9 +64,9 @@ const LoginScreen = () => {
 
         if (result.success) {
             if (result.role === 'paciente') {
-                router.replace('/(paciente)/(tabs)/chat');
+                router.replace('/paciente/tabs/chat');
             } else {
-                router.replace('/(psicologo)/(tabs)/chat');
+                router.replace('/psicologo/tabs/chat');
             }
         } else {
             Alert.alert('Error', result.message || 'Error al iniciar sesión con Google');

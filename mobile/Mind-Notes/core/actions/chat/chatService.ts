@@ -53,14 +53,15 @@ export const enviarMensaje = (
   socket: any,
   idPsicologo: string,
   idPaciente: string,
-  mensaje: string
+  mensaje: string,
+  remitente: 'psicologo' | 'paciente' = 'psicologo'
 ) => {
   if (socket && mensaje.trim()) {
     socket.emit('sendMessage', {
       idPsicologo,
       idPaciente,
       mensaje,
-      remitente: 'psicologo',
+      remitente,
     });
   }
 };
