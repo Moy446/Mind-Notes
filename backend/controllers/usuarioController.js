@@ -510,7 +510,15 @@ class UsuarioController {
             const refreshSecret = process.env.REFRESH_SECRET || 'default_refresh_secret';
 
             const decoded = jwt.verify(refreshToken, refreshSecret);
-            const accessToken = cookieCtrl.signAccess({ id: decoded.id, role: decoded.role });
+            const usuarioModel = new Usuario();
+            const usuario = await usuarioModel.findById(decoded.id);
+
+            if (!usuario) {
+                return res.status(401).json({ success: false, message: 'Usuario no encontrado' });
+            }
+
+            const role = usuario.esPsicologo ? 'psicologo' : 'paciente';
+            const accessToken = cookieCtrl.signAccess({ id: decoded.id, role });
 
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,
@@ -519,7 +527,15 @@ class UsuarioController {
                 maxAge: 15 * 60 * 1000 // 15 minutos
             });
 
-            res.status(200).json({ success: true, message: 'Token renovado' });
+            res.status(200).json({
+                success: true,
+                idUsuario: usuario.idUsuario,
+                email: usuario.email,
+                nombre: usuario.nombre,
+                role,
+                suscripcion: usuario.suscripcion?.plan || '',
+                token: accessToken,
+            });
         } catch (error) {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
