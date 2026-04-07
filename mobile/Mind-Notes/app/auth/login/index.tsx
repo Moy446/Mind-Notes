@@ -1,7 +1,7 @@
 import { View, Text, TextInput, Alert, Pressable, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
-import { UseAuthStore } from '@/store/auth/UseAuthStore'
+import { UseAuthStore } from '@/store/auth/useAuthStore'
 //Todo: Hay que ver el token refresh
 
 const LoginScreen = () => {

@@ -4,7 +4,7 @@ import { Redirect, Tabs } from 'expo-router'
 import { tabStyle } from '@/styles/tabStyle'
 import { Colors } from '@/constants/theme'
 import TabBarButton from '@/components/tabs/TabBarButton'
-import { UseAuthStore } from '@/store/auth/UseAuthStore'
+import { UseAuthStore } from '@/store/auth/useAuthStore'
 
 const tabsLayout = () => {
     
