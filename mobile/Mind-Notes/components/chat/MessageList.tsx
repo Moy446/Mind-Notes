@@ -43,11 +43,13 @@ const BubbleChat: React.FC<BubbleChatProps> = ({ text, type }) => {
 interface MessageListProps {
   messages: Message[];
   loading?: boolean;
+  currentUserRole?: 'psicologo' | 'paciente';
 }
 
 export const MessageList: React.FC<MessageListProps> = ({
   messages,
   loading = false,
+  currentUserRole = 'psicologo',
 }) => {
   return (
     <ScrollView
@@ -66,7 +68,7 @@ export const MessageList: React.FC<MessageListProps> = ({
           <BubbleChat
             key={index}
             text={msg.mensaje}
-            type={msg.remitente === 'psicologo' ? 'send' : 'receive'}
+            type={msg.remitente === currentUserRole ? 'send' : 'receive'}
           />
         ))
       )}
@@ -100,10 +102,10 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   sendBubble: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#2973B2',
   },
   receiveBubble: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#9ACBD0',
   },
   bubbleText: {
     fontSize: 14,

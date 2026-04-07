@@ -8,12 +8,14 @@ import BarTittle from '@/components/auth/BarTittle';
 import ThemedLink from '@/components/auth/ThemedLink';
 import ThemedTextInput from '@/components/auth/ThemedTextInput';
 import GoogleButton from '@/components/auth/GoogleButton';
+import { loginWithGoogle } from '@/services/googleAuthService';
 
 //Todo: Hay que ver el token refresh
 
 const LoginScreen = () => {
 
     const login = UseAuthStore.getState().login;
+    const changeStatus = UseAuthStore.getState().changeStatus;
 
     const [isPosting, setIsPosting] = useState(false)
     const [form, setForm] = useState({
@@ -37,13 +39,35 @@ const LoginScreen = () => {
             return;
         }
         if(wasSuccesful.role === 'paciente'){
-            router.replace('/(paciente)/chat')
+            router.replace('/paciente/tabs/chat')
             return;
         }else{
-            router.replace('/(psicologo)/chat')
+            router.replace('/psicologo/tabs/chat')
             return;
         }
     }
+
+    const handleGoogleLogin = async () => {
+        setIsPosting(true);
+        const result = await loginWithGoogle();
+        setIsPosting(false);
+
+        if (result.success) {
+            const sessionReady = changeStatus(result.accessToken, result.user);
+            if (!sessionReady) {
+                Alert.alert('Error', 'No se pudo guardar la sesión de Google');
+                return;
+            }
+
+            if (result.role === 'paciente') {
+                router.replace('/paciente/tabs/chat');
+            } else {
+                router.replace('/psicologo/tabs/chat');
+            }
+        } else {
+            Alert.alert('Error', result.message || 'Error al iniciar sesión con Google');
+        }
+    };
 
     return (
     <View style={loginStyle.container}>
@@ -82,7 +106,7 @@ const LoginScreen = () => {
             <Text style={loginStyle.textStyle}> ¿Aún no tienes una cuenta? </Text>
             <ThemedLink href={'/auth/register'} style={loginStyle.textStyle}>Registrate</ThemedLink>
             <Text style={loginStyle.textStyle}> O ingresa con: </Text>
-            <GoogleButton onPress={()=>{console.log('Google login pressed')}} />
+            <GoogleButton onPress={handleGoogleLogin} />
 
         </KeyboardAvoidingView>
     </View>
