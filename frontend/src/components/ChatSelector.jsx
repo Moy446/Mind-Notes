@@ -18,11 +18,36 @@ export default function ChatSelector(props) {
     const [loading, setLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
+    const normalizeId = (value) => {
+        if (!value) return null;
+        if (typeof value === 'string') return value;
+        if (typeof value === 'object') {
+            if (typeof value.$oid === 'string') return value.$oid;
+            if (typeof value.toString === 'function') {
+                const parsed = value.toString();
+                if (parsed && parsed !== '[object Object]') return parsed;
+            }
+        }
+        return null;
+    };
+
+    const normalizeContact = (contact) => {
+        if (!contact || typeof contact !== 'object') return null;
+
+        return {
+            ...contact,
+            idPaciente: normalizeId(contact.idPaciente),
+            idPsicologo: normalizeId(contact.idPsicologo),
+            _id: normalizeId(contact._id),
+            id: normalizeId(contact.id),
+        };
+    };
+
     const loadContacts = useCallback(async () => {
         try {
             setLoading(true);
             const userRole = user?.role;
-            const userId = user?.id;
+            const userId = user?.id || user?.idUsuario;
             if (!userRole || !userId) {
                 setContacts([]);
                 return;
@@ -37,7 +62,8 @@ export default function ChatSelector(props) {
 
             // Algunos endpoints pueden devolver {data: []} o [] directo
             const parsed = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
-            setContacts(parsed.filter(Boolean));
+            const normalizedContacts = parsed.map(normalizeContact).filter(Boolean);
+            setContacts(normalizedContacts);
         } catch (error) {
             console.error('Error al obtener contactos vinculados:', error);
             setContacts([]);
@@ -49,6 +75,15 @@ export default function ChatSelector(props) {
     useEffect(() => {
         loadContacts();
     }, [loadContacts, props.refreshKey]);
+
+    useEffect(() => {
+        const onFocus = () => loadContacts();
+        window.addEventListener('focus', onFocus);
+
+        return () => {
+            window.removeEventListener('focus', onFocus);
+        };
+    }, [loadContacts]);
 
     const handleSelect = (id) => {
         setSelectedId(id);
