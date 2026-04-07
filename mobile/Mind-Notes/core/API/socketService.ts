@@ -2,11 +2,25 @@ import { io, Socket } from 'socket.io-client';
 import { API_URL } from './clienteAxios';
 
 let socket: Socket | null = null;
-const SOCKET_URL = (API_URL || '').replace(/\/api$/, '');
+
+const getSocketBaseUrl = (rawUrl?: string): string => {
+  if (!rawUrl) return '';
+
+  try {
+    const parsed = new URL(rawUrl);
+    return `${parsed.protocol}//${parsed.host}`;
+  } catch {
+    // Fallback for malformed env values.
+    return rawUrl.replace(/\/api\/?$/, '').replace(/\/+$/, '');
+  }
+};
+
+const SOCKET_URL = getSocketBaseUrl(API_URL);
 
 export const initializeSocket = (token: string): Socket => {
   if (!socket) {
     socket = io(SOCKET_URL, {
+      path: '/socket.io',
       auth: {
         token: `Bearer ${token}`,
       },

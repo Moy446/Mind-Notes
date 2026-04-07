@@ -305,8 +305,14 @@ class AuthController {
                 });
             }
 
-            // Validar que el token no sea del cliente secreto (seguridad)
-            if (decodedToken.aud !== process.env.GOOGLE_CLIENT_ID) {
+            // Acepta audiencias válidas para web y móviles del mismo proyecto OAuth.
+            const allowedAudiences = [
+                process.env.GOOGLE_CLIENT_ID,
+                process.env.GOOGLE_ANDROID_CLIENT_ID,
+                process.env.GOOGLE_IOS_CLIENT_ID,
+            ].filter(Boolean);
+
+            if (!allowedAudiences.includes(decodedToken.aud)) {
                 return res.status(400).json({
                     success: false,
                     message: 'Token no es para esta aplicación'

@@ -1,7 +1,6 @@
 import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
-import Constants from 'expo-constants';
 import { UseAuthStore } from '@/store/auth/useAuthStore';
 import { loginStyle } from '@/styles/auth/loginStyle';
 import CustomButton from '@/components/auth/CustomButton';
@@ -9,14 +8,14 @@ import BarTittle from '@/components/auth/BarTittle';
 import ThemedLink from '@/components/auth/ThemedLink';
 import ThemedTextInput from '@/components/auth/ThemedTextInput';
 import GoogleButton from '@/components/auth/GoogleButton';
-import { useGoogleAuth, loginWithGoogle } from '@/services/googleAuthService';
+import { loginWithGoogle } from '@/services/googleAuthService';
 
 //Todo: Hay que ver el token refresh
 
 const LoginScreen = () => {
 
     const login = UseAuthStore.getState().login;
-    const { request, promptAsync } = useGoogleAuth();
+    const changeStatus = UseAuthStore.getState().changeStatus;
 
     const [isPosting, setIsPosting] = useState(false)
     const [form, setForm] = useState({
@@ -49,20 +48,17 @@ const LoginScreen = () => {
     }
 
     const handleGoogleLogin = async () => {
-        if (!request || !promptAsync) {
-            const message = Constants.appOwnership === 'expo'
-                ? 'Google login no funciona en Expo Go. Usa un Dev Build nativo (Android o iOS).'
-                : 'Google login todavía no está listo. Verifica tus variables EXPO_PUBLIC_GOOGLE_CLIENT_ID_* y vuelve a abrir la app.';
-
-            Alert.alert('Info', message);
-            return;
-        }
-
         setIsPosting(true);
-        const result = await loginWithGoogle(promptAsync, 'paciente');
+        const result = await loginWithGoogle();
         setIsPosting(false);
 
         if (result.success) {
+            const sessionReady = changeStatus(result.accessToken, result.user);
+            if (!sessionReady) {
+                Alert.alert('Error', 'No se pudo guardar la sesión de Google');
+                return;
+            }
+
             if (result.role === 'paciente') {
                 router.replace('/paciente/tabs/chat');
             } else {

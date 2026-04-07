@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { nameBarStyle } from '@/styles/chat/nameBarStyle';
+import { resolveMediaUrl } from '@/core/API/mediaUrl';
 
 interface NameBarProps {
   img?: string;
@@ -34,11 +35,7 @@ export const NameBar: React.FC<NameBarProps> = ({
         {img && (
           <Image
             source={{
-              uri: img.startsWith('http')
-                ? img
-                : img === '/src/images/pimg2.png'
-                ? 'https://via.placeholder.com/48'
-                : `http://localhost:5000/${img}`,
+              uri: resolveMediaUrl(img),
             }}
             style={nameBarStyle.avatar}
           />

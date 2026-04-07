@@ -101,16 +101,7 @@ export default function ChatPacienteScreen() {
         const psicologo = psicologos.find((p) => p.idPsicologo === chatId);
         if (psicologo) {
           setNombreMostrado(psicologo.nombrePsicologo || psicologo.nombre || 'Psicologo');
-          let foto = psicologo.fotoPerfilPsicologo || '/src/images/pimg2.png';
-          if (
-            foto &&
-            foto !== '/src/images/pimg2.png' &&
-            !foto.startsWith('http') &&
-            !foto.startsWith('/')
-          ) {
-            foto = `http://localhost:5000/${foto}`;
-          }
-          setImagenMostrada(foto);
+          setImagenMostrada(psicologo.fotoPerfilPsicologo || '/src/images/pimg2.png');
         }
 
         const socket = getSocket();

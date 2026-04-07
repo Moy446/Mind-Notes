@@ -58,6 +58,17 @@ export default function ChatScreen() {
   const [imagenMostrada, setImagenMostrada] = useState('/src/images/pimg2.png');
   const [showSelector, setShowSelector] = useState(true);
 
+  const refreshChatInfo = useCallback(async () => {
+    if (!selectedChat || !user?.idUsuario) return;
+
+    try {
+      const info = await obtenerInformacionChat(user.idUsuario, selectedChat);
+      setPatientData(info.patientData || {});
+    } catch (error) {
+      // Keep current UI state if refresh fails.
+    }
+  }, [selectedChat, user?.idUsuario]);
+
   // Inicializar socket y cargar pacientes
   useEffect(() => {
     if (!user?.idUsuario) return;
@@ -105,16 +116,7 @@ export default function ChatScreen() {
         const paciente = pacientes.find((p) => p.idPaciente === chatId);
         if (paciente) {
           setNombreMostrado(paciente.nombrePaciente || paciente.nombre || 'Usuario');
-          let foto = paciente.fotoPerfilPaciente || '/src/images/pimg2.png';
-          if (
-            foto &&
-            foto !== '/src/images/pimg2.png' &&
-            !foto.startsWith('http') &&
-            !foto.startsWith('/')
-          ) {
-            foto = `http://localhost:5000/${foto}`;
-          }
-          setImagenMostrada(foto);
+          setImagenMostrada(paciente.fotoPerfilPaciente || '/src/images/pimg2.png');
         }
 
         const socket = getSocket();
@@ -159,6 +161,17 @@ export default function ChatScreen() {
     setShowLinkedDocuments(false);
     setShowSelector(true);
   }, []);
+
+  useEffect(() => {
+    if (!showLinkedDocuments || !selectedChat) return;
+
+    refreshChatInfo();
+    const intervalId = setInterval(() => {
+      refreshChatInfo();
+    }, 4000);
+
+    return () => clearInterval(intervalId);
+  }, [showLinkedDocuments, selectedChat, refreshChatInfo]);
 
   const ejecutarVinculacion = useCallback(async (uidValue: string) => {
     if (!user?.idUsuario) return;

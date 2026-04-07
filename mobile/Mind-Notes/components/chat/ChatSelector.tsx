@@ -10,6 +10,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { chatSelectorStyle } from '@/styles/chat/chatSelectorStyle';
 import { Colors } from '@/constants/theme';
+import { resolveMediaUrl } from '@/core/API/mediaUrl';
 
 export interface ChatContact {
   id: string;
@@ -76,9 +77,7 @@ export const ChatSelector: React.FC<ChatSelectorProps> = ({
             {contact.fotoPerfil && (
               <Image
                 source={{
-                  uri: contact.fotoPerfil.startsWith('http')
-                    ? contact.fotoPerfil
-                    : `http://localhost:5000/${contact.fotoPerfil}`,
+                  uri: resolveMediaUrl(contact.fotoPerfil),
                 }}
                 style={chatSelectorStyle.avatar}
               />
