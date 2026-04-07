@@ -1,7 +1,14 @@
-import { View, Text, TextInput, Alert, Pressable, KeyboardAvoidingView } from 'react-native'
+import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
 import React, { useState } from 'react'
 import { router } from 'expo-router'
-import { UseAuthStore } from '@/store/auth/useAuthStore'
+import { UseAuthStore } from '@/store/auth/useAuthStore';
+import { loginStyle } from '@/styles/auth/loginStyle';
+import CustomButton from '@/components/auth/CustomButton';
+import BarTittle from '@/components/auth/BarTittle';
+import ThemedLink from '@/components/auth/ThemedLink';
+import ThemedTextInput from '@/components/auth/ThemedTextInput';
+import GoogleButton from '@/components/auth/GoogleButton';
+
 //Todo: Hay que ver el token refresh
 
 const LoginScreen = () => {
@@ -38,34 +45,48 @@ const LoginScreen = () => {
         }
     }
 
-  return (
-    <KeyboardAvoidingView style={{marginTop: 50, alignItems: 'center'}}>
-        <TextInput 
-            placeholder="Correo electrónico"
-            keyboardType='email-address' 
-            autoCapitalize='none'
-            value={form.email}
-            onChangeText={(value) => { console.log(form);
-                setForm(prev =>({
-                ...prev, 
-                ["email"]: value
-            }))}}
-        />
-        <TextInput 
-            placeholder="Contraseña" 
-            secureTextEntry 
-            autoCapitalize='none'
-            value={form.password}
-            onChangeText={(value) => setForm(prev =>({
-                ...prev, 
-                ["password"]: value
-            }))}
-        />
-        <Pressable onPress={onLogin} disabled={isPosting}>
-            <Text>Ingresar</Text>
-        </Pressable>
-    </KeyboardAvoidingView>
-  )
+    return (
+    <View style={loginStyle.container}>
+        <View style={loginStyle.topContainer}>
+            <Text style={loginStyle.topTextTitle}>¡Bienvenido!</Text>
+            <Text style={loginStyle.topTextDescription}>¿Aún no tienes una cuenta?</Text>
+            <CustomButton text='Registrate' size='md' onPress={() => router.push('/auth/register')} style={{marginBottom: 20}} />
+        </View>
+        <BarTittle title='MindNotes' align='left' />
+        <KeyboardAvoidingView style={{marginTop: 30, alignItems: 'center'}}>
+            <ThemedTextInput 
+                icon='mail-outline'
+                placeholder="Correo electrónico"
+                keyboardType='email-address'
+                autoCapitalize='none'
+                value={form.email}
+                onChangeText={(value) => { console.log(form);
+                    setForm(prev =>({
+                    ...prev, 
+                    ["email"]: value
+                }))}}
+            />
+            <ThemedTextInput 
+                icon='lock-closed-outline'
+                placeholder="Contraseña" 
+                secureTextEntry 
+                autoCapitalize='none'
+                value={form.password}
+                onChangeText={(value) => setForm(prev =>({
+                    ...prev, 
+                    ["password"]: value
+                }))}
+            />
+            <CustomButton onPress={onLogin} disabled={isPosting} text='Ingresar' size='lg' textColor='black' style={{marginBottom: 10}} />
+            <ThemedLink href={'/auth/forgot-password'} style={loginStyle.textStyle}>¿Olvidaste tu contraseña?</ThemedLink>
+            <Text style={loginStyle.textStyle}> ¿Aún no tienes una cuenta? </Text>
+            <ThemedLink href={'/auth/register'} style={loginStyle.textStyle}>Registrate</ThemedLink>
+            <Text style={loginStyle.textStyle}> O ingresa con: </Text>
+            <GoogleButton onPress={()=>{console.log('Google login pressed')}} />
+
+        </KeyboardAvoidingView>
+    </View>
+    )
 }
 
 export default LoginScreen

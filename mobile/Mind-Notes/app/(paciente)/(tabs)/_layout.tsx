@@ -1,8 +1,10 @@
+
 import { View, Text, Image, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
-import { Redirect, Tabs } from 'expo-router'
 import { tabStyle } from '@/styles/tabStyle'
 import { Colors } from '@/constants/theme'
+import { UseAuthStore } from '@/store/auth/useAuthStore'
+import { Redirect, Tabs } from 'expo-router'
 import TabBarButton from '@/components/tabs/TabBarButton'
 import { UseAuthStore } from '@/store/auth/useAuthStore'
 
