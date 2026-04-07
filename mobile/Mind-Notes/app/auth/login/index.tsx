@@ -84,8 +84,7 @@ const LoginScreen = () => {
                 keyboardType='email-address'
                 autoCapitalize='none'
                 value={form.email}
-                onChangeText={(value) => { console.log(form);
-                    setForm(prev =>({
+                onChangeText={(value) => { setForm(prev =>({
                     ...prev, 
                     ["email"]: value
                 }))}}
