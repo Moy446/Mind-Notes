@@ -9,6 +9,7 @@ import GoogleButton from '@/components/auth/GoogleButton'
 import { router } from 'expo-router'
 import UseRegister from '@/hooks/auth/UseRegister'
 import { registerPaciente, registerPsicologo } from '@/core/actions/auth/register.actions'
+import ThemedLink from '@/components/auth/ThemedLink'
 
 const RegisterScreen = () => {
 
@@ -118,9 +119,22 @@ const RegisterScreen = () => {
         </Text>
         <ThemedSwitch value={esPsicologo} onChange={() => setEsPsicologo(!esPsicologo)}/>
       </View>
-      <View style={{alignItems: 'center', marginVertical: 5, marginLeft: 10}}>
-        <Text style={registerStyle.termsText}>
-          Al registrarte, aceptas nuestros términos y condiciones.
+      <View style={{ marginVertical: 5, marginHorizontal: 10 }}>
+        <Text style={[registerStyle.termsText, { textAlign: 'center' }]}>
+          Al registrarte, aceptas nuestros{' '}        
+          <Text
+            style={{ fontSize: 12, fontFamily: 'SairaMedium', color: 'blue' }}
+            onPress={() => router.push('/auth/register/privacidad/terminosYCondiciones')}
+          >
+            términos y condiciones
+          </Text>
+          {' '}y nuestro{' '}
+          <Text
+            style={{ fontSize: 12, fontFamily: 'SairaMedium', color: 'blue' }}
+            onPress={() => router.push('/auth/register/privacidad/avisoPrivacidad')}
+          >
+            aviso de privacidad
+          </Text>
         </Text>
       </View>
       <View style={{alignItems: 'center', marginBottom: 20}}>
