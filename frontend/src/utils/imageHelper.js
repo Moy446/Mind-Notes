@@ -8,5 +8,6 @@ export const getImageUrl = (relativePath, defaultImage = '/src/images/testimg.pn
     if (relativePath.startsWith('/')) return relativePath;
     
     // Construye la URL completa
-    return `${process.env.REACT_APP_API_URL}/${relativePath}`;
+    const backendUrl = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+    return `${backendUrl}/${relativePath.replace(/^\/+/, '')}`;
 };

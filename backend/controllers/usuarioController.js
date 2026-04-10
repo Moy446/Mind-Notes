@@ -313,6 +313,7 @@ class UsuarioController {
         const idPsicologo = req.params.idPsicologo;
         const { idPaciente } = req.body;
         const listaVinculacionModel = new ListaVinculacion();
+        const usuarioModel = new Usuario();
 
         try {
             // Validar que ambos IDs estén presentes
@@ -320,6 +321,49 @@ class UsuarioController {
                 return res.status(400).json({
                     success: false,
                     message: 'ID del psicólogo y del paciente son requeridos'
+                });
+            }
+
+            if (!req.user?.idUsuario) {
+                return res.status(401).json({
+                    success: false,
+                    message: 'No autenticado'
+                });
+            }
+
+            if (!req.user.esPsicologo) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Solo un psicólogo puede vincular pacientes desde esta ruta'
+                });
+            }
+
+            if (req.user.idUsuario.toString() !== idPsicologo.toString()) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'No puedes vincular pacientes para otro psicólogo'
+                });
+            }
+
+            if (idPsicologo.toString() === idPaciente.toString()) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No puedes vincularte contigo mismo'
+                });
+            }
+
+            const paciente = await usuarioModel.findById(idPaciente);
+            if (!paciente) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Paciente no encontrado'
+                });
+            }
+
+            if (paciente.esPsicologo) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El UID ingresado corresponde a un psicólogo, no a un paciente'
                 });
             }
 
@@ -362,6 +406,7 @@ class UsuarioController {
         const idPaciente = req.params.idPaciente;
         const { idPsicologo } = req.body;
         const listaVinculacionModel = new ListaVinculacion();
+        const usuarioModel = new Usuario();
 
         try {
             // Validar que ambos IDs estén presentes
@@ -369,6 +414,49 @@ class UsuarioController {
                 return res.status(400).json({
                     success: false,
                     message: 'ID del paciente y del psicólogo son requeridos'
+                });
+            }
+
+            if (!req.user?.idUsuario) {
+                return res.status(401).json({
+                    success: false,
+                    message: 'No autenticado'
+                });
+            }
+
+            if (req.user.esPsicologo) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Solo un paciente puede vincular psicólogos desde esta ruta'
+                });
+            }
+
+            if (req.user.idUsuario.toString() !== idPaciente.toString()) {
+                return res.status(403).json({
+                    success: false,
+                    message: 'No puedes vincular psicólogos para otro paciente'
+                });
+            }
+
+            if (idPaciente.toString() === idPsicologo.toString()) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No puedes vincularte contigo mismo'
+                });
+            }
+
+            const psicologo = await usuarioModel.findById(idPsicologo);
+            if (!psicologo) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Psicólogo no encontrado'
+                });
+            }
+
+            if (!psicologo.esPsicologo) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El UID ingresado corresponde a un paciente, no a un psicólogo'
                 });
             }
 
