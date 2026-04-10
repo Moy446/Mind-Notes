@@ -2,6 +2,7 @@ import React from 'react'
 import { View, Text, Pressable, PressableProps, Image } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
+import { resolveMediaUrl } from '@/core/API/mediaUrl'
 
 type Cita = {
   idCita: string,
@@ -35,7 +36,10 @@ const ViewDatesComponent = ({info, onPress, ...props}:Props) => {
         onPress()
       }}>
         <View style={calendarioStyle.infoDateContainer}>
-            <Image source={require('../../assets/images/userDefault.png')} alt='ImagenPaciente' style={calendarioStyle.infoDateContainer_img} />
+            <Image source={info.extendedProps.img?.includes('userDefault')
+              ? require('../../assets/images/userDefault.png')
+              : { uri: resolveMediaUrl(info.extendedProps.img )}} alt='ImagenPaciente' style={calendarioStyle.infoDateContainer_img} 
+            />
             <View style={calendarioStyle.infoDateContainer_dataPacient}>
               <Text style={calendarioStyle.infoDateContainer_text}>{info.title}</Text>
               <Text style={calendarioStyle.infoDateContainer_text}>{info.start.toLocaleTimeString().substring(0, 5)} - {info.end.toLocaleTimeString().substring(0, 5)}</Text>

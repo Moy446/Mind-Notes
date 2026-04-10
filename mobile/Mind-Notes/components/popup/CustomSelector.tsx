@@ -1,3 +1,4 @@
+import { resolveMediaUrl } from "@/core/API/mediaUrl";
 import { calendarPopUpStyle } from "@/styles/popup/calendar.popUpStyle";
 import { useState } from "react";
 import { Image, Text, View } from "react-native"
@@ -30,7 +31,10 @@ const CustomSelector = ({ data, value, onChange, placeholder }: Props) => {
             }}
             renderItem={(item) => (
                 <View style={calendarPopUpStyle.renderItemContainer}>
-                    <Image source={{ uri: item.img }} style={{ width: 30, height: 30 }} />
+                    <Image source={item.img?.includes('userDefault')
+                        ? require('../../assets/images/userDefault.png')
+                        : { uri: resolveMediaUrl(item.img )}} style={{ width: 30, height: 30 }} 
+                    />
                     <Text>{item.nombre}</Text>
                 </View>
             )}
