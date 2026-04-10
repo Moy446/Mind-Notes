@@ -1,9 +1,15 @@
 import { StyleSheet } from "react-native";
 import { Colors } from "../constants/theme";
 export const tabStyle = StyleSheet.create({
-    generalTab:{
+    topTab:{
         backgroundColor: Colors.principal,
-        borderRadius: 35,
+        borderBottomStartRadius: 35,
+        borderBottomEndRadius: 35,
+    },
+    buttonTab:{
+        backgroundColor: Colors.principal,
+        borderTopStartRadius: 35,
+        borderTopEndRadius: 35,
     },
     containerTab:{
         display: 'flex',
