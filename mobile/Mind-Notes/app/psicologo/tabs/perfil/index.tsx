@@ -3,10 +3,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import Svg, { Path } from 'react-native-svg'
 import { perfilStyle } from '@/styles/perfil/perfilStyle'
 import DeliteAcountPopUp from '@/components/popup/DeleteAcountPopUp'
+import HorarioPopUp from '@/components/perfil/Horario'
 
 const profileScreen = () => {
 
   const [showPopup, setShowPopup] = useState(false);
+  const [showHorario, setHorario] = useState(false);
 
   return (
     <View style={perfilStyle.container}>
@@ -90,7 +92,7 @@ const profileScreen = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={perfilStyle.btnHorario} onPress={() => console.log('Presionado')}>
+      <TouchableOpacity style={perfilStyle.btnHorario} onPress={() => setHorario(true)}>
         <Text style={perfilStyle.btnText}>Horario</Text>
       </TouchableOpacity>
 
@@ -119,7 +121,12 @@ const profileScreen = () => {
           </View>
         </View>
       </Modal>
-
+      <Modal 
+      visible={showHorario}  
+      animationType='slide'
+      onRequestClose={() => setHorario(false)}>
+            <HorarioPopUp onClose={() => {setHorario(false)}}/>
+      </Modal>
     </View>
   )
 }

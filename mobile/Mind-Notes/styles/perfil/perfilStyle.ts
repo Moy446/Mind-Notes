@@ -92,5 +92,6 @@ export const perfilStyle = StyleSheet.create({
     },
     deleteAccountPopUp:{
         backgroundColor: Colors.background
-    }
+    },
+    
 })
