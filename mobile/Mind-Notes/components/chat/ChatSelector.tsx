@@ -76,9 +76,10 @@ export const ChatSelector: React.FC<ChatSelectorProps> = ({
           >
             {contact.fotoPerfil && (
               <Image
-                source={{
-                  uri: resolveMediaUrl(contact.fotoPerfil),
-                }}
+                source={contact.fotoPerfil?.includes('userDefault')
+                  ? require('../../assets/images/userDefault.png')
+                  : {uri: resolveMediaUrl(contact.fotoPerfil)}
+                }
                 style={chatSelectorStyle.avatar}
               />
             )}
