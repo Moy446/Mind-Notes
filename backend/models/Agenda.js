@@ -64,12 +64,11 @@ class Agenda {
     }
     async searchByDayAndPsychologist(fechaCita, idPsicologo) {
         try {
-            const inicio = new Date(fechaCita);
-            inicio.setHours(0, 0, 0, 0);
+            const inicio = new Date(fechaCita+ "T00:00:00");
 
-            const fin = new Date(fechaCita);
-            fin.setHours(23, 59, 59, 999);
+            const fin = new Date(fechaCita+ "T23:59:59");
 
+            console.log(inicio, fin)
             const datesOfDay = await this.colAgenda.find({
                 idPsicologo: new ObjectId(idPsicologo),
                 fechaCita: {

@@ -160,6 +160,7 @@ export default function ChatPsiF(props){
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
+        setOpenInfo(false);
     };
 
     //cargar informacion en el sidebar del psicólogo

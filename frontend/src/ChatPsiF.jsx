@@ -57,6 +57,7 @@ const fetchSelectedName = useCallback(async () => {
                 fotoUrl = `http://localhost:5000/${fotoUrl}`;
             }
             setImage(fotoUrl);
+            console.log('Foto del paciente:', fotoUrl);
         } else {
             setN('Usuario no seleccionado');
             setImage('/src/images/pimg2.png');
@@ -163,6 +164,7 @@ const fetchSelectedName = useCallback(async () => {
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
+        setOpenInfo(false);
         console.log('💬 Chat seleccionado:', chatId);
     };
 

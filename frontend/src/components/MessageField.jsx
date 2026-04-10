@@ -29,7 +29,7 @@ const MessageField = (props) => { // CAMBIO: Recibir props completo
                 name="message"
                 required
                 minLength="1"
-                maxLength="59"
+                maxLength="500"
                 size="10"
                 className='message-text'
                 placeholder="Escribe un mensaje..."

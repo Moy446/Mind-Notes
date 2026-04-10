@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
 import Tooltipe from './components/Tooltipe'
+import TerminosAvisoModal from './components/TerminosAvisoModal'
 import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
@@ -12,6 +13,10 @@ export default function Login() {
     const navigate = useNavigate();
     const { login } = useContext(AuthContext);
     const [modo, setModo] = useState('login');
+    
+    // Estados para modal de términos y privacidad
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [datosRegistroPendiente, setDatosRegistroPendiente] = useState(null);
     
     // Estados para login
     const [loginEmail, setLoginEmail] = useState('');
@@ -89,7 +94,12 @@ export default function Login() {
 
             if (result && result.success) {
                 // Redirigir según el tipo de usuario detectado automáticamente
-                navigate(result.role === 'psicologo' ? '/psicologo' : '/paciente');
+                const userId = result?.user?.id;
+                navigate(
+                    result.role === 'psicologo'
+                        ? `/psicologo/chat/${userId}`
+                        : `/paciente/chat/${userId}`
+                );
             } else {
                 setLoginError(result?.message || 'Error al iniciar sesión');
             }
@@ -104,28 +114,47 @@ export default function Login() {
     const handleRegister = async (e) => {
         e.preventDefault();
         setRegisterError('');
-        setRegisterLoading(true);
 
         if (registerPassword !== registerPasswordConfirm) {
             setRegisterError('Las contraseñas no coinciden');
-            setRegisterLoading(false);
             return;
         }
 
+        if(!validarPassword(registerPassword)){
+            setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
+            return;
+        }
+
+        // Guardar los datos del registro y mostrar modal
+        setDatosRegistroPendiente({
+            nombre: registerNombre,
+            email: registerEmail,
+            password: registerPassword,
+            passwordConfirm: registerPasswordConfirm,
+            esPsicologo: isPsicologo
+        });
+        setMostrarModal(true);
+    };
+
+    // Función para completar el registro después de aceptar términos
+    const handleCompletarRegistro = async () => {
+        if (!datosRegistroPendiente) return;
+
+        setRegisterLoading(true);
+        setMostrarModal(false);
+
         try {
-            if(!validarPassword(registerPassword)){
-                setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
-                setRegisterLoading(false);
-                return;
-            }
-            const result = isPsicologo
-                ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
-                : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
+            const { nombre, email, password, passwordConfirm, esPsicologo } = datosRegistroPendiente;
+            
+            const result = esPsicologo
+                ? await authService.registrarPsicologo(nombre, email, password, passwordConfirm)
+                : await authService.registrarPaciente(nombre, email, password, passwordConfirm);
 
             if (result.success) {
                 setRegisterError('');
-                setModo('login'); // Cambiar a formulario de login
-                setLoginEmail(registerEmail);
+                setDatosRegistroPendiente(null);
+                setModo('login');
+                setLoginEmail(email);
                 setLoginPassword('');
                 Swal.fire({
                     icon: 'success',
@@ -141,6 +170,13 @@ export default function Login() {
         } finally {
             setRegisterLoading(false);
         }
+    };
+
+    // Función para rechazar términos
+    const handleRechazarTerminos = () => {
+        setMostrarModal(false);
+        setDatosRegistroPendiente(null);
+        setRegisterError('Debes aceptar los términos y condiciones para registrarte');
     };
 
     // Función para manejar recuperación de contraseña
@@ -389,6 +425,12 @@ export default function Login() {
             </div>
         </div>
 
+        {mostrarModal && (
+            <TerminosAvisoModal 
+                onAceptar={handleCompletarRegistro}
+                onRechazar={handleRechazarTerminos}
+            />
+        )}
         </div>
     )
 }

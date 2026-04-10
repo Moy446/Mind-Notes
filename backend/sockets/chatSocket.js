@@ -16,6 +16,11 @@ export default (io) => {
     // Enviar mensaje
     socket.on('sendMessage', async ({ idPsicologo, idPaciente, mensaje, remitente }) => {
       try {
+
+        if (mensaje.length > 500) {
+          console.warn('Mensaje demasiado largo, truncando a 500 caracteres');
+          mensaje = mensaje.slice(0, 500);
+        }
         console.log('📨 Guardando mensaje:', { idPsicologo, idPaciente, mensaje, remitente });
         
         const chat = new Chat();
@@ -25,6 +30,8 @@ export default (io) => {
           remitente,
           timestamp: new Date()
         };
+
+    
         
         // Insertar el mensaje dentro del array mensajes del Chat
         const resultado = await chat.insertMensaje(
