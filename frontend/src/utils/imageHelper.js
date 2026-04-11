@@ -13,5 +13,6 @@ export const getImageUrl = (relativePath, defaultImage = '/src/images/testimg.pn
     if (cleanPath.startsWith('/')) return `${apiBaseUrl}${cleanPath}`;
     
     // Construye la URL completa
-    return `${apiBaseUrl}/${cleanPath}`;
+    const backendUrl = (import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+    return `${backendUrl}/${relativePath.replace(/^\/+/, '')}`;
 };

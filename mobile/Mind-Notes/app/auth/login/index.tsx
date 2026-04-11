@@ -1,5 +1,5 @@
-import { View, Text, Alert, KeyboardAvoidingView } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, Alert, KeyboardAvoidingView, Modal } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { router } from 'expo-router'
 import { UseAuthStore } from '@/store/auth/useAuthStore';
 import { loginStyle } from '@/styles/auth/loginStyle';
@@ -9,8 +9,9 @@ import ThemedLink from '@/components/auth/ThemedLink';
 import ThemedTextInput from '@/components/auth/ThemedTextInput';
 import GoogleButton from '@/components/auth/GoogleButton';
 import { loginWithGoogle } from '@/services/googleAuthService';
+import DisclaimerPopup from '@/components/popup/Disclaimer';
 
-//Todo: Hay que ver el token refresh
+let hasShownDisclaimer = false;
 
 const LoginScreen = () => {
 
@@ -23,6 +24,13 @@ const LoginScreen = () => {
         password: '',
     })
 
+    const [showDisclaimer, setShowDisclaimer] = useState(false)
+    useEffect(() => {
+        if (!hasShownDisclaimer) {
+        setShowDisclaimer(true);
+        hasShownDisclaimer = true;
+        }
+    }, []);
 
     const onLogin = async () => {
         const {email, password} = form;
@@ -106,7 +114,13 @@ const LoginScreen = () => {
             <ThemedLink href={'/auth/register'} style={loginStyle.textStyle}>Registrate</ThemedLink>
             <Text style={loginStyle.textStyle}> O ingresa con: </Text>
             <GoogleButton onPress={handleGoogleLogin} />
-
+            <Modal visible={showDisclaimer} transparent animationType="slide">
+                <View style={loginStyle.darkThemeModal}>
+                <View style={loginStyle.modalContainer}>
+                    <DisclaimerPopup onPress={() => setShowDisclaimer(false)} />
+                </View>
+                </View>
+            </Modal>
         </KeyboardAvoidingView>
     </View>
     )
