@@ -73,16 +73,33 @@ router.get('/google',
  * Callback de Google OAuth2
  */
 router.get('/google/callback',
-    passport.authenticate('google', { 
-        failureRedirect: process.env.FRONTEND_URL + '/login?error=google_auth_failed',
-        session: false
-    }),
-    (req, res) => {
-        try {
+    (req, res, next) => {
+        passport.authenticate('google', { session: false }, (error, usuario, info) => {
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
             const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
             const sameSite = useSecure ? 'None' : 'Lax';
+
             res.clearCookie('google_role', { httpOnly: true, secure: useSecure, sameSite });
 
+            if (error) {
+                console.error('Error en Google callback:', error);
+                return res.redirect(`${frontendUrl}/login?error=google_auth_failed`);
+            }
+
+            if (!usuario) {
+                const isNotRegistered = info?.code === 'GOOGLE_ACCOUNT_NOT_REGISTERED';
+                const errorCode = isNotRegistered ? 'google_not_registered' : 'google_auth_failed';
+                const emailQuery = info?.email ? `&email=${encodeURIComponent(info.email)}` : '';
+                return res.redirect(`${frontendUrl}/login?error=${errorCode}${emailQuery}`);
+            }
+
+            req.user = usuario;
+            return next();
+        })(req, res, next);
+    },
+    (req, res) => {
+        const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+        try {
             const usuario = req.user;
             const role = usuario.esPsicologo ? 'psicologo' : 'paciente';
             
@@ -100,11 +117,9 @@ router.get('/google/callback',
             cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
 
             // Redirigir al chat según el rol con id en URL
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
             res.redirect(`${frontendUrl}/${role}/chat/${usuario.idUsuario}`);
         } catch (error) {
             console.error('Error en Google callback:', error);
-            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
             res.redirect(`${frontendUrl}/login?error=callback_error`);
         }
     }
