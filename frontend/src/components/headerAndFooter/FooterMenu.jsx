@@ -108,13 +108,13 @@ export default function FooterMenu(){
                     <div className='three'>
                         <ul>
                             <li><a className='a-footermenu'><h4>Legal</h4></a></li>
-                            <li><Link to={"/ComoFunciona"} className='li-link'>Privacidad</Link></li>
-                            <li><Link to={"/ComoFunciona"} className='li-link'>Terminos y condiciones</Link></li>
+                            <li><Link to={"/aviso-privacidad"} className='li-link'>Privacidad</Link></li>
+                            <li><Link to={"/terminos-y-condiciones"} className='li-link'>Terminos y condiciones</Link></li>
                         </ul>
                     </div>
 
                     <div className='four'>
-                        <h4>Contactanos</h4>
+                        <h4>Contáctanos</h4>
                         <form onSubmit={handleSendComment}>
                             <ul>
                                 <li>
