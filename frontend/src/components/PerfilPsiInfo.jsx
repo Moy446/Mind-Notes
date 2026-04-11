@@ -182,6 +182,7 @@ export default function PerfilPsiInfo(props) {
                 currentValue={editModal.value}
                 onSave={handleSaveEdit}
                 type={editModal.field === 'email' ? 'email' : 'text'}
+                maxLength={editModal.field === 'nombre' ? 45 : undefined}
             />
         </div>
     );

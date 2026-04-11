@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './EditModal.css';
 
-export default function EditModal({ open, handleClose, title, currentValue, onSave, type = 'text' }) {
+export default function EditModal({ open, handleClose, title, currentValue, onSave, type = 'text', maxLength }) {
     const [value, setValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -16,6 +16,20 @@ export default function EditModal({ open, handleClose, title, currentValue, onSa
     const handleSave = async () => {
         if (!value || value.trim() === '') {
             setError('El campo no puede estar vacío');
+            return;
+        }
+
+        if (type === 'email') {
+            const email = value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                setError('Ingresa un correo electrónico válido');
+                return;
+            }
+        }
+
+        if (maxLength && value.trim().length > maxLength) {
+            setError(`El campo no puede tener más de ${maxLength} caracteres`);
             return;
         }
 
@@ -53,6 +67,8 @@ export default function EditModal({ open, handleClose, title, currentValue, onSa
                         disabled={loading}
                         className='modal-input'
                         placeholder={`Ingrese ${title.toLowerCase()}`}
+                        maxLength={maxLength}
+                        autoComplete={type === 'email' ? 'email' : 'off'}
                     />
                     
                     {error && (
