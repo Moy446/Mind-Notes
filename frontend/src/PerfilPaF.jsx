@@ -140,13 +140,13 @@ export default function PerfilPaF(props){
 
     // Actualizar el contexto también
     updateUser({ fotoPerfil: result.fotoPerfil });
-    console.log('updateUser llamado'); // TEMPORAL
 
     Swal.fire({
         title: 'Foto actualizada correctamente',
         icon: 'success',
         confirmButtonText: 'Aceptar'
     });
+    console.log(userData.fotoPerfil); 
 }
         } catch (error) {
             Swal.fire({
@@ -164,6 +164,8 @@ export default function PerfilPaF(props){
                 email: user.email || '',
                 fotoPerfil: user.fotoPerfil || '/src/images/testimg.png'
             });
+            
+            console.log(user.fotoPerfil);
         }
     }, [user]);
 
