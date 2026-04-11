@@ -28,13 +28,13 @@ export default function MenuPa() {
     return (
         <div className='menuPa'>
             <div className='paMendiv'>
-                
-                <Link to="" className='svgPa'>
-                    <Tooltipe text="Mind Notes">
+
+                <Tooltipe text="Mind Notes">
+                    <div className="toolTip">
                         <img src="/src/images/logowithe.png" className='imgMPsi' />
-                    </Tooltipe>
-                    
-                </Link>
+                    </div>
+                </Tooltipe>
+
                 <Link to={`/paciente/chat/${datos}`} className='svgPa'>
                     <Tooltipe text="Chats">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" className={`size-6 ${selectedId === "1" ? 'selectedPa' : ''}`} onClick={() => setSelectedId("1")}>
