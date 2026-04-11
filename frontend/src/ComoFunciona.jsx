@@ -5,7 +5,11 @@ import FooterMenu from './components/headerAndFooter/FooterMenu'
 
 //Imagenes
 import nosotrosImg from './images/nosotrosImg.png'
-import logoBlanco from './images/logoCompletoBlanco.png'
+import recordatorios from './images/recordatorios.png'
+import chat from './images/chat.jpg'
+import herramienta from './images/herramienta.jpg'
+import comoFunciona_img from './images/comoFunciona_img.jpg'
+
 
 function ComoFunciona() {
     return (
@@ -15,12 +19,12 @@ function ComoFunciona() {
         </header>
 
         <section className='section-first'>
-            <img className= "imgNosotros" src={nosotrosImg} alt="Imagen" />
+            <img className= "imgNosotros" src={comoFunciona_img} alt="Imagen" />
             <div className='container'>
                 <h3 className='title-text'>¿Cómo funciona?</h3>
                 <p className="p-ComoFunciona">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.
+                    Nuestra aplicacion funciona con base a una inteligencia artificial que transcribe y analiza lo ocurrido en 
+                    una sesion psicologica, clasificando la información en secciones: Vida amorosa, familiar, personal y laboral.
                 </p>
             </div>
             
@@ -36,7 +40,7 @@ function ComoFunciona() {
                 <p className="p-colum">
                     Realizara resúmenes de la sesión, además identificará los puntos abordados.
                 </p>
-                <img className="imgMision" src={nosotrosImg} alt="Imagen" />
+                <img className="imgMision" src={herramienta} alt="Imagen" />
             </div>
 
             <div className='div-secondColum'>
@@ -45,7 +49,7 @@ function ComoFunciona() {
                     Para el paciente de sus próximas citas y evitar así las faltas o el poder reagendar a tiempo de una manera 
                     más automatizada.
                 </p>
-                <img className="imgMision" src={nosotrosImg} alt="Imagen" />
+                <img className="imgMision" src={recordatorios} alt="Imagen" />
             </div>
 
             <div className='div-thirdColum'>
@@ -54,7 +58,7 @@ function ComoFunciona() {
                     Tendrá organizado todos los materiales de ayuda que le envía su psicólogo y un chat integrado para poder 
                     comunicarse con él.
                 </p>
-                <img className="imgMision" src={nosotrosImg} alt="Imagen" />
+                <img className="imgMision" src={chat} alt="Imagen" />
             </div>
         </div>
 

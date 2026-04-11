@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import Switch from './components/Switch'
 import Tooltipe from './components/Tooltipe'
@@ -8,6 +8,9 @@ import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
 import './login.css'
 import Swal from 'sweetalert2';
+import DisclaimerComponent from './components/Disclaimer';
+
+let hasShownDisclaimer = false;
 
 export default function Login() {
     const navigate = useNavigate();
@@ -109,6 +112,15 @@ export default function Login() {
             setLoginLoading(false);
         }
     };
+
+    const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+    useEffect(() => {
+        if (!hasShownDisclaimer) {
+        setShowDisclaimer(true);
+        hasShownDisclaimer = true;
+        }
+    }, []);
 
     // Función para manejar registro
     const handleRegister = async (e) => {
@@ -266,7 +278,7 @@ export default function Login() {
                             </Link>
                         </div>
                     </div>
-                     <p>O ingresa con:</p>
+                        <p>O ingresa con:</p>
                     <div className='div-google'>
                         <button 
                             type='button'
@@ -280,8 +292,20 @@ export default function Login() {
                         </button>
                     </div>           
                 </form>
-            </div>
 
+            </div>
+            <button className='arrowBack' onClick={() => navigate('/')}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" style={modo == 'login' ? {color: 'white'}:{color: 'black'} }>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+
+            <div className={`${showDisclaimer ? 'modal-overlay': 'hidden'} `}>
+                <div className="modal-container">
+                    <DisclaimerComponent navigation = {navigate} onClick = {() => {setShowDisclaimer(false)}}/>
+                </div>
+            </div>
 
 {/* ---------------------------REGISTRO--------------------------- */}
             <div className='formBox register'>
@@ -403,7 +427,14 @@ export default function Login() {
 
 {/* -----------------------------Panel de color------------------------------- */}
         <div className="toggle-box">
+
             <div className="toggle-panel toggle-left">
+
+                {/* <div className='arrowBack'>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+</div> */}
                 <h1 className='title-saludo'>¡Hola, bienvenido!</h1>
                 <p>¿Aún no tienes cuenta?</p>
                 {/* <button
@@ -413,6 +444,7 @@ export default function Login() {
                     Registrarse
                 </button> */}
                 <button onClick={() => setModo('register')} className='btn register' id='formRegister' >Registrarse</button>
+                
             </div>
 
             <div className="toggle-panel toggle-right">
