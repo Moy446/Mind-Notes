@@ -1,14 +1,12 @@
-.chatbox
-{
-   display: flex;
-   height: 90px;
-   width: 100%;
-   border-radius: 20px;
-   background-color: #9ACBD0; 
+.chatbox {
+    display: flex;
+    height: 90px;
+    width: 100%;
+    border-radius: 20px;
+    background-color: #9ACBD0;
 }
 
-.chatbox-activo
-{
+.chatbox-activo {
     display: flex;
     height: 90px;
     width: 100%;
@@ -16,7 +14,7 @@
     background-color: #2973B2;
 }
 
-.img-chatbox{
+.img-chatbox {
     align-self: center;
     justify-self: center;
     max-height: 80%;
@@ -24,34 +22,39 @@
     border-radius: 50px;
 }
 
-.div-textchatbox{
+.div-textchatbox {
     display: flex;
     flex-direction: column;
     align-self: center;
     justify-self: center;
     margin-left: 15px;
+    min-width: 0;
+    flex: 1;
 }
 
-.text-chatbox-name{
+.text-chatbox-name {
     font-family: 'Saira';
-    font-size: 25px;
     color: black;
     font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.1;
 }
 
-.text-chatbox-message{
+.text-chatbox-message {
     font-family: 'Saira';
-    font-size: 20px;
+    font-size: 18px;
     color: black;
     font-weight: 300;
 }
 
 @font-face {
-  font-family: 'Saira';
-  src: url('../fonts/Saira.ttf') format('truetype');
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900; 
+    font-family: 'Saira';
+    src: url('../fonts/Saira.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
 }
 
 /* ------------------------------------------------------------------------------------------------------------------------------------- */
@@ -126,4 +129,3 @@
         max-height: 65%;
     }
 } */
-
