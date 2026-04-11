@@ -36,3 +36,55 @@
   font-weight: 100 900; 
 }
 
+/* ------------------------------------------------------------------------------------------------------------------------ */
+@media (max-width: 1024px) {
+
+    .planes
+{
+    min-height: 100vh;
+    overflow: auto;
+    padding-bottom: 15%;
+}
+
+   .plaBtns {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        padding: 20px
+    }
+
+    .div.subbtn.free {
+        width: 90%;
+        max-width: 320px;
+    }
+
+    .imgsub {
+        width: 120px;
+        height: 120px;
+    }
+
+    #PlanesTitle {
+        font-size: 48px;
+        text-align: center;
+    }
+
+    .a.time {
+        font-size: 24px;
+    }
+}
+/* ------------------------------------------------------------------------------------------------------------------------ */
+@media (max-width: 480px) {
+
+    .planes
+    {
+        padding-top: 5%;
+        padding-bottom: 25%;
+    }
+
+    .plaBtns {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 30px;
+        padding: 20px
+    }
+}

@@ -132,7 +132,7 @@ export default function PerfilPsiF(props) {
 
     return (
         <div className="planes">
-            <div>
+            <div id='PlanesTitle'>
                 Planes
             </div>
             <div className='plaBtns'>
@@ -161,7 +161,7 @@ export default function PerfilPsiF(props) {
             </div>
             <div className='cancelSubBtn'>
                 <EliminarBtn
-                    texto="Cancelar suscripccion"
+                    texto="Cancelar suscripción"
                     onClick={() => handleCancelSubscription()}
                     disabled={loading || authLoading}
                 />
