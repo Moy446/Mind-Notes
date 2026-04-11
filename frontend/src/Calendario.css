@@ -1,0 +1,293 @@
+.calendario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(242, 239, 231);
+}
+
+.row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100vh - 120px); /* 👈 altura real */
+    gap: 20px;
+}
+
+.calendario>*:first-child {
+    width: 30%;
+}
+
+.row > :first-child {
+    width: 10%;
+    overflow-y: auto;
+}
+.row > :nth-child(3) {
+    width: 100%;
+    height: 100%;
+}
+
+.fc-event {
+    border-radius: 10px;
+    border: none;
+    padding: 3px;
+}
+
+.fc-event:hover {
+    filter: brightness(0.9);
+}
+
+.fc-day-today {
+    background-color: #90aec9 !important;
+    color: black;
+}
+
+.fc-toolbar-title {
+    color: #3866a3;
+}
+
+.fc-col-header-cell {
+    background-color: #2973B2;
+    color: white;
+}
+
+.fc-button {
+    background-color: #4496aa !important;
+    border: none !important;
+}
+
+.fc-button:hover {
+    background-color: #3b8192 !important;
+    border: none !important;
+}
+
+.fc-scrollgrid-section {
+    background: '#2973B2' !important;
+}
+
+.fc-timegrid-col:nth-child(odd) {
+    background-color: #e8f4fc;
+}
+
+.fc-timegrid-col:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.fc-timegrid-slot {
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Barra citas actuales */
+
+.newCita {
+    width: 100%;
+    height: 56px;
+    background-color: rgba(242, 239, 231, 60%);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.newCita:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.newCita:active {
+    transform: translateY(0);
+}
+
+/* Popups */
+.showAddMenu {
+    position: fixed;
+    display: flex;
+    top: 35%;
+    z-index: 10;
+}
+
+.hideAddMenu {
+    display: none;
+    z-index: 10;
+}
+
+/*Cuadro calendarios*/
+.infoCita {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    padding: 5px;
+    text-align: center;
+}
+
+.infoCita img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 6px;
+}
+
+.infoCita-text {
+    color: black;
+    padding: 5px;
+}
+.rbnShowAddMenu{
+    display: none;
+}
+
+/*Funciones SELECT*/
+.selectP__control {
+  display: block;
+  width: 95%;
+  gap: 10px;
+  background-color: #48A6A7;
+  border: none;
+  box-shadow: none;
+}
+.selectP__control *{
+  cursor: pointer;
+}
+
+.selectP__menu {
+  background: rgb(41, 114, 178);
+  width: 90%;
+  margin-top: 5px;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.selectP__option {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  background: transparent;
+}
+
+.selectP__option *{
+  cursor: pointer;
+}
+/* hover para ver cual esta seleccionando*/
+.selectP__option--is-focused {
+  background-color: #48A6A7;
+}
+
+/*Marca la opcion seleccionada*/
+.selectP__option--is-selected {
+  background-color: #dceeff;
+}
+
+.optionContentP {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/*IMAGEN DEL OPTION*/
+.avatarP {
+  height: 9%;
+  width: 9%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+@media (max-width: 1024px) {
+
+    .calendario>*:first-child {
+        width: 35%;
+    }
+
+    .row > :first-child {
+        width: 10%;
+        overflow-y: auto;
+    }
+    .row > :nth-child(3) {
+        width: 100%;
+        height: 100%;
+    }
+
+    .infoCita img{
+        width: 20px;
+        height: 20px;
+    }
+    .infoCita-text{
+        padding: 0px;
+        font-size: 10px;
+    }
+
+}
+
+@media (max-width: 768px){
+    .calendario {
+        flex-direction: column;
+        align-items: center;
+    }
+    .calendario>*:first-child {
+        width: 50%;
+    }
+
+    .row > :nth-child(4) {
+        width: 100%;
+        height: 100%;
+    }
+
+    .fc-event {
+        width: auto;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+    .infoCita{
+        flex-direction: column;
+    }
+    .infoCita img{
+        width: 15px;
+        height: 15px;
+    }
+    .infoCita-text{
+        padding: 0px;
+    }
+    .citas{
+        display: none;
+    }
+    .rbnShowAddMenu{
+        display: flex !important; 
+        position: fixed;
+        margin: 15px;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .calendario {
+        padding: 5px;
+    }
+    .calendario>*:first-child {
+        width: 50%;
+    }
+    .fc-toolbar-title {
+        font-size: 20px;
+    }
+    .fc-button-group {
+        font-size: 12px !important;
+    }
+    .infoCita-text{
+        font-size: 7px;
+    }
+    .rbnShowAddMenu .add-btn{
+        margin-bottom: 0;
+    }
+}

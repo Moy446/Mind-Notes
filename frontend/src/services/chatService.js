@@ -4,9 +4,9 @@ export const subirArchivo = async (idPsicologo, idPaciente, file) => {
     try {
         const formData = new FormData();
         formData.append('file', file);
-        
+
         const response = await clienteAxios.post(
-            `/chat/${idPsicologo}/${idPaciente}/archivo`, 
+            `/chat/${idPsicologo}/${idPaciente}/archivo`,
             formData,
             {
                 headers: {
@@ -46,7 +46,7 @@ export const descargarArchivo = async (idPsicologo, idPaciente, archivoId) => {
     try {
         const response = await clienteAxios.get(
             `/chat/${idPsicologo}/${idPaciente}/archivo/${archivoId}`,
-            { 
+            {
                 responseType: 'blob',
                 withCredentials: true
             }
@@ -54,6 +54,22 @@ export const descargarArchivo = async (idPsicologo, idPaciente, archivoId) => {
         return response.data;
     } catch (error) {
         console.error('Error al descargar archivo:', error);
+        throw error;
+    }
+};
+
+export const obtenerDocumento = async (idPsicologo, idPaciente, archivoId) => {
+    try {
+        const response = await clienteAxios.get(
+            `/chat/${idPsicologo}/${idPaciente}/documento/${archivoId}`,
+            {
+                responseType: 'blob',
+                withCredentials: true
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error al descargar documento:', error);
         throw error;
     }
 };

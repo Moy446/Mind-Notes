@@ -4,7 +4,7 @@ import './CitasList.css'
 export default function Cita(props) {
 
     return (
-        <div className='cita' onClick={props.handleEdit}>
+        <div className='cita' onClick={props.handleEdit} key={`${props.id}`}>
             <img src={props.img} className='imgcita' />
             Cita {props.name}
             <br />

@@ -272,6 +272,7 @@ const fetchSelectedName = useCallback(async () => {
                                 expedientes={patientData.expedientes}
                                 materialAdjunto={patientData.materialAdjunto}
                                 grabaciones={patientData.grabaciones}
+                                idPaciente={selectedChat}
                             />
                             : <InfoPsi
                                 img={image}

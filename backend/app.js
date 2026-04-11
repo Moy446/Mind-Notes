@@ -7,6 +7,7 @@ import setupPassport from './config/passport.js';
 import webRoutes from './routes/routesWeb.js';
 import routesChat from './routes/routesChat.js';
 import routesPsicologo from './routes/routesPsicologoApp.js';
+import routesPaciente from './routes/routesPaciente.js';
 import routesAuth from './routes/routesAuth.js';
 import cookieParser from 'cookie-parser';
 import csrf from 'csurf';
@@ -99,6 +100,7 @@ async function startServer() {
     app.use('/api', webRoutes);
     app.use('/api/chat', routesChat);
     app.use('/api/psicologo', routesPsicologo);
+    app.use('/api/paciente',routesPaciente)
     app.use('/api/auth', routesAuth);
     app.use('/uploads', express.static('uploads'));
 

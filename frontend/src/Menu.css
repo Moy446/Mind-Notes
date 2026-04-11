@@ -35,6 +35,9 @@
 
 /* Responsive 768 */
 @media only screen and (max-width: 768px) {
+    .menuFullCon{
+        display: block;
+    }
     .showUID{
         position: fixed;
         top: 50%;
