@@ -6,6 +6,13 @@ export interface Message {
   idPaciente: string;
   mensaje: string;
   remitente: 'psicologo' | 'paciente';
+  tipo?: 'texto' | 'archivo';
+  archivo?: {
+    nombre?: string;
+    path?: string;
+    mimeType?: string;
+    size?: number;
+  };
   timestamp?: string;
 }
 

@@ -36,6 +36,7 @@ async function startServer() {
             credentials: true
         }
     });
+    app.set('io', io);
 
     // Cors
     app.use(cors({
