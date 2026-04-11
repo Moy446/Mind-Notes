@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import './ChatSelector.css'
 import SearchBar from './SearchBar';
 import AddBtn from './AddBtn';
@@ -8,6 +8,7 @@ import { obtenerPacientesVinculados } from '../services/vinculacionService';
 import { obtenerPsicologosVinculados } from '../services/vinculacionService';
 import { AuthContext } from '../context/AuthContext';
 import { getImageUrl } from '../utils/imageHelper';
+import socket from '../services/socketService';
 
 
 export default function ChatSelector(props) {
@@ -16,6 +17,7 @@ export default function ChatSelector(props) {
     const [selectedId, setSelectedId] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const hasLoadedOnceRef = useRef(false);
     const [searchTerm, setSearchTerm] = useState('');
 
     const normalizeId = (value) => {
@@ -43,13 +45,18 @@ export default function ChatSelector(props) {
         };
     };
 
-    const loadContacts = useCallback(async () => {
+    const loadContacts = useCallback(async ({ silent = false } = {}) => {
         try {
-            setLoading(true);
+            const shouldShowLoader = !silent && !hasLoadedOnceRef.current;
+            if (shouldShowLoader) {
+                setLoading(true);
+            }
+
             const userRole = user?.role;
             const userId = user?.id || user?.idUsuario;
             if (!userRole || !userId) {
                 setContacts([]);
+                hasLoadedOnceRef.current = true;
                 return;
             }
 
@@ -64,11 +71,17 @@ export default function ChatSelector(props) {
             const parsed = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
             const normalizedContacts = parsed.map(normalizeContact).filter(Boolean);
             setContacts(normalizedContacts);
+            hasLoadedOnceRef.current = true;
         } catch (error) {
             console.error('Error al obtener contactos vinculados:', error);
             setContacts([]);
+            hasLoadedOnceRef.current = true;
         } finally {
-            setLoading(false);
+            if (!silent && !hasLoadedOnceRef.current) {
+                setLoading(false);
+            } else if (!silent) {
+                setLoading(false);
+            }
         }
     }, [user]);
 
@@ -77,13 +90,30 @@ export default function ChatSelector(props) {
     }, [loadContacts, props.refreshKey]);
 
     useEffect(() => {
-        const onFocus = () => loadContacts();
+        const onFocus = () => loadContacts({ silent: true });
         window.addEventListener('focus', onFocus);
 
         return () => {
             window.removeEventListener('focus', onFocus);
         };
     }, [loadContacts]);
+
+    useEffect(() => {
+        const userId = user?.id || user?.idUsuario;
+        if (!userId) return;
+
+        socket.emit('joinUserRoom', { userId });
+
+        const handleChatListUpdate = () => {
+            loadContacts({ silent: true });
+        };
+
+        socket.on('updateChatList', handleChatListUpdate);
+
+        return () => {
+            socket.off('updateChatList', handleChatListUpdate);
+        };
+    }, [loadContacts, user]);
 
     const handleSelect = (id) => {
         setSelectedId(id);

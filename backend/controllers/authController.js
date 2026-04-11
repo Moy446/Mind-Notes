@@ -264,7 +264,7 @@ class AuthController {
      */
     async googleMobileAuth(req, res) {
         try {
-            const { idToken, role } = req.body;
+            const { idToken } = req.body;
 
             if (!idToken) {
                 return res.status(400).json({
@@ -319,9 +319,7 @@ class AuthController {
                 });
             }
 
-            const { email, name, picture, sub } = decodedToken;
-            const userRole = role === 'psicologo' ? 'psicologo' : 'paciente';
-            const createAsPsicologo = userRole === 'psicologo';
+            const { email, sub } = decodedToken;
 
             const usuarioModel = new Usuario();
             
@@ -336,15 +334,12 @@ class AuthController {
                     // Actualizar el Google ID si el usuario ya existe
                     await usuarioModel.actualizarGoogleId(usuario.idUsuario, sub);
                 } else {
-                    // Crear nuevo usuario
-                    usuario = await usuarioModel.create({
-                        nombre: name || email.split('@')[0],
+                    return res.status(404).json({
+                        success: false,
+                        code: 'GOOGLE_ACCOUNT_NOT_REGISTERED',
                         email,
-                        fotoPerfil: picture || null,
-                        googleId: sub,
-                        password: null,
-                        verificado: true
-                    }, createAsPsicologo);
+                        message: 'No existe una cuenta con este correo. Registrate primero.'
+                    });
                 }
             }
 

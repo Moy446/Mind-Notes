@@ -6,6 +6,13 @@ export interface Message {
   idPaciente: string;
   mensaje: string;
   remitente: 'psicologo' | 'paciente';
+  tipo?: 'texto' | 'archivo';
+  archivo?: {
+    nombre?: string;
+    path?: string;
+    mimeType?: string;
+    size?: number;
+  };
   timestamp?: string;
 }
 
@@ -17,6 +24,12 @@ export interface ChatInfo {
     expedientes?: any[];
     grabaciones?: any[];
   };
+}
+
+export interface UploadChatFileInput {
+  uri: string;
+  name: string;
+  type: string;
 }
 
 export const obtenerMensajes = async (
@@ -64,4 +77,29 @@ export const enviarMensaje = (
       remitente,
     });
   }
+};
+
+export const subirArchivo = async (
+  idPsicologo: string,
+  idPaciente: string,
+  file: UploadChatFileInput
+) => {
+  const formData = new FormData();
+  formData.append('file', {
+    uri: file.uri,
+    name: file.name,
+    type: file.type,
+  } as any);
+
+  const { data } = await clienteAxios.post(
+    `/chat/${idPsicologo}/${idPaciente}/archivo`,
+    formData,
+    {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    }
+  );
+
+  return data;
 };

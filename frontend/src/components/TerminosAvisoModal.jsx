@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './TerminosAvisoModal.css';
+import Swal from 'sweetalert2';
 
 export default function TerminosAvisoModal({ onAceptar, onRechazar }) {
     const [tab, setTab] = useState('terminos');
@@ -10,7 +11,11 @@ export default function TerminosAvisoModal({ onAceptar, onRechazar }) {
         if (aceptoTerminos && aceptoPrivacidad) {
             onAceptar();
         } else {
-            alert('Debes aceptar tanto los términos como el aviso de privacidad para continuar');
+            Swal.fire({
+                icon: 'warning',
+                title: 'Términos no aceptados',
+                text: 'Debes aceptar tanto los términos como el aviso de privacidad para continuar'
+            });
         }
     };
 
