@@ -4,6 +4,41 @@
     font-family: Saira;
 }
 
+.hidden{
+    display: none;
+}
+
+.arrowBack{
+    display: flex;
+    align-self: flex-start;
+    width: 4%;
+    height: auto;
+    position: absolute;
+    z-index: 5;
+    margin: 1%;
+
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+}
+
+.modal-overlay {
+    display: flex;
+    flex: 1; /* no siempre aplica en web, opcional */
+    background-color: #f2efe725;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-container {
+    width: 70%;
+    background-color: #F2EFE7;
+    border-radius: 12px;
+
+    /* sombra en web */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
 .loginContainer{
     position: relative;
     align-items: center;
@@ -634,6 +669,12 @@ text-decoration: none;
     .loginContainer{
         height: calc(100vh - 40px);
     }
+
+    .arrowBack{
+    width: 7%;
+    height: auto;
+    margin: 3%;
+}
 
     .formBox{
         bottom: 0;

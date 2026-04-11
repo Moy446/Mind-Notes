@@ -4,7 +4,8 @@ import FooterMenu from './components/headerAndFooter/FooterMenu'
 import './App.css'
 
 // Imágenes
-import nosotrosImg from './images/nosotrosImg.png'
+import cerebro from './images/cerebro.jpg'
+import logoCompletoOriginal from './images/logoCompletoOriginal.png'
 
 function App() {
   return (
@@ -17,15 +18,15 @@ function App() {
         <div className="container">
           <h3 className="title-App">¿Qué es Mind Notes?</h3>
           <p className="p-QueEsMindNotes">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-            Ut enim ad minim veniam, quis nostrud exercitation.
+            Mind Notes es una herramienta pensada para psicologos que busca ayudar a preservar la calidad de la información obtenida durante una sesion psicologica, 
+            impulsada con inteligencia artificial.
           </p>
         </div>
 
         <img
           className="imgNosotros"
-          src={nosotrosImg}
-          alt="Imagen Nosotros"
+          src={logoCompletoOriginal}
+          alt="Logo de Mind Notes"
         />
       </section>
 
@@ -33,8 +34,8 @@ function App() {
 
       <section className="second">
         <img
-          className="imgMision"
-          src={nosotrosImg}
+          className="imgNosotros"
+          src={cerebro}
           alt="Imagen Misión"
         />
 
