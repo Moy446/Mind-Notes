@@ -15,8 +15,6 @@ export default function setupPassport(passport) {
     async (req, accessToken, refreshToken, profile, done) => {
         try {
             const usuarioModel = new Usuario();
-            const requestedRole = req.cookies?.google_role === 'psicologo' ? 'psicologo' : 'paciente';
-            const createAsPsicologo = requestedRole === 'psicologo';
             
             let usuario = await usuarioModel.findByGoogleId(profile.id);
             
@@ -26,14 +24,10 @@ export default function setupPassport(passport) {
                 if (usuario) {
                     await usuarioModel.actualizarGoogleId(usuario.idUsuario, profile.id);
                 } else {
-                    usuario = await usuarioModel.create({
-                        nombre: profile.displayName,
-                        email: profile.emails[0].value,
-                        fotoPerfil: profile.photos[0]?.value || null,
-                        googleId: profile.id,
-                        password: null,
-                        verificado: true
-                    }, createAsPsicologo);
+                    return done(null, false, {
+                        code: 'GOOGLE_ACCOUNT_NOT_REGISTERED',
+                        email: profile.emails[0].value
+                    });
                 }
             }
             
