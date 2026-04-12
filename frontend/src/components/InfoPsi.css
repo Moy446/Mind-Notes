@@ -94,6 +94,12 @@
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.documentsInfoPsi p {
+    font-family: 'Saira';
+    color: white;
+    font-size: 10px;
+    text-align: center;
+}
 
 .divDocument{
     display: flex;
@@ -146,9 +152,22 @@
         color:black;
     }
 
+    .documentsInfoPsi{
+        gap: 80px;
+    }
+    .documentsInfoPsi p { 
+        color: black;
+        font-size: 10px;
+    }
+    
     .divDocument{
         color:black;
         width: 50px;
+    }
+}
+@media only screen and (max-width: 480px) {
+    .documentsInfoPsi{
+        gap: 15px;
     }
 }
 

@@ -72,4 +72,19 @@ export const loginStyle = StyleSheet.create({
         fontSize: 16,
         color: '#333',
     },
+    darkThemeModal:{
+        flex: 1,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        justifyContent: "center",
+        alignItems: "center",  
+    },
+    modalContainer:{
+        width: "85%",
+        backgroundColor: Colors.background,
+        borderRadius: 12,
+        elevation: 5,
+        shadowColor: "#000", 
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+    }
 })
