@@ -6,6 +6,14 @@ export default (io) => {
   io.on('connection', (socket) => {
     console.log('Socket ID:', socket.id);
 
+    // Sala por usuario para notificaciones globales (lista de chats, badges, etc.)
+    socket.on('joinUserRoom', ({ userId }) => {
+      if (!userId) return;
+      const userRoom = `user-${userId}`;
+      socket.join(userRoom);
+      console.log(`Socket ${socket.id} se unió a ${userRoom}`);
+    });
+
     // Unirse a una sala de chat (ej: 'chat-psicologoId-pacienteId')
     socket.on('joinChat', ({ idPsicologo, idPaciente }) => {
       const room = `chat-${idPsicologo}-${idPaciente}`;
@@ -44,6 +52,20 @@ export default (io) => {
         
         const room = `chat-${idPsicologo}-${idPaciente}`;
         io.to(room).emit('receiveMessage', nuevoMensaje);
+
+        // Refrescar lista de chats en tiempo real para ambos participantes
+        io.to(`user-${idPsicologo}`).emit('updateChatList', {
+          idPsicologo,
+          idPaciente,
+          mensaje,
+          timestamp: nuevoMensaje.timestamp
+        });
+        io.to(`user-${idPaciente}`).emit('updateChatList', {
+          idPsicologo,
+          idPaciente,
+          mensaje,
+          timestamp: nuevoMensaje.timestamp
+        });
       } catch (error) {
         console.error('❌ Error al enviar mensaje via socket:', error);
       }

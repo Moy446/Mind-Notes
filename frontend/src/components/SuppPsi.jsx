@@ -20,7 +20,7 @@ export default function SuppPsi(props) {
     const indexOfLastItem = paginador * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = currentData.slice(indexOfFirstItem, indexOfLastItem);
-
+    console.log(currentItems);
     const handleClick = () => {
         setActivo(!activo);
     };
@@ -33,6 +33,7 @@ export default function SuppPsi(props) {
         }
     };
     const renderIcon = (type) => {
+        console.log("renderizando svgs")
         if (["pdf", "docx", "doc", "txt"].includes(type)) {
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -43,7 +44,7 @@ export default function SuppPsi(props) {
             );
         }
 
-        if (["mp4", "mov", "avi"].includes(type)) {
+        if (["mp4", "mov", "avi", "wav"].includes(type)) {
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -88,14 +89,21 @@ export default function SuppPsi(props) {
             <div className='matApo'>
                 {currentItems.map((item) => 
                 (
-                    <Link
+                    ["pdf", "docx", "doc", "txt"].includes(item.type) 
+                        ? 
+                        <Link
                         key={item._id}
                         to={`/psicologo/doc/${props.idPaciente}/${item._id}`}
                         className='itemsmatApo btnSuppPsi'
-                    >
+                        >
                         {renderIcon(item.type)}
                         <p className='pMatApo'>{item.nombre}</p>
-                    </Link>
+                        </Link>
+                        :
+                        <div className='itemsmatApo' key={item._id}>
+                            {renderIcon(item.type)}
+                            <p className='pMatApo'>{item.nombre}</p>
+                        </div>
                 ))}
             </div>
 

@@ -52,8 +52,11 @@ export default function PerfilPsiF(props) {
         }
 
         if (!authenticated || !user?.id) {
-            alert('Debes iniciar sesion para comprar un plan');
-            return;
+           Swal.fire({
+                icon: 'warning',
+                title: 'No autenticado',
+                text: 'Debes iniciar sesión para contratar un plan.'
+            });
         }
 
         try {
@@ -86,8 +89,11 @@ export default function PerfilPsiF(props) {
     const handleCancelSubscription = async () => {
         try {
             if (!authenticated || !user?.id) {
-                alert('Debes iniciar sesion para cancelar tu suscripción');
-                return;
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'No autenticado',
+                    text: 'Debes iniciar sesión para cancelar tu suscripción.'
+                });
             }
             else {
                 const subscriptionStatus = await getSubscriptionStatus(user.id);

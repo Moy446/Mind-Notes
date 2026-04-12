@@ -68,11 +68,47 @@ class ChatController {
             }
             const chatModel = new Chat();
             const relativePath = path.relative(path.resolve(), req.file.path);
+            const normalizedPath = req.file.path.replace(/\\/g, "/");
+            const remitente = req.user?.esPsicologo ? 'psicologo' : 'paciente';
 
-            const resultado = await chatModel.insertMaterialAdjunto(idPsicologo, idPaciente, req.file.path.replace(/\\/g, "/"));
+            const resultado = await chatModel.insertMaterialAdjunto(idPsicologo, idPaciente, normalizedPath);
 
             if (resultado.modifiedCount !== 1) {
                 return res.status(500).json({ success: false, message: 'Error al guardar el archivo en el chat' });
+            }
+
+            const mensajeArchivo = {
+                _id: new ObjectId(),
+                mensaje: req.file.originalname,
+                remitente,
+                tipo: 'archivo',
+                archivo: {
+                    nombre: req.file.originalname,
+                    path: normalizedPath,
+                    mimeType: req.file.mimetype,
+                    size: req.file.size
+                },
+                timestamp: new Date()
+            };
+
+            await chatModel.insertMensaje(idPsicologo, idPaciente, mensajeArchivo);
+
+            const io = req.app.get('io');
+            if (io) {
+                const room = `chat-${idPsicologo}-${idPaciente}`;
+                io.to(room).emit('receiveMessage', mensajeArchivo);
+                io.to(`user-${idPsicologo}`).emit('updateChatList', {
+                    idPsicologo,
+                    idPaciente,
+                    mensaje: req.file.originalname,
+                    timestamp: mensajeArchivo.timestamp
+                });
+                io.to(`user-${idPaciente}`).emit('updateChatList', {
+                    idPsicologo,
+                    idPaciente,
+                    mensaje: req.file.originalname,
+                    timestamp: mensajeArchivo.timestamp
+                });
             }
 
             res.status(200).json({

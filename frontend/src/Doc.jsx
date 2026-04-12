@@ -48,7 +48,7 @@ export default function Doc(props) {
     };
 
     const closeDoc = () => {
-        navigate('/psicologo/perfil:id');
+        navigate('/psicologo/perfil');
     }
 
     const saveDoc = async () => {

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Switch from './components/Switch'
 import Tooltipe from './components/Tooltipe'
 import TerminosAvisoModal from './components/TerminosAvisoModal'
@@ -14,6 +14,7 @@ let hasShownDisclaimer = false;
 
 export default function Login() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { login } = useContext(AuthContext);
     const [modo, setModo] = useState('login');
     
@@ -41,6 +42,29 @@ export default function Login() {
     const [recoveryError, setRecoveryError] = useState('');
     const [recoverySuccess, setRecoverySuccess] = useState('');
     const [recoveryLoading, setRecoveryLoading] = useState(false);
+
+    useEffect(() => {
+        const error = searchParams.get('error');
+        const email = searchParams.get('email') || '';
+
+        if (error === 'google_not_registered') {
+            setModo('register');
+            setRegisterEmail(email);
+            setRegisterError('No existe una cuenta con ese correo. Registrate primero para continuar con Google.');
+            return;
+        }
+
+        if (error === 'google_auth_failed') {
+            setModo('login');
+            setLoginError('No se pudo autenticar con Google. Intenta nuevamente.');
+            return;
+        }
+
+        if (error === 'callback_error') {
+            setModo('login');
+            setLoginError('Error al procesar la autenticación con Google.');
+        }
+    }, [searchParams]);
 
     //Función de expresion regular para validar contraseña
     const validarPassword = (password) =>{

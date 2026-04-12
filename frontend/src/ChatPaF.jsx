@@ -207,7 +207,7 @@ export default function ChatPsiF(props){
             <div className={`nameVarCon ${!selectedChat ? 'hidden-movile' : ''}`}>
                 {selectedChat && <NameBar img={image} name={n} open={infoOpen} handleOpen={handleOpenInfo} openChat = {handleOpenChatSelector} />}
                 <div className='chatCon'>
-                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`} style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                    <div className={`chatView ${infoOpen ? 'hidden-movile' : ''}`}>
                         <div className='bubbles' style={{ display: 'flex', flexDirection: 'column', overflowY: 'auto', flex: 1 }}>
                             {/* NUEVO: Renderizar mensajes dinámicos */}
                             {!selectedChat ? (
