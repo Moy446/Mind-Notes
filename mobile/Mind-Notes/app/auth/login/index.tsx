@@ -53,6 +53,7 @@ const LoginScreen = () => {
             router.replace('/psicologo/tabs/chat')
             return;
         }
+        
     }
 
     const handleGoogleLogin = async () => {
