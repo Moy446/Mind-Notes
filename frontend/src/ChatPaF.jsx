@@ -53,7 +53,7 @@ export default function ChatPsiF(props){
             // Normalizar la foto: si no empieza con http ni con /, construir URL completa
             let fotoUrl = psicologo.fotoPerfilPsicologo || '/src/images/pimg2.png';
             if (fotoUrl && fotoUrl !== '/src/images/pimg2.png' && !fotoUrl.startsWith('http') && !fotoUrl.startsWith('/')) {
-                fotoUrl = `${process.env.VITE_BACKEND_BASE_URL}/${fotoUrl}`;
+                fotoUrl = `${import.meta.env.VITE_BACKEND_BASE_URL}/${fotoUrl}`;
             }
             setImage(fotoUrl);
         } else {

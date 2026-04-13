@@ -28,7 +28,7 @@ export default function AudioMenu(props) {
                     fotoPerfil: (() => {
                         let foto = p.fotoPerfilPaciente || '/src/images/userDefault.png';
                         if (foto && foto !== '/src/images/userDefault.png' && !foto.startsWith('http') && !foto.startsWith('/')) {
-                            return `${process.env.VITE_BACKEND_URL_NoAPI}/${foto}`;
+                            return `${import.meta.env.VITE_BACKEND_URL_NoAPI}/${foto}`;
                         }
                         return foto;
                     })()
