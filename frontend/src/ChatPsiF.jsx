@@ -51,10 +51,10 @@ const fetchSelectedName = useCallback(async () => {
         if (paciente) {
             setN(paciente.nombrePaciente || paciente?.nombre);
             
-            // Normalizar la foto: si no empieza con http ni con /, construir URL completa
-            let fotoUrl = paciente.fotoPerfilPaciente || '/src/images/pimg2.png';
-            if (fotoUrl && fotoUrl !== '/src/images/pimg2.png' && !fotoUrl.startsWith('http') && !fotoUrl.startsWith('/')) {
-                fotoUrl = `http://localhost:5000/${fotoUrl}`;
+            // Usar helper centralizado para construir URL
+            let fotoUrl = getImageUrl(paciente.fotoPerfilPaciente || '');
+            if (!fotoUrl || fotoUrl === '/src/images/testimg.png') {
+                fotoUrl = '/src/images/pimg2.png';
             }
             setImage(fotoUrl);
             console.log('Foto del paciente:', fotoUrl);

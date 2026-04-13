@@ -129,7 +129,7 @@ export default function PerfilPaF(props){
         try {
             const result = await cambiarFotoPerfil(formData);
             if (result.success) {
-    const nuevaFoto = `http://localhost:5000/${result.fotoPerfil}`;
+    const nuevaFoto = getImageUrl(result.fotoPerfil);
     console.log('Nueva foto:', nuevaFoto); // TEMPORAL
     console.log('result.fotoPerfil:', result.fotoPerfil); // TEMPORAL
     
