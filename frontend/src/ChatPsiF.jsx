@@ -164,6 +164,7 @@ const fetchSelectedName = useCallback(async () => {
         setSelectedChat(chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
+        setOpenInfo(false);
         console.log('💬 Chat seleccionado:', chatId);
     };
 

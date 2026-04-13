@@ -10,8 +10,8 @@
   background: rgba(41, 115, 178, 0.60);
   color: #FFF;
   font-family: Saira;
-  padding: 5%;
-  gap: 3rem;
+  padding: 3%;
+  gap: 2rem;
 }
 
 .title-App{
@@ -27,8 +27,8 @@
 }
 
 .imgNosotros {
-  width: 570px;
-  max-width: 100%;
+  width: 60%;
+  border-radius: 50%;
 }
 
 .separator{
@@ -67,7 +67,7 @@
 }
 
 .third{
-  background-image: url('src/images/visionBack.png');
+  background-image: url('/src/images/visionBack.png');
   background-size: cover;
   background-position: center;
   min-height: 95vh;

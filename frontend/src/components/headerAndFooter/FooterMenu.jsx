@@ -123,7 +123,7 @@ export default function FooterMenu(){
                     </div>
 
                     <div className='four'>
-                        <h4>Contactanos</h4>
+                        <h4>Contáctanos</h4>
                         <form onSubmit={handleSendComment}>
                             <ul>
                                 <li>

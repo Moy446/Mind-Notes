@@ -92,6 +92,9 @@ class CalendarioController {
             }else{
                 horarioPsicologo = await usuario.getHorarioPsicologo(idAgendado)
             }
+            if (!horarioPsicologo){
+                throw new Error('El psicologo no a habilitado su horario de trabajo');
+            }
             const dias = ["dom","lun","mar","mie","jue","vie","sab"];
             const fecha = new Date(fechaCita + "T00:00:00");
             const dia = dias[fecha.getDay()]
@@ -109,6 +112,9 @@ class CalendarioController {
             }
 
             //validar que no haya citas en el mismo horario
+            if (horaInicio >= horaFin) {
+                throw new Error('La hora de inicio debe ser menor que la hora de fin');
+            }
             const agenda = new Agenda();
             let citasDelDia = []
             if (esPsicologo){
