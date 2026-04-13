@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import Spinner from './components/spinner';
+import Spinner from './components/Spinner';
 import clienteAxios from './services/axios';
 import MeetMenu from './components/MeetMenu';
 import CitasList from './components/CitasList';
