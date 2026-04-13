@@ -54,7 +54,7 @@ const fetchSelectedName = useCallback(async () => {
             // Normalizar la foto: si no empieza con http ni con /, construir URL completa
             let fotoUrl = paciente.fotoPerfilPaciente || '/src/images/pimg2.png';
             if (fotoUrl && fotoUrl !== '/src/images/pimg2.png' && !fotoUrl.startsWith('http') && !fotoUrl.startsWith('/')) {
-                fotoUrl = `http://localhost:5000/${fotoUrl}`;
+                fotoUrl = `${process.env.VITE_BACKEND_BASE_URL}/${fotoUrl}`;
             }
             setImage(fotoUrl);
             console.log('Foto del paciente:', fotoUrl);

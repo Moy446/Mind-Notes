@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const clienteAxios = axios.create({
-    baseURL: 'http://localhost:5000/api',
+    baseURL: process.env.VITE_BACKEND_URL,
     withCredentials: true, // Enviar cookies automáticamente
 });
 

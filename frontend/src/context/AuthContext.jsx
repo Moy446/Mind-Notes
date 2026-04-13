@@ -13,7 +13,7 @@ const normalizeFotoPerfil = (user) => {
       // Es una ruta relativa (uploads/images/...), construir URL completa
       return {
         ...user,
-        fotoPerfil: `http://localhost:5000/${user.fotoPerfil}`
+        fotoPerfil: `${process.env.VITE_BACKEND_BASE_URL}/${user.fotoPerfil}`
       };
     }
   }
