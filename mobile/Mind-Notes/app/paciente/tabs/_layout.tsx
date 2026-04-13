@@ -1,43 +1,18 @@
 
-import { View, Text, Image, ActivityIndicator } from 'react-native'
-import React, { useEffect } from 'react'
+import { Image } from 'react-native'
+import React from 'react'
 import { tabStyle } from '@/styles/tabStyle'
 import { Colors } from '@/constants/theme'
-import { UseAuthStore } from '@/store/auth/useAuthStore'
-import { Redirect, Tabs } from 'expo-router'
+import { Tabs } from 'expo-router'
 import TabBarButton from '@/components/tabs/TabBarButton'
 
 
-const tabsLayout = () => {
-    
-        const user = UseAuthStore(state => state.user);
-        const status = UseAuthStore(state => state.status);
-        const { checkStatus } = UseAuthStore();
-    
-        useEffect(() => {
-            checkStatus();
-        }, []);
-    
-        if(status === 'checking'){
-            return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <ActivityIndicator />
-                </View>
-            )
-        }
-    
-        if (status === 'unauthenticated') {
-            return <Redirect href={'/auth/login'} />;
-        }
-    
-        if (user?.role === 'psicologo') {
-            return <Redirect href={'/psicologo/tabs/chat'} />
-        }
+const tabsLayout = () => {    
         
     return (
         <Tabs
             screenOptions={{
-                headerStyle: tabStyle.generalTab,
+                headerStyle: tabStyle.topTab,
                 headerTitle: '',
                 headerLeft: () => (
                     <Image
@@ -46,7 +21,7 @@ const tabsLayout = () => {
                     />
                 ),
                 tabBarStyle: {
-                    ...tabStyle.generalTab,
+                    ...tabStyle.buttonTab,
                     elevation: 0,
                     shadowColor: 'transparent',
                     borderTopWidth: 0,

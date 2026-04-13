@@ -20,6 +20,8 @@ import cookieCtrl from './helpers/cookiesControll.js';
 import paymentController from './controllers/paymentController.js';
 import enviarNotificaciones from './jobs/notificaciones.js';
 import { ins } from 'framer-motion/client';
+import fs from 'fs';
+import path from 'path';
 
 
 const app = express();
@@ -91,6 +93,25 @@ async function startServer() {
         next();
     });
 
+    //verficar las carpetas de uploads
+
+    const folders = [
+    'uploads/files',
+    'uploads/audio',
+    'uploads/images',
+    'uploads/docs'
+    ];
+
+    folders.forEach(folder => {
+    const fullPath = path.join('./', folder);
+
+    if (!fs.existsSync(fullPath)) {
+        fs.mkdirSync(fullPath, { recursive: true });
+        console.log(`Carpeta creada: ${fullPath}`);
+    } else {
+        console.log(`Ya existe: ${fullPath}`);
+    }
+    });
 
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
 

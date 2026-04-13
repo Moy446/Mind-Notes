@@ -117,6 +117,7 @@ router.get('/google/callback',
             cookieCtrl.setAuthCookies(res, accessToken, refreshToken);
 
             // Redirigir al chat según el rol con id en URL
+            const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
             res.redirect(`${frontendUrl}/${role}/chat/${usuario.idUsuario}`);
         } catch (error) {
             console.error('Error en Google callback:', error);
