@@ -100,7 +100,7 @@ export default function PerfilPsiInfo(props) {
 
                 setUserData(prev => ({
                     ...prev,
-                    fotoPerfil: `http://localhost:5000/${result.fotoPerfil}`
+                    fotoPerfil: `${process.env.VITE_BACKEND_BASE_URL}/${result.fotoPerfil}`
                 }));
                 updateUser({ fotoPerfil: result.fotoPerfil });
 
