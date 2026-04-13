@@ -53,6 +53,7 @@ const LoginScreen = () => {
             router.replace('/psicologo/tabs/chat')
             return;
         }
+        
     }
 
     const handleGoogleLogin = async () => {
@@ -73,6 +74,20 @@ const LoginScreen = () => {
                 router.replace('/psicologo/tabs/chat');
             }
         } else {
+            if (result.errorCode === 'GOOGLE_ACCOUNT_NOT_REGISTERED') {
+                Alert.alert(
+                    'Cuenta no registrada',
+                    'No existe una cuenta con este correo. Debes registrarte primero.',
+                    [
+                        { text: 'Cancelar', style: 'cancel' },
+                        {
+                            text: 'Ir a registro',
+                            onPress: () => router.push('/auth/register')
+                        }
+                    ]
+                );
+                return;
+            }
             Alert.alert('Error', result.message || 'Error al iniciar sesión con Google');
         }
     };

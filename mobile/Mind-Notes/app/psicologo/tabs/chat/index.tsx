@@ -22,6 +22,7 @@ import {
   ChatInfo,
   Message,
   enviarMensaje,
+  subirArchivo,
 } from '@/core/actions/chat/chatService';
 import { initializeSocket, getSocket, disconnectSocket } from '@/core/API/socketService';
 import { ChatSelector } from '@/components/chat/ChatSelector';
@@ -32,6 +33,7 @@ import { LinkedDocumentsPanel } from '@/components/chat/LinkedDocumentsPanel';
 import { QrScannerModal } from '@/components/chat/QrScannerModal';
 import { chatPsicologoStyle } from '@/styles/chat/chatPsicologoStyle';
 import { Colors } from '@/constants/theme';
+import * as DocumentPicker from 'expo-document-picker';
 
 export default function ChatScreen() {
   const router = useRouter();
@@ -54,6 +56,7 @@ export default function ChatScreen() {
   const [showQrScanner, setShowQrScanner] = useState(false);
   const [uid, setUid] = useState('');
   const [uidLoading, setUidLoading] = useState(false);
+  const [uploadingFile, setUploadingFile] = useState(false);
   const [nombreMostrado, setNombreMostrado] = useState('Usuario no seleccionado');
   const [imagenMostrada, setImagenMostrada] = useState('/src/images/pimg2.png');
   const [showSelector, setShowSelector] = useState(true);
@@ -69,32 +72,54 @@ export default function ChatScreen() {
     }
   }, [selectedChat, user?.idUsuario]);
 
+  const loadPacientes = useCallback(async (showLoader = false) => {
+    if (!user?.idUsuario) return;
+
+    try {
+      if (showLoader) {
+        setLoading(true);
+      }
+      const data = await obtenerPacientesVinculados(user.idUsuario);
+      setPacientes(data);
+    } catch (error) {
+      Alert.alert('Error', 'No se pudieron cargar los pacientes');
+    } finally {
+      if (showLoader) {
+        setLoading(false);
+      }
+    }
+  }, [user?.idUsuario]);
+
   // Inicializar socket y cargar pacientes
   useEffect(() => {
     if (!user?.idUsuario) return;
 
-    const loadPacientes = async () => {
-      try {
-        setLoading(true);
-        const data = await obtenerPacientesVinculados(user.idUsuario);
-        setPacientes(data);
-
-        if (UseAuthStore.getState().token) {
-          initializeSocket(UseAuthStore.getState().token!);
-        }
-      } catch (error) {
-        Alert.alert('Error', 'No se pudieron cargar los pacientes');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadPacientes();
+    loadPacientes(true);
 
     return () => {
       disconnectSocket();
     };
-  }, [user?.idUsuario]);
+  }, [user?.idUsuario, loadPacientes]);
+
+    useEffect(() => {
+      if (!user?.idUsuario) return;
+
+      const token = UseAuthStore.getState().token;
+      if (!token) return;
+
+      const socket = initializeSocket(token);
+      socket.emit('joinUserRoom', { userId: user.idUsuario });
+
+      const handleChatListUpdate = () => {
+        loadPacientes(false);
+      };
+
+      socket.on('updateChatList', handleChatListUpdate);
+
+      return () => {
+        socket.off('updateChatList', handleChatListUpdate);
+      };
+    }, [user?.idUsuario, loadPacientes]);
 
   // Manejar selección de chat
   const handleSelectChat = useCallback(
@@ -153,6 +178,53 @@ export default function ChatScreen() {
     },
     [selectedChat, user]
   );
+
+  const handleUploadFile = useCallback(async () => {
+    if (!selectedChat || !user?.idUsuario || uploadingFile) return;
+
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: false,
+        copyToCacheDirectory: true,
+        type: [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'text/plain',
+          'audio/*',
+          'video/*',
+          'application/epub+zip',
+          'application/x-mobipocket-ebook',
+        ],
+      });
+
+      if (result.canceled || !result.assets?.length) return;
+
+      const file = result.assets[0];
+      const maxSize = 50 * 1024 * 1024;
+      if (typeof file.size === 'number' && file.size > maxSize) {
+        Alert.alert('Archivo demasiado grande', 'El maximo permitido es 50 MB.');
+        return;
+      }
+
+      setUploadingFile(true);
+      await subirArchivo(user.idUsuario, selectedChat, {
+        uri: file.uri,
+        name: file.name || `archivo-${Date.now()}`,
+        type: file.mimeType || 'application/octet-stream',
+      });
+
+      await refreshChatInfo();
+      Alert.alert('Archivo subido', 'El archivo se subio correctamente.');
+    } catch (error: any) {
+      const message =
+        error?.response?.data?.message ||
+        'No se pudo subir el archivo. Intenta de nuevo.';
+      Alert.alert('Error', message);
+    } finally {
+      setUploadingFile(false);
+    }
+  }, [selectedChat, user?.idUsuario, uploadingFile, refreshChatInfo]);
 
   // Ir atrás
   const handleGoBack = useCallback(() => {
@@ -215,7 +287,7 @@ export default function ChatScreen() {
     [ejecutarVinculacion]
   );
 
-  if (loading) {
+  if (loading && pacientes.length === 0) {
     return (
       <SafeAreaView style={chatPsicologoStyle.container}>
         <View style={chatPsicologoStyle.centerContent}>
@@ -258,6 +330,9 @@ export default function ChatScreen() {
           <MessageField
             onSendMessage={handleSendMessage}
             disabled={!selectedChat}
+            onUploadPress={handleUploadFile}
+            uploadDisabled={!selectedChat || uploadingFile}
+            uploadingFile={uploadingFile}
           />
         </View>
       )}

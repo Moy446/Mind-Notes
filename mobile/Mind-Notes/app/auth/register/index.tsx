@@ -9,11 +9,14 @@ import GoogleButton from '@/components/auth/GoogleButton'
 import { router } from 'expo-router'
 import UseRegister from '@/hooks/auth/UseRegister'
 import { registerPaciente, registerPsicologo } from '@/core/actions/auth/register.actions'
+import { loginWithGoogle } from '@/services/googleAuthService'
+import { UseAuthStore } from '@/store/auth/useAuthStore'
 import ThemedLink from '@/components/auth/ThemedLink'
 
 const RegisterScreen = () => {
 
   const {validarPassword} = UseRegister()
+  const changeStatus = UseAuthStore.getState().changeStatus;
   const [esPsicologo, setEsPsicologo] = useState(false);
   const [isPosting, setIsPosting] = useState(false)
   const [form, setForm] = useState({
@@ -65,6 +68,39 @@ const RegisterScreen = () => {
     }finally{
       setIsPosting(false)
     }
+  }
+
+  const handleGoogleAuth = async () => {
+    const selectedRole = esPsicologo ? 'psicologo' : 'paciente';
+
+    setIsPosting(true);
+    const result = await loginWithGoogle(selectedRole);
+    setIsPosting(false);
+
+    if (result.success) {
+      const sessionReady = changeStatus(result.accessToken, result.user);
+      if (!sessionReady) {
+        Alert.alert('Error', 'No se pudo guardar la sesión de Google');
+        return;
+      }
+
+      if (result.role === 'psicologo') {
+        router.replace('/psicologo/tabs/chat');
+      } else {
+        router.replace('/paciente/tabs/chat');
+      }
+      return;
+    }
+
+    if (result.errorCode === 'GOOGLE_ACCOUNT_NOT_REGISTERED') {
+      Alert.alert(
+        'Cuenta no registrada',
+        'Ese correo aún no existe. Completa el registro manual y luego inicia sesión.'
+      );
+      return;
+    }
+
+    Alert.alert('Error', result.message || 'Error al iniciar sesión con Google');
   }
 
 
@@ -146,7 +182,7 @@ const RegisterScreen = () => {
           disabled={isPosting}
           />
           <Text style={registerStyle.textStyle}> O ingresa con: </Text>
-          <GoogleButton onPress={()=>{console.log('Google login pressed')}} />
+            <GoogleButton onPress={handleGoogleAuth} />
       </View>
       <View style={registerStyle.bottomContainer}>
             <Text style={registerStyle.bottomTextTitle}>¡Bienvenido!</Text>

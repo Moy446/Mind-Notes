@@ -32,6 +32,15 @@ export default function FooterMenu(){
         const email = formData.email.trim();
         const mensaje = formData.mensaje.trim();
 
+        if (mensaje.length > 500) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Mensaje demasiado largo',
+                text: 'El mensaje no puede exceder los 500 caracteres.'
+            });
+            return;
+        }
+
         if (!nombre || !email || !mensaje) {
             Swal.fire({
                 icon: 'warning',

@@ -13,11 +13,17 @@ import { MaterialIcons } from '@expo/vector-icons';
 interface MessageFieldProps {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
+  onUploadPress?: () => void;
+  uploadDisabled?: boolean;
+  uploadingFile?: boolean;
 }
 
 export const MessageField: React.FC<MessageFieldProps> = ({
   onSendMessage,
   disabled = false,
+  onUploadPress,
+  uploadDisabled = false,
+  uploadingFile = false,
 }) => {
   const [message, setMessage] = useState('');
 
@@ -34,6 +40,16 @@ export const MessageField: React.FC<MessageFieldProps> = ({
       style={styles.container}
     >
       <View style={styles.inputContainer}>
+        {onUploadPress ? (
+          <TouchableOpacity
+            style={[styles.attachButton, (disabled || uploadDisabled) && styles.disabledButton]}
+            onPress={onUploadPress}
+            disabled={disabled || uploadDisabled}
+          >
+            <MaterialIcons name={uploadingFile ? 'hourglass-empty' : 'attach-file'} size={20} color="#fff" />
+          </TouchableOpacity>
+        ) : null}
+
         <TextInput
           style={styles.input}
           placeholder="Escribe un mensaje..."
@@ -84,6 +100,14 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     backgroundColor: '#2973B2',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  attachButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#48A6A7',
     justifyContent: 'center',
     alignItems: 'center',
   },

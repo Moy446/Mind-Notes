@@ -12,6 +12,7 @@ export default function MeetMenu(props) {
     //datos user = state setUsers = funcion para actualizar el state
     const [users, setUsers] = useState([]);
     const role = props.role;
+    const [selectedUser, setSelectedUser] = useState(null);
 
     const manana = new Date();
     manana.setDate(manana.getDate() + 1);
@@ -55,6 +56,7 @@ export default function MeetMenu(props) {
         })
     }
     const actualizarDatosPaciente = e => {
+        setSelectedUser(e);
         guardarDatosCita({
             ...datosCita,
             ["idUsuario"]: e.idUsuario,
@@ -137,14 +139,13 @@ export default function MeetMenu(props) {
             horaInicio: '',
             horaFin: ''
         })
+        setSelectedUser(null);
     }
 
     const cerrarVentana = () => {
         limpiarDatos();
         props.tipo ? props.handleEdit() : props.handleAdd();
     }
-
-    const [position, setPosition] = useState(null);
 
     //carga la informacion de la cita del paciente seleccionado
     const cargarDatosPaciente = async (idCita) => {
@@ -161,14 +162,6 @@ export default function MeetMenu(props) {
                     ["horaFin"]: res.data.cita.horaFin,
                     ["fotoPerfil"]: res.data.cita.fotoPerfil
                 })
-            }
-            for (let user of users) {
-                let cont = 0
-                if (user.idUsuario == res.data.cita.idUsuario) {
-                    setPosition(cont);
-                    break;
-                }
-                cont++;
             }
         } catch (error) {
             console.log(error);
@@ -194,7 +187,7 @@ export default function MeetMenu(props) {
                         getOptionValue={(u) => u.idUsuario}
                         components={{ IndicatorSeparator: () => null }}
                         onChange={actualizarDatosPaciente}
-                        value={users[position]}
+                        value={selectedUser}
                         formatOptionLabel={(u) => (
                             <div className='optionContentM' key={u.idUsuario}>
                                 <img src={u.fotoPerfil} className="avatarM" />
