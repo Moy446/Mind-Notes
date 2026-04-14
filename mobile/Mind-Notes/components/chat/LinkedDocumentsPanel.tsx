@@ -2,6 +2,8 @@ import React, { useMemo, useState } from 'react';
 import { Alert, Linking, Text, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { linkedDocumentsStyle } from '@/styles/chat/linkedDocumentsStyle';
+import { router } from 'expo-router'
+
 
 type LinkedFile = {
   _id?: string;
@@ -98,7 +100,7 @@ export const LinkedDocumentsPanel = ({
             <TouchableOpacity
               key={item._id || `${item.nombre || 'file'}-${index}`}
               style={linkedDocumentsStyle.fileItem}
-              onPress={() => openFile(item)}
+              onPress={() => router.push('/psicologo/document')}
             >
               <Text style={linkedDocumentsStyle.fileName} numberOfLines={1}>
                 {item.nombre || 'Archivo sin nombre'}
