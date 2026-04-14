@@ -27,6 +27,7 @@ import VerificarCuenta from './VerificarCuenta.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import GoogleCallback from './GoogleCallback.jsx'
 import ConfirmarCita from './confirmarCita.jsx'
+import DeleteAccountView from './DeleteAccountView.jsx'
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -61,6 +62,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/Login' element={<Login/>}/>
+        <Route path='/eliminar-cuenta' element={<DeleteAccountView/>}/>
         <Route path='/ReestablecerPassword' element={<ReestablecerPassword/>}/>
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
         <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />

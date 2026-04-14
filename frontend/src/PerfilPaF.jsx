@@ -42,11 +42,11 @@ export default function PerfilPaF(props){
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
                 });
-    
+
                 if (!result.isConfirmed) {
                     return;
                 }
-    
+
                 const deleteResult = await eliminarCuenta(user.id);
                 if (deleteResult.success) {
                     await Swal.fire({
