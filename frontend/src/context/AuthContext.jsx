@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import { authService } from '../services/authService';
+import { getImageUrl } from '../utils/imageHelper';
 
 export const AuthContext = createContext();
 
@@ -10,10 +11,10 @@ const normalizeFotoPerfil = (user) => {
   if (user.fotoPerfil) {
     // Si ya es URL completa o es una ruta local (/src/...), dejar como está
     if (!user.fotoPerfil.startsWith('http') && !user.fotoPerfil.startsWith('/')) {
-      // Es una ruta relativa (uploads/images/...), construir URL completa
+      // Es una ruta relativa (uploads/images/...), construir URL completa automáticamente
       return {
         ...user,
-        fotoPerfil: `${import.meta.env.VITE_BACKEND_BASE_URL}/${user.fotoPerfil}`
+        fotoPerfil: getImageUrl(user.fotoPerfil)
       };
     }
   }

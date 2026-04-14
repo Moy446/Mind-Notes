@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { API_CONFIG } from '../config/apiConfig';
 
 const clienteAxios = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_URL,
+    baseURL: API_CONFIG.API_BASE,
     withCredentials: true, // Enviar cookies automáticamente
 });
 
