@@ -11,7 +11,7 @@ const tabsPsicologo = () => {
   return (
     <Tabs
       screenOptions={{
-        headerStyle: tabStyle.generalTab,
+        headerStyle: tabStyle.topTab,
         headerTitle: '',
         headerLeft: () => (
           <Image
@@ -20,7 +20,7 @@ const tabsPsicologo = () => {
           />
         ),
         tabBarStyle: {
-          ...tabStyle.generalTab,
+          ...tabStyle.buttonTab,
           elevation: 0,
           shadowColor: 'transparent',
           borderTopWidth: 0,

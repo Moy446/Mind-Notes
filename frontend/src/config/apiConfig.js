@@ -16,10 +16,11 @@ export const API_CONFIG = {
 /**
  * Construir URL de imagen desde el backend
  * @param {string} relativePath - Ruta relativa de la imagen
+ * @param {string} [defaultImage='/src/images/testimg.png'] - Imagen por defecto si no hay ruta
  * @returns {string} URL completa de la imagen
  */
-export const getImageUrl = (relativePath) => {
-  if (!relativePath) return '/src/images/testimg.png';
+export const getImageUrl = (relativePath, defaultImage = '/src/images/testimg.png') => {
+  if (!relativePath) return defaultImage;
   
   const cleanPath = String(relativePath).replace(/^undefined\/?/, '');
   
