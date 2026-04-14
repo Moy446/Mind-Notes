@@ -51,6 +51,8 @@ export const exchangeGoogleTokenForBackendAuth = async (
   user?: User;
   message?: string;
   role?: string;
+  errorCode?: string;
+  email?: string;
 }> => {
   try {
     const payload: { idToken: string; role?: 'paciente' | 'psicologo' } = { idToken };
@@ -72,7 +74,9 @@ export const exchangeGoogleTokenForBackendAuth = async (
     if (!response.ok || !data?.success) {
       return {
         success: false,
-        message: data?.message || 'Error en la autenticación'
+        message: data?.message || 'Error en la autenticación',
+        errorCode: data?.code,
+        email: data?.email
       };
     }
 
@@ -113,6 +117,8 @@ export const loginWithGoogle = async (
   user?: User;
   role?: string;
   message?: string;
+  errorCode?: string;
+  email?: string;
 }> => {
   try {
     if (Constants.appOwnership === 'expo') {
@@ -151,7 +157,9 @@ export const loginWithGoogle = async (
 
       return {
         success: false,
-        message: backendResponse.message || 'Error en la autenticación'
+        message: backendResponse.message || 'Error en la autenticación',
+        errorCode: backendResponse.errorCode,
+        email: backendResponse.email
       };
     }
 

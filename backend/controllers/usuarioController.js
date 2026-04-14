@@ -652,8 +652,24 @@ class UsuarioController {
 
             const usuarioModel = new Usuario();
 
+            if (typeof datosActualizar.nombre === 'string' && datosActualizar.nombre.trim().length > 45) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'El nombre no puede tener más de 45 caracteres'
+                });
+            }
+
             // Si se está actualizando el email, verificar que no exista
             if (datosActualizar.email) {
+                const email = datosActualizar.email.trim();
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Correo electrónico inválido'
+                    });
+                }
+
                 const emailExistente = await usuarioModel.findByEmail(datosActualizar.email);
                 if (emailExistente && emailExistente.idUsuario.toString() !== id) {
                     return res.status(400).json({

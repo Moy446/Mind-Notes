@@ -19,7 +19,7 @@ export default function Switch(props) {
     return (
         <div className='div-switchContainer'>
             <input type="checkbox" id={props.id} className='offScreen' checked={props.valor} onChange={handleChange}/>
-            <label for={props.id} className="div-switch"></label>
+            <label htmlFor={props.id} className="div-switch"></label>
         </div>
     );
 }
