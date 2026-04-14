@@ -11,6 +11,7 @@ import AddBtn from './components/AddBtn';
 import { authService } from './services/authService';
 import Select from 'react-select'
 import './Calendario.css'
+import userDefault from './images/userDefault.png'
 
 
 
@@ -61,7 +62,7 @@ export default function Calendario() {
                     end: new Date(`${formatDate(cita.fecha)}T${cita.horaF}:00`),
                     extendedProps: {
                         estado: cita.estado,
-                        img: cita.img || './images/userDefault.png'
+                        img: cita.img || userDefault
                     }
                 })));
                 setIsLoading(false);
@@ -106,7 +107,7 @@ export default function Calendario() {
                 end: new Date(`${formatDate(cita.fecha)}T${cita.horaF}:00`),
                 extendedProps: {
                     estado: cita.estado,
-                    img: cita.img || '/src/images/userDefault.png'
+                    img: cita.img || userDefault
                 }
             })));
 
