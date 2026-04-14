@@ -17,14 +17,14 @@ class CookiesController {
     }
 
     setAuthCookies(res, accessToken, refreshToken) {
-        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.STAGW === 'production';
         const sameSite = useSecure ? 'None' : 'Lax';
         const cookiesOptions = { httpOnly: true, secure: useSecure, sameSite };
         res.cookie('accessToken', accessToken, { ...cookiesOptions, maxAge: this.ACCESS_TTL_MS });
         res.cookie('refreshToken', refreshToken, { ...cookiesOptions, maxAge: this.REFRESH_TTL_MS });
     }
     clearAuthCookies(res) {
-        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.STAGW === 'production';
         const sameSite = useSecure ? 'None' : 'Lax';
         const cookiesOptions = { httpOnly: true, secure: useSecure, sameSite };
         res.clearCookie('accessToken', cookiesOptions);
