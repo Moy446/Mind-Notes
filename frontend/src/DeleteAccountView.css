@@ -1,0 +1,173 @@
+.delete-page {
+    min-height: 100vh;
+    width: 100%;
+    background: #F2EFE7;
+}
+
+.delete-page-main {
+    min-height: 60vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    justify-items: center;
+    align-items: center;
+    padding: 34px 16px;
+}
+
+.delete-page-hero {
+    width: min(920px, 96vw);
+    border-radius: 22px;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(27, 77, 120, 0.24);
+    border: 1px solid #c9d8e5;
+    padding: 22px 24px;
+    color: #1f1f1f;
+    font-family: 'Saira';
+}
+
+.delete-page-hero h1 {
+    margin: 0 0 8px;
+    font-size: 37px;
+    font-weight: 600;
+}
+
+.delete-page-hero p {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.delete-page-form {
+    width: min(720px, 96vw);
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: 'Saira';
+}
+
+.delete-page-title {
+    margin: 0;
+    color: #1f1f1f;
+    font-size: 34px;
+    font-weight: 500;
+}
+
+.delete-page-subtitle {
+    margin: 0 0 4px;
+    color: #2e2e2e;
+    font-size: 18px;
+}
+
+.delete-page-label {
+    color: #1d1d1d;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.delete-page-input,
+.delete-page-textarea {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid #9fbdd6;
+    padding: 12px 14px;
+    font-family: 'Saira';
+    font-size: 17px;
+    color: #121212;
+    background: #fff;
+}
+
+.delete-page-input:focus,
+.delete-page-textarea:focus {
+    outline: 2px solid rgba(41, 115, 178, 0.25);
+    border-color: #2973B2;
+}
+
+.delete-page-textarea {
+    min-height: 130px;
+    resize: vertical;
+}
+
+.delete-page-button {
+    margin-top: 6px;
+    border: none;
+    border-radius: 14px;
+    background: #2973B2;
+    color: #fff;
+    padding: 13px 18px;
+    font-family: 'Saira';
+    font-size: 22px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.delete-page-button:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+}
+
+.delete-page-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+@font-face {
+    font-family: 'Saira';
+    src: url('./fonts/Saira.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+}
+
+@media (max-width: 768px) {
+    .delete-page-main {
+        padding: 24px 12px;
+    }
+
+    .delete-page-hero h1 {
+        font-size: 31px;
+    }
+
+    .delete-page-hero p,
+    .delete-page-subtitle {
+        font-size: 17px;
+    }
+
+    .delete-page-title {
+        font-size: 29px;
+    }
+
+    .delete-page-label,
+    .delete-page-input,
+    .delete-page-textarea {
+        font-size: 16px;
+    }
+
+    .delete-page-button {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .delete-page-hero {
+        border-radius: 16px;
+        padding: 16px;
+    }
+
+    .delete-page-hero h1 {
+        font-size: 25px;
+    }
+
+    .delete-page-title {
+        font-size: 24px;
+    }
+
+    .delete-page-form {
+        border-radius: 16px;
+        padding: 16px;
+    }
+}

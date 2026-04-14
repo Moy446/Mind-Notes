@@ -26,11 +26,11 @@ export default function AudioMenu(props) {
                     nombre: p.nombrePaciente,
                     id: p.idPaciente,
                     fotoPerfil: (() => {
-                        let foto = p.fotoPerfilPaciente || '/src/images/userDefault.png';
-                        if (foto && foto !== '/src/images/userDefault.png' && !foto.startsWith('http') && !foto.startsWith('/')) {
-                            return `${process.env.VITE_BACKEND_URL_NoAPI}/${foto}`;
+                        const foto = p.fotoPerfilPaciente || '/src/images/userDefault.png';
+                        if (foto === '/src/images/userDefault.png') {
+                            return foto;
                         }
-                        return foto;
+                        return getImageUrl(foto);
                     })()
                 })));
 
