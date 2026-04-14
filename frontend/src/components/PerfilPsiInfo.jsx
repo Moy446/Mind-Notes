@@ -6,6 +6,7 @@ import EditModal from './EditModal';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { actualizarPerfil, cambiarFotoPerfil } from '../services/usuarioService';
+import { getImageUrl } from '../utils/imageHelper';
 import Swal from 'sweetalert2';
 
 export default function PerfilPsiInfo(props) {
@@ -100,7 +101,7 @@ export default function PerfilPsiInfo(props) {
 
                 setUserData(prev => ({
                     ...prev,
-                    fotoPerfil: `${import.meta.env.VITE_BACKEND_BASE_URL}/${result.fotoPerfil}`
+                    fotoPerfil: getImageUrl(result.fotoPerfil)
                 }));
                 updateUser({ fotoPerfil: result.fotoPerfil });
 
