@@ -15,20 +15,36 @@ export default function setupPassport(passport) {
     async (req, accessToken, refreshToken, profile, done) => {
         try {
             const usuarioModel = new Usuario();
+            const googleEmail = profile.emails?.[0]?.value;
+            const googleName = profile.displayName || googleEmail?.split('@')[0] || 'Usuario';
+            const googlePhoto = profile.photos?.[0]?.value || null;
+
+            if (!googleEmail) {
+                return done(null, false, { code: 'GOOGLE_EMAIL_NOT_AVAILABLE' });
+            }
             
             let usuario = await usuarioModel.findByGoogleId(profile.id);
             
             if (!usuario) {
-                usuario = await usuarioModel.findByEmail(profile.emails[0].value);
+                usuario = await usuarioModel.findByEmail(googleEmail);
                 
                 if (usuario) {
                     await usuarioModel.actualizarGoogleId(usuario.idUsuario, profile.id);
                 } else {
-                    return done(null, false, {
-                        code: 'GOOGLE_ACCOUNT_NOT_REGISTERED',
-                        email: profile.emails[0].value
-                    });
+                    const esPsicologo = req?.cookies?.google_role === 'psicologo';
+                    await usuarioModel.create(
+                        {
+                            nombre: googleName,
+                            email: googleEmail,
+                            googleId: profile.id,
+                            fotoPerfil: googlePhoto,
+                            verificado: true
+                        },
+                        esPsicologo
+                    );
                 }
+
+                usuario = await usuarioModel.findByEmail(googleEmail);
             }
             
             return done(null, usuario);
