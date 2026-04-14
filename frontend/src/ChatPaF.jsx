@@ -16,6 +16,7 @@ import { AuthContext } from './context/AuthContext';
 import { obtenerPsicologosVinculados } from './services/vinculacionService';
 import { obtenerMensajes, obtenerInformacionChat } from './services/chatService';
 import clienteAxios from './services/axios';
+import { getImageUrl } from './utils/imageHelper';
 
 export default function ChatPsiF(props){
 
@@ -50,10 +51,10 @@ export default function ChatPsiF(props){
         if (psicologo) {
             setN(psicologo.nombrePsicologo || psicologo?.nombre);
             
-            // Normalizar la foto: si no empieza con http ni con /, construir URL completa
-            let fotoUrl = psicologo.fotoPerfilPsicologo || '/src/images/pimg2.png';
-            if (fotoUrl && fotoUrl !== '/src/images/pimg2.png' && !fotoUrl.startsWith('http') && !fotoUrl.startsWith('/')) {
-                fotoUrl = `${import.meta.env.VITE_BACKEND_BASE_URL}/${fotoUrl}`;
+            // Usar helper centralizado para construir URL
+            let fotoUrl = getImageUrl(psicologo.fotoPerfilPsicologo || '');
+            if (!fotoUrl || fotoUrl === '/src/images/testimg.png') {
+                fotoUrl = '/src/images/pimg2.png';
             }
             setImage(fotoUrl);
         } else {
