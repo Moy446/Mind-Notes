@@ -9,7 +9,7 @@ import { obtenerPsicologosVinculados } from '../services/vinculacionService';
 import { AuthContext } from '../context/AuthContext';
 import { getImageUrl } from '../utils/imageHelper';
 import socket from '../services/socketService';
-import userDefault from './images/userDefault.png'
+import userDefault from '../images/userDefault.png'
 
 
 export default function ChatSelector(props) {

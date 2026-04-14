@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import clienteAxios from '../services/axios';
 import Select from 'react-select';
 import { getImageUrl } from '../utils/imageHelper';
-import userDefault from './images/userDefault.png'
+import userDefault from '../images/userDefault.png'
 
 export default function AudioMenu(props) {
 
