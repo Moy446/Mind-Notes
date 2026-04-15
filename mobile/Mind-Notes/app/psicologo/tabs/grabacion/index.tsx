@@ -1,17 +1,17 @@
 import { View, Text, Pressable, Animated, Modal } from 'react-native'
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { grabadoraStyle } from '@/styles/grabadora/grabadora'
 import FakeWave from '@/components/grabadora/Ondas'
 import { Audio } from 'expo-av'
 import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import CustomSelector from '@/components/popup/CustomSelector'
 
-const recordScreen = () => {
-  const [recording, setRecording] = useState(null);
-  const [audioUri, setAudioUri] = useState(null);
-  const [showPopup, setShowPopup] = useState(false);
-  const [resumen, setResumen] = useState(false);
-  const [transcript, setTranscript] = useState(false);
+const RecordScreen = () => {
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const [audioUri, setAudioUri] = useState<string | null>(null);
+  const [showPopup, setShowPopup] = useState<boolean>(false);
+  const [resumen, setResumen] = useState<boolean>(false);
+  const [transcript, setTranscript] = useState<boolean>(false);
   const scale = useRef(new Animated.Value(1)).current;
   const { userList, loadUserList } = useCalendarPsicologo()
 
@@ -41,6 +41,8 @@ const recordScreen = () => {
 
   const stopRecording = async () => {
     try {
+      if (!recording) return;
+
       await recording.stopAndUnloadAsync();
 
       const uri = recording.getURI();
@@ -121,4 +123,4 @@ const recordScreen = () => {
   )
 }
 
-export default recordScreen
+export default RecordScreen
