@@ -200,8 +200,8 @@ export default function ChatSelector(props) {
                             ? (contact.ultimoMensaje?.mensaje || '')
                             : (contact.ultimoMensaje || contact.ultimoMensajeTexto || '');
                         const imagenFinal = userRole === 'psicologo'
-                            ? getImageUrl(contact.fotoPerfilPaciente.includes('userDefault') ? userDefault : contact.fotoPerfilPaciente, userDefault)
-                            : getImageUrl(contact.fotoPerfilPsicologo.includes('userDefault') ? userDefault : contact.fotoPerfilPsicologo, userDefault);
+                            ? contact.fotoPerfilPaciente.includes('userDefault') ? userDefault : getImageUrl(contact.fotoPerfilPaciente, userDefault)
+                            : contact.fotoPerfilPsicologo.includes('userDefault') ? userDefault : getImageUrl(contact.fotoPerfilPsicologo, userDefault);
                             return (
                                 <ChatBox
                                     key={contactId}
