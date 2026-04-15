@@ -12,6 +12,7 @@ import { authService } from './services/authService';
 import Select from 'react-select'
 import './Calendario.css'
 import userDefault from './images/userDefault.png'
+import { getImageUrl } from './utils/imageHelper';
 
 
 
@@ -166,7 +167,7 @@ export default function Calendario() {
                     }}
                     eventContent={(eventInfo) => {
                         const estado = eventInfo.event.extendedProps.estado;
-                        const img = eventInfo.event.extendedProps.img;
+                        const img = eventInfo.event.extendedProps.img.includes('userDefault') ? userDefault : getImageUrl(eventInfo.event.extendedProps.img, userDefault);
 
                         let color = "#A3D8F4";
 
