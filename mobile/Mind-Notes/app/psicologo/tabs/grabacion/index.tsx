@@ -1,19 +1,26 @@
 import { View, Text, Pressable, Animated, Modal } from 'react-native'
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useState, useRef, use } from 'react'
 import { grabadoraStyle } from '@/styles/grabadora/grabadora'
 import FakeWave from '@/components/grabadora/Ondas'
 import { Audio } from 'expo-av'
 import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import CustomSelector from '@/components/popup/CustomSelector'
+import { subirGrabacion } from '@/core/actions/grabacion/grabacion.actions'
 
 const RecordScreen = () => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [audioUri, setAudioUri] = useState<string | null>(null);
   const [showPopup, setShowPopup] = useState<boolean>(false);
   const [resumen, setResumen] = useState<boolean>(false);
-  const [transcript, setTranscript] = useState<boolean>(false);
+  const [grabacion, setGrabacion] = useState<boolean>(false);
   const scale = useRef(new Animated.Value(1)).current;
   const { userList, loadUserList } = useCalendarPsicologo()
+  const [selectedUser, setSelectedUser] = useState({
+    idUsuario: '',
+    nombre: '',
+  });
+  const [isRecording, setIsRecording] = useState(false);
+  const [isStopping, setIsStopping] = useState(false);
 
   useEffect(() => {
     loadUserList()
@@ -23,6 +30,10 @@ const RecordScreen = () => {
     try {
       const permission = await Audio.requestPermissionsAsync();
       if (permission.status !== "granted") return;
+      if (selectedUser.idUsuario === '') {
+        alert('Selecciona un paciente para empezar la grabación')
+        return;
+      }
 
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
@@ -34,30 +45,53 @@ const RecordScreen = () => {
       );
 
       setRecording(recording);
+      setIsRecording(true)
     } catch (err) {
       console.error(err);
     }
   };
 
   const stopRecording = async () => {
+    if (!recording || isStopping) return;
+    setIsStopping(true);
     try {
-      if (!recording) return;
+      const status = await recording.getStatusAsync();
+      if (!status.isRecording) {
+        setRecording(null);
+        setIsRecording(false);
+        return;
+      }  
 
       await recording.stopAndUnloadAsync();
-
+      
       const uri = recording.getURI();
       setAudioUri(uri);
-
       console.log("Audio:", uri);
-
-      setRecording(null);
+      
+      const formData = new FormData();
+      formData.append("audio", {
+        uri: uri,
+        name: "grabacion.wav",
+        type: "audio/wav",
+      });
+      formData.append("idPaciente", selectedUser.idUsuario);
+      formData.append("nombrePaciente", selectedUser.nombre);
+      formData.append("resume", resumen);
+      formData.append("grabacion", grabacion);
+      subirGrabacion(formData);
+      alert('La grabación se está procesando, se le enviara un correo cuando esté lista');
     } catch (err) {
       console.error(err);
+      alert('Hubo un error para guardar la grabacion')
+    } finally {
+      setRecording(null);
+      setIsRecording(false)
+      setIsStopping(false);
     }
   };
 
   const handlePress = () => {
-    if (recording) {
+    if (isRecording) {
       stopRecording();
     } else {
       startRecording();
@@ -66,7 +100,7 @@ const RecordScreen = () => {
 
   useEffect(() => {
     Animated.timing(scale, {
-      toValue: recording ? 1.6 : 1,
+      toValue: isRecording ? 1.6 : 1,
       duration: 200,
       useNativeDriver: true,
     }).start();
@@ -77,7 +111,8 @@ const RecordScreen = () => {
       <FakeWave isRecording={!!recording} />
       <Pressable
         style={grabadoraStyle.boton}
-        onPress={() => setShowPopup(true)}
+        disabled={isStopping}
+        onPress={() => isRecording ? stopRecording() : setShowPopup(true)}
       >
         <Animated.View style={[
           grabadoraStyle.centroBoton,
@@ -94,6 +129,7 @@ const RecordScreen = () => {
                 data={userList || []}
                 value={'0'}
                 placeholder={'Selecciona el paciente'}
+                onChange={(user) => setSelectedUser({ idUsuario: user.id, nombre: user.nombre })}
               />
               <View style={grabadoraStyle.radioBtnContainer}>
 
@@ -104,16 +140,21 @@ const RecordScreen = () => {
                   <Text>Resumen</Text>
                 </Pressable>
 
-                <Pressable style={grabadoraStyle.radioBtn} onPress={() => setTranscript(!transcript)}>
+                <Pressable style={grabadoraStyle.radioBtn} onPress={() => setGrabacion(!grabacion)}>
                   <View style={grabadoraStyle.circleRadio}>
-                    <View style={transcript ? grabadoraStyle.active : null}/>
+                    <View style={grabacion ? grabadoraStyle.active : null}/>
                   </View>
-                  <Text>Transcripción</Text>
+                  <Text>Guardar grabación</Text>
                 </Pressable>
 
               </View>
 
-              <Pressable style={grabadoraStyle.acceptBtn}>
+              <Pressable style={grabadoraStyle.acceptBtn}
+                onPress={()=>{
+                  handlePress(); 
+                  setShowPopup(false)
+                }}
+              >
                 <Text style={grabadoraStyle.accetpText}>Aceptar</Text>
               </Pressable>
           </View>
