@@ -7,6 +7,7 @@ import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import CustomSelector from '@/components/popup/CustomSelector'
 import { subirGrabacion } from '@/core/actions/grabacion/grabacion.actions'
 
+
 const RecordScreen = () => {
   const [recording, setRecording] = useState<Audio.Recording | null>(null);
   const [audioUri, setAudioUri] = useState<string | null>(null);
@@ -21,10 +22,39 @@ const RecordScreen = () => {
   });
   const [isRecording, setIsRecording] = useState(false);
   const [isStopping, setIsStopping] = useState(false);
+  const [audioLevel, setAudioLevel] = useState(-160);
+  const [levels, setLevels] = useState(Array(40).fill(-160));
 
   useEffect(() => {
     loadUserList()
   }, [])
+
+  useEffect(() => {
+  let interval: any;
+
+  if (recording && isRecording) {
+    interval = setInterval(async () => {
+      try {
+        const status = await recording.getStatusAsync();
+
+        if (status.metering !== undefined) {
+          setAudioLevel(status.metering);
+
+          setLevels(prev => [
+            status.metering,
+            ...prev.slice(0, 39),
+          ]);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }, 100);
+  }
+
+  return () => {
+    if (interval) clearInterval(interval);
+  };
+}, [recording, isRecording]);
 
   const startRecording = async () => {
     try {
@@ -40,9 +70,10 @@ const RecordScreen = () => {
         playsInSilentModeIOS: true,
       });
 
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY
-      );
+      const { recording } = await Audio.Recording.createAsync({
+        ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
+        isMeteringEnabled: true,
+      });
 
       setRecording(recording);
       setIsRecording(true)
@@ -108,7 +139,7 @@ const RecordScreen = () => {
 
   return (
     <View style={grabadoraStyle.container}>
-      <FakeWave isRecording={!!recording} />
+      <FakeWave levels={levels} />
       <Pressable
         style={grabadoraStyle.boton}
         disabled={isStopping}
