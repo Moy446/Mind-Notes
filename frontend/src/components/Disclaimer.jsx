@@ -11,8 +11,8 @@ function DisclaimerComponent (props){
 
             <div className="body-container">
             <p>
-                Esta aplicacaion es una herramienta de apoyo para el psicologo para ayudar a mantener la calidad de la informacion durante la sesion psicologica. 
-                Cualquier duda o aclaracion no dude en consultarnos y consultar nuestro{" "}
+                Esta aplicación es una herramienta de apoyo para el psicólogo para ayudar a mantener la calidad de la información durante la sesión psicológica. 
+                Cualquier duda o aclaración no dude en consultarnos y consultar nuestro{" "}
 
                 <span
                 className="link"
@@ -30,7 +30,7 @@ function DisclaimerComponent (props){
                 Términos y condiciones
                 </span>
 
-                {' '}de esta aplicacion.
+                {' '}de esta aplicación.
             </p>
 
             <button
