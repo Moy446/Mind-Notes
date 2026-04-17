@@ -1,5 +1,3 @@
-import { th } from "framer-motion/client";
-import dbClient from "../config/dbClient.js";
 import Chat from "../models/Chat.js";
 import { ObjectId } from "mongodb";
 import fs from "fs";
@@ -24,19 +22,16 @@ class ChatController {
     async obtenerMensajes(req, res) {
         const { idPsicologo, idPaciente } = req.params;
         try {
-            console.log('🔍 Buscando mensajes para:', { idPsicologo, idPaciente });
             const chat = new Chat();
             const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
 
             if (!chatData) {
-                console.log('❌ Chat no encontrado');
                 return res.status(404).json({ success: false, message: 'Chat no encontrado', data: [] });
             }
 
-            console.log('✅ Chat encontrado con', chatData.mensajes?.length || 0, 'mensajes');
             res.status(200).json({ success: true, data: chatData.mensajes || [] });
         } catch (error) {
-            console.error('❌ Error al obtener mensajes:', error);
+            console.error('Error al obtener mensajes:', error);
             res.status(500).json({ success: false, message: 'Error al obtener mensajes: ' + error.message, data: [] });
         }
     }
