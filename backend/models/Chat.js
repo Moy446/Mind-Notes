@@ -1,6 +1,5 @@
 import dbClient from "../config/dbClient.js";
 import { ObjectId } from "mongodb";
-import fs from 'fs';
 
 /* Modelo de datos para Chat
    Aqui unicamente se definen las operaciones relacionadas con la coleccion de Chat
