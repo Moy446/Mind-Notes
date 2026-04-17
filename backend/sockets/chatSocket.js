@@ -12,8 +12,14 @@ export default (io) => {
 
     // Unirse a una sala de chat (ej: 'chat-psicologoId-pacienteId')
     socket.on('joinChat', ({ idPsicologo, idPaciente }) => {
-      const room = `chat-${idPsicologo}-${idPaciente}`;
-      socket.join(room);
+      try {
+        if (!idPsicologo || !idPaciente) return;
+        const room = `chat-${idPsicologo}-${idPaciente}`;
+        socket.join(room);
+      }
+      catch (error) {
+        console.error('Error al unirse a la sala de chat:', error);
+      }
     });
 
     // Enviar mensaje
@@ -59,7 +65,9 @@ export default (io) => {
           mensaje,
           timestamp: nuevoMensaje.timestamp
         });
-      } catch (error) {}
+      } catch (error) {
+        console.error('Error al enviar mensaje:', error);
+      }
     });
 
     socket.on('disconnect', () => {});
