@@ -114,6 +114,21 @@ class Cita {
             throw new Error("Error al buscar citas por fecha: " + error);
         }
     }
+
+    async eliminarPorUsuario(idUsuario) {
+        try {
+            const resultado = await this.colCitas.deleteMany({
+                $or: [
+                    { idPsicologo: new ObjectId(idUsuario) },
+                    { idPaciente: new ObjectId(idUsuario) }
+                ]
+            });
+
+            return resultado.deletedCount;
+        } catch (error) {
+            throw new Error('Error al eliminar citas del usuario: ' + error.message);
+        }
+    }
 }
 
 export default Cita;
