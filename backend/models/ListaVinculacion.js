@@ -256,5 +256,20 @@ class ListaVinculacion {
         }
     }
 
+    async eliminarPorUsuario(idUsuario) {
+        try {
+            const resultado = await this.colListaVinculacion.deleteMany({
+                $or: [
+                    { idPsicologo: new ObjectId(idUsuario) },
+                    { idPaciente: new ObjectId(idUsuario) }
+                ]
+            });
+
+            return resultado.deletedCount;
+        } catch (error) {
+            throw new Error('Error al eliminar vinculaciones del usuario: ' + error.message);
+        }
+    }
+
 }
 export default ListaVinculacion;

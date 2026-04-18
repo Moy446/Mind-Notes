@@ -66,8 +66,15 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "93fcf703-2bc7-4b2b-af1a-e79671f916b6"
+        "projectId": "b8e7d630-c22f-4bdc-8b36-1b210f97315c"
       }
+    },
+    "owner": "bocchi446",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/b8e7d630-c22f-4bdc-8b36-1b210f97315c"
     }
   }
 }

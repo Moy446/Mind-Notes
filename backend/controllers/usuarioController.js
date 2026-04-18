@@ -1,5 +1,8 @@
 import Usuario from "../models/Usuario.js";
 import ListaVinculacion from "../models/ListaVinculacion.js";
+import Chat from "../models/Chat.js";
+import Cita from "../models/Cita.js";
+import Agenda from "../models/Agenda.js";
 import Bcrypt from 'bcryptjs';
 import cookieCtrl from "../helpers/cookiesControll.js";
 import emailService from "../helpers/emailService.js";
@@ -902,12 +905,57 @@ class UsuarioController {
         try {
             const idUsuario = req.user?.idUsuario;
             const usuarioModel = new Usuario();
+            const listaVinculacionModel = new ListaVinculacion();
+            const chatModel = new Chat();
+            const citaModel = new Cita();
+            const agendaModel = new Agenda();
+
             if (!idUsuario) {
                 return res.status(400).json({
                     success: false,
                     message: 'ID de usuario es requerido'
                 });
             }
+
+            const usuario = await usuarioModel.findById(idUsuario);
+            if (!usuario) {
+                return res.status(404).json({
+                    success: false,
+                    message: 'Usuario no encontrado'
+                });
+            }
+
+            const archivosLocales = new Set();
+
+            if (usuario.fotoPerfil && typeof usuario.fotoPerfil === 'string' && !usuario.fotoPerfil.startsWith('http')) {
+                archivosLocales.add(usuario.fotoPerfil);
+            }
+
+            const [vinculacionesEliminadas, chatsEliminados, citasEliminadas, agendaEliminada] = await Promise.all([
+                listaVinculacionModel.eliminarPorUsuario(idUsuario),
+                chatModel.eliminarPorUsuario(idUsuario),
+                citaModel.eliminarPorUsuario(idUsuario),
+                agendaModel.eliminarPorUsuario(idUsuario)
+            ]);
+
+            for (const archivoPath of chatsEliminados.archivos) {
+                archivosLocales.add(archivoPath);
+            }
+
+            for (const archivoRelativo of archivosLocales) {
+                const filePath = path.resolve(path.resolve(), archivoRelativo);
+
+                try {
+                    if (fs.existsSync(filePath)) {
+                        await fs.promises.unlink(filePath);
+                    }
+                } catch (error) {
+                    if (error.code !== 'ENOENT') {
+                        console.warn('No se pudo eliminar archivo vinculado:', filePath, error.message);
+                    }
+                }
+            }
+
             const eliminado = await usuarioModel.eliminarCuenta(idUsuario);
             if (eliminado) {
                 // Limpiar cookies de autenticación
@@ -917,7 +965,13 @@ class UsuarioController {
                 res.clearCookie('connect.sid'); // Cookie de sesión de Passport
                 return res.status(200).json({
                     success: true,
-                    message: 'Cuenta eliminada exitosamente'
+                    message: 'Cuenta eliminada exitosamente',
+                    cascade: {
+                        vinculacionesEliminadas,
+                        chatsEliminados: chatsEliminados.deletedCount,
+                        citasEliminadas,
+                        agendaEliminada
+                    }
                 });
             } else {
                 return res.status(400).json({
