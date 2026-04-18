@@ -1,70 +1,88 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, Text, View } from 'react-native'
+import { Pressable, Text, View, Alert } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { horarioStyle } from '@/styles/perfil/horarioStyle'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/theme'
 import SwitchHorario from './SwitchHorario';
 import TimeRangePicker from '../popup/timePicker';
+import HorarioItem from './HorarioItem';
+import { obtenerHorario, actualizarHorario } from '@/core/actions/perfil/perfil.actions'
 
 interface Props {
     //Metodos
     onClose: () => void;
+    userId: string;
 }
 
-const HorarioPopUp = ({ onClose }: Props) => {
+const HorarioPopUp = ({ onClose, userId }: Props,) => {
 
-    const [dias, setInfo] = useState([
-        {
-            id: 1,
-            name: "Lunes",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-        {
-            id: 2,
-            name: "Martes",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-        {
-            id: 3,
-            name: "Miercoles",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-        {
-            id: 4,
-            name: "Jueves",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-        {
-            id: 5,
-            name: "Viernes",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-        {
-            id: 6,
-            name: "Sabado",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-        {
-            id: 7,
-            name: "Domingo",
-            value: false,
-            horaI: '',
-            horaF: ''
-        },
-    ])
+    const [dom, setDom] = useState({ activo: false, inicio: '', fin: '' });
+    const [lun, setLun] = useState({ activo: false, inicio: '', fin: '' });
+    const [mar, setMar] = useState({ activo: false, inicio: '', fin: '' });
+    const [mie, setMie] = useState({ activo: false, inicio: '', fin: '' });
+    const [jue, setJue] = useState({ activo: false, inicio: '', fin: '' });
+    const [vie, setVie] = useState({ activo: false, inicio: '', fin: '' });
+    const [sab, setSab] = useState({ activo: false, inicio: '', fin: '' });
+    const [loading, setLoading] = useState(true);
+
+    const handleGuardarHorario = async (horario) => {
+        try {
+            const response = await actualizarHorario(userId, horario);
+
+            if (response?.success) {
+                // Alert en React Native
+                Alert.alert("Éxito", "Horario guardado correctamente");
+            } else {
+                Alert.alert("Error", response?.message || "No se pudo guardar");
+            }
+
+        } catch (error) {
+            Alert.alert("Error", "No se pudo guardar el horario");
+        }
+    };
+
+    useEffect(() => {
+        const fetchHorario = async () => {
+            if (!userId) { setLoading(false); return; }
+            try {
+                const data = await obtenerHorario(userId);
+                const horarioRaw = data?.data?.horario;
+
+                if (horarioRaw) {
+                    const h = typeof horarioRaw === 'string' ? JSON.parse(horarioRaw) : horarioRaw;
+
+                    // Normalizar: Si viene booleano, convertir a objeto
+                    const normalizar = (valor) => {
+                        if (typeof valor === 'boolean') {
+                            return { activo: valor, inicio: '', fin: '' };
+                        }
+                        if (valor && typeof valor === 'object') {
+                            return {
+                                activo: valor.activo || false,
+                                inicio: valor.inicio || '',
+                                fin: valor.fin || ''
+                            };
+                        }
+                        return { activo: false, inicio: '', fin: '' };
+                    };
+
+                    setDom(normalizar(h.dom));
+                    setLun(normalizar(h.lun));
+                    setMar(normalizar(h.mar));
+                    setMie(normalizar(h.mie));
+                    setJue(normalizar(h.jue));
+                    setVie(normalizar(h.vie));
+                    setSab(normalizar(h.sab));
+                }
+            } catch (error) {
+                console.error('Error al obtener el horario:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchHorario();
+    }, [userId]);
 
     return (
         <View style={horarioStyle.container}>
@@ -75,43 +93,18 @@ const HorarioPopUp = ({ onClose }: Props) => {
                 <Text style={horarioStyle.title}>Horario</Text>
             </View>
             <View style={horarioStyle.daysContainer}>
-                {
-                    dias.map(dia =>
-                        <View key={dia.id}>
-                            <View style={horarioStyle.dayContainer} >
-                                <SwitchHorario temporal={dia.value} onChange={(val) => {
-                                    setInfo(prev =>
-                                        prev.map(d =>
-                                            d.id === dia.id
-                                                ? { ...d, value: val }
-                                                : d
-                                        )
-                                    );
-                                }} />
-                                <Text style={horarioStyle.dayText}>{dia.name}</Text>
-                            </View>
-                             {
-                                    dia.value && (
-                                        <View style={horarioStyle.horas}>
-                                            <TimeRangePicker
-                                                start={dia.horaI}
-                                                end={dia.horaF}
-                                                onChange={(s, e) => {
-                                                    setInfo(prev =>
-                                                        prev.map(d =>
-                                                            d.id === dia.id
-                                                                ? { ...d, horaI: s, horaF: e }
-                                                                : d
-                                                        )
-                                                    );
-                                                }}
-                                            />
-                                        </View>
-                                    )
-                                }
-                        </View>
-                    )
-                }
+
+                <HorarioItem day="Dom" valor={dom} onCambio={setDom} />
+                <HorarioItem day="Lun" valor={lun} onCambio={setLun} />
+                <HorarioItem day="Mar" valor={mar} onCambio={setMar} />
+                <HorarioItem day="Mie" valor={mie} onCambio={setMie} />
+                <HorarioItem day="Jue" valor={jue} onCambio={setJue} />
+                <HorarioItem day="Vie" valor={vie} onCambio={setVie} />
+                <HorarioItem day="Sab" valor={sab} onCambio={setSab} />
+
+                <Pressable style={horarioStyle.guardarBtn} onPress={() => handleGuardarHorario({ dom, lun, mar, mie, jue, vie, sab })}>
+                    <Text style={horarioStyle.textGuardar}>Guardar</Text>
+                </Pressable>
             </View>
         </View>
     )

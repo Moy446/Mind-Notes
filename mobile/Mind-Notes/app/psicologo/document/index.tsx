@@ -2,10 +2,13 @@ import { View, Text, Pressable, ScrollView, Modal } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/theme'
-import { router } from 'expo-router'
+import { router, useLocalSearchParams  } from 'expo-router'
+
 import { documentStyle } from '@/styles/document/documentStyle'
 
 const DocumentScreen = () => {
+
+    const { path } = useLocalSearchParams();
 
     return (
         <View style={documentStyle.container}>
@@ -16,7 +19,7 @@ const DocumentScreen = () => {
                 <Text style={documentStyle.textTitle}>Document Blabla</Text>
             </View>
             <ScrollView>
-                <Text style={documentStyle.documentText}>ljfkadlfjslakfjdsaklfjdsakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaafhdsajkfhaskjfsahfjklsaflsajñfdlksaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+                <Text style={documentStyle.documentText}>Path: {path}</Text>
             </ScrollView>
         </View>
     )
