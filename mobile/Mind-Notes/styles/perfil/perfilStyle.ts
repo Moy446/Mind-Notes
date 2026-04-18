@@ -34,9 +34,8 @@ export const perfilStyle = StyleSheet.create({
     imgPerfil:{
         height: '100%',
         borderRadius:400,
-        resizeMode: 'contain',
-        aspectRatio: 1,
-        
+        resizeMode: 'cover',
+        aspectRatio: 1,        
     },
     imgSvg:{
         position: 'absolute',

@@ -8,17 +8,20 @@ export interface AuthResponse {
     nombre:      string;
     role:        string;
     suscripcion?: string;
+    fotoPerfil:  string;
     token:       string;
 }
 
 const returnUserToken = (data:AuthResponse):{user:User, token:string} =>{
-    const { idUsuario, email, nombre, role, suscripcion, token} = data;
+    const { idUsuario, email, nombre, role, suscripcion, fotoPerfil, token} = data;
+    console.log(data);
     const user: User = {
         idUsuario,
         email,
         nombre,
         role,
-        suscripcion: suscripcion ? suscripcion : ''
+        suscripcion: suscripcion ? suscripcion : '',
+        fotoPerfil: fotoPerfil ? fotoPerfil: '../../../../assets/images/userDefault.png'
     }
     return { user, token };
 }
@@ -31,7 +34,7 @@ export const authLogin = async (email: string, password: string) => {
         return returnUserToken(data);
 
     } catch (error) {
-        console.log(error);
+        console.log(error?.response?.data || 'Error en el login');
         return null
     }
 }

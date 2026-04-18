@@ -9,6 +9,7 @@ import { obtenerPsicologosVinculados } from '../services/vinculacionService';
 import { AuthContext } from '../context/AuthContext';
 import { getImageUrl } from '../utils/imageHelper';
 import socket from '../services/socketService';
+import userDefault from '../images/userDefault.png'
 
 
 export default function ChatSelector(props) {
@@ -199,8 +200,8 @@ export default function ChatSelector(props) {
                             ? (contact.ultimoMensaje?.mensaje || '')
                             : (contact.ultimoMensaje || contact.ultimoMensajeTexto || '');
                         const imagenFinal = userRole === 'psicologo'
-                            ? getImageUrl(contact.fotoPerfilPaciente, '/src/images/pimg1.png')
-                            : getImageUrl(contact.fotoPerfilPsicologo, '/src/images/pimg1.png'); 
+                            ? contact.fotoPerfilPaciente.includes('userDefault') ? userDefault : getImageUrl(contact.fotoPerfilPaciente, userDefault)
+                            : contact.fotoPerfilPsicologo.includes('userDefault') ? userDefault : getImageUrl(contact.fotoPerfilPsicologo, userDefault);
                             return (
                                 <ChatBox
                                     key={contactId}

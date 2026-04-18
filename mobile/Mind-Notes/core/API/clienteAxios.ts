@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 const stage = process.env.EXPO_PUBLIC_STAGE;
 
 export const API_URL = 
-    (stage === 'produc') 
+    (stage === 'production') 
     ? process.env.EXPO_PUBLIC_BACKEND_URL 
     : (Platform.OS === 'ios')
         ? process.env.EXPO_PUBLIC_BACKEND_URL_IOS

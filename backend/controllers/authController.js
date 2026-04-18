@@ -264,7 +264,7 @@ class AuthController {
      */
     async googleMobileAuth(req, res) {
         try {
-            const { idToken } = req.body;
+            const { idToken, role } = req.body;
 
             if (!idToken) {
                 return res.status(400).json({
@@ -319,7 +319,14 @@ class AuthController {
                 });
             }
 
-            const { email, sub } = decodedToken;
+            const { email, sub, name, picture } = decodedToken;
+
+            if (!email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo obtener el correo de Google'
+                });
+            }
 
             const usuarioModel = new Usuario();
             
@@ -334,13 +341,20 @@ class AuthController {
                     // Actualizar el Google ID si el usuario ya existe
                     await usuarioModel.actualizarGoogleId(usuario.idUsuario, sub);
                 } else {
-                    return res.status(404).json({
-                        success: false,
-                        code: 'GOOGLE_ACCOUNT_NOT_REGISTERED',
-                        email,
-                        message: 'No existe una cuenta con este correo. Registrate primero.'
-                    });
+                    const esPsicologo = role === 'psicologo';
+                    await usuarioModel.create(
+                        {
+                            nombre: name || email?.split('@')[0] || 'Usuario',
+                            email,
+                            googleId: sub,
+                            fotoPerfil: picture || null,
+                            verificado: true
+                        },
+                        esPsicologo
+                    );
                 }
+
+                usuario = await usuarioModel.findByEmail(email);
             }
 
             // Generar tokens JWT
