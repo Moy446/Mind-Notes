@@ -268,6 +268,7 @@ class UsuarioController {
                     nombre: usuario.nombre,
                     role: 'psicologo',
                     suscripcion: usuario.suscripcion?.plan || 'Plan Gratuito',
+                    fotoPerfil: usuario.fotoPerfil,
                     token: accessToken,
                 });
             }
@@ -283,6 +284,7 @@ class UsuarioController {
                 email: email,
                 nombre: usuario.nombre,
                 role: 'paciente',
+                fotoPerfil: usuario.fotoPerfil,
                 token: accessToken,
             });
         } catch (error) {
