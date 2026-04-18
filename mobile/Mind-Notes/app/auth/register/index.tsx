@@ -41,16 +41,16 @@ const RegisterScreen = () => {
 
   const onRegister = async () => {
     const {email, fullName, password, confirmPassword} = form
-    if (!email || !fullName || !password || !confirmPassword) {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
-      return;
-    }
     if (form.password !== form.confirmPassword) {
       Alert.alert('Error', 'Las contraseñas no coinciden.');
       return;
     }
     if (!validarPassword(form.password)) {
       Alert.alert('Error', 'La contraseña no cumple con los requisitos de seguridad.');
+      return;
+    }
+    if (!email || !fullName || !password || !confirmPassword) {
+      Alert.alert('Error', 'Por favor, completa todos los campos.');
       return;
     }
     try {
@@ -153,6 +153,14 @@ const RegisterScreen = () => {
         <Text style={registerStyle.TextLeft}>
           ¿Eres un psicólogo?
         </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '29%'}}>
+          <Text style={registerStyle.TextLeftSwitch}>
+            No
+          </Text>
+          <Text style={registerStyle.TextRigthSwitch}>
+            Si
+          </Text>
+        </View>
         <ThemedSwitch value={esPsicologo} onChange={() => setEsPsicologo(!esPsicologo)}/>
       </View>
       <View style={{ marginVertical: 5, marginHorizontal: 10 }}>
