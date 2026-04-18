@@ -100,7 +100,10 @@ export const LinkedDocumentsPanel = ({
             <TouchableOpacity
               key={item._id || `${item.nombre || 'file'}-${index}`}
               style={linkedDocumentsStyle.fileItem}
-              onPress={() => router.push('/psicologo/document')}
+              onPress={() => router.push({
+                pathname:'/psicologo/document',
+                params:{path: item.path}
+              })}
             >
               <Text style={linkedDocumentsStyle.fileName} numberOfLines={1}>
                 {item.nombre || 'Archivo sin nombre'}

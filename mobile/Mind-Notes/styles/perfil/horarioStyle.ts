@@ -7,8 +7,7 @@ export const horarioStyle = StyleSheet.create({
         width: '100%',
         height: '100%',
         paddingHorizontal: 12,
-        paddingTop: 10,
-        paddingBottom: 8,
+        paddingVertical: 30,
         flex: 1,
     },
     title: {
@@ -46,6 +45,23 @@ export const horarioStyle = StyleSheet.create({
     },
     horas:{
         flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    },
+    guardarBtn:{
+        alignSelf: 'center',
+        backgroundColor: Colors.principal,
+        borderRadius: 10, 
+        width: '30%',
+        alignItems: 'center',
+        padding: 10
+    },
+    textGuardar:
+    {
+        color: Colors.white,
+        fontSize: 20,
+        fontWeight: '600'
     }
 
 })
