@@ -123,7 +123,7 @@ const LoginScreen = () => {
                     ["password"]: value
                 }))}
             />
-            <CustomButton onPress={onLogin} disabled={isPosting} text='Ingresar' size='lg' textColor='black' style={{marginBottom: 10}} />
+            <CustomButton onPress={onLogin} disabled={isPosting} text={isPosting ? 'Ingresando...' : 'Ingresar'} size='lg' textColor='black' style={{marginBottom: 10}} />
             <ThemedLink href={'/auth/forgot-password'} style={loginStyle.textStyle}>¿Olvidaste tu contraseña?</ThemedLink>
             <Text style={loginStyle.textStyle}> ¿Aún no tienes una cuenta? </Text>
             <ThemedLink href={'/auth/register'} style={loginStyle.textStyle}>Registrate</ThemedLink>

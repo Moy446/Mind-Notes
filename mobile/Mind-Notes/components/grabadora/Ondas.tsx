@@ -2,45 +2,21 @@ import React, { useRef, useEffect } from "react";
 import { View, Animated } from "react-native";
 import { Colors } from "@/constants/theme";
 
-const AnimatedBar = ({ isRecording }) => {
+const AnimatedBar = ({ value, index}) => {
   const height = useRef(new Animated.Value(10)).current;
   const animationRef = useRef(null);
 
   useEffect(() => {
-    if (isRecording) {
-      const animate = () => {
-        animationRef.current = Animated.sequence([
-          Animated.timing(height, {
-            toValue: Math.random() * 50 + 20,
-            duration: 200,
-            useNativeDriver: false,
-          }),
-          Animated.timing(height, {
-            toValue: 10,
-            duration: 200,
-            useNativeDriver: false,
-          }),
-        ]);
+    const normalized = Math.max(10, (value + 160) * 0.4);
+    const variance = 0.7 + (index % 5) * 0.1;
 
-        animationRef.current.start(({ finished }) => {
-          if (finished && isRecording) {
-            animate();
-          }
-        });
-      };
-
-      animate();
-    } else {
-      animationRef.current?.stop();
-      height.setValue(10);
-    }
-
-    return () => {
-      animationRef.current?.stop();
-    };
-  }, [isRecording]);
-
-  return (
+      Animated.timing(height, {
+        toValue: normalized * variance,
+        duration: 80,
+        useNativeDriver: false,
+        }).start();
+      }, [value]);
+        return (
     <Animated.View
       style={{
         width: 4,
@@ -53,18 +29,18 @@ const AnimatedBar = ({ isRecording }) => {
   );
 };
 
-export default function FakeWave({ isRecording }) {
+export default function FakeWave({ levels = [] }) {
   return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
         height: 60,
-        width: "100%",
+        width: "90%",
       }}
     >
-      {Array.from({ length: 48 }).map((_, i) => (
-        <AnimatedBar key={i} isRecording={isRecording} />
+      {levels.map((lvl, i) => (
+        <AnimatedBar key={i} value={lvl} index={i} />
       ))}
     </View>
   );

@@ -175,7 +175,7 @@ const RegisterScreen = () => {
       </View>
       <View style={{alignItems: 'center', marginBottom: 20}}>
         <CustomButton 
-          text='Registrarse' 
+          text={isPosting ? 'Registrando...' : 'Registrarse'} 
           textColor='black' 
           size='lg'
           onPress={() => onRegister()}

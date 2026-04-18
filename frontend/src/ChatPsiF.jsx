@@ -18,6 +18,7 @@ import { obtenerMensajes, obtenerInformacionChat } from './services/chatService'
 import clienteAxios from './services/axios';
 import { tr } from 'framer-motion/client';
 import { getImageUrl } from './utils/imageHelper';
+import userDefault from './images/userDefault.png'
 
 export default function ChatPsiF(props) {
 
@@ -30,7 +31,7 @@ export default function ChatPsiF(props) {
     const [selectedChat, setSelectedChat] = useState(null);
     const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Usuario no seleccionado');
-    const [image, setImage] = useState('/src/images/pimg2.png');
+    const [image, setImage] = useState(userDefault);
     const [patientData, setPatientData] = useState({});
     const [archivos, setArchivos] = useState([]);;
     const nombreMostrado = n !== 'Usuario no seleccionado'
@@ -40,7 +41,7 @@ export default function ChatPsiF(props) {
 const fetchSelectedName = useCallback(async () => {
     if (!selectedChat) {
         setN('Usuario no seleccionado');
-        setImage('/src/images/pimg2.png');
+        setImage(userDefault);
         return;
     }
     try {
@@ -53,19 +54,19 @@ const fetchSelectedName = useCallback(async () => {
             
             // Usar helper centralizado para construir URL
             let fotoUrl = getImageUrl(paciente.fotoPerfilPaciente || '');
-            if (!fotoUrl || fotoUrl === '/src/images/testimg.png') {
-                fotoUrl = '/src/images/pimg2.png';
+            if (!fotoUrl || fotoUrl === '/src/images/testimg.png' || fotoUrl.includes('userDefault')) {
+                fotoUrl = userDefault;
             }
             setImage(fotoUrl);
             console.log('Foto del paciente:', fotoUrl);
         } else {
             setN('Usuario no seleccionado');
-            setImage('/src/images/pimg2.png');
+            setImage(userDefault);
         }
     } catch (error) {
         console.error('Error al obtener pacientes:', error);
         setN('Usuario no seleccionado');
-        setImage('/src/images/pimg2.png');
+        setImage(userDefault);
     }
 }, [idUser, selectedChat]);
 

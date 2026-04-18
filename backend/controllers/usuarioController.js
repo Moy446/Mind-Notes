@@ -613,8 +613,8 @@ class UsuarioController {
 
             res.cookie('accessToken', accessToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+                secure: process.env.STAGE === 'production',
+                sameSite: process.env.STAGE === 'production' ? 'None' : 'Lax',
                 maxAge: 15 * 60 * 1000 // 15 minutos
             });
 

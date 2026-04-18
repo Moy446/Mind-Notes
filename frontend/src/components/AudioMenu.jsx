@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import clienteAxios from '../services/axios';
 import Select from 'react-select';
 import { getImageUrl } from '../utils/imageHelper';
+import userDefault from '../images/userDefault.png'
 
 export default function AudioMenu(props) {
 
@@ -26,9 +27,9 @@ export default function AudioMenu(props) {
                     nombre: p.nombrePaciente,
                     id: p.idPaciente,
                     fotoPerfil: (() => {
-                        const foto = p.fotoPerfilPaciente || '/src/images/userDefault.png';
-                        if (foto === '/src/images/userDefault.png') {
-                            return foto;
+                        const foto = p.fotoPerfilPaciente || userDefault;
+                        if (foto.includes('userDefault')) {
+                            return userDefault;
                         }
                         return getImageUrl(foto);
                     })()

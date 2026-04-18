@@ -52,7 +52,7 @@ router.post('/reenviar-verificacion', (req, res) =>
 router.get('/google', 
     (req, res, next) => {
         const requestedRole = req.query.role === 'psicologo' ? 'psicologo' : 'paciente';
-        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+        const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.STAGE === 'production';
         const sameSite = useSecure ? 'None' : 'Lax';
 
         // Guarda el rol seleccionado para usarlo al crear cuentas nuevas por Google.
@@ -76,7 +76,7 @@ router.get('/google/callback',
     (req, res, next) => {
         passport.authenticate('google', { session: false }, (error, usuario, info) => {
             const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
-            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.NODE_ENV === 'production';
+            const useSecure = process.env.COOKIE_SECURE === 'true' || process.env.STAGE === 'production';
             const sameSite = useSecure ? 'None' : 'Lax';
 
             res.clearCookie('google_role', { httpOnly: true, secure: useSecure, sameSite });
