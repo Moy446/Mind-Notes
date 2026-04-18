@@ -2,6 +2,7 @@ import Chat from "../models/Chat.js";
 import { ObjectId } from "mongodb";
 import fs from "fs";
 import path from "path";
+import mammoth from "mammoth";
 
 class ChatController {
     constructor() {
@@ -222,6 +223,42 @@ class ChatController {
                     res.status(500).json({ success: false, message: 'Error al descargar el archivo' });
                 }
             });
+        } catch (error) {
+            console.error('Error al descargar archivo:', error);
+            res.status(500).json({ success: false, message: 'Error al descargar el archivo: ' + error.message });
+        }
+    }
+
+    async obtenerTexto(req, res) {
+        const { idPsicologo, idPaciente, archivoId } = req.params;
+
+        try {
+            const chat = new Chat();
+            const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
+
+            if (!chatData) {
+                return res.status(404).json({ success: false, message: 'Chat no encontrado' });
+            }
+
+            const archivo = chatData.expedientes.find(a => a._id.toString() === archivoId);
+
+            if (!archivo) {
+                return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+            }
+
+            const filePath = path.resolve(archivo.path);
+
+            if (!fs.existsSync(filePath)) {
+                return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
+            }
+
+            const result = await mammoth.extractRawText({ path: filePath });
+
+            res.json({
+                success: true,
+                content: result.value
+            });
+
         } catch (error) {
             console.error('Error al descargar archivo:', error);
             res.status(500).json({ success: false, message: 'Error al descargar el archivo: ' + error.message });
