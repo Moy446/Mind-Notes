@@ -13,6 +13,7 @@ type LinkedFile = {
 };
 
 interface LinkedDocumentsPanelProps {
+  idPaciente?: string;
   materialAdjunto?: LinkedFile[];
   expedientes?: LinkedFile[];
   grabaciones?: LinkedFile[];
@@ -30,6 +31,7 @@ const buildFileUrl = (file?: LinkedFile): string | null => {
 };
 
 export const LinkedDocumentsPanel = ({
+  idPaciente,
   materialAdjunto,
   expedientes,
   grabaciones,
@@ -102,7 +104,7 @@ export const LinkedDocumentsPanel = ({
               style={linkedDocumentsStyle.fileItem}
               onPress={() => router.push({
                 pathname:'/psicologo/document',
-                params:{path: item.path}
+                params:{idDoc: item._id, idPat: idPaciente}
               })}
             >
               <Text style={linkedDocumentsStyle.fileName} numberOfLines={1}>
