@@ -3,6 +3,7 @@ import { ObjectId } from "mongodb";
 import fs from "fs";
 import path from "path";
 import mammoth from "mammoth";
+import { Document, Packer, Paragraph } from "docx";
 
 class ChatController {
     constructor() {
@@ -264,6 +265,54 @@ class ChatController {
             res.status(500).json({ success: false, message: 'Error al descargar el archivo: ' + error.message });
         }
     }
+
+    async guardarDocumento(req, res){
+        try {
+            const { content } = req.body;
+            const { idPsicologo, idPaciente, archivoId } = req.params;
+
+            const doc = new Document({
+                sections: [
+                    {
+                        children: content.split('\n').map(
+                            line => new Paragraph(line)
+                        )
+                    }
+                ]
+            });
+
+            const buffer = await Packer.toBuffer(doc);
+
+            const chat = new Chat();
+            const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
+
+            if (!chatData) {
+                return res.status(404).json({ success: false, message: 'Chat no encontrado' });
+            }
+
+            const archivo = chatData.expedientes.find(a => a._id.toString() === archivoId);
+
+            if (!archivo) {
+                return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+            }
+
+            const filePath = path.resolve(archivo.path);
+
+            fs.writeFileSync(filePath, buffer);
+
+            return res.json({
+                success: true,
+                message: "Documento guardado"
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                message: "Error al guardar documento"
+            });
+        }
+    };
 
 }
 

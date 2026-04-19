@@ -11,3 +11,17 @@ export const obtenerDocumento = async (idPsicologo, idPaciente, archivoId) => {
         throw error;
     }
 };
+
+export const guardarDocumento = async (idPsicologo, idPaciente, archivoId, content) => {
+  try {
+    const response = await clienteAxios.put(
+      `/chat/${idPsicologo}/${idPaciente}/documento/${archivoId}`,
+      { content }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error al guardar:", error);
+    throw error;
+  }
+};
