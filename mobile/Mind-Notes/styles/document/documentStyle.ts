@@ -8,7 +8,7 @@ export const documentStyle = StyleSheet.create({
         height: '100%',
         flex: 1,
     },
-    header:{
+    header: {
         backgroundColor: Colors.principal,
         width: '100%',
         height: 70,
@@ -20,15 +20,30 @@ export const documentStyle = StyleSheet.create({
         paddingLeft: 10,
         gap: 10
     },
-    textTitle:{
+    textTitle: {
         color: Colors.white,
         fontSize: 30,
         fontWeight: '400'
     },
-    documentText:{
+    documentText: {
         margin: 10,
         fontSize: 20,
         fontWeight: '400'
-    }
+    },
+    fab: {
+        position: 'absolute',
+        bottom: 20,
+        right: 20,
+        backgroundColor: Colors.principal,
+        width: 60,
+        height: 60,
+        borderRadius: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        elevation: 5, 
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 4,
+    },
 
 })
