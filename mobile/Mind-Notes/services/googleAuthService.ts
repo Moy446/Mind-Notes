@@ -169,19 +169,21 @@ export const loginWithGoogle = async (
     };
   } catch (error) {
     console.error('Error en loginWithGoogle:', error);
+    console.error('Error completo:', JSON.stringify(error, null, 2));
+    console.error('Error code:', (error as any)?.code);
+    console.error('Error message:', (error as any)?.message);
 
     const errorCode = (error as { code?: string } | null)?.code;
     if (errorCode === 'DEVELOPER_ERROR' || errorCode === '10') {
       return {
         success: false,
-        message:
-          'Configuracion de Google invalida (DEVELOPER_ERROR). Verifica que el cliente Android y el cliente Web pertenezcan al mismo proyecto de Google Cloud, y que el SHA-1 registrado coincida con el de esta app.'
+        message: (error as any)?.message
       };
     }
 
     return {
       success: false,
-      message: 'Error al iniciar autenticación con Google'
+      message: 'Error al iniciar autenticación con Google: ' + (error as any)?.message
     };
   }
 };
