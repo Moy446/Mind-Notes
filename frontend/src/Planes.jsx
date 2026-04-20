@@ -146,7 +146,7 @@ export default function PerfilPsiF(props) {
                 />
                 <SubBtn
                     time="6 Meses"
-                    price="USD$45"
+                    price="USD$35"
                     des="Contratar plan semestral"
                     onClick={() => handleCheckout('seisMeses')}
                     disabled={loading || authLoading}
