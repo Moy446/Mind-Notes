@@ -6,6 +6,7 @@ import EditModal from './EditModal';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { actualizarPerfil, cambiarFotoPerfil } from '../services/usuarioService';
+import { getImageUrl } from '../utils/imageHelper';
 import Swal from 'sweetalert2';
 
 export default function PerfilPsiInfo(props) {
@@ -100,7 +101,7 @@ export default function PerfilPsiInfo(props) {
 
                 setUserData(prev => ({
                     ...prev,
-                    fotoPerfil: `http://localhost:5000/${result.fotoPerfil}`
+                    fotoPerfil: getImageUrl(result.fotoPerfil)
                 }));
                 updateUser({ fotoPerfil: result.fotoPerfil });
 
@@ -182,6 +183,7 @@ export default function PerfilPsiInfo(props) {
                 currentValue={editModal.value}
                 onSave={handleSaveEdit}
                 type={editModal.field === 'email' ? 'email' : 'text'}
+                maxLength={editModal.field === 'nombre' ? 45 : undefined}
             />
         </div>
     );

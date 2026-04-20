@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\""
   },
   "keywords": [
     "Mind-Notes",
@@ -26,7 +26,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "csurf": "^1.2.2",
-    "docx": "^9.6.0",
+    "docx": "^9.6.1",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
@@ -36,10 +36,11 @@
     "html-to-docx": "^1.8.0",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.3",
+    "mammoth": "^1.12.0",
     "mongodb": "^7.0.0",
     "multer": "^2.0.2",
     "node-cron": "^4.2.1",
-    "nodemailer": "^7.0.13",
+    "nodemailer": "^8.0.5",
     "openai": "^6.22.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",

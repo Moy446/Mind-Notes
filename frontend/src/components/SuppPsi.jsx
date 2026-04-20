@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { descargarArchivoPsi } from '../services/chatService';
+import { AuthContext } from '../context/AuthContext';
 import './SuppPsi.css'
 
 export default function SuppPsi(props) {
-
+    const { user } = useContext(AuthContext);
 
     const [paginador, setPaginador] = useState(1);
     const itemsPerPage = 20;
@@ -20,7 +22,7 @@ export default function SuppPsi(props) {
     const indexOfLastItem = paginador * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = currentData.slice(indexOfFirstItem, indexOfLastItem);
-
+    console.log(currentItems);
     const handleClick = () => {
         setActivo(!activo);
     };
@@ -33,6 +35,7 @@ export default function SuppPsi(props) {
         }
     };
     const renderIcon = (type) => {
+        console.log("renderizando svgs")
         if (["pdf", "docx", "doc", "txt"].includes(type)) {
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -43,7 +46,7 @@ export default function SuppPsi(props) {
             );
         }
 
-        if (["mp4", "mov", "avi"].includes(type)) {
+        if (["mp4", "mov", "avi", "wav"].includes(type)) {
             return (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                     strokeWidth={1.5} stroke="currentColor" className="size-6">
@@ -60,6 +63,27 @@ export default function SuppPsi(props) {
                     d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z" />
             </svg>
         );
+    };
+
+    const descargarArchivo = async (id, idP, idA, type, nombre) => {
+        try {
+            const res = await descargarArchivoPsi(id, idP, idA, type);
+
+            const blob = new Blob([res.data]);
+            const link = document.createElement("a");
+
+            link.href = URL.createObjectURL(blob);
+            link.download = nombre;
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.remove();
+            URL.revokeObjectURL(link.href);
+
+        } catch (error) {
+            console.error("Error al descargar:", error);
+        }
     };
 
     return (
@@ -86,16 +110,23 @@ export default function SuppPsi(props) {
             <hr className={activo ? 'lineDown2' : 'lineDown'} />
 
             <div className='matApo'>
-                {currentItems.map((item) => 
+                {currentItems.map((item) =>
                 (
-                    <Link
-                        key={item._id}
-                        to={`/psicologo/doc/${props.idPaciente}/${item._id}`}
-                        className='itemsmatApo btnSuppPsi'
-                    >
-                        {renderIcon(item.type)}
-                        <p className='pMatApo'>{item.nombre}</p>
-                    </Link>
+                    ["pdf", "docx", "doc", "txt"].includes(item.type)
+                        ?
+                        <Link
+                            key={item._id}
+                            to={`/psicologo/doc/${props.idPaciente}/${item._id}/${activo ? "mat" : "exp"}`}
+                            className='itemsmatApo btnSuppPsi'
+                        >
+                            {renderIcon(item.type)}
+                            <p className='pMatApo'>{item.nombre}</p>
+                        </Link>
+                        :
+                        <div className='itemsmatApo' key={item._id} onClick={() => descargarArchivo(user.id, props.idPaciente, item._id, activo ? "mat" : "exp", item.nombre)}>
+                            {renderIcon(item.type)}
+                            <p className='pMatApo'>{item.nombre}</p>
+                        </div>
                 ))}
             </div>
 

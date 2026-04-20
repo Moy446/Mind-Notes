@@ -41,6 +41,7 @@ router.post('/registrarPsicologo', UserController.registrarPsicologoBD);
 router.post('/registrarPaciente', UserController.registrarPacienteBD);
 router.put('/usuario/foto',protector, uploadImage.single('foto'), UserController.cambiarFotoPerfil); 
 router.get('/usuario/:id', protector, UserController.obtenerPerfil);
+router.put('/usuario/:id', protector, UserController.actualizarPerfil);
 router.post('/vincularPacientes/:idPsicologo', protector, UserController.vincularPacientes);
 router.post('/vincularPsicologo/:idPaciente', protector, UserController.vincularPsicologo);
 router.get('/pacientes/:idPsicologo', protector, UserController.obtenerPacientesVinculados);

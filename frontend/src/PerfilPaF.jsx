@@ -42,11 +42,11 @@ export default function PerfilPaF(props){
                     confirmButtonText: 'Sí, eliminar',
                     cancelButtonText: 'Cancelar'
                 });
-    
+
                 if (!result.isConfirmed) {
                     return;
                 }
-    
+
                 const deleteResult = await eliminarCuenta(user.id);
                 if (deleteResult.success) {
                     await Swal.fire({
@@ -129,7 +129,7 @@ export default function PerfilPaF(props){
         try {
             const result = await cambiarFotoPerfil(formData);
             if (result.success) {
-    const nuevaFoto = `http://localhost:5000/${result.fotoPerfil}`;
+    const nuevaFoto = getImageUrl(result.fotoPerfil);
     console.log('Nueva foto:', nuevaFoto); // TEMPORAL
     console.log('result.fotoPerfil:', result.fotoPerfil); // TEMPORAL
     
@@ -233,6 +233,7 @@ export default function PerfilPaF(props){
                 currentValue={editModal.value}
                 onSave={handleSaveEdit}
                 type={editModal.field === 'email' ? 'email' : 'text'}
+                maxLength={editModal.field === 'nombre' ? 45 : undefined}
             />
         </div>
     );

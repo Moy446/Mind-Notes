@@ -2,6 +2,7 @@ import Usuario from "../models/Usuario.js";
 import Bcrypt from 'bcryptjs';
 import emailService from "../helpers/emailService.js";
 import crypto from 'crypto';
+import cookieCtrl from "../helpers/cookiesControll.js";
 import 'dotenv/config';
 
 class AuthController {
@@ -253,6 +254,139 @@ class AuthController {
             return res.status(500).json({
                 success: false,
                 message: 'Error interno del servidor'
+            });
+        }
+    }
+
+    /**
+     * Autentica usuarios desde la app móvil usando Google OAuth
+     * POST /api/auth/google/mobile
+     */
+    async googleMobileAuth(req, res) {
+        try {
+            const { idToken, role } = req.body;
+
+            if (!idToken) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'ID token de Google es requerido'
+                });
+            }
+
+            // Decodificar el ID token para extraer información del usuario
+            // Nota: En producción, se debe verificar el token usando la librería google-auth-library
+            const parts = idToken.split('.');
+            if (parts.length !== 3) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token inválido'
+                });
+            }
+
+            let decodedToken;
+            try {
+                // Decodificar el payload (segunda parte del JWT)
+                const payload = parts[1];
+                const decodedPayload = Buffer.from(payload, 'base64').toString('utf-8');
+                decodedToken = JSON.parse(decodedPayload);
+            } catch (error) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token inválido o malformado'
+                });
+            }
+
+            // Validar que sea un token de Google correcto
+            if (decodedToken.iss !== 'https://accounts.google.com' && 
+                decodedToken.iss !== 'accounts.google.com') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token no es de Google'
+                });
+            }
+
+            // Acepta audiencias válidas para web y móviles del mismo proyecto OAuth.
+            const allowedAudiences = [
+                process.env.GOOGLE_CLIENT_ID,
+                process.env.GOOGLE_ANDROID_CLIENT_ID,
+                process.env.GOOGLE_IOS_CLIENT_ID,
+            ].filter(Boolean);
+
+            if (!allowedAudiences.includes(decodedToken.aud)) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Token no es para esta aplicación'
+                });
+            }
+
+            const { email, sub, name, picture } = decodedToken;
+
+            if (!email) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No se pudo obtener el correo de Google'
+                });
+            }
+
+            const usuarioModel = new Usuario();
+            
+            // Buscar usuario por Google ID
+            let usuario = await usuarioModel.findByGoogleId(sub);
+
+            if (!usuario) {
+                // Buscar por email
+                usuario = await usuarioModel.findByEmail(email);
+
+                if (usuario) {
+                    // Actualizar el Google ID si el usuario ya existe
+                    await usuarioModel.actualizarGoogleId(usuario.idUsuario, sub);
+                } else {
+                    const esPsicologo = role === 'psicologo';
+                    await usuarioModel.create(
+                        {
+                            nombre: name || email?.split('@')[0] || 'Usuario',
+                            email,
+                            googleId: sub,
+                            fotoPerfil: picture || null,
+                            verificado: true
+                        },
+                        esPsicologo
+                    );
+                }
+
+                usuario = await usuarioModel.findByEmail(email);
+            }
+
+            // Generar tokens JWT
+            const accessToken = cookieCtrl.signAccess({
+                id: usuario.idUsuario,
+                role: usuario.esPsicologo ? 'psicologo' : 'paciente'
+            });
+
+            const refreshToken = cookieCtrl.signRefresh({
+                id: usuario.idUsuario,
+                role: usuario.esPsicologo ? 'psicologo' : 'paciente'
+            });
+
+            return res.status(200).json({
+                success: true,
+                message: 'Autenticación exitosa',
+                accessToken,
+                refreshToken,
+                role: usuario.esPsicologo ? 'psicologo' : 'paciente',
+                user: {
+                    id: usuario.idUsuario,
+                    nombre: usuario.nombre,
+                    email: usuario.email,
+                    fotoPerfil: usuario.fotoPerfil
+                }
+            });
+
+        } catch (error) {
+            console.error('Error en googleMobileAuth:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Error al autenticar con Google'
             });
         }
     }

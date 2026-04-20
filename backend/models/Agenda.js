@@ -82,6 +82,21 @@ class Agenda {
             throw error;
         }
     }
+
+    async eliminarPorUsuario(idUsuario) {
+        try {
+            const resultado = await this.colAgenda.deleteMany({
+                $or: [
+                    { idPsicologo: new ObjectId(idUsuario) },
+                    { idPaciente: new ObjectId(idUsuario) }
+                ]
+            });
+
+            return resultado.deletedCount;
+        } catch (error) {
+            throw new Error('Error al eliminar agenda del usuario: ' + error.message);
+        }
+    }
 }
 
 export default Agenda;

@@ -15,6 +15,8 @@ import MenuPaF from './MenuPaF.jsx'
 import PerfilPaF from './PerfilPaF.jsx'
 import ChatPaF from './ChatPaF.jsx'
 import Error from './Error.jsx'
+import TerminosYCondiciones from './terminosYcondiciones.jsx'
+import AvisoPrivacidad from './aviso-privacidad.jsx'
 
 import ComoFunciona from './ComoFunciona.jsx'
 import PlanesGeneral from './PlanesGeneral.jsx'
@@ -25,6 +27,7 @@ import VerificarCuenta from './VerificarCuenta.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
 import GoogleCallback from './GoogleCallback.jsx'
 import ConfirmarCita from './confirmarCita.jsx'
+import DeleteAccountView from './DeleteAccountView.jsx'
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
@@ -37,7 +40,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           {/*-- Rutas protegidas para psicólogos --*/}
         <Route path='/psicologo' element={<ProtectedRoute requiredRole="psicologo"><MenuPsiF/></ProtectedRoute>}>
           <Route path='chat/:id' element={<ChatPsiF/>}/>
-          <Route path='doc/:idP/:id' element={<Doc/>}/>
+          <Route path='doc/:idP/:id/:type' element={<Doc/>}/>
           <Route path='grabadora' element={<Grabadora/>}/>
           <Route path='calendario' element={<Calendario/>}/>
           <Route path='perfil' element={<PerfilPsiF/>}/>
@@ -54,9 +57,12 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         {/*-- Rutas públicas --*/}
         <Route path='error:id' element={<Error number={404} desc="Not found"/>}/>
         <Route path='/' element = {<App/>}/>
+        <Route path="/terminos-y-condiciones" element={<TerminosYCondiciones />} />
+        <Route path="/aviso-privacidad" element={<AvisoPrivacidad />} />
         <Route path="/ComoFunciona" element={<ComoFunciona/>} />
         <Route path='/PlanesGeneral' element={<PlanesGeneral/>}/>
         <Route path='/Login' element={<Login/>}/>
+        <Route path='/eliminar-cuenta' element={<DeleteAccountView/>}/>
         <Route path='/ReestablecerPassword' element={<ReestablecerPassword/>}/>
         <Route path='/pruebas' element = {<componentsPruebas/>}/>
         <Route path="/verificar-cuenta/:token" element={<VerificarCuenta />} />

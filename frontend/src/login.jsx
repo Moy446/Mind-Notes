@@ -1,17 +1,26 @@
-import React, { useState, useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Switch from './components/Switch'
 import Tooltipe from './components/Tooltipe'
+import TerminosAvisoModal from './components/TerminosAvisoModal'
 import { authService } from './services/authService'
 import { AuthContext } from './context/AuthContext'
 import { emailAuthService } from './services/emailAuthService';
 import './login.css'
 import Swal from 'sweetalert2';
+import DisclaimerComponent from './components/Disclaimer';
+
+let hasShownDisclaimer = false;
 
 export default function Login() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { login } = useContext(AuthContext);
     const [modo, setModo] = useState('login');
+    
+    // Estados para modal de términos y privacidad
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const [datosRegistroPendiente, setDatosRegistroPendiente] = useState(null);
     
     // Estados para login
     const [loginEmail, setLoginEmail] = useState('');
@@ -34,6 +43,29 @@ export default function Login() {
     const [recoverySuccess, setRecoverySuccess] = useState('');
     const [recoveryLoading, setRecoveryLoading] = useState(false);
 
+    useEffect(() => {
+        const error = searchParams.get('error');
+        const email = searchParams.get('email') || '';
+
+        if (error === 'google_not_registered') {
+            setModo('register');
+            setRegisterEmail(email);
+            setRegisterError('No existe una cuenta con ese correo. Registrate primero para continuar con Google.');
+            return;
+        }
+
+        if (error === 'google_auth_failed') {
+            setModo('login');
+            setLoginError('No se pudo autenticar con Google. Intenta nuevamente.');
+            return;
+        }
+
+        if (error === 'callback_error') {
+            setModo('login');
+            setLoginError('Error al procesar la autenticación con Google.');
+        }
+    }, [searchParams]);
+
     //Función de expresion regular para validar contraseña
     const validarPassword = (password) =>{
         const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -42,7 +74,8 @@ export default function Login() {
 
     //Función Login con Google
     const handleGoogleLogin = (googleRole = null) => {
-        const baseUrl = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
+        const baseUrl = `${backendUrl.replace(/\/api\/?$/, '')}/api/auth/google`;
         if (googleRole) {
             window.location.href = `${baseUrl}?role=${googleRole}`;
             return;
@@ -105,32 +138,60 @@ export default function Login() {
         }
     };
 
+    const [showDisclaimer, setShowDisclaimer] = useState(false);
+
+    useEffect(() => {
+        if (!hasShownDisclaimer) {
+        setShowDisclaimer(true);
+        hasShownDisclaimer = true;
+        }
+    }, []);
+
     // Función para manejar registro
     const handleRegister = async (e) => {
         e.preventDefault();
         setRegisterError('');
-        setRegisterLoading(true);
 
         if (registerPassword !== registerPasswordConfirm) {
             setRegisterError('Las contraseñas no coinciden');
-            setRegisterLoading(false);
             return;
         }
 
+        if(!validarPassword(registerPassword)){
+            setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
+            return;
+        }
+
+        // Guardar los datos del registro y mostrar modal
+        setDatosRegistroPendiente({
+            nombre: registerNombre,
+            email: registerEmail,
+            password: registerPassword,
+            passwordConfirm: registerPasswordConfirm,
+            esPsicologo: isPsicologo
+        });
+        setMostrarModal(true);
+    };
+
+    // Función para completar el registro después de aceptar términos
+    const handleCompletarRegistro = async () => {
+        if (!datosRegistroPendiente) return;
+
+        setRegisterLoading(true);
+        setMostrarModal(false);
+
         try {
-            if(!validarPassword(registerPassword)){
-                setRegisterError('La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales');
-                setRegisterLoading(false);
-                return;
-            }
-            const result = isPsicologo
-                ? await authService.registrarPsicologo(registerNombre, registerEmail, registerPassword, registerPasswordConfirm)
-                : await authService.registrarPaciente(registerNombre, registerEmail, registerPassword, registerPasswordConfirm);
+            const { nombre, email, password, passwordConfirm, esPsicologo } = datosRegistroPendiente;
+            
+            const result = esPsicologo
+                ? await authService.registrarPsicologo(nombre, email, password, passwordConfirm)
+                : await authService.registrarPaciente(nombre, email, password, passwordConfirm);
 
             if (result.success) {
                 setRegisterError('');
-                setModo('login'); // Cambiar a formulario de login
-                setLoginEmail(registerEmail);
+                setDatosRegistroPendiente(null);
+                setModo('login');
+                setLoginEmail(email);
                 setLoginPassword('');
                 Swal.fire({
                     icon: 'success',
@@ -146,6 +207,13 @@ export default function Login() {
         } finally {
             setRegisterLoading(false);
         }
+    };
+
+    // Función para rechazar términos
+    const handleRechazarTerminos = () => {
+        setMostrarModal(false);
+        setDatosRegistroPendiente(null);
+        setRegisterError('Debes aceptar los términos y condiciones para registrarte');
     };
 
     // Función para manejar recuperación de contraseña
@@ -235,7 +303,7 @@ export default function Login() {
                             </Link>
                         </div>
                     </div>
-                     <p>O ingresa con:</p>
+                        <p>O ingresa con:</p>
                     <div className='div-google'>
                         <button 
                             type='button'
@@ -249,8 +317,20 @@ export default function Login() {
                         </button>
                     </div>           
                 </form>
-            </div>
 
+            </div>
+            <button className='arrowBack' onClick={() => navigate('/')}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6" style={modo == 'login' ? {color: 'white'}:{color: 'black'} }>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+            </button>
+
+
+            <div className={`${showDisclaimer ? 'modal-overlay': 'hidden'} `}>
+                <div className="modal-container">
+                    <DisclaimerComponent navigation = {navigate} onClick = {() => {setShowDisclaimer(false)}}/>
+                </div>
+            </div>
 
 {/* ---------------------------REGISTRO--------------------------- */}
             <div className='formBox register'>
@@ -372,7 +452,14 @@ export default function Login() {
 
 {/* -----------------------------Panel de color------------------------------- */}
         <div className="toggle-box">
+
             <div className="toggle-panel toggle-left">
+
+                {/* <div className='arrowBack'>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+    </svg>
+</div> */}
                 <h1 className='title-saludo'>¡Hola, bienvenido!</h1>
                 <p>¿Aún no tienes cuenta?</p>
                 {/* <button
@@ -382,6 +469,7 @@ export default function Login() {
                     Registrarse
                 </button> */}
                 <button onClick={() => setModo('register')} className='btn register' id='formRegister' >Registrarse</button>
+                
             </div>
 
             <div className="toggle-panel toggle-right">
@@ -394,6 +482,12 @@ export default function Login() {
             </div>
         </div>
 
+        {mostrarModal && (
+            <TerminosAvisoModal 
+                onAceptar={handleCompletarRegistro}
+                onRechazar={handleRechazarTerminos}
+            />
+        )}
         </div>
     )
 }

@@ -15,26 +15,36 @@ export default function setupPassport(passport) {
     async (req, accessToken, refreshToken, profile, done) => {
         try {
             const usuarioModel = new Usuario();
-            const requestedRole = req.cookies?.google_role === 'psicologo' ? 'psicologo' : 'paciente';
-            const createAsPsicologo = requestedRole === 'psicologo';
+            const googleEmail = profile.emails?.[0]?.value;
+            const googleName = profile.displayName || googleEmail?.split('@')[0] || 'Usuario';
+            const googlePhoto = profile.photos?.[0]?.value || null;
+
+            if (!googleEmail) {
+                return done(null, false, { code: 'GOOGLE_EMAIL_NOT_AVAILABLE' });
+            }
             
             let usuario = await usuarioModel.findByGoogleId(profile.id);
             
             if (!usuario) {
-                usuario = await usuarioModel.findByEmail(profile.emails[0].value);
+                usuario = await usuarioModel.findByEmail(googleEmail);
                 
                 if (usuario) {
                     await usuarioModel.actualizarGoogleId(usuario.idUsuario, profile.id);
                 } else {
-                    usuario = await usuarioModel.create({
-                        nombre: profile.displayName,
-                        email: profile.emails[0].value,
-                        fotoPerfil: profile.photos[0]?.value || null,
-                        googleId: profile.id,
-                        password: null,
-                        verificado: true
-                    }, createAsPsicologo);
+                    const esPsicologo = req?.cookies?.google_role === 'psicologo';
+                    await usuarioModel.create(
+                        {
+                            nombre: googleName,
+                            email: googleEmail,
+                            googleId: profile.id,
+                            fotoPerfil: googlePhoto,
+                            verificado: true
+                        },
+                        esPsicologo
+                    );
                 }
+
+                usuario = await usuarioModel.findByEmail(googleEmail);
             }
             
             return done(null, usuario);

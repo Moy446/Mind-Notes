@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react';
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react';
 import './ChatSelector.css'
 import SearchBar from './SearchBar';
 import AddBtn from './AddBtn';
@@ -8,6 +8,8 @@ import { obtenerPacientesVinculados } from '../services/vinculacionService';
 import { obtenerPsicologosVinculados } from '../services/vinculacionService';
 import { AuthContext } from '../context/AuthContext';
 import { getImageUrl } from '../utils/imageHelper';
+import socket from '../services/socketService';
+import userDefault from '../images/userDefault.png'
 
 
 export default function ChatSelector(props) {
@@ -16,15 +18,46 @@ export default function ChatSelector(props) {
     const [selectedId, setSelectedId] = useState(null);
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const hasLoadedOnceRef = useRef(false);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const loadContacts = useCallback(async () => {
+    const normalizeId = (value) => {
+        if (!value) return null;
+        if (typeof value === 'string') return value;
+        if (typeof value === 'object') {
+            if (typeof value.$oid === 'string') return value.$oid;
+            if (typeof value.toString === 'function') {
+                const parsed = value.toString();
+                if (parsed && parsed !== '[object Object]') return parsed;
+            }
+        }
+        return null;
+    };
+
+    const normalizeContact = (contact) => {
+        if (!contact || typeof contact !== 'object') return null;
+
+        return {
+            ...contact,
+            idPaciente: normalizeId(contact.idPaciente),
+            idPsicologo: normalizeId(contact.idPsicologo),
+            _id: normalizeId(contact._id),
+            id: normalizeId(contact.id),
+        };
+    };
+
+    const loadContacts = useCallback(async ({ silent = false } = {}) => {
         try {
-            setLoading(true);
+            const shouldShowLoader = !silent && !hasLoadedOnceRef.current;
+            if (shouldShowLoader) {
+                setLoading(true);
+            }
+
             const userRole = user?.role;
-            const userId = user?.id;
+            const userId = user?.id || user?.idUsuario;
             if (!userRole || !userId) {
                 setContacts([]);
+                hasLoadedOnceRef.current = true;
                 return;
             }
 
@@ -37,18 +70,51 @@ export default function ChatSelector(props) {
 
             // Algunos endpoints pueden devolver {data: []} o [] directo
             const parsed = Array.isArray(data) ? data : (Array.isArray(data?.data) ? data.data : []);
-            setContacts(parsed.filter(Boolean));
+            const normalizedContacts = parsed.map(normalizeContact).filter(Boolean);
+            setContacts(normalizedContacts);
+            hasLoadedOnceRef.current = true;
         } catch (error) {
             console.error('Error al obtener contactos vinculados:', error);
             setContacts([]);
+            hasLoadedOnceRef.current = true;
         } finally {
-            setLoading(false);
+            if (!silent && !hasLoadedOnceRef.current) {
+                setLoading(false);
+            } else if (!silent) {
+                setLoading(false);
+            }
         }
     }, [user]);
 
     useEffect(() => {
         loadContacts();
     }, [loadContacts, props.refreshKey]);
+
+    useEffect(() => {
+        const onFocus = () => loadContacts({ silent: true });
+        window.addEventListener('focus', onFocus);
+
+        return () => {
+            window.removeEventListener('focus', onFocus);
+        };
+    }, [loadContacts]);
+
+    useEffect(() => {
+        const userId = user?.id || user?.idUsuario;
+        if (!userId) return;
+
+        socket.emit('joinUserRoom', { userId });
+
+        const handleChatListUpdate = () => {
+            loadContacts({ silent: true });
+        };
+
+        socket.on('updateChatList', handleChatListUpdate);
+
+        return () => {
+            socket.off('updateChatList', handleChatListUpdate);
+        };
+    }, [loadContacts, user]);
 
     const handleSelect = (id) => {
         setSelectedId(id);
@@ -134,8 +200,8 @@ export default function ChatSelector(props) {
                             ? (contact.ultimoMensaje?.mensaje || '')
                             : (contact.ultimoMensaje || contact.ultimoMensajeTexto || '');
                         const imagenFinal = userRole === 'psicologo'
-                            ? getImageUrl(contact.fotoPerfilPaciente, '/src/images/pimg1.png')
-                            : getImageUrl(contact.fotoPerfilPsicologo, '/src/images/pimg1.png'); 
+                            ? contact.fotoPerfilPaciente.includes('userDefault') ? userDefault : getImageUrl(contact.fotoPerfilPaciente, userDefault)
+                            : contact.fotoPerfilPsicologo.includes('userDefault') ? userDefault : getImageUrl(contact.fotoPerfilPsicologo, userDefault);
                             return (
                                 <ChatBox
                                     key={contactId}
