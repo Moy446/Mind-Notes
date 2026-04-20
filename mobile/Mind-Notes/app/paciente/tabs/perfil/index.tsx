@@ -1,5 +1,5 @@
 import { View, Text, Image, Alert, Modal } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Svg, { Path } from 'react-native-svg'
 import { UseAuthStore } from '@/store/auth/useAuthStore'
 import { router } from 'expo-router'
@@ -9,7 +9,7 @@ import EditModal from '@/components/perfil/Edit'
 import DeliteAcountPopUp from '@/components/popup/DeleteAcountPopUp'
 import { perfilStyle } from '@/styles/perfil/perfilStyle'
 
-const perfilPaciente = () => {
+const PerfilPaciente = () => {
 
   const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
   const { user, token } = UseAuthStore();
@@ -279,4 +279,4 @@ const perfilPaciente = () => {
   )
 }
 
-export default perfilPaciente
+export default PerfilPaciente

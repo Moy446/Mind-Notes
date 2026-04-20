@@ -153,7 +153,7 @@ const RegisterScreen = () => {
         <Text style={registerStyle.TextLeft}>
           ¿Eres un psicólogo?
         </Text>
-        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '29%'}}>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '25%'}}>
           <Text style={registerStyle.TextLeftSwitch}>
             No
           </Text>
