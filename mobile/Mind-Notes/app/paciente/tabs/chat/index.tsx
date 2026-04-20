@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   View,
-  SafeAreaView,
   Alert,
   ActivityIndicator,
   Modal,
@@ -9,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { UseAuthStore } from '@/store/auth/useAuthStore';
 import {
@@ -16,13 +16,21 @@ import {
   PsicologoVinculado,
   vincularPsicologo,
 } from '@/core/actions/chat/vinculacionService';
-import { obtenerMensajes, Message, enviarMensaje, subirArchivo } from '@/core/actions/chat/chatService';
+import {
+  obtenerMensajes,
+  obtenerInformacionChat,
+  ChatInfo,
+  Message,
+  enviarMensaje,
+  subirArchivo,
+} from '@/core/actions/chat/chatService';
 import { initializeSocket, getSocket, disconnectSocket } from '@/core/API/socketService';
 import { ChatSelector, ChatContact } from '@/components/chat/ChatSelector';
 import { MessageList } from '@/components/chat/MessageList';
 import { MessageField } from '@/components/chat/MessageField';
 import { NameBar } from '@/components/chat/NameBar';
 import { QrScannerModal } from '@/components/chat/QrScannerModal';
+import { LinkedDocumentsPanel } from '@/components/chat/LinkedDocumentsPanel';
 import { chatPsicologoStyle } from '@/styles/chat/chatPsicologoStyle';
 import { Colors } from '@/constants/theme';
 import * as DocumentPicker from 'expo-document-picker';
@@ -34,9 +42,11 @@ export default function ChatPacienteScreen() {
   const [psicologos, setPsicologos] = useState<PsicologoVinculado[]>([]);
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [patientData, setPatientData] = useState<ChatInfo['patientData']>({});
   const [loading, setLoading] = useState(true);
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [showSelector, setShowSelector] = useState(true);
+  const [showLinkedDocuments, setShowLinkedDocuments] = useState(false);
 
   const [nombreMostrado, setNombreMostrado] = useState('Usuario no seleccionado');
   const [imagenMostrada, setImagenMostrada] = useState('/src/images/pimg2.png');
@@ -52,6 +62,17 @@ export default function ChatPacienteScreen() {
       router.replace('/auth/login');
     }
   }, [status, user, router]);
+
+  const refreshChatInfo = useCallback(async () => {
+    if (!selectedChat || !user?.idUsuario) return;
+
+    try {
+      const info = await obtenerInformacionChat(selectedChat, user.idUsuario);
+      setPatientData(info.patientData || {});
+    } catch (error) {
+      // Keep current UI state if refresh fails.
+    }
+  }, [selectedChat, user?.idUsuario]);
 
   const loadPsicologos = useCallback(async (showLoader = false) => {
     if (!user?.idUsuario) return;
@@ -119,6 +140,9 @@ export default function ChatPacienteScreen() {
       try {
         const mensajes = await obtenerMensajes(chatId, user.idUsuario);
         setMessages(mensajes);
+
+          const info = await obtenerInformacionChat(chatId, user.idUsuario);
+          setPatientData(info.patientData || {});
 
         const psicologo = psicologos.find((p) => p.idPsicologo === chatId);
         if (psicologo) {
@@ -195,6 +219,7 @@ export default function ChatPacienteScreen() {
         type: file.mimeType || 'application/octet-stream',
       });
 
+      await refreshChatInfo();
       Alert.alert('Archivo subido', 'El archivo se subio correctamente.');
     } catch (error: any) {
       const message =
@@ -204,13 +229,25 @@ export default function ChatPacienteScreen() {
     } finally {
       setUploadingFile(false);
     }
-  }, [selectedChat, user?.idUsuario, uploadingFile]);
+  }, [selectedChat, user?.idUsuario, uploadingFile, refreshChatInfo]);
 
   const handleGoBack = useCallback(() => {
     setSelectedChat(null);
     setMessages([]);
+    setShowLinkedDocuments(false);
     setShowSelector(true);
   }, []);
+
+  useEffect(() => {
+    if (!showLinkedDocuments || !selectedChat) return;
+
+    refreshChatInfo();
+    const intervalId = setInterval(() => {
+      refreshChatInfo();
+    }, 4000);
+
+    return () => clearInterval(intervalId);
+  }, [showLinkedDocuments, selectedChat, refreshChatInfo]);
 
   const ejecutarVinculacion = useCallback(async (uidValue: string) => {
     if (!user?.idUsuario) return;
@@ -276,7 +313,12 @@ export default function ChatPacienteScreen() {
         />
       ) : (
         <View style={chatPsicologoStyle.chatContainer}>
-          <NameBar img={imagenMostrada} name={nombreMostrado} onBack={handleGoBack} />
+          <NameBar
+            img={imagenMostrada}
+            name={nombreMostrado}
+            onBack={handleGoBack}
+            onPressName={() => setShowLinkedDocuments((prev) => !prev)}
+          />
 
           <MessageList
             messages={messages}
@@ -293,6 +335,21 @@ export default function ChatPacienteScreen() {
           />
         </View>
       )}
+
+      <Modal
+        visible={showLinkedDocuments}
+        animationType="slide"
+        onRequestClose={() => setShowLinkedDocuments(false)}
+      >
+        <SafeAreaView style={chatPsicologoStyle.container}>
+          <LinkedDocumentsPanel
+            materialAdjunto={patientData.materialAdjunto}
+            expedientes={patientData.expedientes}
+            grabaciones={patientData.grabaciones}
+            onClose={() => setShowLinkedDocuments(false)}
+          />
+        </SafeAreaView>
+      </Modal>
 
       <Modal
         visible={showLinkModal}

@@ -8,6 +8,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { UseAuthStore } from '@/store/auth/useAuthStore';
 import {
@@ -288,16 +289,16 @@ export default function ChatScreen() {
 
   if (loading && pacientes.length === 0) {
     return (
-      <View style={chatPsicologoStyle.container}>
+      <SafeAreaView style={chatPsicologoStyle.container}>
         <View style={chatPsicologoStyle.centerContent}>
           <ActivityIndicator size="large" color={Colors.principal} />
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={chatPsicologoStyle.container}>
+    <SafeAreaView style={chatPsicologoStyle.container}>
       {!selectedChat || showSelector ? (
         // Vista de selector de pacientes
         <ChatSelector
@@ -341,14 +342,14 @@ export default function ChatScreen() {
         animationType="slide"
         onRequestClose={() => setShowLinkedDocuments(false)}
       >
-        <View style={chatPsicologoStyle.container}>
+        <SafeAreaView style={chatPsicologoStyle.container}>
           <LinkedDocumentsPanel
             materialAdjunto={patientData.materialAdjunto}
             expedientes={patientData.expedientes}
             grabaciones={patientData.grabaciones}
             onClose={() => setShowLinkedDocuments(false)}
           />
-        </View>
+        </SafeAreaView>
       </Modal>
 
       <Modal
@@ -446,6 +447,6 @@ export default function ChatScreen() {
         title="Escanear QR del paciente"
         subtitle="Escanea el codigo para vincular automaticamente"
       />
-    </View>
+    </SafeAreaView>
   );
 }
