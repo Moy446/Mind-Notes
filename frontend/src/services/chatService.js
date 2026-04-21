@@ -58,20 +58,42 @@ export const descargarArchivo = async (idPsicologo, idPaciente, archivoId) => {
     }
 };
 
-export const obtenerDocumento = async (idPsicologo, idPaciente, archivoId) => {
+export const descargarArchivoPsi = async (idPsicologo, idPaciente, archivoId, type) => {
     try {
         const response = await clienteAxios.get(
-            `/chat/${idPsicologo}/${idPaciente}/documento/${archivoId}`,
+            `/chat/${idPsicologo}/${idPaciente}/archivo/${archivoId}/${type}`,
             {
                 responseType: 'blob',
                 withCredentials: true
             }
         );
-        return response.data;
+        console.log(response)
+        return response;
     } catch (error) {
-        console.error('Error al descargar documento:', error);
+        console.error('Error al descargar archivo:', error);
         throw error;
     }
+};
+
+export const obtenerDocumento = async (idPsicologo, idPaciente, archivoId, type) => {
+  try {
+    const response = await clienteAxios.get(
+      `/chat/${idPsicologo}/${idPaciente}/documento/${archivoId}/${type}`,
+      {
+        responseType: 'blob',
+        withCredentials: true
+      }
+    );
+
+    return {
+      blob: response.data,
+      contentType: response.headers['content-type'] 
+    };
+
+  } catch (error) {
+    console.error('Error al descargar documento:', error);
+    throw error;
+  }
 };
 
 export const eliminarArchivo = async (idPsicologo, idPaciente, archivoId) => {
