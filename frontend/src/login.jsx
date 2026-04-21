@@ -68,13 +68,14 @@ export default function Login() {
 
     //Función de expresion regular para validar contraseña
     const validarPassword = (password) =>{
-        const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        const regex =  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&'./#"+-])[A-Za-z\d@$!%*?&'./#"+-]{8,}$/;
         return regex.test(password);
     }
 
     //Función Login con Google
     const handleGoogleLogin = (googleRole = null) => {
-        const baseUrl = `${import.meta.env.VITE_BACKEND_URL.replace('/api', '')}/api/auth/google`;
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api';
+        const baseUrl = `${backendUrl.replace(/\/api\/?$/, '')}/api/auth/google`;
         if (googleRole) {
             window.location.href = `${baseUrl}?role=${googleRole}`;
             return;

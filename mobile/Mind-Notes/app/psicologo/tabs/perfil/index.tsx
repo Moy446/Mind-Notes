@@ -1,31 +1,42 @@
-import { View, Text, Image, Modal, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Modal, TouchableOpacity, Pressable } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import Svg, { Path } from 'react-native-svg'
 import { perfilStyle } from '@/styles/perfil/perfilStyle'
 import DeliteAcountPopUp from '@/components/popup/DeleteAcountPopUp'
 import HorarioPopUp from '@/components/perfil/Horario'
+import PlanesComponent from '@/components/perfil/Planes'
+import { UseAuthStore } from '@/store/auth/useAuthStore'
 
 const profileScreen = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [showHorario, setHorario] = useState(false);
+  const [showPlan, setPlan] = useState(false);
+  const logout = UseAuthStore.getState().logout;
 
   return (
     <View style={perfilStyle.container}>
       <View style={perfilStyle.title}>
         <Text style={perfilStyle.titleText}>Perfil</Text>
-        <Svg
-          viewBox="0 0 24 24"
-          width={40}
-          height={40}
-          fill="red"
+        <Pressable
+          style={({pressed}) =>({
+            opacity: pressed ? 0.6 : 1,
+          })}
+          onPress={() => {logout()}}
         >
-          <Path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
-          />
-        </Svg>
+          <Svg
+            viewBox="0 0 24 24"
+            width={40}
+            height={40}
+            fill="red"
+          >
+            <Path
+              fillRule="evenodd"
+              clipRule="evenodd"
+              d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
+            />
+          </Svg>
+        </Pressable>
       </View>
       <View style={perfilStyle.imgContainer}>
         <Image source={require('../../../../assets/images/userDefault.png')} style={perfilStyle.imgPerfil} />
@@ -85,6 +96,7 @@ const profileScreen = () => {
           height={30}
           fill="black"
           style={perfilStyle.imgSvg}
+          onPress={() => setPlan(true)}
           >
           <Path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
           <Path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
@@ -126,6 +138,13 @@ const profileScreen = () => {
       animationType='slide'
       onRequestClose={() => setHorario(false)}>
             <HorarioPopUp onClose={() => {setHorario(false)}}/>
+      </Modal>
+      <Modal
+        visible={showPlan}
+        animationType='slide'
+        onRequestClose={() => setPlan(false)}
+      >
+        <PlanesComponent onClose={() => {setPlan(false)}}/>
       </Modal>
     </View>
   )

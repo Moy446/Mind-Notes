@@ -152,6 +152,7 @@ export default function FooterMenu(){
                             <li><Link to={"/terminos-y-condiciones"} 
                             onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
                             className='li-link'>Terminos y condiciones</Link></li>
+                            <li><Link to={"/eliminar-cuenta"} className='li-link'>Petición de eliminación de cuenta</Link></li>
                         </ul>
                     </div>
 

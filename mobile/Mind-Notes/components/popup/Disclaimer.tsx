@@ -17,8 +17,8 @@ const DisclaimerPopup = ({ onPress }: Props) => {
       </View>
       <View style={disclaimerPopupStyle.bodyContainer}>
         <Text style={disclaimerPopupStyle.bodyText}>
-          Esta aplicacaion es una herramienta de apoyo para el psicologo para ayudar a mantener la calidad de la informacion durante la sesion psicologica. 
-          Cualquier duda o aclaracion no dude en consultarnos y consultar nuestro{' '}
+          Esta aplicación es una herramienta de apoyo para el psicólogo para ayudar a mantener la calidad de la información durante la sesión psicológica. 
+          Cualquier duda o aclaración no dude en consultarnos y consultar nuestro{' '}
           <Text
             style={{ fontSize: 12, fontFamily: 'SairaMedium', color: 'blue' }}
             onPress={() => router.push('/auth/register/privacidad/avisoPrivacidad')}
@@ -32,7 +32,7 @@ const DisclaimerPopup = ({ onPress }: Props) => {
           >
             términos y condiciones
           </Text>
-          {' '}de esta aplicacion
+          {' '}de esta aplicación
         </Text>
         <Pressable style={{...disclaimerPopupStyle.button }} onPress={() =>{
           Haptics.selectionAsync()

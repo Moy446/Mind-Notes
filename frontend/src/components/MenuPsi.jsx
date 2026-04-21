@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import clienteAxios from '../services/axios';
 import Tooltipe from './Tooltipe';
+import logowhite from '../images/logowithe.png'
 
 export default function MenuPsi() {
 
@@ -32,7 +33,7 @@ export default function MenuPsi() {
             <div className='psiMendiv'>
                 <Tooltipe text="Mind Notes">
                     <div className="toolTip"> 
-                          <img src="/src/images/logowithe.png" className='imgMPsi' />
+                          <img src={logowhite} className='imgMPsi' />
                     </div>  
                 </Tooltipe>
                 <div className='psiMendiv'>

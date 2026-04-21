@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   View,
-  SafeAreaView,
   Alert,
   ActivityIndicator,
   Modal,
@@ -289,16 +288,16 @@ export default function ChatScreen() {
 
   if (loading && pacientes.length === 0) {
     return (
-      <SafeAreaView style={chatPsicologoStyle.container}>
+      <View style={chatPsicologoStyle.container}>
         <View style={chatPsicologoStyle.centerContent}>
           <ActivityIndicator size="large" color={Colors.principal} />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={chatPsicologoStyle.container}>
+    <View style={chatPsicologoStyle.container}>
       {!selectedChat || showSelector ? (
         // Vista de selector de pacientes
         <ChatSelector
@@ -342,14 +341,14 @@ export default function ChatScreen() {
         animationType="slide"
         onRequestClose={() => setShowLinkedDocuments(false)}
       >
-        <SafeAreaView style={chatPsicologoStyle.container}>
+        <View style={chatPsicologoStyle.container}>
           <LinkedDocumentsPanel
             materialAdjunto={patientData.materialAdjunto}
             expedientes={patientData.expedientes}
             grabaciones={patientData.grabaciones}
             onClose={() => setShowLinkedDocuments(false)}
           />
-        </SafeAreaView>
+        </View>
       </Modal>
 
       <Modal
@@ -447,6 +446,6 @@ export default function ChatScreen() {
         title="Escanear QR del paciente"
         subtitle="Escanea el codigo para vincular automaticamente"
       />
-    </SafeAreaView>
+    </View>
   );
 }

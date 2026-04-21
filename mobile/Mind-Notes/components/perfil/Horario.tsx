@@ -59,7 +59,7 @@ const HorarioPopUp = ({ onClose }: Props) => {
         },
         {
             id: 7,
-            name: "Mimingo",
+            name: "Domingo",
             value: false,
             horaI: '',
             horaF: ''

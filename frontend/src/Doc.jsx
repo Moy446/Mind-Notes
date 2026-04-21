@@ -57,7 +57,7 @@ export default function Doc(props) {
         }
 
         const html = editor.getHTML();
-        console.log("Exportando a:", "http://localhost:5000/export-docx");
+        console.log("Exportando a:", `${import.meta.env.VITE_BACKEND_BASE_URL}/export-docx`);
         const response = await clienteAxios.post('/psicologo/export-docx', { html },
             {
                 responseType: "blob",

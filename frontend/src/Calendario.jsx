@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import Spinner from './components/spinner';
+import Spinner from './components/Spinner';
 import clienteAxios from './services/axios';
 import MeetMenu from './components/MeetMenu';
 import CitasList from './components/CitasList';
@@ -11,6 +11,8 @@ import AddBtn from './components/AddBtn';
 import { authService } from './services/authService';
 import Select from 'react-select'
 import './Calendario.css'
+import userDefault from './images/userDefault.png'
+import { getImageUrl } from './utils/imageHelper';
 
 
 
@@ -61,7 +63,7 @@ export default function Calendario() {
                     end: new Date(`${formatDate(cita.fecha)}T${cita.horaF}:00`),
                     extendedProps: {
                         estado: cita.estado,
-                        img: cita.img || './images/userDefault.png'
+                        img: cita.img || userDefault
                     }
                 })));
                 setIsLoading(false);
@@ -106,7 +108,7 @@ export default function Calendario() {
                 end: new Date(`${formatDate(cita.fecha)}T${cita.horaF}:00`),
                 extendedProps: {
                     estado: cita.estado,
-                    img: cita.img || '/src/images/userDefault.png'
+                    img: cita.img || userDefault
                 }
             })));
 
@@ -165,7 +167,7 @@ export default function Calendario() {
                     }}
                     eventContent={(eventInfo) => {
                         const estado = eventInfo.event.extendedProps.estado;
-                        const img = eventInfo.event.extendedProps.img;
+                        const img = eventInfo.event.extendedProps.img.includes('userDefault') ? userDefault : getImageUrl(eventInfo.event.extendedProps.img, userDefault);
 
                         let color = "#A3D8F4";
 
