@@ -343,6 +343,7 @@ export default function ChatScreen() {
       >
         <View style={chatPsicologoStyle.container}>
           <LinkedDocumentsPanel
+            idPaciente={selectedChat}
             materialAdjunto={patientData.materialAdjunto}
             expedientes={patientData.expedientes}
             grabaciones={patientData.grabaciones}
