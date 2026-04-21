@@ -23,8 +23,8 @@ function ComoFunciona() {
             <div className='container'>
                 <h3 className='title-text'>¿Cómo funciona?</h3>
                 <p className="p-ComoFunciona">
-                    Nuestra aplicacion funciona con base a una inteligencia artificial que transcribe y analiza lo ocurrido en 
-                    una sesion psicologica, clasificando la información en secciones: Vida amorosa, familiar, personal y laboral.
+                    Nuestra aplicación funciona con base a una inteligencia artificial que transcribe y analiza lo ocurrido en 
+                    una sesión psicologica, clasificando la información en secciones: Vida amorosa, familiar, personal y laboral.
                 </p>
             </div>
             
@@ -40,16 +40,16 @@ function ComoFunciona() {
                 <p className="p-colum">
                     Realizara resúmenes de la sesión, además identificará los puntos abordados.
                 </p>
-                <img className="imgMision" src={herramienta} alt="Imagen" />
+                <img className="imgBeneficios" src={herramienta} alt="Imagen" />
             </div>
 
             <div className='div-secondColum'>
                 <h3>Recordatorio</h3>
                 <p className="p-colum">
-                    Para el paciente de sus próximas citas y evitar así las faltas o el poder reagendar a tiempo de una manera 
+                    Los recordatorios son para el paciente de sus próximas citas y evitar así las faltas o el poder reagendar a tiempo de una manera 
                     más automatizada.
                 </p>
-                <img className="imgMision" src={recordatorios} alt="Imagen" />
+                <img className="imgBeneficios" src={recordatorios} alt="Imagen" id='imgRecordatorio'/>
             </div>
 
             <div className='div-thirdColum'>
@@ -58,7 +58,7 @@ function ComoFunciona() {
                     Tendrá organizado todos los materiales de ayuda que le envía su psicólogo y un chat integrado para poder 
                     comunicarse con él.
                 </p>
-                <img className="imgMision" src={chat} alt="Imagen" />
+                <img className="imgBeneficios" src={chat} alt="Imagen" />
             </div>
         </div>
 
