@@ -6,8 +6,8 @@ import FooterMenu from './components/headerAndFooter/FooterMenu'
 //Imagenes
 import nosotrosImg from './images/nosotrosImg.png'
 import recordatorios from './images/recordatorios.png'
-import chat from './images/chat.jpg'
-import herramienta from './images/herramienta.jpg'
+import chat from './images/chat.png'
+import herramienta from './images/herramienta.png'
 import comoFunciona_img from './images/comoFunciona_img.jpg'
 
 
