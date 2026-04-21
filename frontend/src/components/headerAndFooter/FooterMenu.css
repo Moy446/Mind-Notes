@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: space-between;
     margin-top: 25px;
+
 }
 
 .nav-footermenu
@@ -19,10 +20,12 @@
     font-family: 'Saira';
     color: #FFF;
     font-size: 18px;
-    align-items: center;
+    align-items: start;
     justify-content: end;
     gap: 3%;
     grid-template-columns: 4fr 2fr 2fr 4fr;
+    
+    scroll-behavior: smooth;
 }
 
 .img-footermenu
