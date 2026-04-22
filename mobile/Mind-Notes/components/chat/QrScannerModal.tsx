@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -21,6 +21,10 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
 }) => {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
+
+  useEffect(() => {
+    if (!visible) setScanned(false);
+  }, [visible]);
 
   const handleCodeScanned = useCallback(
     ({ data }: { data: string }) => {
