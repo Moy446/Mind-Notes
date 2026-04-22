@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
-import { Modal, View, Text, TouchableOpacity, Image } from 'react-native';
+import React from 'react';
+import { Modal, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import QRCode from 'react-native-qrcode-svg';
 import { Colors } from '@/constants/theme';
 
 interface UserQrModalProps {
@@ -18,12 +19,6 @@ export const UserQrModal: React.FC<UserQrModalProps> = ({
   title,
   subtitle,
 }) => {
-  const qrUrl = useMemo(() => {
-    if (!uid) return null;
-    const data = encodeURIComponent(uid);
-    return `https://api.qrserver.com/v1/create-qr-code/?size=280x280&data=${data}`;
-  }, [uid]);
-
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <SafeAreaView style={{ flex: 1, backgroundColor: Colors.background }} edges={['top', 'bottom']}>
@@ -33,12 +28,10 @@ export const UserQrModal: React.FC<UserQrModalProps> = ({
         </View>
 
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
-          {qrUrl ? (
-            <Image
-              source={{ uri: qrUrl }}
-              style={{ width: 280, height: 280, borderRadius: 12, backgroundColor: Colors.white }}
-              resizeMode="contain"
-            />
+          {uid ? (
+            <View style={{ borderRadius: 12, backgroundColor: Colors.white, padding: 12 }}>
+              <QRCode value={uid} size={280} color="#000000" backgroundColor="#FFFFFF" />
+            </View>
           ) : (
             <Text style={{ color: Colors.black }}>No se pudo generar el QR</Text>
           )}
