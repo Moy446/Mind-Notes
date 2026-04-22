@@ -7,6 +7,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -31,6 +33,7 @@ import { MessageField } from '@/components/chat/MessageField';
 import { NameBar } from '@/components/chat/NameBar';
 import { QrScannerModal } from '@/components/chat/QrScannerModal';
 import { LinkedDocumentsPanel } from '@/components/chat/LinkedDocumentsPanel';
+import { UserQrModal } from '@/components/chat/UserQrModal';
 import { chatPsicologoStyle } from '@/styles/chat/chatPsicologoStyle';
 import { Colors } from '@/constants/theme';
 import * as DocumentPicker from 'expo-document-picker';
@@ -53,6 +56,7 @@ export default function ChatPacienteScreen() {
 
   const [showLinkModal, setShowLinkModal] = useState(false);
   const [showQrScanner, setShowQrScanner] = useState(false);
+  const [showOwnQr, setShowOwnQr] = useState(false);
   const [uid, setUid] = useState('');
   const [uidLoading, setUidLoading] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -312,7 +316,11 @@ export default function ChatPacienteScreen() {
           onPressLink={() => setShowLinkModal(true)}
         />
       ) : (
-        <View style={chatPsicologoStyle.chatContainer}>
+        <KeyboardAvoidingView
+          style={chatPsicologoStyle.chatContainer}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        >
           <NameBar
             img={imagenMostrada}
             name={nombreMostrado}
@@ -333,7 +341,7 @@ export default function ChatPacienteScreen() {
             uploadDisabled={!selectedChat || uploadingFile}
             uploadingFile={uploadingFile}
           />
-        </View>
+        </KeyboardAvoidingView>
       )}
 
       <Modal
@@ -410,6 +418,21 @@ export default function ChatPacienteScreen() {
               <Text style={{ color: Colors.principal, fontWeight: '700' }}>Escanear con camara</Text>
             </TouchableOpacity>
 
+            <TouchableOpacity
+              onPress={() => setShowOwnQr(true)}
+              disabled={uidLoading}
+              style={{
+                marginTop: 10,
+                borderWidth: 1,
+                borderColor: Colors.principal,
+                borderRadius: 8,
+                paddingVertical: 10,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ color: Colors.principal, fontWeight: '700' }}>Mostrar mi codigo QR</Text>
+            </TouchableOpacity>
+
             <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginTop: 14, gap: 10 }}>
               <TouchableOpacity
                 onPress={() => setShowLinkModal(false)}
@@ -445,6 +468,14 @@ export default function ChatPacienteScreen() {
         onCodeScanned={handleScanCode}
         title="Escanear QR del psicologo"
         subtitle="Escanea el codigo para vincularte automaticamente"
+      />
+
+      <UserQrModal
+        visible={showOwnQr}
+        onClose={() => setShowOwnQr(false)}
+        uid={user?.idUsuario}
+        title="Tu codigo QR"
+        subtitle="Comparte este codigo para que te vinculen rapidamente"
       />
     </SafeAreaView>
   );
