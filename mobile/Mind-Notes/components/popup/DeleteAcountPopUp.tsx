@@ -23,8 +23,8 @@ const DeliteAcountPopUp = ({ onAccept, onClose }: Props) => {
             <Text>Todos los datos se perderan y se cancelara la suscripción</Text>
             <View style={deleteAccountPopUpStyle.btnsContainer}>
                 <Pressable style={deleteAccountPopUpStyle.acceptBtn} onPress={() => {
-                    Haptics.selectionAsync()
-                    onClose()
+                    
+                    onAccept()
                 }}>
                     <Text style={deleteAccountPopUpStyle.acceptText}>Aceptar</Text>
                 </Pressable>
