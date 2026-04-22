@@ -2,6 +2,8 @@ import Chat from "../models/Chat.js";
 import { ObjectId } from "mongodb";
 import fs from "fs";
 import path from "path";
+import mammoth from "mammoth";
+import { Document, Packer, Paragraph } from "docx";
 
 class ChatController {
     constructor() {
@@ -164,6 +166,71 @@ class ChatController {
         }
     }
 
+    async descargarArchivoPsi(req, res) {
+        const { idPsicologo, idPaciente, archivoId, type } = req.params;
+        console.log("Buscando archivo para descargar")
+
+        try {
+            const chat = new Chat();
+            const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
+
+            if (!chatData) {
+                return res.status(404).json({ success: false, message: 'Chat no encontrado' });
+            }
+
+
+            if (type === "mat") {
+                console.log("El archivo es material de apoyo")
+                const archivo = chatData.materialAdjunto.find(a => a._id.toString() === archivoId);
+
+                if (!archivo) {
+                    return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+                }
+
+                const filePath = path.resolve(archivo.path);
+
+                if (!fs.existsSync(filePath)) {
+                    return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
+                }
+
+                res.download(filePath, archivo.nombre, (err) => {
+                    if (err) {
+                        console.error('Error al descargar archivo:', err);
+                        res.status(500).json({ success: false, message: 'Error al descargar el archivo' });
+                    }
+                });
+            }
+            else{
+                console.log("El archivo es expediento o grabacion")
+                const archivo = chatData.grabaciones.find(a => a._id.toString() === archivoId);
+
+                if (!archivo) {
+                    console.log("trono aquí")
+                    return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+                }
+
+                const filePath = path.resolve(archivo.path);
+
+                if (!fs.existsSync(filePath)) {
+                    console.log("trono aca")
+                    return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
+                }
+
+                res.download(filePath, archivo.nombre, (err) => {
+                    if (err) {
+                        console.error('Error al descargar archivo:', err);
+                        res.status(500).json({ success: false, message: 'Error al descargar el archivo' });
+                    }
+                });
+            }
+
+
+        } catch (error) {
+            console.error('Error al descargar archivo:', error);
+            res.status(500).json({ success: false, message: 'Error al descargar el archivo: ' + error.message });
+        }
+    }
+
     async eliminarArchivo(req, res) {
         const { idPsicologo, idPaciente, archivoId } = req.params;
 
@@ -201,6 +268,64 @@ class ChatController {
     }
 
     async obtenerDocumento(req, res) {
+        const { idPsicologo, idPaciente, archivoId, type } = req.params;
+
+        try {
+            const chat = new Chat();
+            const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
+
+            if (!chatData) {
+                return res.status(404).json({ success: false, message: 'Chat no encontrado' });
+            }
+
+            if (type === "mat") {
+                const archivo = chatData.materialAdjunto.find(a => a._id.toString() === archivoId);
+
+                if (!archivo) {
+                    return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+                }
+
+                const filePath = path.resolve(archivo.path);
+
+                if (!fs.existsSync(filePath)) {
+                    return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
+                }
+
+                res.download(filePath, archivo.nombre, (err) => {
+                    if (err) {
+                        console.error('Error al descargar archivo:', err);
+                        res.status(500).json({ success: false, message: 'Error al descargar el archivo' });
+                    }
+                });
+            }
+            else {
+                console.log("Buscando expediente");
+                const archivo = chatData.expedientes.find(a => a._id.toString() === archivoId);
+
+                if (!archivo) {
+                    return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+                }
+
+                const filePath = path.resolve(archivo.path);
+
+                if (!fs.existsSync(filePath)) {
+                    return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
+                }
+
+                res.download(filePath, archivo.nombre, (err) => {
+                    if (err) {
+                        console.error('Error al descargar archivo:', err);
+                        res.status(500).json({ success: false, message: 'Error al descargar el archivo' });
+                    }
+                });
+            }
+        } catch (error) {
+            console.error('Error al descargar archivo:', error);
+            res.status(500).json({ success: false, message: 'Error al descargar el archivo: ' + error.message });
+        }
+    }
+
+    async obtenerTexto(req, res) {
         const { idPsicologo, idPaciente, archivoId } = req.params;
 
         try {
@@ -223,17 +348,66 @@ class ChatController {
                 return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
             }
 
-            res.download(filePath, archivo.nombre, (err) => {
-                if (err) {
-                    console.error('Error al descargar archivo:', err);
-                    res.status(500).json({ success: false, message: 'Error al descargar el archivo' });
-                }
+            const result = await mammoth.extractRawText({ path: filePath });
+
+            res.json({
+                success: true,
+                content: result.value
             });
+
         } catch (error) {
             console.error('Error al descargar archivo:', error);
             res.status(500).json({ success: false, message: 'Error al descargar el archivo: ' + error.message });
         }
     }
+
+    async guardarDocumento(req, res) {
+        try {
+            const { content } = req.body;
+            const { idPsicologo, idPaciente, archivoId } = req.params;
+
+            const doc = new Document({
+                sections: [
+                    {
+                        children: content.split('\n').map(
+                            line => new Paragraph(line)
+                        )
+                    }
+                ]
+            });
+
+            const buffer = await Packer.toBuffer(doc);
+
+            const chat = new Chat();
+            const chatData = await chat.findChatByParticipants(idPaciente, idPsicologo);
+
+            if (!chatData) {
+                return res.status(404).json({ success: false, message: 'Chat no encontrado' });
+            }
+
+            const archivo = chatData.expedientes.find(a => a._id.toString() === archivoId);
+
+            if (!archivo) {
+                return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
+            }
+
+            const filePath = path.resolve(archivo.path);
+
+            fs.writeFileSync(filePath, buffer);
+
+            return res.json({
+                success: true,
+                message: "Documento guardado"
+            });
+
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                success: false,
+                message: "Error al guardar documento"
+            });
+        }
+    };
 
 }
 
