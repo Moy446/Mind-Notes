@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Doc.css'
 import Tiptap from './components/TipTap';
@@ -11,34 +11,40 @@ import { obtenerDocumento } from './services/chatService';
 export default function Doc(props) {
     const { id } = useParams();
     const { idP } = useParams();
+    const { type } = useParams();
 
     const navigate = useNavigate();
 
     const [pencil, setPencil] = useState(true);
     const [brush, setBrush] = useState(false);
     const [editor, setEditor] = useState(null);
-    const [doc, setDoc] = useState("");
+
+    const [doc, setDoc] = useState(null);
+    const [docType, setDocType] = useState(null);
+    const [docText, setDocText] = useState("");
+
     const [loading, setLoading] = useState(true);
     const { user } = useContext(AuthContext);
 
-    React.useEffect(() => {
+    useEffect(() => {
         const getArchivo = async () => {
-            if (!id || !idP) return
+            if (!id || !idP) return;
 
             try {
                 setLoading(true);
-                const data = await obtenerDocumento(user.id, idP, id);
-                if (data) {
-                    setDoc(data);
-                }
-            }
-            catch (error) {
+
+                const res = await obtenerDocumento(user.id, idP, id, type);
+
+                setDoc(res.blob);
+                setDocType(res.contentType);
+
+            } catch (error) {
                 console.log(error);
-            }
-            finally {
+            } finally {
                 setLoading(false);
             }
         };
+
         getArchivo();
     }, [id]);
 
@@ -81,6 +87,25 @@ export default function Doc(props) {
     if (loading) {
         return <div>Cargando documento...</div>;
     }
+
+    if (docType?.includes('pdf') && doc) {
+    return (
+        <div className={`doc ${brush ? "cursorbrush" : ""}`}>
+            <iframe
+                src={URL.createObjectURL(doc)}
+                width="100%"
+                height="100%"
+                style={{ border: 'none' }}
+                title="PDF Viewer"
+            />
+            <div className='btnsDoc'>
+                <button className="docBtn efectBtn" onClick={closeDoc}>
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    );
+}
 
     return (
         <div className={`doc ${brush ? "cursorbrush" : ""}`}>

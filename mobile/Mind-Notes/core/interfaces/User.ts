@@ -4,4 +4,5 @@ export interface User {
     nombre:      string;
     role:        string;
     suscripcion?: string;
+    fotoPerfil?: string;
 }
