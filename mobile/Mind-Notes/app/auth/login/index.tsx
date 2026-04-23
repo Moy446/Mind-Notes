@@ -46,6 +46,10 @@ const LoginScreen = () => {
             Alert.alert('Error', 'El usuario o contraseña son incorrectos')
             return;
         }
+        setForm({
+            email: '',
+            password: '',
+        })
         if(wasSuccesful.role === 'paciente'){
             router.replace('/paciente/tabs/chat')
             return;
