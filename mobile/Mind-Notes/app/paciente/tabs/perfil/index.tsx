@@ -7,6 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import { cambiarFotoPerfil, actualizarPerfil, eliminarCuenta } from '@/core/actions/perfil/perfil.actions'
 import EditModal from '@/components/perfil/Edit'
 import DeliteAcountPopUp from '@/components/popup/DeleteAcountPopUp'
+import { resolveMediaUrl } from "@/core/API/mediaUrl";
 import { perfilStyle } from '@/styles/perfil/perfilStyle'
 
 const PerfilPaciente = () => {

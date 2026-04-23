@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { descargarArchivoPsi } from '../services/chatService';
+import { AuthContext } from '../context/AuthContext';
 import './SuppPsi.css'
 
 export default function SuppPsi(props) {
-
+    const { user } = useContext(AuthContext);
 
     const [paginador, setPaginador] = useState(1);
     const itemsPerPage = 20;
@@ -63,6 +65,27 @@ export default function SuppPsi(props) {
         );
     };
 
+    const descargarArchivo = async (id, idP, idA, type, nombre) => {
+        try {
+            const res = await descargarArchivoPsi(id, idP, idA, type);
+
+            const blob = new Blob([res.data]);
+            const link = document.createElement("a");
+
+            link.href = URL.createObjectURL(blob);
+            link.download = nombre;
+
+            document.body.appendChild(link);
+            link.click();
+
+            link.remove();
+            URL.revokeObjectURL(link.href);
+
+        } catch (error) {
+            console.error("Error al descargar:", error);
+        }
+    };
+
     return (
         <div className='suppPsi'>
             <div className='headerSuppPsi'>
@@ -87,20 +110,20 @@ export default function SuppPsi(props) {
             <hr className={activo ? 'lineDown2' : 'lineDown'} />
 
             <div className='matApo'>
-                {currentItems.map((item) => 
+                {currentItems.map((item) =>
                 (
-                    ["pdf", "docx", "doc", "txt"].includes(item.type) 
-                        ? 
+                    ["pdf", "docx", "doc", "txt"].includes(item.type)
+                        ?
                         <Link
-                        key={item._id}
-                        to={`/psicologo/doc/${props.idPaciente}/${item._id}`}
-                        className='itemsmatApo btnSuppPsi'
+                            key={item._id}
+                            to={`/psicologo/doc/${props.idPaciente}/${item._id}/${activo ? "mat" : "exp"}`}
+                            className='itemsmatApo btnSuppPsi'
                         >
-                        {renderIcon(item.type)}
-                        <p className='pMatApo'>{item.nombre}</p>
+                            {renderIcon(item.type)}
+                            <p className='pMatApo'>{item.nombre}</p>
                         </Link>
                         :
-                        <div className='itemsmatApo' key={item._id}>
+                        <div className='itemsmatApo' key={item._id} onClick={() => descargarArchivo(user.id, props.idPaciente, item._id, activo ? "mat" : "exp", item.nombre)}>
                             {renderIcon(item.type)}
                             <p className='pMatApo'>{item.nombre}</p>
                         </div>
