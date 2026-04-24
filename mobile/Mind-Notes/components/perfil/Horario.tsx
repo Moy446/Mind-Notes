@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, Text, View, Alert } from 'react-native'
+import { Pressable, Text, View, Alert, ScrollView } from 'react-native'
 import * as Haptics from 'expo-haptics'
 import { horarioStyle } from '@/styles/perfil/horarioStyle'
 import { MaterialIcons } from '@expo/vector-icons';
@@ -92,7 +92,7 @@ const HorarioPopUp = ({ onClose, userId }: Props,) => {
                 </Pressable>
                 <Text style={horarioStyle.title}>Horario</Text>
             </View>
-            <View style={horarioStyle.daysContainer}>
+            <ScrollView style={horarioStyle.daysContainer} contentContainerStyle={{ justifyContent: 'space-evenly',gap: 15 }}>
 
                 <HorarioItem day="Dom" valor={dom} onCambio={setDom} />
                 <HorarioItem day="Lun" valor={lun} onCambio={setLun} />
@@ -105,7 +105,7 @@ const HorarioPopUp = ({ onClose, userId }: Props,) => {
                 <Pressable style={horarioStyle.guardarBtn} onPress={() => handleGuardarHorario({ dom, lun, mar, mie, jue, vie, sab })}>
                     <Text style={horarioStyle.textGuardar}>Guardar</Text>
                 </Pressable>
-            </View>
+            </ScrollView>
         </View>
     )
 }

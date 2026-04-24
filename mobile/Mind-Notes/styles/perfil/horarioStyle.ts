@@ -38,7 +38,6 @@ export const horarioStyle = StyleSheet.create({
     },
     daysContainer:
     {
-        justifyContent: 'space-evenly',
         height: '100%',
         alignContent: 'center',
         paddingBottom: 20,
