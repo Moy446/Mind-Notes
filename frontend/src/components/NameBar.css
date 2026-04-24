@@ -23,6 +23,9 @@
 .img-namebar
 {
     max-height: 80%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    overflow: hidden;
     align-self: center;
     justify-self: center;
     margin: 20px;

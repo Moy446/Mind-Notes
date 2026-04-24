@@ -11,6 +11,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from "expo-image-picker";
 import { cambiarFotoPerfil, actualizarPerfil, eliminarCuenta } from '@/core/actions/perfil/perfil.actions'
 import EditModal from '@/components/perfil/Edit'
+import { resolveMediaUrl } from "@/core/API/mediaUrl";
 
 
 const profileScreen = () => {
@@ -105,6 +106,7 @@ const profileScreen = () => {
 
   useEffect(() => {
     if (user) {
+      console.log(user)
       setUserData({
         nombre: user.nombre || 'Usuario',
         email: user.email || 'correo@ejemplo.com',
@@ -187,9 +189,10 @@ const profileScreen = () => {
         </Svg>
       </View>
       <View style={perfilStyle.imgContainer}>
-        <Image source={{
-          uri: `${BASE_URL}/${userData?.fotoPerfil}`
-        }} style={perfilStyle.imgPerfil} />
+        <Image source={userData.fotoPerfil?.includes('userDefault')
+          ? require('../../../../assets/images/userDefault.png')
+          : { uri: resolveMediaUrl(userData.fotoPerfil) }}
+          style={perfilStyle.imgPerfil} />
         <Svg
           viewBox="0 0 24 24"
           width={30}
