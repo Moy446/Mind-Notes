@@ -1,6 +1,5 @@
 import { resolveMediaUrl } from "@/core/API/mediaUrl";
 import { calendarPopUpStyle } from "@/styles/popup/calendar.popUpStyle";
-import { useState } from "react";
 import { Image, Text, View } from "react-native"
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -25,6 +24,8 @@ const CustomSelector = ({ data, value, onChange, placeholder }: Props) => {
             labelField="nombre"
             valueField="id"
             value={ value }
+            maxHeight={200}
+            dropdownPosition="top"
             placeholder={placeholder}
             onChange={item => {
                 onChange && onChange(item)

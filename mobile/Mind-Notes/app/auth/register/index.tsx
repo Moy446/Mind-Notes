@@ -193,8 +193,8 @@ const RegisterScreen = () => {
             <GoogleButton onPress={handleGoogleAuth} />
       </View>
       <View style={registerStyle.bottomContainer}>
-            <Text style={registerStyle.bottomTextTitle}>¡Bienvenido!</Text>
-            <Text style={registerStyle.bottomTextDescription}>¿Aún no tienes una cuenta?</Text>
+            <Text style={registerStyle.bottomTextTitle}>¡Hola, de nuevo!</Text>
+            <Text style={registerStyle.bottomTextDescription}>¿Ya tienes una cuenta?</Text>
             <CustomButton text='Iniciar sesión' size='md' onPress={() => router.push('/auth/login')} style={{marginBottom: 50}} />
         </View>
     </ScrollView>

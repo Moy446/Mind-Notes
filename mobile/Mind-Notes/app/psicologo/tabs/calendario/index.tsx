@@ -6,7 +6,6 @@ import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
 import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import ViewDatesComponent from '@/components/calendar/ViewDates'
 import CalendarPopUp from '@/components/popup/CalendarPopUp'
-import { calendarPopUpStyle } from '@/styles/popup/calendar.popUpStyle'
 import { infoCita } from '@/core/interfaces/Dates'
 
 interface Cita {
@@ -30,11 +29,13 @@ const CalendarioScreen = () => {
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
+  const [createDate, setCreateDate] = useState(false)
+  const currentDate = formatLocalDate(new Date())
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
     idUsuario: '',
     nombre: '',
-    fechaCita: '',
+    fechaCita: currentDate,
     horaInicio: '',
     horaFin: ''
   });
@@ -55,17 +56,36 @@ const CalendarioScreen = () => {
         idCita: '',
         idUsuario: '',
         nombre: '',
-        fechaCita: '',
+        fechaCita: currentDate,
         horaInicio: '',
         horaFin: ''
       })
     },[])
-
+    
+    useEffect(() => {
+      const currentDateSplit = currentDate.split('-').map(Number);
+      const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
+      if(currentDateSplit[0] > selectedDateSplit[0]){
+        setCreateDate(true)
+        return
+      }
+      if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
+        setCreateDate(true)
+        return
+      }
+      if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
+        setCreateDate(true)
+        return
+      }
+      setCreateDate(false)
+    }, [date])
+    
   return (
     <View style={calendarioStyle.container}>
       
       <CalendarComponent onDayPress={(date) => {
           setDate(date);
+          setSelectedCita({...selectedCita, fechaCita: formatLocalDate(date)})
           loadDateEvents(date);
         }} 
         citas={allDates} 
@@ -79,7 +99,7 @@ const CalendarioScreen = () => {
         ListHeaderComponent={
           <>
             <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
-            <AddNewDateComponent onPress={() => setShowPopup(true)} />
+            <AddNewDateComponent disabled={createDate} onPress={() => setShowPopup(true)} />
           </>
         }
         renderItem={({item}) => (
@@ -96,7 +116,6 @@ const CalendarioScreen = () => {
                 horaInicio: horaInicio.toLocaleTimeString().substring(0,5),
                 horaFin:horaFin.toLocaleTimeString().substring(0,5)
               }
-              console.log(cita)
               setSelectedCita(cita)
               setShowPopup(true)
             }}

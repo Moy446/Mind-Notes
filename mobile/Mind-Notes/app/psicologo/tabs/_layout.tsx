@@ -22,9 +22,7 @@ const tabsPsicologo = () => {
         tabBarStyle: {
           ...tabStyle.buttonTab,
           elevation: 0,
-          shadowColor: 'transparent',
           borderTopWidth: 0,
-          overflow: 'hidden',
         },
         tabBarActiveTintColor: Colors.white,
         

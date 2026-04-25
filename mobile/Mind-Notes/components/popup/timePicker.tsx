@@ -17,6 +17,15 @@ const TimeRangePicker = ({ start, end, onChange }: Props) => {
         return date.toTimeString().slice(0, 5); // HH:mm
     };
 
+    const timeToMinutes = (time: string) => {
+        const [h, m] = time.split(":").map(Number);
+        return h * 60 + m;
+    };
+
+    const isAfter = (t1: string, t2: string) => {
+        return timeToMinutes(t1) > timeToMinutes(t2);
+    };
+
     return (
         <View style={calendarPopUpStyle.timePickerContainer}>
             {/* Hora inicio */}
@@ -37,6 +46,10 @@ const TimeRangePicker = ({ start, end, onChange }: Props) => {
                         setShowStart(Platform.OS === "ios");
                         if (date) {
                             const newStart = formatTime(date);
+                            if (isAfter(newStart, end)) {
+                                alert("La hora inicio debe ser antes de la hora fin");
+                                return;
+                            }
                             onChange(newStart, end);
                         }
                     }}
@@ -61,6 +74,10 @@ const TimeRangePicker = ({ start, end, onChange }: Props) => {
                         setShowEnd(Platform.OS === "ios");
                         if (date) {
                             const newEnd = formatTime(date);
+                            if (isAfter(start, newEnd)) {
+                                alert("La hora fin debe ser después de la hora inicio");
+                                return;
+                            }
                             onChange(start, newEnd);
                         }
                     }}

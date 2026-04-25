@@ -28,6 +28,9 @@ export const tabStyle = StyleSheet.create({
         backgroundColor: Colors.secondaryButton,
         borderRadius: 50,
         elevation: 5,
+        shadowColor: Colors.black,
+        shadowOffset: { width: 0, height: 10 },
+        boxShadow: '0px 10px 15px rgba(0, 0, 0, 0.3)',
     },
     fontTab:{
         color: '#ffffff',

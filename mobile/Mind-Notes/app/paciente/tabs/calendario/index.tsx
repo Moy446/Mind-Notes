@@ -29,6 +29,8 @@ const calendarioPaciente = () => {
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
+  const [createDate, setCreateDate] = useState(false)
+  const currentDate = formatLocalDate(new Date())
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
     idUsuario: '',
@@ -66,6 +68,24 @@ const calendarioPaciente = () => {
     })
   },[])
 
+  useEffect(() => {
+        const currentDateSplit = currentDate.split('-').map(Number);
+        const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
+        if(currentDateSplit[0] > selectedDateSplit[0]){
+          setCreateDate(true)
+          return
+        }
+        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
+          setCreateDate(true)
+          return
+        }
+        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
+          setCreateDate(true)
+          return
+        }
+        setCreateDate(false)
+      }, [date])
+
   return (
     <View style={calendarioStyle.container}>
       <CustomSelector 
@@ -89,7 +109,7 @@ const calendarioPaciente = () => {
         ListHeaderComponent={
           <>
             <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
-            <AddNewDateComponent onPress={() => setShowPopup(true)} />
+            <AddNewDateComponent disabled={createDate} onPress={() => setShowPopup(true)} />
           </>
         }
         renderItem={({item}) => (
