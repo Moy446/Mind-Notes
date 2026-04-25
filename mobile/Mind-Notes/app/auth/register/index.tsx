@@ -11,7 +11,6 @@ import UseRegister from '@/hooks/auth/UseRegister'
 import { registerPaciente, registerPsicologo } from '@/core/actions/auth/register.actions'
 import { loginWithGoogle } from '@/services/googleAuthService'
 import { UseAuthStore } from '@/store/auth/useAuthStore'
-import ThemedLink from '@/components/auth/ThemedLink'
 
 const RegisterScreen = () => {
 

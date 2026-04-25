@@ -63,6 +63,10 @@ const CalendarioScreen = () => {
     },[])
     
     useEffect(() => {
+        loadDateEvents(date)
+    }, [allDates, date])
+    
+    useEffect(() => {
       const currentDateSplit = currentDate.split('-').map(Number);
       const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
       if(currentDateSplit[0] > selectedDateSplit[0]){

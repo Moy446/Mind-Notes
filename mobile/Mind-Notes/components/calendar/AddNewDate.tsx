@@ -11,19 +11,21 @@ interface Props extends PressableProps{
     onPress: () => void
 }
 
-const AddNewDateComponent = ({onPress, ...props}: Props) => {
+const AddNewDateComponent = ({onPress,disabled, ...props}: Props) => {
   return (
     <Pressable 
         {...props}
+        disabled={disabled}
         style={({pressed}) =>({
             ...calendarioStyle.addContainer,
             opacity: pressed ? 0.6 : 1,
+            ...(disabled && calendarioStyle.disabledButton)
         })}
         onPress={()=>{
             Haptics.selectionAsync()
             onPress()
         }}>
-        <Ionicons name='add-outline' color={Colors.primaryButton} size={35} />
+        <Ionicons name='add-outline' color={disabled ? Colors.disabledIcon : Colors.primaryButton} size={35} />
 
     </Pressable>
   )
