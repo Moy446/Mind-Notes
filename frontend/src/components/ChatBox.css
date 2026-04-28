@@ -18,6 +18,9 @@
     align-self: center;
     justify-self: center;
     max-height: 80%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    overflow: hidden;
     margin-left: 15px;
     border-radius: 50px;
 }

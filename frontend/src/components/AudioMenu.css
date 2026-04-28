@@ -1,5 +1,4 @@
-.AudioMenu
-{
+.AudioMenu {
     height: 396px;
     width: 694px;
     border-radius: 20px;
@@ -12,8 +11,7 @@
     margin-bottom: -10vw;
 }
 
-.titleAudio
-{
+.titleAudio {
     font-family: 'Saira';
     font-size: 25px;
     font-weight: 400;
@@ -38,66 +36,68 @@
 
 /*Funciones SELECT*/
 .selectM__control {
-  display: block;
-  height: 100%;
-  width: 95%;
-  align-items: center;
-  gap: 10px;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
+    display: block;
+    height: 100%;
+    width: 95%;
+    align-items: center;
+    gap: 10px;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
 }
-.selectM__control *{
-  cursor: pointer;
+
+.selectM__control * {
+    cursor: pointer;
 }
 
 .selectM__menu {
-  background: rgb(41, 114, 178);
-  width: 90%;
-  margin-top: 5px;
-  border-radius: 20px;
-  overflow: hidden;
-  z-index: 10;
-  cursor: pointer;
+    background: rgb(41, 114, 178);
+    width: 90%;
+    margin-top: 5px;
+    border-radius: 20px;
+    overflow: hidden;
+    z-index: 10;
+    cursor: pointer;
 }
 
 .selectM__option {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: transparent;
 }
 
-.selectM__option *{
-  cursor: pointer;
+.selectM__option * {
+    cursor: pointer;
 }
+
 /* hover para ver cual esta seleccionando*/
 .selectM__option--is-focused {
-  background-color: #48A6A7;
+    background-color: #48A6A7;
 }
 
 /*Marca la opcion seleccionada*/
 .selectM__option--is-selected {
-  background-color: #dceeff;
+    background-color: #dceeff;
 }
 
 .optionContentM {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /*IMAGEN DEL OPTION*/
 .avatarM {
-  height: 9%;
-  width: 9%;
-  border-radius: 50%;
-  object-fit: cover;
+    height: 9%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-.radioBtns
-{
+.radioBtns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -105,7 +105,7 @@
     z-index: 0;
 }
 
-.accept-button{
+.accept-button {
     width: 40%;
     height: 73px;
     background-color: #2973B2;
@@ -125,21 +125,20 @@
 }
 
 .accept-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .accept-button:active {
-  transform: translateY(0);
+    transform: translateY(0);
 }
 
-.offScreen{
+.offScreen {
     position: absolute;
     left: -999999999999999999px;
 }
 
-.radioA
-{
+.radioA {
     width: 43px;
     height: 43px;
     background-color: #F2EFE7;
@@ -151,8 +150,7 @@
     justify-content: center;
 }
 
-.radioA::after
-{
+.radioA::after {
     content: '';
     position: absolute;
     width: 26px;
@@ -162,27 +160,25 @@
     transition: all 0.4s;
 }
 
-input[type='checkbox']:checked + .radioA::after
-{
+input[type='checkbox']:checked+.radioA::after {
     background-color: #2973B2;
 }
 
-input[type='checkbox']:checked + .radioA
-{
+input[type='checkbox']:checked+.radioA {
     background-color: #F2EFE7;
 }
 
-.radioBtn{
+.radioBtn {
     display: flex;
     gap: 10px;
 }
 
 @font-face {
-  font-family: 'Saira';
-  src: url('../fonts/Saira.ttf') format('truetype');
-  font-style: normal;
-  font-display: swap;
-  font-weight: 100 900; 
+    font-family: 'Saira';
+    src: url('../fonts/Saira.ttf') format('truetype');
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
 }
 
 /* ----------------------------------------------------------------------------------------------------------------------------------- */
@@ -218,6 +214,7 @@ input[type='checkbox']:checked + .radioA
         margin-bottom: 45px;
     }
 }
+
 /* ------------------------------------------------------------------------------------------------------------------------------------- */
 @media (max-width: 768px) {
 
@@ -253,6 +250,7 @@ input[type='checkbox']:checked + .radioA
         height: 12%;
     }
 }
+
 /* ------------------------------------------------------------------------------------------------------------------------------------- */
 @media (max-width: 480px) {
 

@@ -33,6 +33,9 @@
     width: 50%;
     align-self: center;
     border-radius: 50%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    overflow: hidden;
 }
 
 .nameInfoPsi
