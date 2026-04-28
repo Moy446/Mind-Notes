@@ -181,9 +181,10 @@ const perfilPaciente = () => {
         </Svg>
       </View>
       <View style={perfilStyle.imgContainer}>
-        <Image source={{
-          uri: `${BASE_URL}/${userData?.fotoPerfil}`
-        }} style={perfilStyle.imgPerfil} />
+        <Image source={userData.fotoPerfil?.includes('userDefault')
+          ? require('../../../../assets/images/userDefault.png')
+          : { uri: resolveMediaUrl(userData.fotoPerfil) }}
+          style={perfilStyle.imgPerfil} />
         <Svg
           viewBox="0 0 24 24"
           width={30}
