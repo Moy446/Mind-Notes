@@ -41,7 +41,10 @@
 
 .D40
 {
-    background-color: rgba(41, 115, 178, 80%);
+    background-color: #F2EFE7;
+    border-color: #2973B2;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .time

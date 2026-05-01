@@ -27,13 +27,13 @@ function PlanesGeneral() {
                 <div className='div-planCard'>
                     <img className="img-planesGeneral" src={logoColor} alt="Imagen"/>
                     <p className='p-duracion'>6 meses</p>
-                    <button className= "btn-planesGeneral">USD $30</button>
+                    <button className= "btn-planesGeneral">USD $45</button>
                 </div>
 
                 <div className='div-planCard'>
                     <img className="img-planesGeneral" src={logoColor} alt="Imagen"/>
                     <p className='p-duracion'>1 año</p>
-                    <button className= "btn-planesGeneral">USD $40</button>
+                    <button className= "btn-planesGeneral">USD $80</button>
                 </div>
 
             </div>
