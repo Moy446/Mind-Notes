@@ -288,7 +288,7 @@ const perfilPaciente = () => {
           handleSaveEdit(value);
         }}
         type={editModal.field === 'email' ? 'email' : 'text'}
-        maxLength={editModal.field === 'nombre' ? 45 : 254}
+        maxLength={editModal.field === 'nombre' ? 45 : 50}
       />
       <Modal visible={showPopup} transparent animationType="slide">
         <View style={perfilStyle.darkThemeModal}>
