@@ -342,7 +342,7 @@ const profileScreen = () => {
           handleSaveEdit(value);
         }}
         type={editModal.field === 'email' ? 'email' : 'text'}
-        maxLength={editModal.field === 'nombre' ? 45 : undefined}
+        maxLength={editModal.field === 'nombre' ? 45 : 254}
       />
     </View>
   )
