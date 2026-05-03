@@ -359,7 +359,7 @@ export default function Login() {
                         />
                     </div>
 
-                    <div className='inputBox'>
+                    <div className='inputBox registerInput'>
                         <Tooltipe text="La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales como @, $, !, %, *, ?, &">
                         <input 
                             type="password" 
@@ -384,16 +384,20 @@ export default function Login() {
                     
 
                     <p className='p-switch'>¿Eres psicólogo?</p>
+                    <div className='rowInformation-switch'>
+                        <p>No</p>
+                        <p>Si</p>
+                    </div>
                     <div className='div-buttons'>
-                    <Switch
-                        id="pSwitch2"
-                        valor={isPsicologo}
-                        onCambio={setIsPsicologo}
-                    />
+                        <Switch
+                            id="pSwitch2"
+                            valor={isPsicologo}
+                            onCambio={setIsPsicologo}
+                        />
 
-                    <button type='submit' className='btn register' id="btnFormRegister" disabled={registerLoading}>
-                        {registerLoading ? 'Registrando...' : 'Registrarse'}
-                    </button>
+                        <button type='submit' className='btn register' id="btnFormRegister" disabled={registerLoading}>
+                            {registerLoading ? 'Registrando...' : 'Registrarse'}
+                        </button>
                     </div>
                     
                     <p>O ingresa con:</p>

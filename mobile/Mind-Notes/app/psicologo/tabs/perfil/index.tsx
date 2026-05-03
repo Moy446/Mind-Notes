@@ -1,20 +1,19 @@
 import { View, Text, Image, Modal, TouchableOpacity, Alert } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Svg, { Path } from 'react-native-svg'
 import { perfilStyle } from '@/styles/perfil/perfilStyle'
 import DeliteAcountPopUp from '@/components/popup/DeleteAcountPopUp'
 import HorarioPopUp from '@/components/perfil/Horario'
 import PlanesComponent from '@/components/perfil/Planes'
 import { UseAuthStore } from '@/store/auth/useAuthStore'
-import { authLogout } from '@/core/actions/auth/login.actions'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import * as ImagePicker from "expo-image-picker";
 import { cambiarFotoPerfil, actualizarPerfil, eliminarCuenta } from '@/core/actions/perfil/perfil.actions'
 import EditModal from '@/components/perfil/Edit'
 import { resolveMediaUrl } from "@/core/API/mediaUrl";
 
 
-const profileScreen = () => {
+const ProfileScreen = () => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [showHorario, setHorario] = useState(false);
@@ -348,4 +347,4 @@ const profileScreen = () => {
   )
 }
 
-export default profileScreen
+export default ProfileScreen
