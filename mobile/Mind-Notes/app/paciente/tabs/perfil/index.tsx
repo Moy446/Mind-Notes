@@ -35,9 +35,35 @@ const PerfilPaciente = () => {
 
 
   const salir = () => {
-    UseAuthStore.getState().logout()
-    router.push('/auth/login')
-  }
+      try {
+        setShowPopup(false);
+        Alert.alert(
+          "¿Estás seguro de salir?",
+          "",
+          [
+            {
+              text: "Cancelar",
+              style: "cancel"
+            },
+            {
+              text: "Sí, salir",
+              style: "destructive",
+              onPress: async () => {
+                UseAuthStore.getState().logout()
+                router.push('/auth/login')
+              }
+            }
+          ]
+        );
+  
+      } catch (error) {
+        Alert.alert(
+          "Error",
+          "No se pudo cerrar sesión."
+        );
+      }
+      
+    }
 
   const handleCambiarFoto = async () => {
     try {
@@ -181,9 +207,10 @@ const PerfilPaciente = () => {
         </Svg>
       </View>
       <View style={perfilStyle.imgContainer}>
-        <Image source={{
-          uri: `${BASE_URL}/${userData?.fotoPerfil}`
-        }} style={perfilStyle.imgPerfil} />
+        <Image source={userData.fotoPerfil?.includes('userDefault')
+          ? require('../../../../assets/images/userDefault.png')
+          : { uri: resolveMediaUrl(userData.fotoPerfil) }}
+          style={perfilStyle.imgPerfil} />
         <Svg
           viewBox="0 0 24 24"
           width={30}
@@ -261,7 +288,7 @@ const PerfilPaciente = () => {
           handleSaveEdit(value);
         }}
         type={editModal.field === 'email' ? 'email' : 'text'}
-        maxLength={editModal.field === 'nombre' ? 45 : undefined}
+        maxLength={editModal.field === 'nombre' ? 45 : 50}
       />
       <Modal visible={showPopup} transparent animationType="slide">
         <View style={perfilStyle.darkThemeModal}>

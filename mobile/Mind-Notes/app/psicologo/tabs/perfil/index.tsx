@@ -119,8 +119,34 @@ const ProfileScreen = () => {
   const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
   const salir = () => {
-    UseAuthStore.getState().logout()
-    router.push('/auth/login')
+    try {
+      setShowPopup(false);
+      Alert.alert(
+        "¿Estás seguro de salir?",
+        "",
+        [
+          {
+            text: "Cancelar",
+            style: "cancel"
+          },
+          {
+            text: "Sí, salir",
+            style: "destructive",
+            onPress: async () => {
+              UseAuthStore.getState().logout()
+              router.push('/auth/login')
+            }
+          }
+        ]
+      );
+
+    } catch (error) {
+      Alert.alert(
+        "Error",
+        "No se pudo cerrar sesión."
+      );
+    }
+    
   }
 
   const handleCambiarFoto = async () => {
@@ -315,7 +341,7 @@ const ProfileScreen = () => {
           handleSaveEdit(value);
         }}
         type={editModal.field === 'email' ? 'email' : 'text'}
-        maxLength={editModal.field === 'nombre' ? 45 : undefined}
+        maxLength={editModal.field === 'nombre' ? 45 : 50}
       />
     </View>
   )
