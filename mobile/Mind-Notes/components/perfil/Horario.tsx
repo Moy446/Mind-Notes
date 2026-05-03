@@ -88,7 +88,7 @@ const HorarioPopUp = ({ onClose, userId }: Props,) => {
         <View style={horarioStyle.container}>
             <View style={horarioStyle.header}>
                 <Pressable onPress={onClose} style={horarioStyle.backButton}>
-                    <MaterialIcons name="arrow-back" size={24} color={Colors.principal} />
+                    <MaterialIcons name="arrow-back" size={35} color={Colors.principal} />
                 </Pressable>
                 <Text style={horarioStyle.title}>Horario</Text>
             </View>

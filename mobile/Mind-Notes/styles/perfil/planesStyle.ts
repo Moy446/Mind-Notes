@@ -18,7 +18,7 @@ export const planesStyle = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
         marginHorizontal: 20,
-        marginTop: 20
+        marginTop: 30
     },
     planGratis:
     {
@@ -50,7 +50,7 @@ export const planesStyle = StyleSheet.create({
     },
     txtTime:{
         color: Colors.principal,
-        fontSize: 30,
+        fontSize: 27,
         fontWeight: '400'
     },
     planSmall:{
@@ -84,7 +84,7 @@ export const planesStyle = StyleSheet.create({
     },
     txtTimeSecondary:{
         color: Colors.white,
-        fontSize: 30,
+        fontSize: 27,
         fontWeight: '400'
     },
     planBig:{

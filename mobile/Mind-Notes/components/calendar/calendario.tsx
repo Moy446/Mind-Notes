@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useState } from 'react'
 import { View } from 'react-native'
 import { Calendar } from 'react-native-calendars';
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle';
@@ -20,7 +20,6 @@ interface Props {
   citas?: CitaCalendar[];
   onDayPress?: (date: Date) => void;
 }
-
 const formatLocaleDate = (date:Date) => {
     
     return date.getFullYear() + '-' +
@@ -30,22 +29,38 @@ const formatLocaleDate = (date:Date) => {
   }
 
 
-const getDate = (citas?: CitaCalendar[]) => {
+const getMarkedDates = (
+  citas?: CitaCalendar[],
+  selectedDate?: string
+) => {
   const markedDates: { [key: string]: any } = {};
+
   citas?.forEach((cita) => {
     const formattedDate = formatLocaleDate(cita.start);
+
     markedDates[formattedDate] = {
       marked: true,
       dotColor: Colors.principal,
     };
-  })
+  });
+
+  if (selectedDate) {
+    markedDates[selectedDate] = {
+      ...(markedDates[selectedDate] || {}), // mantiene el dot si existe
+      selected: true,
+      selectedColor: Colors.primaryButton,
+      selectedTextColor: '#fff',
+    };
+  }
+
   return markedDates;
-}
+};
 
 const CalendarComponent = ({ citas, onDayPress }: Props) => {
 
-    const currentDate = formatLocaleDate(new Date())
-    const markedDates = getDate(citas);
+  const currentDate = formatLocaleDate(new Date())
+  const [selectedDate, setSelectedDate] = useState<string>(currentDate);
+  const markedDates = getMarkedDates(citas, selectedDate);
   return (
     <View >
         <Calendar
@@ -66,10 +81,14 @@ const CalendarComponent = ({ citas, onDayPress }: Props) => {
 
               dotStyle: calendarioStyle.dotStyle,          
               todayBackgroundColor: Colors.secondaryButton,
+              
+              selectedDayBackgroundColor: Colors.principal,
+              selectedDayTextColor: '#fff',
           }}
           onDayPress={(day)=>{
             const [year, month, dayNum] = day.dateString.split('-').map(Number);
             const selected = new Date(year, month - 1, dayNum);
+            setSelectedDate(formatLocaleDate(selected));
             onDayPress && onDayPress(selected);
           }}    
           markedDates={markedDates}
