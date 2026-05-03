@@ -297,7 +297,7 @@ export default function ChatScreen() {
 	}
 
 	return (
-		<SafeAreaView style={chatPsicologoStyle.container}>
+		<View style={chatPsicologoStyle.container}>
 			{!selectedChat || showSelector ? (
 				<ChatSelector
 					contacts={pacientes.map((p) => ({
@@ -471,6 +471,6 @@ export default function ChatScreen() {
 				title="Tu codigo QR"
 				subtitle="Comparte este codigo para que te vinculen rapidamente"
 			/>
-		</SafeAreaView>
+		</View>
 	);
 }
