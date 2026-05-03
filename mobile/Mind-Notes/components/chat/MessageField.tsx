@@ -5,8 +5,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
@@ -35,10 +33,7 @@ export const MessageField: React.FC<MessageFieldProps> = ({
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <View style={styles.inputContainer}>
         {onUploadPress ? (
           <TouchableOpacity
@@ -68,7 +63,7 @@ export const MessageField: React.FC<MessageFieldProps> = ({
           <MaterialIcons name="send" size={20} color="#fff" />
         </TouchableOpacity>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
