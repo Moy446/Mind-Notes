@@ -5,8 +5,24 @@ import {Link} from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { emailAuthService }  from '../../services/emailAuthService';
 
+
+import { useLayoutEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+export function ScrollToTop() {
+    const { pathname } = useLocation();
+
+    useLayoutEffect(() => {
+        window.scrollTo(0, 0); // (x, y) - x=0, y=0 es la parte superior izquierda
+    }, [pathname]);
+
+    return null;
+}
+
+
 //Logo
 import logoBlanco from '../../images/logoCompletoBlanco.png'
+import { Leaf } from 'lucide-react';
 
 export default function FooterMenu(){
 
@@ -95,6 +111,7 @@ export default function FooterMenu(){
         <div className='div-completeFooter'>
             <div className='div-FooterContenedor'>
                 <img src={logoBlanco} alt="Descripción de la imagen" className='img-footermenu'/>
+                
                 <div className='nav-footermenu'>
 
                     <div className='one'>
@@ -107,18 +124,34 @@ export default function FooterMenu(){
                     <div className='two'>
                         <ul>
                             <li><a className='a-footermenu'><h4>Mind Notes</h4></a></li>
-                            <li><Link to={'/'} className='li-link'>Nosotros</Link></li>
-                            <li><Link to={"/ComoFunciona"} className='li-link'>¿Cómo funciona?</Link></li>
-                            <li><Link to={"/PlanesGeneral"} className='li-link'>Precios</Link></li>
-                            <li><Link to={"/Login"} className='li-link'>Ingresar</Link></li>
+                            <li><Link to={'/'} 
+                            onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
+                            className='li-link'>Nosotros</Link></li>
+                            
+                            <li><Link to={"/ComoFunciona"} 
+                            onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
+                            className='li-link'>¿Cómo funciona?</Link></li>
+                            
+                            <li><Link to={"/PlanesGeneral"} 
+                            onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
+                            className='li-link'>Precios</Link></li>
+                            
+                            <li><Link to={"/Login"} 
+                            onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
+                            className='li-link'>Ingresar</Link></li>
                         </ul>    
                     </div>
 
                     <div className='three'>
                         <ul>
                             <li><a className='a-footermenu'><h4>Legal</h4></a></li>
-                            <li><Link to={"/aviso-privacidad"} className='li-link'>Privacidad</Link></li>
-                            <li><Link to={"/terminos-y-condiciones"} className='li-link'>Terminos y condiciones</Link></li>
+                            <li><Link to={"/aviso-privacidad"} 
+                            onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
+                            className='li-link'>Privacidad</Link></li>
+
+                            <li><Link to={"/terminos-y-condiciones"} 
+                            onClick={() => window.ScrollToTop({top:0, left:0, behaivor:'smooth'})}
+                            className='li-link'>Terminos y condiciones</Link></li>
                             <li><Link to={"/eliminar-cuenta"} className='li-link'>Petición de eliminación de cuenta</Link></li>
                         </ul>
                     </div>

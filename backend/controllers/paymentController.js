@@ -77,12 +77,12 @@ class PaymentController {
                 },
                 seisMeses: {
                     nombre: 'Plan de 6 meses',
-                    precio: 3000,
+                    precio: 4500,
                     duracion: 180
                 },
                 unYear: {
                     nombre: 'Plan de 12 meses',
-                    precio: 4000,
+                    precio: 8000,
                     duracion: 365
                 }
             };

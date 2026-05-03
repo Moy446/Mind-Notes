@@ -66,8 +66,8 @@ h3{
     font-family: 'Saira';
     padding: 3vw;
     
-    align-items: center;
-    justify-content: end;
+    align-items: start;
+    justify-content: center;
     gap: 3%;
 
     grid-template-columns: 2fr 2fr 2fr;
@@ -104,6 +104,14 @@ h3{
     justify-items: left;
 }
 
+
+.imgBeneficios{
+    width: 100%;
+}
+/* 
+#imgRecordatorio{
+    width: 80%;
+} */
 
 /**/
 @media (max-width: 768px) {
