@@ -35,9 +35,35 @@ const perfilPaciente = () => {
 
 
   const salir = () => {
-    UseAuthStore.getState().logout()
-    router.push('/auth/login')
-  }
+      try {
+        setShowPopup(false);
+        Alert.alert(
+          "¿Estás seguro de salir?",
+          "",
+          [
+            {
+              text: "Cancelar",
+              style: "cancel"
+            },
+            {
+              text: "Sí, salir",
+              style: "destructive",
+              onPress: async () => {
+                UseAuthStore.getState().logout()
+                router.push('/auth/login')
+              }
+            }
+          ]
+        );
+  
+      } catch (error) {
+        Alert.alert(
+          "Error",
+          "No se pudo cerrar sesión."
+        );
+      }
+      
+    }
 
   const handleCambiarFoto = async () => {
     try {
@@ -262,7 +288,7 @@ const perfilPaciente = () => {
           handleSaveEdit(value);
         }}
         type={editModal.field === 'email' ? 'email' : 'text'}
-        maxLength={editModal.field === 'nombre' ? 45 : undefined}
+        maxLength={editModal.field === 'nombre' ? 45 : 50}
       />
       <Modal visible={showPopup} transparent animationType="slide">
         <View style={perfilStyle.darkThemeModal}>
