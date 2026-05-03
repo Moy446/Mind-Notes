@@ -94,7 +94,7 @@ const PlanesComponent = ({ onClose }: Props) => {
         <View style={planesStyle.container}>
             <View style={planesStyle.header}>
                 <Pressable onPress={onClose} >
-                    <MaterialIcons name="arrow-back" size={24} color={Colors.principal} />
+                    <MaterialIcons name="arrow-back" size={35} color={Colors.principal} />
                 </Pressable>
                 <Svg
                     viewBox="0 0 24 24"

@@ -1,6 +1,7 @@
 import { authLogin, authLogout, checkSessionStatus } from "@/core/actions/auth/login.actions";
 import { User } from "@/core/interfaces/User";
 import { SecureStorageAdapter } from "@/helpers/adapters/secure-storage.adapter";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { create } from "zustand";
 
 export type AuthStatus = 'authenticated' | 'unauthenticated' | 'checking';
@@ -61,6 +62,7 @@ export const UseAuthStore = create<AuthState>((set, get) => ({
         })
         try {
             await authLogout();
+            await GoogleSignin.signOut();
         } catch (error) {
             console.log(error);
         }

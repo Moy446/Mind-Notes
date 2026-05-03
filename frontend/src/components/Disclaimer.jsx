@@ -6,7 +6,7 @@ function DisclaimerComponent (props){
     return (
         <div className='FullDisclaimer'>
             <div className="title-container">
-                <h2>Disclaimer</h2>
+                <h2>Aviso</h2>
             </div>
 
             <div className="body-container">

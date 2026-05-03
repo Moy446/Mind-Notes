@@ -11,7 +11,6 @@ import UseRegister from '@/hooks/auth/UseRegister'
 import { registerPaciente, registerPsicologo } from '@/core/actions/auth/register.actions'
 import { loginWithGoogle } from '@/services/googleAuthService'
 import { UseAuthStore } from '@/store/auth/useAuthStore'
-import ThemedLink from '@/components/auth/ThemedLink'
 
 const RegisterScreen = () => {
 
@@ -41,16 +40,16 @@ const RegisterScreen = () => {
 
   const onRegister = async () => {
     const {email, fullName, password, confirmPassword} = form
-    if (!email || !fullName || !password || !confirmPassword) {
-      Alert.alert('Error', 'Por favor, completa todos los campos.');
-      return;
-    }
     if (form.password !== form.confirmPassword) {
       Alert.alert('Error', 'Las contraseñas no coinciden.');
       return;
     }
     if (!validarPassword(form.password)) {
       Alert.alert('Error', 'La contraseña no cumple con los requisitos de seguridad.');
+      return;
+    }
+    if (!email || !fullName || !password || !confirmPassword) {
+      Alert.alert('Error', 'Por favor, completa todos los campos.');
       return;
     }
     try {
@@ -153,6 +152,14 @@ const RegisterScreen = () => {
         <Text style={registerStyle.TextLeft}>
           ¿Eres un psicólogo?
         </Text>
+        <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '25%'}}>
+          <Text style={registerStyle.TextLeftSwitch}>
+            No
+          </Text>
+          <Text style={registerStyle.TextRigthSwitch}>
+            Si
+          </Text>
+        </View>
         <ThemedSwitch value={esPsicologo} onChange={() => setEsPsicologo(!esPsicologo)}/>
       </View>
       <View style={{ marginVertical: 5, marginHorizontal: 10 }}>
@@ -185,8 +192,8 @@ const RegisterScreen = () => {
             <GoogleButton onPress={handleGoogleAuth} />
       </View>
       <View style={registerStyle.bottomContainer}>
-            <Text style={registerStyle.bottomTextTitle}>¡Bienvenido!</Text>
-            <Text style={registerStyle.bottomTextDescription}>¿Aún no tienes una cuenta?</Text>
+            <Text style={registerStyle.bottomTextTitle}>¡Hola, de nuevo!</Text>
+            <Text style={registerStyle.bottomTextDescription}>¿Ya tienes una cuenta?</Text>
             <CustomButton text='Iniciar sesión' size='md' onPress={() => router.push('/auth/login')} style={{marginBottom: 50}} />
         </View>
     </ScrollView>

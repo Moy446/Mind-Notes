@@ -50,9 +50,6 @@ export const checkSessionStatus = async (): Promise<{user: User, token: string} 
     }
 }
 
-//TODO: falta el register
-
-
 export const authLogout = async () => {
     try {
         await clienteAxios.post<AuthResponse>('/logout'); 

@@ -295,16 +295,16 @@ export default function ChatPacienteScreen() {
 
   if (loading && psicologos.length === 0) {
     return (
-      <SafeAreaView style={chatPsicologoStyle.container}>
+      <View style={chatPsicologoStyle.container}>
         <View style={chatPsicologoStyle.centerContent}>
           <ActivityIndicator size="large" color={Colors.principal} />
         </View>
-      </SafeAreaView>
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={chatPsicologoStyle.container}>
+    <View style={chatPsicologoStyle.container}>
       {!selectedChat || showSelector ? (
         <ChatSelector
           contacts={contacts}
@@ -477,6 +477,6 @@ export default function ChatPacienteScreen() {
         title="Tu codigo QR"
         subtitle="Comparte este codigo para que te vinculen rapidamente"
       />
-    </SafeAreaView>
+    </View>
   );
 }

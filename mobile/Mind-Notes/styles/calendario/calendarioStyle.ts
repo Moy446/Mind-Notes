@@ -90,4 +90,7 @@ export const calendarioStyle = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
     },
+    disabledButton:{
+        backgroundColor: Colors.disabledButton,
+    }
 })

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { View, Animated } from "react-native";
 import { Colors } from "@/constants/theme";
 
-const AnimatedBar = ({ value, index}) => {
+const AnimatedBar = ({ value, index }: { value: number; index: number }) => {
   const height = useRef(new Animated.Value(10)).current;
   const animationRef = useRef(null);
 
@@ -29,12 +29,14 @@ const AnimatedBar = ({ value, index}) => {
   );
 };
 
-export default function FakeWave({ levels = [] }) {
+export default function FakeWave({ levels }: { levels: number[] }) {
   return (
     <View
       style={{
         flexDirection: "row",
         alignItems: "center",
+        alignContent: "center",
+        justifyContent: "center",
         height: 60,
         width: "90%",
       }}

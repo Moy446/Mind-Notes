@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import QRCode from 'react-native-qrcode-svg';
+import  QRCode  from 'react-native-qrcode-svg';
 import { Colors } from '@/constants/theme';
 
 interface UserQrModalProps {
