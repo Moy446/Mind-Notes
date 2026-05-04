@@ -46,6 +46,10 @@ const LoginScreen = () => {
             Alert.alert('Error', 'El usuario o contraseña son incorrectos')
             return;
         }
+        setForm({
+            email: '',
+            password: '',
+        })
         if(wasSuccesful.role === 'paciente'){
             router.replace('/paciente/tabs/chat')
             return;
@@ -128,7 +132,7 @@ const LoginScreen = () => {
             <Text style={loginStyle.textStyle}> ¿Aún no tienes una cuenta? </Text>
             <ThemedLink href={'/auth/register'} style={loginStyle.textStyle}>Registrate</ThemedLink>
             <Text style={loginStyle.textStyle}> O ingresa con: </Text>
-            <GoogleButton onPress={handleGoogleLogin} />
+            <GoogleButton onPress={handleGoogleLogin} disabled={isPosting} text={isPosting ? 'Ingresando...' : 'Ingresar con Google'} />
             <Modal visible={showDisclaimer} transparent animationType="slide">
                 <View style={loginStyle.darkThemeModal}>
                 <View style={loginStyle.modalContainer}>

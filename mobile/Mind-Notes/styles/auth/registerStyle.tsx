@@ -19,6 +19,16 @@ export const registerStyle = StyleSheet.create({
         fontFamily: 'SairaMedium',
         marginBottom: 5,
     },
+    TextLeftSwitch:{
+        fontSize: 11,
+        fontFamily: 'SairaMedium',
+    },
+    TextRigthSwitch:{
+        fontSize: 11,
+        fontFamily: 'SairaMedium',
+        alignSelf: 'flex-end',
+        justifyContent: 'flex-end',
+    },
     switchContainer:{
         width: '60%',
     },

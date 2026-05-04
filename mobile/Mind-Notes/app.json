@@ -15,7 +15,7 @@
         },
         "ITSAppUsesNonExemptEncryption": false
       },
-      "bundleIdentifier": "com.klsiee.MindNotes"
+      "bundleIdentifier": "com.klsiee.mindnotes"
     },
     "android": {
       "package": "com.klsiee.mindnotes",
