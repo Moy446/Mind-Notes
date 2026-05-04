@@ -15,7 +15,7 @@ export default function SubBtn(props){
                 return (
                     "subbtn D10"                
                     );
-            case "USD$35":
+            case "USD$45":
                 return(
                     "subbtn D30"
                 );
