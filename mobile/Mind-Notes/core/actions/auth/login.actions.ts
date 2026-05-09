@@ -14,7 +14,7 @@ export interface AuthResponse {
 
 const returnUserToken = (data:AuthResponse):{user:User, token:string} =>{
     const { idUsuario, email, nombre, role, suscripcion, fotoPerfil, token} = data;
-    console.log(data);
+    console.log("Data", data)
     const user: User = {
         idUsuario,
         email,
