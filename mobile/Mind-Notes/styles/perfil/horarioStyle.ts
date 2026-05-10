@@ -7,11 +7,11 @@ export const horarioStyle = StyleSheet.create({
         width: '100%',
         height: '100%',
         paddingHorizontal: 12,
-        paddingVertical: 30,
+        paddingBottom: 50,
         flex: 1,
     },
     title: {
-        fontSize: 20,
+        fontSize: 25,
         fontWeight: '800',
         color: 'black'
     },
@@ -19,6 +19,8 @@ export const horarioStyle = StyleSheet.create({
     {
         flexDirection: 'row',
         alignItems: 'center',
+        marginTop: 30,
+        marginBottom: 20,
     },
     backButton:
     {
@@ -38,7 +40,6 @@ export const horarioStyle = StyleSheet.create({
     },
     daysContainer:
     {
-        justifyContent: 'space-evenly',
         height: '100%',
         alignContent: 'center',
         paddingBottom: 20,

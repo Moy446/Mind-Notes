@@ -130,6 +130,13 @@ form{
     line-height: normal;
 }
 
+.rowInformation-switch{
+    display: flex;
+    flex-direction: row;
+    gap: 25%;   
+    margin-left: 10%;
+}
+
 .p-switch{
     margin-bottom: 2px;
     text-align: left;
@@ -621,13 +628,21 @@ text-decoration: none;
 
     .div-buttons{
         height: 7vw;
-        margin: 0 5% 4% 0;
+        padding: 0;
+        margin: 0% 5% 2% 0;
         gap: 5%;
     }
 
     .p-switch{
-        margin: 2%;
+        margin: 1% 10%;
+        align-self: center;
     }
+
+    .rowInformation-switch{
+        gap: 20%;    
+        align-items: center;
+    }
+
     #btnFormRegister{
         width: 50%;
         margin: 5px;
@@ -807,9 +822,19 @@ text-decoration: none;
         margin: 0;
     }
 
+    .p-switch{
+        margin: 1% 10%;
+    }
+
+    .rowInformation-switch{
+        margin: 1% 10%;
+    }
 
     .div-buttons button{
         width: 30%;  
+    }
+    .div-buttons {
+        margin-bottom: 5%;  
     }
 
     .div-links{

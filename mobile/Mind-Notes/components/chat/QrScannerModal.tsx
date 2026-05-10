@@ -1,6 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Modal, View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '@/constants/theme';
 
 interface QrScannerModalProps {
@@ -21,6 +22,10 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
 
+  useEffect(() => {
+    if (!visible) setScanned(false);
+  }, [visible]);
+
   const handleCodeScanned = useCallback(
     ({ data }: { data: string }) => {
       if (scanned) return;
@@ -34,8 +39,8 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
-      <View style={{ flex: 1, backgroundColor: Colors.black }}>
-        <View style={{ padding: 16, backgroundColor: Colors.white }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Colors.black }} edges={['top', 'bottom']}>
+        <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12, backgroundColor: Colors.white }}>
           <Text style={{ fontSize: 20, fontWeight: '700', color: Colors.black }}>{title}</Text>
           <Text style={{ marginTop: 6, color: Colors.principal }}>{subtitle}</Text>
         </View>
@@ -76,7 +81,9 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
-            padding: 14,
+            paddingHorizontal: 14,
+            paddingTop: 10,
+            paddingBottom: 14,
             backgroundColor: Colors.white,
           }}
         >
@@ -108,7 +115,7 @@ export const QrScannerModal: React.FC<QrScannerModalProps> = ({
             <Text style={{ color: Colors.white, fontWeight: '700' }}>Cerrar</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </Modal>
   );
 };

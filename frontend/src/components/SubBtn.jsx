@@ -1,5 +1,7 @@
 import React from 'react'
 import './SubBtn.css'
+import logowhite from '../images/logowithe.png'
+import logoColor from '../images/logocolor.png'
 
 export default function SubBtn(props){
 
@@ -13,7 +15,7 @@ export default function SubBtn(props){
                 return (
                     "subbtn D10"                
                     );
-            case "USD$35":
+            case "USD$45":
                 return(
                     "subbtn D30"
                 );
@@ -29,11 +31,11 @@ export default function SubBtn(props){
         if(price == "Gratis" || price == "USD$80")
         {
             return(
-                <img src="/src/images/logocolor.png" alt="Descripción de la imagen" className='imgsub'/>
+                <img src={logoColor} alt="Logo Mind Notes" className='imgsub'/>
             );
         }
         return(
-            <img src="/src/images/logowithe.png" alt="Descripción de la imagen" className='imgsub'/>
+            <img src={logowhite} alt="Logo Mind Notes" className='imgsub'/>
         );
     }
 

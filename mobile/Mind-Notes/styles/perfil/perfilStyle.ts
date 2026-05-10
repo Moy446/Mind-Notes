@@ -22,6 +22,17 @@ export const perfilStyle = StyleSheet.create({
         fontWeight: '700',
         fontSize: 20
     },
+    logoutContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    redText:{
+        color: 'red',
+        fontFamily:'SairaMedium',
+        fontSize: 15,
+        marginHorizontal: 5
+    },
     imgContainer:{
         alignItems: 'center',
         position: 'relative',
@@ -68,10 +79,14 @@ export const perfilStyle = StyleSheet.create({
         fontSize: 35,
         fontWeight: '500',
     },
-    btnDelete:{
+    deleteContainer:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center', 
+        alignSelf: 'flex-end',
         position: 'absolute',
-        right: 20,
-        bottom: 20
+        bottom: 20,
+        right: 20
     },
     darkThemeModal:{
         flex: 1,

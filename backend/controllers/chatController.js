@@ -41,6 +41,13 @@ class ChatController {
     async obtenerInformacionChat(req, res) {
         try {
             const { idPsicologo, idPaciente } = req.params;
+            
+            // Validar que el usuario sea el psicólogo o el paciente del chat
+            const usuarioActual = req.user.idUsuario.toString();
+            if (usuarioActual !== idPsicologo && usuarioActual !== idPaciente) {
+                return res.status(403).json({ success: false, message: 'No tienes permiso para acceder a esta información' });
+            }
+
             const chat = new Chat();
             const infoChat = await chat.findChatByParticipants(idPaciente, idPsicologo);
             const patientData = {
