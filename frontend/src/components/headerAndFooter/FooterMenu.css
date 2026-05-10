@@ -20,7 +20,7 @@
     font-family: 'Saira';
     color: #FFF;
     font-size: 18px;
-    align-items: start;
+    align-items: center;
     justify-content: end;
     gap: 3%;
     grid-template-columns: 4fr 2fr 2fr 4fr;
