@@ -177,6 +177,43 @@ class Chat {
         }
     }
 
+    async desvincular(idPsicologo, idPaciente) {
+        try {
+            const query = {
+                idPsicologo: new ObjectId(idPsicologo),
+                idPaciente: new ObjectId(idPaciente)
+            };
+            const chats = await this.colChat.find(query).toArray();
+            const archivos = new Set();
+
+            for (const chat of chats) {
+                const colecciones = [
+                    chat.materialAdjunto,
+                    chat.grabaciones,
+                    chat.expedientes
+                ];
+
+                for (const lista of colecciones) {
+                    if (!Array.isArray(lista)) continue;
+                    for (const item of lista) {
+                        if (item?.path && typeof item.path === 'string' && !item.path.startsWith('http')) {
+                            archivos.add(item.path);
+                        }
+                    }
+                }
+            }
+
+            const resultado = await this.colChat.deleteMany(query);
+
+            return {
+                deletedCount: resultado.deletedCount,
+                archivos: Array.from(archivos)
+            };
+        } catch (error) {
+            throw new Error('Error al desvincular chats: ' + error.message);
+        }
+    }
+
 }
 
 export default Chat;

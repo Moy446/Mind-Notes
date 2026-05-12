@@ -18,6 +18,7 @@ import { obtenerMensajes, obtenerInformacionChat } from './services/chatService'
 import clienteAxios from './services/axios';
 import { getImageUrl } from './utils/imageHelper';
 import userDefault from './images/userDefault.png'
+import Swal from 'sweetalert2';
 
 export default function ChatPsiF(props){
 
@@ -97,6 +98,33 @@ export default function ChatPsiF(props){
     const handleOpenInfoSupp = useCallback(() => {
         setOpenSuppInfo(!suppInfoOpen)
     }, [suppInfoOpen])
+
+    const handleConfirmDelete = async () => {
+        try {
+            const res = await clienteAxios.delete(`/desvincular/${idUser}/${selectedChat}`);
+            setOpenDel(false);
+            setSelectedChat(null);
+            sessionStorage.removeItem('selectedChatPa');
+            setOpenInfo(false);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Psicólogo eliminado',
+                text: 'El psicólogo y todos los datos compartidos han sido eliminados.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                window.location.reload();
+            });
+            
+        } catch (error) {
+            console.error('Error al desvincular:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al intentar eliminar al psicólogo. Inténtalo de nuevo.'
+            });
+        }
+    };
 
     // NUEVO: Efecto para conectar al chat cuando se selecciona un psicólogo
     useEffect(() => {
@@ -285,7 +313,13 @@ export default function ChatPsiF(props){
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title = {`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} subtitle = "Todos los datos se perderan" del = {delOpen} handleDel = {handleOpenDel}/>
+                        <DeleteMenu 
+                            title={`¿Esta seguro de eliminar al psicólogo ${nombreMostrado}?`} 
+                            subtitle="Todos los datos se perderan" 
+                            del={delOpen} 
+                            handleDel={handleOpenDel} 
+                            onConfirm={handleConfirmDelete}
+                        />
                     </div>
                 </div>
             </div>

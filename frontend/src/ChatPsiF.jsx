@@ -19,6 +19,7 @@ import clienteAxios from './services/axios';
 import { tr } from 'framer-motion/client';
 import { getImageUrl } from './utils/imageHelper';
 import userDefault from './images/userDefault.png'
+import Swal from 'sweetalert2';
 
 export default function ChatPsiF(props) {
 
@@ -99,6 +100,33 @@ const fetchSelectedName = useCallback(async () => {
     const handleOpenInfoSupp = useCallback(() => {
         setOpenSuppInfo(!suppInfoOpen)
     }, [suppInfoOpen])
+
+    const handleConfirmDelete = async () => {
+        try {
+            const res = await clienteAxios.delete(`/desvincular/${idUser}/${selectedChat}`);
+            setOpenDel(false);
+            setSelectedChat(null);
+            sessionStorage.removeItem('selectedChatPsi');
+            setOpenInfo(false);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Paciente eliminado',
+                text: 'El paciente y todos los datos compartidos han sido eliminados.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                window.location.reload();
+            });
+            
+        } catch (error) {
+            console.error('Error al desvincular:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al intentar eliminar al paciente. Inténtalo de nuevo.'
+            });
+        }
+    };
 
     // NUEVO: Efecto para conectar al chat cuando se selecciona un paciente
     useEffect(() => {
@@ -290,7 +318,13 @@ const fetchSelectedName = useCallback(async () => {
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title={`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} subtitle="Todos los datos se perderan" del={delOpen} handleDel={handleOpenDel} />
+                        <DeleteMenu 
+                            title={`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} 
+                            subtitle="Todos los datos se perderan" 
+                            del={delOpen} 
+                            handleDel={handleOpenDel} 
+                            onConfirm={handleConfirmDelete}
+                        />
                     </div>
                 </div>
             </div>
