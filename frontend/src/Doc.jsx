@@ -63,7 +63,7 @@ export default function Doc(props) {
     };
 
     const closeDoc = () => {
-        navigate('/psicologo/perfil');
+        navigate(-1);
     }
 
     const saveDoc = async () => {

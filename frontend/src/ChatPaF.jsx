@@ -28,7 +28,7 @@ export default function ChatPsiF(props){
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
-    const [selectedChat, setSelectedChat] = useState(null);
+    const [selectedChat, setSelectedChat] = useState(() => sessionStorage.getItem('selectedChatPa') || null);
     const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState(userDefault);
@@ -160,6 +160,7 @@ export default function ChatPsiF(props){
             return;
         }
         setSelectedChat(chatId);
+        sessionStorage.setItem('selectedChatPa', chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
         setOpenInfo(false);
@@ -191,6 +192,7 @@ export default function ChatPsiF(props){
 
     const handleOpenChatSelector = useCallback(() => {
         setSelectedChat(null);
+        sessionStorage.removeItem('selectedChatPa');
         setOpenInfo(false);
     }, []);
 
@@ -268,6 +270,8 @@ export default function ChatPsiF(props){
                                 suppInfO = {suppInfoOpen} 
                                 handleSuppInfo = {handleOpenInfoSupp} 
                                 materialAdjunto = {patientData.materialAdjunto} 
+                                idPaciente = {idUser}
+                                idPsicologo = {selectedChat}
                                 />
                             : <InfoPsi 
                                 img = {image} 

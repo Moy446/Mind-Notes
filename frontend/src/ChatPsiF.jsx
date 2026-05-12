@@ -28,7 +28,7 @@ export default function ChatPsiF(props) {
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
-    const [selectedChat, setSelectedChat] = useState(null);
+    const [selectedChat, setSelectedChat] = useState(() => sessionStorage.getItem('selectedChatPsi') || null);
     const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState(userDefault);
@@ -163,6 +163,7 @@ const fetchSelectedName = useCallback(async () => {
             return;
         }
         setSelectedChat(chatId);
+        sessionStorage.setItem('selectedChatPsi', chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
         setOpenInfo(false);
@@ -195,6 +196,7 @@ const fetchSelectedName = useCallback(async () => {
 
     const handleOpenChatSelector = useCallback(() => {
         setSelectedChat(null);
+        sessionStorage.removeItem('selectedChatPsi');
         setOpenInfo(false);
     }, []);
 

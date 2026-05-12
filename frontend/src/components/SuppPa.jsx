@@ -1,5 +1,7 @@
 import React, { useState }from 'react'
 import './SuppPsi.css'
+import { descargarArchivoPsi } from '../services/chatService';
+import Swal from 'sweetalert2';
 
 export default function SuppPa(props){
 
@@ -51,6 +53,33 @@ export default function SuppPa(props){
         );
     };
 
+    const descargarArchivo = async (idPsicologo, idPaciente, archivoId, type, nombre) => {
+        try {
+            const res = await descargarArchivoPsi(idPsicologo, idPaciente, archivoId, type);
+            
+            const blob = new Blob([res.data || res]);
+            const link = document.createElement("a");
+            
+            link.href = URL.createObjectURL(blob);
+            link.download = nombre;
+            
+            document.body.appendChild(link);
+            link.click();
+            
+            link.remove();
+            URL.revokeObjectURL(link.href);
+        } catch (error) {
+            console.error(error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al descargar',
+                text: error.response?.status === 404 
+                    ? 'El archivo no se encontró en el servidor. Puede que haya sido eliminado o no se haya migrado correctamente.'
+                    : 'Hubo un problema al intentar descargar el archivo.'
+            });
+        }
+    };
+
     return (
         <div className='suppPsi'>
             <div className='headerSuppPsi'>
@@ -66,7 +95,7 @@ export default function SuppPa(props){
             <hr className="unique"/>
             <div className='matApo'>
                 {currentItems.map((item) => (
-                    <div key={item._id} className='itemsmatApo btnSuppPsi'>
+                    <div key={item._id} className='itemsmatApo btnSuppPsi' onClick={() => descargarArchivo(props.idPsicologo, props.idPaciente, item._id, "mat", item.nombre)}>
                         {renderIcon(item.type)}
                         <p className='pMatApo'>{item.nombre}</p>
                     </div>
