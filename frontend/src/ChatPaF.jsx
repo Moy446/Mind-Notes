@@ -102,7 +102,7 @@ export default function ChatPsiF(props){
     useEffect(() => {
         if (selectedChat) {
         
-        // Cargar mensajes existentes
+        // Cargar mensajes existentes y datos del paciente
         const loadMessages = async () => {
             try {
                 const data = await obtenerMensajes(selectedChat, idUser);
@@ -113,6 +113,7 @@ export default function ChatPsiF(props){
             }
         };
         loadMessages();
+        getInformationChat(selectedChat);
         
         // Unirse al chat
         socket.emit('joinChat', { 

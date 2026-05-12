@@ -104,7 +104,7 @@ const fetchSelectedName = useCallback(async () => {
     useEffect(() => {
         if (selectedChat) {
 
-            // Cargar mensajes existentes
+            // Cargar mensajes existentes y datos del paciente
             const loadMessages = async () => {
                 try {
                     const data = await obtenerMensajes(idUser, selectedChat);
@@ -115,6 +115,7 @@ const fetchSelectedName = useCallback(async () => {
                 }
             };
             loadMessages();
+            getInformationChat(selectedChat);
 
             // Unirse al chat
             socket.emit('joinChat', {
