@@ -20,17 +20,15 @@ const StatusLayout = () => {
       </View>
     )
   }
-  console.log('StatusLayout renderizado, status:', status, 'user:', user);
     
   if (status === 'unauthenticated') {
     return <Redirect href={'/auth/login'} />;
   }
-  console.log('StatusLayout renderizado, status:', status, 'user:', user); 
 
   if (status === 'authenticated' && user?.role === 'psicologo') {
     return <Redirect href={'/psicologo/tabs/chat'} />
   }
-  console.log('StatusLayout renderizado, status:', status, 'user:', user);
+
 
   return <Redirect href={'/paciente/tabs/chat'} />
 }
