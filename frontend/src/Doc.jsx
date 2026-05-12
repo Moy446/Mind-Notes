@@ -7,6 +7,7 @@ import clienteAxios from "./services/axios";
 import { useParams, useLocation } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import { obtenerDocumento } from './services/chatService';
+import Swal from 'sweetalert2';
 
 export default function Doc(props) {
     const { id } = useParams();
@@ -40,6 +41,13 @@ export default function Doc(props) {
 
             } catch (error) {
                 console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al cargar documento',
+                    text: error.response?.status === 404
+                        ? 'El documento no existe en el servidor.'
+                        : 'Hubo un error al obtener el documento.'
+                });
             } finally {
                 setLoading(false);
             }

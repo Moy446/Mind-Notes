@@ -4,6 +4,11 @@ import fs from "fs";
 import path from "path";
 import mammoth from "mammoth";
 import { Document, Packer, Paragraph } from "docx";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const backendRoot = path.join(__dirname, '..');
 
 class ChatController {
     constructor() {
@@ -148,7 +153,8 @@ class ChatController {
                 return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
             }
 
-            const filePath = path.resolve(archivo.path);
+            const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
             if (!fs.existsSync(filePath)) {
                 return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
@@ -187,7 +193,8 @@ class ChatController {
                     return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
                 }
 
-                const filePath = path.resolve(archivo.path);
+                const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
                 if (!fs.existsSync(filePath)) {
                     return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
@@ -209,7 +216,8 @@ class ChatController {
                     return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
                 }
 
-                const filePath = path.resolve(archivo.path);
+                const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
                 if (!fs.existsSync(filePath)) {
                     console.log("trono aca")
@@ -248,7 +256,8 @@ class ChatController {
                 return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
             }
 
-            const filePath = path.resolve(archivo.path);
+            const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
@@ -285,7 +294,8 @@ class ChatController {
                     return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
                 }
 
-                const filePath = path.resolve(archivo.path);
+                const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
                 if (!fs.existsSync(filePath)) {
                     return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
@@ -306,7 +316,8 @@ class ChatController {
                     return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
                 }
 
-                const filePath = path.resolve(archivo.path);
+                const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
                 if (!fs.existsSync(filePath)) {
                     return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
@@ -342,7 +353,8 @@ class ChatController {
                 return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
             }
 
-            const filePath = path.resolve(archivo.path);
+            const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
             if (!fs.existsSync(filePath)) {
                 return res.status(404).json({ success: false, message: 'Archivo no existe en el servidor' });
@@ -391,7 +403,8 @@ class ChatController {
                 return res.status(404).json({ success: false, message: 'Archivo no encontrado' });
             }
 
-            const filePath = path.resolve(archivo.path);
+            const normalizedPathFromDB = archivo.path.replace(/\\/g, '/');
+            const filePath = path.join(backendRoot, normalizedPathFromDB);
 
             fs.writeFileSync(filePath, buffer);
 
