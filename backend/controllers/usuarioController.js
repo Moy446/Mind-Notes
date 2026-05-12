@@ -625,6 +625,7 @@ class UsuarioController {
                 idUsuario: usuario.idUsuario,
                 email: usuario.email,
                 nombre: usuario.nombre,
+                fotoPerfil: usuario.fotoPerfil,
                 role,
                 suscripcion: usuario.suscripcion?.plan || '',
                 token: accessToken,
