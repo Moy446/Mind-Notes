@@ -43,9 +43,10 @@ async function startServer() {
 
     const corsOptions = {
         origin: function (origin, callback) {
-            if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.mind-notes.net')) {
+            if (!origin || origin.includes('mind-notes.net') || origin.includes('localhost')) {
                 callback(null, true);
             } else {
+                console.error('CORS blocked origin:', origin);
                 callback(new Error('Not allowed by CORS'));
             }
         },
