@@ -6,6 +6,7 @@ import uvicorn
 from dotenv import load_dotenv
 import tempfile
 import os
+import shutil
 
 
 model = whisper.load_model("base")
@@ -17,7 +18,7 @@ load_dotenv(dotenv_path=".env")
 async def transcribe(audio: UploadFile = File(...)):
 
     with tempfile.NamedTemporaryFile(delete=False) as tmp:
-        tmp.write(await audio.read())
+        shutil.copyfileobj(audio.file, tmp)
         path = tmp.name
     try:        
         result = model.transcribe(path, language="es", fp16=False)

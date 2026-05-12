@@ -38,29 +38,33 @@ services:
     build:
       context: ./whisper
       dockerfile: Dockerfile
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     environment:
       - ENV=production
-    deploy:
-        resources:
-          limits:
-            cpus: "2.0"
-            memory: 4G
     restart: always
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx_server
-    restart: always
-    ports:
-      - "80:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/mindNotes.com.conf
+      - whisper-cache:/root/.cache
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/docs"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
-    networks:
-      - app-network
+#   nginx:
+#     image: nginx:latest
+#     container_name: nginx_server
+#     restart: always
+#     ports:
+#       - "80:80"
+#     volumes:
+#       - ./nginx/default.conf:/etc/nginx/conf.d/mindNotes.com.conf
 
-networks:
-  app-network:
-    driver: bridge
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
+volumes:
+  whisper-cache:
