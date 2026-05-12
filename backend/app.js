@@ -43,7 +43,7 @@ async function startServer() {
 
     const corsOptions = {
         origin: function (origin, callback) {
-            if (!origin || origin.includes('mind-notes.net') || origin.includes('localhost')) {
+            if (!origin || origin.includes('mind-notes.net') || origin.includes('localhost') || origin.includes('azurestaticapps.net')) {
                 callback(null, true);
             } else {
                 console.error('CORS blocked origin:', origin);
