@@ -13,6 +13,7 @@ export default function Doc(props) {
     const { id } = useParams();
     const { idP } = useParams();
     const { type } = useParams();
+    const location = useLocation();
 
     const navigate = useNavigate();
 
@@ -96,7 +97,9 @@ export default function Doc(props) {
         return <div>Cargando documento...</div>;
     }
 
-    if (docType?.includes('pdf') && doc) {
+    const isPdf = docType?.includes('pdf') || location.state?.nombre?.toLowerCase().endsWith('.pdf');
+
+    if (isPdf && doc) {
     return (
         <div className={`doc ${brush ? "cursorbrush" : ""}`}>
             <iframe

@@ -125,6 +125,7 @@ export default function SuppPsi(props) {
                         <Link
                             key={item._id}
                             to={`/psicologo/doc/${props.idPaciente}/${item._id}/${activo ? "mat" : "exp"}`}
+                            state={{ nombre: item.nombre }}
                             className='itemsmatApo btnSuppPsi'
                         >
                             {renderIcon(item.type)}
