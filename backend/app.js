@@ -38,17 +38,19 @@ async function startServer() {
         'http://localhost:3001',
         'http://localhost:5173',
         'https://mind-notes.net',
-        'https://www.mind-notes.net'
+        'https://www.mind-notes.net',
+        'https://salmon-ocean-049d8c410.2.azurestaticapps.net',
+        'https://www.salmon-ocean-049d8c410.2.azurestaticapps.net',
     ].filter(Boolean);
 
     const corsOptions = {
         origin: function (origin, callback) {
-            if (!origin || 
-                origin === process.env.FRONTEND_URL || 
-                origin === process.env.AZURE_FRONTEND_URL || 
-                origin.includes('mind-notes.net') || 
-                origin.includes('localhost') || 
-                origin.includes('azurestaticapps.net') || 
+            if (!origin ||
+                origin === process.env.FRONTEND_URL ||
+                origin === process.env.AZURE_FRONTEND_URL ||
+                origin.includes('mind-notes.net') ||
+                origin.includes('localhost') ||
+                origin.includes('azurestaticapps.net') ||
                 origin.includes('azurewebsites.net')) {
                 callback(null, true);
             } else {
@@ -117,21 +119,21 @@ async function startServer() {
     //verficar las carpetas de uploads
 
     const folders = [
-    'uploads/files',
-    'uploads/audio',
-    'uploads/images',
-    'uploads/docs'
+        'uploads/files',
+        'uploads/audio',
+        'uploads/images',
+        'uploads/docs'
     ];
 
     folders.forEach(folder => {
-    const fullPath = path.join('./', folder);
+        const fullPath = path.join('./', folder);
 
-    if (!fs.existsSync(fullPath)) {
-        fs.mkdirSync(fullPath, { recursive: true });
-        console.log(`Carpeta creada: ${fullPath}`);
-    } else {
-        console.log(`Ya existe: ${fullPath}`);
-    }
+        if (!fs.existsSync(fullPath)) {
+            fs.mkdirSync(fullPath, { recursive: true });
+            console.log(`Carpeta creada: ${fullPath}`);
+        } else {
+            console.log(`Ya existe: ${fullPath}`);
+        }
     });
 
     // app.use(csrf({ cookie: true })); // Descomenta si necesitas CSRF
@@ -143,7 +145,7 @@ async function startServer() {
     app.use('/api', webRoutes);
     app.use('/api/chat', routesChat);
     app.use('/api/psicologo', routesPsicologo);
-    app.use('/api/paciente',routesPaciente)
+    app.use('/api/paciente', routesPaciente)
     app.use('/api/auth', routesAuth);
     app.use('/uploads', express.static('uploads'));
 
