@@ -19,6 +19,7 @@ import clienteAxios from './services/axios';
 import { tr } from 'framer-motion/client';
 import { getImageUrl } from './utils/imageHelper';
 import userDefault from './images/userDefault.png'
+import Swal from 'sweetalert2';
 
 export default function ChatPsiF(props) {
 
@@ -28,7 +29,7 @@ export default function ChatPsiF(props) {
 
     // NUEVO: Estados para el chat en tiempo real
     const [messages, setMessages] = useState([]);
-    const [selectedChat, setSelectedChat] = useState(null);
+    const [selectedChat, setSelectedChat] = useState(() => sessionStorage.getItem('selectedChatPsi') || null);
     const idUser = user?.id; // Usa el ID del contexto
     const [n, setN] = useState('Usuario no seleccionado');
     const [image, setImage] = useState(userDefault);
@@ -100,11 +101,38 @@ const fetchSelectedName = useCallback(async () => {
         setOpenSuppInfo(!suppInfoOpen)
     }, [suppInfoOpen])
 
+    const handleConfirmDelete = async () => {
+        try {
+            const res = await clienteAxios.delete(`/desvincular/${idUser}/${selectedChat}`);
+            setOpenDel(false);
+            setSelectedChat(null);
+            sessionStorage.removeItem('selectedChatPsi');
+            setOpenInfo(false);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Paciente eliminado',
+                text: 'El paciente y todos los datos compartidos han sido eliminados.',
+                confirmButtonText: 'Entendido'
+            }).then(() => {
+                window.location.reload();
+            });
+            
+        } catch (error) {
+            console.error('Error al desvincular:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al intentar eliminar al paciente. Inténtalo de nuevo.'
+            });
+        }
+    };
+
     // NUEVO: Efecto para conectar al chat cuando se selecciona un paciente
     useEffect(() => {
         if (selectedChat) {
 
-            // Cargar mensajes existentes
+            // Cargar mensajes existentes y datos del paciente
             const loadMessages = async () => {
                 try {
                     const data = await obtenerMensajes(idUser, selectedChat);
@@ -115,6 +143,7 @@ const fetchSelectedName = useCallback(async () => {
                 }
             };
             loadMessages();
+            getInformationChat(selectedChat);
 
             // Unirse al chat
             socket.emit('joinChat', {
@@ -163,6 +192,7 @@ const fetchSelectedName = useCallback(async () => {
             return;
         }
         setSelectedChat(chatId);
+        sessionStorage.setItem('selectedChatPsi', chatId);
         setMessages([]); // Limpiar mensajes al cambiar de chat
         getInformationChat(chatId);
         setOpenInfo(false);
@@ -195,6 +225,7 @@ const fetchSelectedName = useCallback(async () => {
 
     const handleOpenChatSelector = useCallback(() => {
         setSelectedChat(null);
+        sessionStorage.removeItem('selectedChatPsi');
         setOpenInfo(false);
     }, []);
 
@@ -287,7 +318,13 @@ const fetchSelectedName = useCallback(async () => {
                         }
                     </div>
                     <div className={delOpen ? 'showDelMenu' : 'hideSuppMenu'}>
-                        <DeleteMenu title={`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} subtitle="Todos los datos se perderan" del={delOpen} handleDel={handleOpenDel} />
+                        <DeleteMenu 
+                            title={`¿Esta seguro de eliminar al paciente ${nombreMostrado}? `} 
+                            subtitle="Todos los datos se perderan" 
+                            del={delOpen} 
+                            handleDel={handleOpenDel} 
+                            onConfirm={handleConfirmDelete}
+                        />
                     </div>
                 </div>
             </div>

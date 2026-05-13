@@ -129,6 +129,18 @@ class Cita {
             throw new Error('Error al eliminar citas del usuario: ' + error.message);
         }
     }
+
+    async desvincular(idPsicologo, idPaciente) {
+        try {
+            const resultado = await this.colCitas.deleteMany({
+                idPsicologo: new ObjectId(idPsicologo),
+                idPaciente: new ObjectId(idPaciente)
+            });
+            return resultado.deletedCount;
+        } catch (error) {
+            throw new Error('Error al desvincular citas: ' + error.message);
+        }
+    }
 }
 
 export default Cita;

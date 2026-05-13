@@ -44,6 +44,7 @@ router.get('/usuario/:id', protector, UserController.obtenerPerfil);
 router.put('/usuario/:id', protector, UserController.actualizarPerfil);
 router.post('/vincularPacientes/:idPsicologo', protector, UserController.vincularPacientes);
 router.post('/vincularPsicologo/:idPaciente', protector, UserController.vincularPsicologo);
+router.delete('/desvincular/:idUsuario1/:idUsuario2', protector, UserController.desvincularUsuario);
 router.get('/pacientes/:idPsicologo', protector, UserController.obtenerPacientesVinculados);
 router.get('/psicologos/:idPaciente', protector, UserController.obtenerPsicologosVinculados);
 router.get('/mensajes/:idPsicologo/:idPaciente', protector, chatController.obtenerMensajes);
