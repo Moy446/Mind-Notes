@@ -66,7 +66,7 @@ const LoginScreen = () => {
         setIsPosting(false);
 
         if (result.success) {
-            const sessionReady = changeStatus(result.accessToken, result.user);
+            const sessionReady = await changeStatus(result.accessToken, result.user);
             if (!sessionReady) {
                 Alert.alert('Error', 'No se pudo guardar la sesión de Google');
                 return;
