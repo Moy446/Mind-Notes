@@ -12,7 +12,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
   VITE_BACKEND_URL: https://mindnotes-api.azurewebsites.net/api
   VITE_BACKEND_BASE_URL: https://mindnotes-api.azurewebsites.net
-  VITE_FRONTEND_URL: https://salmon-ocean-049d8c410.2.azurestaticapps.net/
+  VITE_FRONTEND_URL: https://www.mind-notes.net
   VITE_GOOGLE_CLIENT_ID: Secreto de amor
   
 jobs:

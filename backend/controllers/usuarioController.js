@@ -12,7 +12,7 @@ import 'dotenv/config';
 import { li } from "framer-motion/client";
 import path from 'path';
 import fs from 'fs';
-
+import { ObjectId } from 'mongodb';
 
 class UsuarioController {
 
@@ -990,6 +990,66 @@ class UsuarioController {
         }
     }
 
+    async desvincularUsuario(req, res) {
+        try {
+            const { idUsuario1, idUsuario2 } = req.params;
+            const listaVinculacionModel = new ListaVinculacion();
+            const chatModel = new Chat();
+            const citaModel = new Cita();
+            
+            let vinculacion = await listaVinculacionModel.colListaVinculacion.findOne({ idPsicologo: new ObjectId(idUsuario1), idPaciente: new ObjectId(idUsuario2) });
+            let idPsicologo, idPaciente;
+
+            if (vinculacion) {
+                idPsicologo = idUsuario1;
+                idPaciente = idUsuario2;
+            } else {
+                vinculacion = await listaVinculacionModel.colListaVinculacion.findOne({ idPsicologo: new ObjectId(idUsuario2), idPaciente: new ObjectId(idUsuario1) });
+                if (vinculacion) {
+                    idPsicologo = idUsuario2;
+                    idPaciente = idUsuario1;
+                } else {
+                    return res.status(404).json({ success: false, message: 'No existe vinculación entre estos usuarios' });
+                }
+            }
+
+            const archivosLocales = new Set();
+            
+            const [vincDel, chatsDelResult, citasDel] = await Promise.all([
+                listaVinculacionModel.desvincular(idPsicologo, idPaciente),
+                chatModel.desvincular(idPsicologo, idPaciente),
+                citaModel.desvincular(idPsicologo, idPaciente)
+            ]);
+
+            for (const archivoPath of chatsDelResult.archivos) {
+                archivosLocales.add(archivoPath);
+            }
+
+            for (const archivoRelativo of archivosLocales) {
+                const safePath = archivoRelativo.replace(/\\/g, '/');
+                const filePath = path.resolve(path.resolve(), safePath);
+
+                try {
+                    if (fs.existsSync(filePath)) {
+                        await fs.promises.unlink(filePath);
+                    }
+                } catch (error) {
+                    if (error.code !== 'ENOENT') {
+                        console.warn('No se pudo eliminar archivo al desvincular:', filePath, error.message);
+                    }
+                }
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: 'Usuarios desvinculados exitosamente'
+            });
+
+        } catch (error) {
+            console.error('Error al desvincular:', error);
+            return res.status(500).json({ success: false, message: 'Error al desvincular: ' + error.message });
+        }
+    }
 
 }
 

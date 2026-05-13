@@ -271,5 +271,17 @@ class ListaVinculacion {
         }
     }
 
+    async desvincular(idPsicologo, idPaciente) {
+        try {
+            const resultado = await this.colListaVinculacion.deleteMany({
+                idPsicologo: new ObjectId(idPsicologo),
+                idPaciente: new ObjectId(idPaciente)
+            });
+            return resultado.deletedCount;
+        } catch (error) {
+            throw new Error('Error al desvincular: ' + error.message);
+        }
+    }
+
 }
 export default ListaVinculacion;

@@ -87,7 +87,7 @@ export const obtenerDocumento = async (idPsicologo, idPaciente, archivoId, type)
 
     return {
       blob: response.data,
-      contentType: response.headers['content-type'] 
+      contentType: response.headers['content-type'] || response.data.type
     };
 
   } catch (error) {

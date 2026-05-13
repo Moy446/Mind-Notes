@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { descargarArchivoPsi } from '../services/chatService';
 import { AuthContext } from '../context/AuthContext';
+import Swal from 'sweetalert2';
 import './SuppPsi.css'
 
 export default function SuppPsi(props) {
@@ -83,6 +84,13 @@ export default function SuppPsi(props) {
 
         } catch (error) {
             console.error("Error al descargar:", error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error al descargar',
+                text: error.response?.status === 404 
+                    ? 'El archivo no se encontró en el servidor. Puede que haya sido eliminado o no se haya migrado correctamente.'
+                    : 'Hubo un problema al intentar descargar el archivo.'
+            });
         }
     };
 
@@ -117,6 +125,7 @@ export default function SuppPsi(props) {
                         <Link
                             key={item._id}
                             to={`/psicologo/doc/${props.idPaciente}/${item._id}/${activo ? "mat" : "exp"}`}
+                            state={{ nombre: item.nombre }}
                             className='itemsmatApo btnSuppPsi'
                         >
                             {renderIcon(item.type)}
