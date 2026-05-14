@@ -25,7 +25,7 @@ const CalendarioScreen = () => {
 
   
 
-  const { allDates, citas, userList, currentDate, tomorrowDate, validateDate, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
+  const { allDates, citas, userList, tomorrowDate, validateDate, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
     
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
@@ -35,7 +35,7 @@ const CalendarioScreen = () => {
     idCita: '',
     idUsuario: '',
     nombre: '',
-    fechaCita: currentDate,
+    fechaCita: tomorrowDate,
     horaInicio: '',
     horaFin: ''
   });
@@ -54,14 +54,14 @@ const CalendarioScreen = () => {
     },[allDates])
 
     const resetSelectedCita = useCallback(() => {
-      setSelectedCita({
+      setSelectedCita(prev => ({
+        ...prev,
         idCita: '',
         idUsuario: '',
         nombre: '',
-        fechaCita: currentDate,
         horaInicio: '',
         horaFin: ''
-      })
+      }))
     },[])
     
     useEffect(() => {
@@ -69,16 +69,17 @@ const CalendarioScreen = () => {
     }, [allDates, date])
     
     useEffect(() => {
-      validateDate(selectedCita) ? setCreateDate(true) : setCreateDate(false)
+      validateDate(formattedDate) ? setCreateDate(true) : setCreateDate(false)
     }, [date])
     
   return (
     <View style={calendarioStyle.container}>
       
-      <CalendarComponent onDayPress={(date) => {
-          setDate(date);
-          setSelectedCita({...selectedCita, fechaCita: validateDate(selectedCita) ? formatLocalDate(date) : tomorrowDate })
-          loadDateEvents(date);
+      <CalendarComponent onDayPress={(selectedDate) => {
+          setDate(selectedDate);
+          const formattedSelectedDate = formatLocalDate(selectedDate);
+          setSelectedCita(prev => ({ ...prev, fechaCita: validateDate(formattedSelectedDate) ? tomorrowDate : formattedSelectedDate }));
+          loadDateEvents(selectedDate);
         }} 
         citas={allDates} 
       />
@@ -102,7 +103,7 @@ const CalendarioScreen = () => {
             info={item}
             onPress={() => {
               const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
-              const fechaCita = formattedDate
+              const fechaCita = selectedCita.fechaCita
               const cita: infoCita = {
                 idCita: item.idCita,
                 idUsuario,
@@ -133,12 +134,12 @@ const CalendarioScreen = () => {
                 await cargarCitas()
                 resetSelectedCita()
                 setShowPopup(false)
-                setCreateDate(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               onClose={() => {
                 resetSelectedCita()
                 setShowPopup(false)
-                setCreateDate(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               />
           </View>

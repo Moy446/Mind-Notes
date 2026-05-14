@@ -24,7 +24,7 @@ const calendarioPaciente = () => {
     }
   }
 
-  const { allDates, userList, citas, currentDate, tomorrowDate, validateDate, loadDates , loadUserList, formatLocalDate, loadDateEvents, addEvent, editEvent } = useCalendarPaciente()
+  const { allDates, userList, citas, tomorrowDate, validateDate, loadDates , loadUserList, formatLocalDate, loadDateEvents, addEvent, editEvent } = useCalendarPaciente()
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
@@ -33,7 +33,7 @@ const calendarioPaciente = () => {
     idCita: '',
     idUsuario: '',
     nombre: '',
-    fechaCita: '',
+    fechaCita: tomorrowDate,
     horaInicio: '',
     horaFin: ''
   });
@@ -66,7 +66,7 @@ const calendarioPaciente = () => {
   }
 
   useEffect(() => {
-    validateDate(selectedCita) ? setCreateDate(true) : setCreateDate(false)
+    validateDate(selectedCita.fechaCita) ? setCreateDate(true) : setCreateDate(false)
   }, [date])
 
   return (
@@ -77,10 +77,11 @@ const calendarioPaciente = () => {
           placeholder='Selecciona tu psicólogo'
           onChange={(user) => setSelectedCita({...selectedCita, idUsuario: user.id, nombre: user.nombre})}
         />
-      <CalendarComponent onDayPress={(date) => {
-          setDate(date);
-          setSelectedCita({...selectedCita, fechaCita: validateDate(selectedCita) ? formatLocalDate(date) : tomorrowDate })
-          loadDateEvents(date);
+      <CalendarComponent onDayPress={(selectedDate) => {
+          setDate(selectedDate);
+          const formattedSelectedDate = formatLocalDate(selectedDate);
+          setSelectedCita(prev => ({ ...prev, fechaCita: validateDate(formattedSelectedDate) ? tomorrowDate : formattedSelectedDate }));
+          loadDateEvents(selectedDate);
         }} 
         citas={allDates} 
       />
@@ -105,7 +106,7 @@ const calendarioPaciente = () => {
             onPress={() => {
               if(item.title === 'reservado') return
               const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
-              const fechaCita = formattedDate
+              const fechaCita = selectedCita.fechaCita
               const cita: infoCita = {
                 idCita: item.idCita,
                 idUsuario,
@@ -137,11 +138,13 @@ const calendarioPaciente = () => {
                 resetSelectedCita()
                 setShowPopup(false)
                 setCreateDate(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               onClose={() => {
                 resetSelectedCita()
                 setShowPopup(false)
                 setCreateDate(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               />
           </View>

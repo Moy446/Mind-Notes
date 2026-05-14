@@ -53,9 +53,9 @@ export const useCalendarPsicologo = () => {
   const currentDate = formatLocalDate(new Date())
   const tomorrowDate = dayTomorrow(new Date())
 
-  const validateDate = (selectedCita: infoCita):boolean => {
+  const validateDate = (selectedCita: string ):boolean => {
     const currentDateSplit = currentDate.split('-').map(Number);
-    const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
+    const selectedDateSplit = selectedCita.split('-').map(Number);
     if(currentDateSplit[0] > selectedDateSplit[0]){
       return true
     }
@@ -148,7 +148,6 @@ export const useCalendarPsicologo = () => {
     citas,
     error,
     userList,
-    currentDate,
     tomorrowDate
   }
 }
