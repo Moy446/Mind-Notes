@@ -6,8 +6,9 @@ export const linkedDocumentsStyle = StyleSheet.create({
     backgroundColor: Colors.principal,
     paddingHorizontal: 12,
     paddingTop: 10,
-    paddingBottom: 8,
-    minHeight: 180,
+    paddingBottom: 16,
+    height: '100%',
+
   },
   header: {
     flexDirection: 'row',
@@ -91,6 +92,12 @@ export const linkedDocumentsStyle = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingBottom: 20,
+    paddingHorizontal: 15,
   },
   paginatorButton: {
     paddingVertical: 4,

@@ -11,7 +11,7 @@ export const documentStyle = StyleSheet.create({
     header: {
         backgroundColor: Colors.principal,
         width: '100%',
-        height: 70,
+        height: 90,
         borderBottomStartRadius: 35,
         borderBottomEndRadius: 35,
         flexDirection: 'row',
@@ -32,7 +32,7 @@ export const documentStyle = StyleSheet.create({
     },
     fab: {
         position: 'absolute',
-        bottom: 20,
+        bottom: 60,
         right: 20,
         backgroundColor: Colors.principal,
         width: 60,

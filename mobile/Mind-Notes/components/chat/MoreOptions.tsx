@@ -11,6 +11,7 @@ const MoreOptionsView = ({ onPress }: MoreOptionsViewProps) => {
     return (
         <View style={nameBarStyle.moreInformationContainer}>
             <Pressable style={({pressed}) =>({
+                flex: 1,
                 padding: 8,
                 opacity: pressed ? 0.6 : 1,})}
                 onPress={() => {

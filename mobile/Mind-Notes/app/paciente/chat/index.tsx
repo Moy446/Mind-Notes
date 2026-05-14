@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -37,6 +38,10 @@ import { UserQrModal } from '@/components/chat/UserQrModal';
 import { chatPsicologoStyle } from '@/styles/chat/chatPsicologoStyle';
 import { Colors } from '@/constants/theme';
 import * as DocumentPicker from 'expo-document-picker';
+import { clienteAxios } from '@/core/API/clienteAxios';
+import MoreOptionsView from '@/components/chat/MoreOptions';
+import UnlinkUserPopUp from '@/components/popup/UnlinkUserPopUp';
+import { perfilStyle } from '@/styles/perfil/perfilStyle';
 
 export default function ChatPacienteScreen() {
   const router = useRouter();
@@ -60,6 +65,8 @@ export default function ChatPacienteScreen() {
   const [uid, setUid] = useState('');
   const [uidLoading, setUidLoading] = useState(false);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [showMoreInformation, setShowMoreInformation] = useState(false);
+  const [deletePatientAccount, setDeletePatientAccount] = useState(false);
 
   useEffect(() => {
     if (status !== 'authenticated' || !user) {
@@ -321,26 +328,50 @@ export default function ChatPacienteScreen() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
         >
-          <NameBar
-            img={imagenMostrada}
-            name={nombreMostrado}
-            onBack={handleGoBack}
-            onPressName={() => setShowLinkedDocuments((prev) => !prev)}
-          />
+          <View style={{flex:1}}>
+            <NameBar
+              img={imagenMostrada}
+              name={nombreMostrado}
+              onBack={handleGoBack}
+              onPressName={() => setShowLinkedDocuments((prev) => !prev)}
+              onMoreOptions={() => setShowMoreInformation((prev) => !prev)}
+            />
+            {showMoreInformation && (
+              <>
+                <Pressable
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                  }}
+                  onPress={() => setShowMoreInformation(false)}
+                />
+                <MoreOptionsView 
+                  onPress={() => (
+                    setShowMoreInformation(false),
+                    setDeletePatientAccount(true)
+                  )}
+                />
+              </>
+            )}
+            <View style={{flex:1}}>
+              <MessageList
+                messages={messages}
+                loading={loadingMessages}
+                currentUserRole="paciente"
+              />
+            </View>
 
-          <MessageList
-            messages={messages}
-            loading={loadingMessages}
-            currentUserRole="paciente"
-          />
-
-          <MessageField
-            onSendMessage={handleSendMessage}
-            disabled={!selectedChat}
-            onUploadPress={handleUploadFile}
-            uploadDisabled={!selectedChat || uploadingFile}
-            uploadingFile={uploadingFile}
-          />
+            <MessageField
+              onSendMessage={handleSendMessage}
+              disabled={!selectedChat}
+              onUploadPress={handleUploadFile}
+              uploadDisabled={!selectedChat || uploadingFile}
+              uploadingFile={uploadingFile}
+            />
+          </View>
         </KeyboardAvoidingView>
       )}
 
@@ -358,6 +389,33 @@ export default function ChatPacienteScreen() {
           />
         </SafeAreaView>
       </Modal>
+
+      <Modal visible={deletePatientAccount} transparent animationType="slide">
+				<View style={perfilStyle.darkThemeModal}>
+					<View style={perfilStyle.modalContainer}>
+						<UnlinkUserPopUp 
+							onClose={() => setDeletePatientAccount(false)}
+							onAccept={async () => {
+								setDeletePatientAccount(false);
+								try {
+									await clienteAxios.delete(`/desvincular/${user?.idUsuario}/${selectedChat}`).then((res)=>{
+										Alert.alert('Cuenta desvinculada', 'La cuenta del paciente ha sido desvinculada exitosamente.');
+										handleGoBack();
+										loadPsicologos(true);	
+									})
+
+								} catch (error) {
+									Alert.alert('Error', 'No se pudo desvincular la cuenta. Intenta de nuevo.');
+								}
+								
+									Alert.alert('Cuenta desvinculada', 'La cuenta del paciente ha sido desvinculada exitosamente.');
+									handleGoBack();
+									loadPsicologos(true);
+							}}
+						/>
+					</View>
+				</View>
+			</Modal>
 
       <Modal
         visible={showLinkModal}
