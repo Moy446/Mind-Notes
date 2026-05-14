@@ -20,7 +20,7 @@ const DeliteAcountPopUp = ({ onAccept, onClose }: Props) => {
     return (
         <View style={deleteAccountPopUpStyle.container}>
             <Text style={deleteAccountPopUpStyle.warningText}>¿Esta seguro de eliminar su cuenta?</Text>
-            <Text>Todos los datos se perderan y se cancelara la suscripción</Text>
+            <Text>Todos los datos se perderán y si eres psicólogo se cancelará la suscripción</Text>
             <View style={deleteAccountPopUpStyle.btnsContainer}>
                 <Pressable style={deleteAccountPopUpStyle.acceptBtn} onPress={() => {
                     

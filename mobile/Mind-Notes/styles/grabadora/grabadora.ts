@@ -74,7 +74,14 @@ export const grabadoraStyle = StyleSheet.create({
     },
     acceptBtn:{
         backgroundColor: Colors.principal,
-        width: '50%',
+        width: '45%',
+        borderRadius: 25,
+        alignSelf: 'center',
+        alignItems: 'center'
+    },
+    cancelBtn:{
+        backgroundColor: Colors.secondaryButton,
+        width: '45%',
         borderRadius: 25,
         alignSelf: 'center',
         alignItems: 'center'

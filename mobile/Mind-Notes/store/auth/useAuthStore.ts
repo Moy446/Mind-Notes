@@ -19,7 +19,7 @@ export interface AuthState {
     //methods
     login: (email: string, password: string) => Promise<AuthResponse>;
     logout: () => Promise<void>;
-    changeStatus: (token?: string, user?: User) => boolean;
+    changeStatus: (token?: string, user?: User) => Promise<boolean>;
     checkStatus: () => Promise<void>;
 }
 
@@ -29,14 +29,14 @@ export const UseAuthStore = create<AuthState>((set, get) => ({
     user: undefined,
     token: undefined,
 
-    changeStatus: (token?: string, user?: User) => {
+    changeStatus: async (token?: string, user?: User) => {
         if (!token || !user) {
             set({
                 status: 'unauthenticated',
                 user: undefined,
                 token: undefined
             });
-            SecureStorageAdapter.deleteItem('token');
+            await SecureStorageAdapter.deleteItem('token');
             return false;
         }
         set({
@@ -44,13 +44,13 @@ export const UseAuthStore = create<AuthState>((set, get) => ({
             user: user,
             token: token
         });
-        SecureStorageAdapter.setItem('token', token);
+        await SecureStorageAdapter.setItem('token', token);
         return true;
     },
     login: async (email: string, password: string) => {
         const resp = await authLogin(email, password)
         console.log(resp)
-        const success = get().changeStatus(resp?.token, resp?.user);
+        const success = await get().changeStatus(resp?.token, resp?.user);
         return { success, role: resp?.user?.role };
     },
     logout: async () => {
@@ -70,7 +70,7 @@ export const UseAuthStore = create<AuthState>((set, get) => ({
     checkStatus: async () => {
         const resp = await checkSessionStatus();
         console.log(resp)
-        get().changeStatus(resp?.token, resp?.user);
+        await get().changeStatus(resp?.token, resp?.user);
     }
 }))
 
