@@ -1,5 +1,5 @@
 import { View, Text, Modal, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { calendarioStyle } from '@/styles/calendario/calendarioStyle'
 import CalendarComponent from '@/components/calendar/calendario'
 import { infoCita } from '@/core/interfaces/Dates'
@@ -8,6 +8,7 @@ import { useCalendarPaciente } from '@/hooks/calendar/UseCalendarPaciente'
 import CalendarPopUp from '@/components/popup/CalendarPopUp'
 import ViewDatesComponent from '@/components/calendar/ViewDates'
 import AddNewDateComponent from '@/components/calendar/AddNewDate'
+import { useFocusEffect } from 'expo-router'
 
 const calendarioPaciente = () => {
 
@@ -38,9 +39,11 @@ const calendarioPaciente = () => {
     horaFin: ''
   });
 
-  useEffect(() => {
-    loadUserList()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      loadUserList()
+    }, [])
+  )
   
   useEffect(() => {
     if(selectedCita.idUsuario) {

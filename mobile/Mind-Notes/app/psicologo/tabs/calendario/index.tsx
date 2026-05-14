@@ -7,6 +7,7 @@ import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import ViewDatesComponent from '@/components/calendar/ViewDates'
 import CalendarPopUp from '@/components/popup/CalendarPopUp'
 import { infoCita } from '@/core/interfaces/Dates'
+import { useFocusEffect } from 'expo-router'
 
 interface Cita {
   idCita: string,
@@ -40,10 +41,12 @@ const CalendarioScreen = () => {
     horaFin: ''
   });
 
-    useEffect(() => {
-        cargarCitas()
-        loadUserList()
+  useFocusEffect(
+    useCallback(() => {
+      cargarCitas()
+      loadUserList()
     }, [])
+  )
 
     useEffect(() => {
       if(allDates.length > 0) {

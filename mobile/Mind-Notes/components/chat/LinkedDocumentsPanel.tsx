@@ -39,7 +39,7 @@ export const LinkedDocumentsPanel = ({
 }: LinkedDocumentsPanelProps) => {
   const [showSupport, setShowSupport] = useState(false);
   const [page, setPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 12;
 
   const currentData = useMemo(() => {
     if (showSupport) return materialAdjunto || [];

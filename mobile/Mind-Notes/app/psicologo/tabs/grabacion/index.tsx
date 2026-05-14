@@ -1,11 +1,12 @@
 import { View, Text, Pressable, Animated, Modal } from 'react-native'
-import React, { useEffect, useState, useRef, use } from 'react'
+import React, { useEffect, useState, useRef, use, useCallback } from 'react'
 import { grabadoraStyle } from '@/styles/grabadora/grabadora'
 import FakeWave from '@/components/grabadora/Ondas'
 import { Audio } from 'expo-av'
 import { useCalendarPsicologo } from '@/hooks/calendar/useCalendarPsicologo'
 import CustomSelector from '@/components/popup/CustomSelector'
 import { subirGrabacion } from '@/core/actions/grabacion/grabacion.actions'
+import { useFocusEffect } from 'expo-router'
 
 
 const RecordScreen = () => {
@@ -25,9 +26,11 @@ const RecordScreen = () => {
   const [audioLevel, setAudioLevel] = useState(-160);
   const [levels, setLevels] = useState(Array(40).fill(-160));
 
-  useEffect(() => {
-    loadUserList()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      loadUserList()
+    }, [])
+    )
 
   useEffect(() => {
   let interval: any;
@@ -179,15 +182,23 @@ const RecordScreen = () => {
                 </Pressable>
 
               </View>
-
-              <Pressable style={grabadoraStyle.acceptBtn}
-                onPress={()=>{
-                  handlePress(); 
-                  setShowPopup(false)
-                }}
-              >
-                <Text style={grabadoraStyle.accetpText}>Aceptar</Text>
-              </Pressable>
+              <View style={{flexDirection: 'row', gap: 10, marginTop: 10, alignItems: 'center', justifyContent: 'center'}}>
+                <Pressable style={grabadoraStyle.acceptBtn}
+                  onPress={()=>{
+                    handlePress(); 
+                    setShowPopup(false)
+                  }}
+                >
+                  <Text style={grabadoraStyle.accetpText}>Aceptar</Text>
+                </Pressable>
+                <Pressable style={grabadoraStyle.cancelBtn}
+                  onPress={()=>{
+                    setShowPopup(false)
+                  }}
+                >
+                  <Text style={grabadoraStyle.accetpText}>Cancelar</Text>
+                </Pressable>
+              </View>
           </View>
         </View>
       </Modal>

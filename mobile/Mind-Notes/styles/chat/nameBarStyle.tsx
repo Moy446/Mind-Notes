@@ -36,4 +36,17 @@ export const nameBarStyle = StyleSheet.create({
     color: Colors.principal,
     marginTop: 2,
   },
+  moreInformationContainer: {
+    position: 'absolute',
+    top: 55,
+    right: 10,
+    backgroundColor: 'white',
+    paddingVertical: 8,
+    width: 180,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    zIndex: 1000,
+  },
 });
