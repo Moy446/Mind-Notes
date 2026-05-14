@@ -25,13 +25,12 @@ const CalendarioScreen = () => {
 
   
 
-  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
+  const { allDates, citas, userList, currentDate, tomorrowDate, validateDate, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
     
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
   const [createDate, setCreateDate] = useState(false)
-  const currentDate = formatLocalDate(new Date())
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
     idUsuario: '',
@@ -70,21 +69,7 @@ const CalendarioScreen = () => {
     }, [allDates, date])
     
     useEffect(() => {
-      const currentDateSplit = currentDate.split('-').map(Number);
-      const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
-      if(currentDateSplit[0] > selectedDateSplit[0]){
-        setCreateDate(true)
-        return
-      }
-      if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
-        setCreateDate(true)
-        return
-      }
-      if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
-        setCreateDate(true)
-        return
-      }
-      setCreateDate(false)
+      validateDate(selectedCita) ? setCreateDate(true) : setCreateDate(false)
     }, [date])
     
   return (
@@ -92,7 +77,7 @@ const CalendarioScreen = () => {
       
       <CalendarComponent onDayPress={(date) => {
           setDate(date);
-          setSelectedCita({...selectedCita, fechaCita: formatLocalDate(date)})
+          setSelectedCita({...selectedCita, fechaCita: validateDate(selectedCita) ? formatLocalDate(date) : tomorrowDate })
           loadDateEvents(date);
         }} 
         citas={allDates} 
@@ -106,7 +91,10 @@ const CalendarioScreen = () => {
         ListHeaderComponent={
           <>
             <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
-            <AddNewDateComponent disabled={createDate} onPress={() => setShowPopup(true)} />
+            <AddNewDateComponent disabled={createDate} onPress={() => {
+              setShowPopup(true)
+              setCreateDate(true)
+            }} />
           </>
         }
         renderItem={({item}) => (
@@ -145,10 +133,12 @@ const CalendarioScreen = () => {
                 await cargarCitas()
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(false)
               }} 
               onClose={() => {
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(false)
               }} 
               />
           </View>
