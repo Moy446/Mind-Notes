@@ -24,17 +24,16 @@ const calendarioPaciente = () => {
     }
   }
 
-  const { allDates, userList, citas, loadDates , loadUserList, formatLocalDate, loadDateEvents, addEvent, editEvent } = useCalendarPaciente()
+  const { allDates, userList, citas, tomorrowDate, validateDate, loadDates , loadUserList, formatLocalDate, loadDateEvents, addEvent, editEvent } = useCalendarPaciente()
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
   const [createDate, setCreateDate] = useState(false)
-  const currentDate = formatLocalDate(new Date())
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
     idUsuario: '',
     nombre: '',
-    fechaCita: '',
+    fechaCita: tomorrowDate,
     horaInicio: '',
     horaFin: ''
   });
@@ -67,22 +66,8 @@ const calendarioPaciente = () => {
   }
 
   useEffect(() => {
-        const currentDateSplit = currentDate.split('-').map(Number);
-        const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
-        if(currentDateSplit[0] > selectedDateSplit[0]){
-          setCreateDate(true)
-          return
-        }
-        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
-          setCreateDate(true)
-          return
-        }
-        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
-          setCreateDate(true)
-          return
-        }
-        setCreateDate(false)
-      }, [date])
+    validateDate(selectedCita.fechaCita) ? setCreateDate(true) : setCreateDate(false)
+  }, [date])
 
   return (
     <View style={calendarioStyle.container}>
@@ -92,10 +77,11 @@ const calendarioPaciente = () => {
           placeholder='Selecciona tu psicólogo'
           onChange={(user) => setSelectedCita({...selectedCita, idUsuario: user.id, nombre: user.nombre})}
         />
-      <CalendarComponent onDayPress={(date) => {
-          setDate(date);
-          setSelectedCita({...selectedCita, fechaCita: formatLocalDate(date)})
-          loadDateEvents(date);
+      <CalendarComponent onDayPress={(selectedDate) => {
+          setDate(selectedDate);
+          const formattedSelectedDate = formatLocalDate(selectedDate);
+          setSelectedCita(prev => ({ ...prev, fechaCita: validateDate(formattedSelectedDate) ? tomorrowDate : formattedSelectedDate }));
+          loadDateEvents(selectedDate);
         }} 
         citas={allDates} 
       />
@@ -108,7 +94,10 @@ const calendarioPaciente = () => {
         ListHeaderComponent={
           <>
             <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
-            <AddNewDateComponent disabled={createDate} onPress={() => setShowPopup(true)} />
+            <AddNewDateComponent disabled={createDate} onPress={() => {
+              setShowPopup(true)
+              setCreateDate(true)
+            }} />
           </>
         }
         renderItem={({item}) => (
@@ -117,7 +106,7 @@ const calendarioPaciente = () => {
             onPress={() => {
               if(item.title === 'reservado') return
               const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
-              const fechaCita = formattedDate
+              const fechaCita = selectedCita.fechaCita
               const cita: infoCita = {
                 idCita: item.idCita,
                 idUsuario,
@@ -148,10 +137,14 @@ const calendarioPaciente = () => {
                 await loadDates(selectedCita.idUsuario)
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               onClose={() => {
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               />
           </View>

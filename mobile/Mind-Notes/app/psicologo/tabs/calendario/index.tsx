@@ -25,18 +25,17 @@ const CalendarioScreen = () => {
 
   
 
-  const { allDates, citas, userList, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
+  const { allDates, citas, userList, tomorrowDate, validateDate, cargarCitas, addEvent, editEvent, loadDateEvents, loadUserList, formatLocalDate } = useCalendarPsicologo()
     
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
   const [createDate, setCreateDate] = useState(false)
-  const currentDate = formatLocalDate(new Date())
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
     idUsuario: '',
     nombre: '',
-    fechaCita: currentDate,
+    fechaCita: tomorrowDate,
     horaInicio: '',
     horaFin: ''
   });
@@ -55,14 +54,14 @@ const CalendarioScreen = () => {
     },[allDates])
 
     const resetSelectedCita = useCallback(() => {
-      setSelectedCita({
+      setSelectedCita(prev => ({
+        ...prev,
         idCita: '',
         idUsuario: '',
         nombre: '',
-        fechaCita: currentDate,
         horaInicio: '',
         horaFin: ''
-      })
+      }))
     },[])
     
     useEffect(() => {
@@ -70,30 +69,17 @@ const CalendarioScreen = () => {
     }, [allDates, date])
     
     useEffect(() => {
-      const currentDateSplit = currentDate.split('-').map(Number);
-      const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
-      if(currentDateSplit[0] > selectedDateSplit[0]){
-        setCreateDate(true)
-        return
-      }
-      if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
-        setCreateDate(true)
-        return
-      }
-      if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
-        setCreateDate(true)
-        return
-      }
-      setCreateDate(false)
+      validateDate(formattedDate) ? setCreateDate(true) : setCreateDate(false)
     }, [date])
     
   return (
     <View style={calendarioStyle.container}>
       
-      <CalendarComponent onDayPress={(date) => {
-          setDate(date);
-          setSelectedCita({...selectedCita, fechaCita: formatLocalDate(date)})
-          loadDateEvents(date);
+      <CalendarComponent onDayPress={(selectedDate) => {
+          setDate(selectedDate);
+          const formattedSelectedDate = formatLocalDate(selectedDate);
+          setSelectedCita(prev => ({ ...prev, fechaCita: validateDate(formattedSelectedDate) ? tomorrowDate : formattedSelectedDate }));
+          loadDateEvents(selectedDate);
         }} 
         citas={allDates} 
       />
@@ -106,7 +92,10 @@ const CalendarioScreen = () => {
         ListHeaderComponent={
           <>
             <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
-            <AddNewDateComponent disabled={createDate} onPress={() => setShowPopup(true)} />
+            <AddNewDateComponent disabled={createDate} onPress={() => {
+              setShowPopup(true)
+              setCreateDate(true)
+            }} />
           </>
         }
         renderItem={({item}) => (
@@ -114,7 +103,7 @@ const CalendarioScreen = () => {
             info={item}
             onPress={() => {
               const {idUsuario:idUsuario,title:nombre,start:horaInicio,end:horaFin} = item
-              const fechaCita = formattedDate
+              const fechaCita = selectedCita.fechaCita
               const cita: infoCita = {
                 idCita: item.idCita,
                 idUsuario,
@@ -145,10 +134,12 @@ const CalendarioScreen = () => {
                 await cargarCitas()
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               onClose={() => {
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(validateDate(formattedDate))
               }} 
               />
           </View>

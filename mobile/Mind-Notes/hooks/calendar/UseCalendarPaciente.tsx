@@ -43,6 +43,32 @@ export const useCalendarPaciente = () => {
     };
 
 
+    const dayTomorrow = (date: Date) => {
+        const tomorrow = new Date(date);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        return tomorrow.getFullYear() + '-' +
+        String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
+        String(tomorrow.getDate()).padStart(2, '0');
+    };
+
+    const currentDate = formatLocalDate(new Date())
+    const tomorrowDate = dayTomorrow(new Date())
+
+    const validateDate = (selectedCita: string):boolean => {
+        const currentDateSplit = currentDate.split('-').map(Number);
+        const selectedDateSplit = selectedCita.split('-').map(Number);
+        if(currentDateSplit[0] > selectedDateSplit[0]){
+            return true
+        }
+        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
+            return true
+        }
+        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
+            return true
+        }
+        return false
+    } 
+
     const loadUserList =   () => {
         //TODO: cargar psicologos
         const psychologists = cargarListaPsicologos()
@@ -103,6 +129,7 @@ export const useCalendarPaciente = () => {
 
 
     return{
+        validateDate,
         loadUserList,
         formatLocalDate,
         loadDates,
@@ -112,6 +139,7 @@ export const useCalendarPaciente = () => {
         userList,
         allDates,
         citas,
-        error
+        error,
+        tomorrowDate
     }
 }
