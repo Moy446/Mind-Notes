@@ -42,6 +42,32 @@ export const useCalendarPsicologo = () => {
     String(date.getDate()).padStart(2, '0');
   };
 
+  const dayTomorrow = (date: Date) => {
+    const tomorrow = new Date(date);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.getFullYear() + '-' +
+    String(tomorrow.getMonth() + 1).padStart(2, '0') + '-' +
+    String(tomorrow.getDate()).padStart(2, '0');
+  };
+
+  const currentDate = formatLocalDate(new Date())
+  const tomorrowDate = dayTomorrow(new Date())
+
+  const validateDate = (selectedCita: infoCita):boolean => {
+    const currentDateSplit = currentDate.split('-').map(Number);
+    const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
+    if(currentDateSplit[0] > selectedDateSplit[0]){
+      return true
+    }
+    if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
+      return true
+    }
+    if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
+      return true
+    }
+    return false
+  } 
+
   const cargarCitas = async () => {
     try {
 
@@ -111,6 +137,7 @@ export const useCalendarPsicologo = () => {
   }
 
   return {
+    validateDate,
     loadDateEvents,
     addEvent,
     editEvent,
@@ -120,7 +147,9 @@ export const useCalendarPsicologo = () => {
     allDates,
     citas,
     error,
-    userList
+    userList,
+    currentDate,
+    tomorrowDate
   }
 }
 

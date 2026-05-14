@@ -24,12 +24,11 @@ const calendarioPaciente = () => {
     }
   }
 
-  const { allDates, userList, citas, loadDates , loadUserList, formatLocalDate, loadDateEvents, addEvent, editEvent } = useCalendarPaciente()
+  const { allDates, userList, citas, currentDate, tomorrowDate, validateDate, loadDates , loadUserList, formatLocalDate, loadDateEvents, addEvent, editEvent } = useCalendarPaciente()
   const [date, setDate] = useState(new Date())
   const formattedDate = formatLocalDate(date) // Formato YYYY-MM-DD
   const [showPopup, setShowPopup] = useState(false);
   const [createDate, setCreateDate] = useState(false)
-  const currentDate = formatLocalDate(new Date())
   const [selectedCita, setSelectedCita] = useState<infoCita>({
     idCita: '',
     idUsuario: '',
@@ -67,22 +66,8 @@ const calendarioPaciente = () => {
   }
 
   useEffect(() => {
-        const currentDateSplit = currentDate.split('-').map(Number);
-        const selectedDateSplit = selectedCita.fechaCita.split('-').map(Number);
-        if(currentDateSplit[0] > selectedDateSplit[0]){
-          setCreateDate(true)
-          return
-        }
-        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] > selectedDateSplit[1]){
-          setCreateDate(true)
-          return
-        }
-        if(currentDateSplit[0] >= selectedDateSplit[0] && currentDateSplit[1] >= selectedDateSplit[1] && currentDateSplit[2] + 1  > selectedDateSplit[2]){
-          setCreateDate(true)
-          return
-        }
-        setCreateDate(false)
-      }, [date])
+    validateDate(selectedCita) ? setCreateDate(true) : setCreateDate(false)
+  }, [date])
 
   return (
     <View style={calendarioStyle.container}>
@@ -94,7 +79,7 @@ const calendarioPaciente = () => {
         />
       <CalendarComponent onDayPress={(date) => {
           setDate(date);
-          setSelectedCita({...selectedCita, fechaCita: formatLocalDate(date)})
+          setSelectedCita({...selectedCita, fechaCita: validateDate(selectedCita) ? formatLocalDate(date) : tomorrowDate })
           loadDateEvents(date);
         }} 
         citas={allDates} 
@@ -108,7 +93,10 @@ const calendarioPaciente = () => {
         ListHeaderComponent={
           <>
             <Text style={calendarioStyle.txtDate}>{ formattedDate }</Text>
-            <AddNewDateComponent disabled={createDate} onPress={() => setShowPopup(true)} />
+            <AddNewDateComponent disabled={createDate} onPress={() => {
+              setShowPopup(true)
+              setCreateDate(true)
+            }} />
           </>
         }
         renderItem={({item}) => (
@@ -148,10 +136,12 @@ const calendarioPaciente = () => {
                 await loadDates(selectedCita.idUsuario)
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(false)
               }} 
               onClose={() => {
                 resetSelectedCita()
                 setShowPopup(false)
+                setCreateDate(false)
               }} 
               />
           </View>
