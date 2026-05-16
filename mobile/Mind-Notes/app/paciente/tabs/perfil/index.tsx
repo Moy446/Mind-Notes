@@ -211,7 +211,7 @@ const PerfilPaciente = () => {
       <View style={perfilStyle.imgContainer}>
         <Image source={userData.fotoPerfil?.includes('userDefault')
           ? require('../../../../assets/images/userDefault.png')
-          : { uri: resolveMediaUrl(`${BASE_URL}/${userData.fotoPerfil}`) }}
+          : { uri: resolveMediaUrl(`${userData.fotoPerfil}`) }}
           style={perfilStyle.imgPerfil} />
         <Svg
           viewBox="0 0 24 24"

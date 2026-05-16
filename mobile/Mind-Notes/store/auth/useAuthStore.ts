@@ -9,6 +9,7 @@ export type AuthStatus = 'authenticated' | 'unauthenticated' | 'checking';
 export interface AuthResponse {
     success: boolean;
     role?: string;
+    message?: string;
 }
 
 export interface AuthState {
@@ -48,10 +49,9 @@ export const UseAuthStore = create<AuthState>((set, get) => ({
         return true;
     },
     login: async (email: string, password: string) => {
-        const resp = await authLogin(email, password)
-        console.log(resp)
+        const resp = await authLogin(email, password);
         const success = await get().changeStatus(resp?.token, resp?.user);
-        return { success, role: resp?.user?.role };
+        return { success, role: resp?.user?.role, message: resp?.message };
     },
     logout: async () => {
         SecureStorageAdapter.deleteItem('token');

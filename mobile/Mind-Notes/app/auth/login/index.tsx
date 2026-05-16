@@ -41,9 +41,8 @@ const LoginScreen = () => {
         const wasSuccesful = await login(form.email, form.password)
         setIsPosting(false)
 
-        console.log(wasSuccesful)
         if(!wasSuccesful.success){
-            Alert.alert('Error', 'El usuario o contraseña son incorrectos')
+            Alert.alert('Error', wasSuccesful.message || 'Error al iniciar sesión');
             return;
         }
         setForm({
