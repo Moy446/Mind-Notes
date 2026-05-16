@@ -376,6 +376,7 @@ export default function ChatScreen() {
 			>
 				<SafeAreaView style={chatPsicologoStyle.container}>
 					<LinkedDocumentsPanel
+						idPaciente={selectedChat || undefined}
 						materialAdjunto={patientData.materialAdjunto}
 						expedientes={patientData.expedientes}
 						grabaciones={patientData.grabaciones}

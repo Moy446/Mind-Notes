@@ -42,6 +42,7 @@ import { clienteAxios } from '@/core/API/clienteAxios';
 import MoreOptionsView from '@/components/chat/MoreOptions';
 import UnlinkUserPopUp from '@/components/popup/UnlinkUserPopUp';
 import { perfilStyle } from '@/styles/perfil/perfilStyle';
+import LinkedSupportMaterialPanel from '@/components/chat/LinkedSupportMaterialPanel';
 
 export default function ChatPacienteScreen() {
   const router = useRouter();
@@ -381,10 +382,8 @@ export default function ChatPacienteScreen() {
         onRequestClose={() => setShowLinkedDocuments(false)}
       >
         <SafeAreaView style={chatPsicologoStyle.container}>
-          <LinkedDocumentsPanel
+          <LinkedSupportMaterialPanel
             materialAdjunto={patientData.materialAdjunto}
-            expedientes={patientData.expedientes}
-            grabaciones={patientData.grabaciones}
             onClose={() => setShowLinkedDocuments(false)}
           />
         </SafeAreaView>

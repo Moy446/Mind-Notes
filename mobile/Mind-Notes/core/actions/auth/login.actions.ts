@@ -35,7 +35,8 @@ export const authLogin = async (email: string, password: string) => {
 
     } catch (error) {
         console.log(error?.response?.data || 'Error en el login');
-        return null
+        const message:string = error?.response?.data?.message || 'Error en el login';
+        return {success: false, message};
     }
 }
 

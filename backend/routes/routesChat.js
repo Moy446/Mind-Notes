@@ -57,7 +57,7 @@ router.post('/:idPsicologo/:idPaciente/archivo', protector, upload.single('file'
 router.get('/:idPsicologo/:idPaciente/archivo/:archivoId', protector, chat.descargarArchivo);
 router.get('/:idPsicologo/:idPaciente/archivo/:archivoId/:type', protector, chat.descargarArchivoPsi);
 router.get('/:idPsicologo/:idPaciente/documento/:archivoId/:type', protector, chat.obtenerDocumento);
-router.get('/:idPsicologo/:idPaciente/documento/:archivoId/texto', protector, chat.obtenerTexto);
+router.get('/:idPsicologo/:idPaciente/documentos/:archivoId/texto', protector, chat.obtenerTexto);
 router.delete('/:idPsicologo/:idPaciente/archivo/:archivoId', protector, chat.eliminarArchivo);
 router.put('/:idPsicologo/:idPaciente/documento/:archivoId', protector, chat.guardarDocumento);
 

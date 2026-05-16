@@ -49,6 +49,13 @@ export const linkedDocumentsStyle = StyleSheet.create({
     backgroundColor: Colors.secondaryButton,
     marginLeft: 180,
   },
+  lineComplete:{
+    marginTop: 6,
+    marginBottom: 8,
+    height: 3,
+    width: '100%',
+    backgroundColor: Colors.secondaryButton,
+  },
   filesContainer: {
     minHeight: 88,
   },
