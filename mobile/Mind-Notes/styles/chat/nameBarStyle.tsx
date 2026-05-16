@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 
 export const nameBarStyle = StyleSheet.create({
   container: {
-    backgroundColor: Colors.white,
+    backgroundColor: "#f5f5f5",
     borderBottomWidth: 1,
     borderBottomColor: Colors.secondaryButton,
     paddingVertical: 8,
