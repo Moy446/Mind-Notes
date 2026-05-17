@@ -4,7 +4,8 @@ import './MeetMenu.css'
 import Select from 'react-select';
 import clienteAxios from '../services/axios';
 import Swal from 'sweetalert2';
-
+import userDefault from '../images/userDefault.png'
+import { getImageUrl } from '../utils/imageHelper';
 
 export default function MeetMenu(props) {
 
@@ -190,7 +191,7 @@ export default function MeetMenu(props) {
                         value={selectedUser}
                         formatOptionLabel={(u) => (
                             <div className='optionContentM' key={u.idUsuario}>
-                                <img src={u.fotoPerfil} className="avatarM" />
+                                <img src={u.fotoPerfil.includes('userDefault') ? userDefault : getImageUrl(u.fotoPerfil, userDefault)} className="avatarM" />
                                 <span>{u.nombre}</span>
                             </div>
                         )} />
