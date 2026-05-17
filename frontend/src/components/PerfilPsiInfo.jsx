@@ -8,6 +8,7 @@ import { AuthContext } from '../context/AuthContext';
 import { actualizarPerfil, cambiarFotoPerfil } from '../services/usuarioService';
 import { getImageUrl } from '../utils/imageHelper';
 import Swal from 'sweetalert2';
+import userDefault from '../images/userDefault.png'
 
 export default function PerfilPsiInfo(props) {
 
@@ -17,7 +18,7 @@ export default function PerfilPsiInfo(props) {
         nombre: '',
         email: '',
         plan: 'Plan Gratuito',
-        fotoPerfil: '/src/images/testimg.png'
+        fotoPerfil: userDefault
     });
     const [editModal, setEditModal] = useState({ open: false, field: '', title: '', value: '' });
 
@@ -27,7 +28,7 @@ export default function PerfilPsiInfo(props) {
                 nombre: user.nombre || user.name || 'Usuario',
                 email: user.email || 'correo@ejemplo.com',
                 plan: user.plan || 'Plan Gratuito',
-                fotoPerfil: user.fotoPerfil || '/src/images/testimg.png'
+                fotoPerfil: user.fotoPerfil?.includes('userDefault') ? userDefault : getImageUrl(user.fotoPerfil, userDefault)
 
             });
         }
@@ -101,7 +102,7 @@ export default function PerfilPsiInfo(props) {
 
                 setUserData(prev => ({
                     ...prev,
-                    fotoPerfil: getImageUrl(result.fotoPerfil)
+                    fotoPerfil: getImageUrl(result.fotoPerfil, userDefault)
                 }));
                 updateUser({ fotoPerfil: result.fotoPerfil });
 
