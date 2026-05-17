@@ -137,7 +137,7 @@ export default function Calendario() {
                 value={psicologos[cont]}
                 formatOptionLabel={(p) => (
                     <div className='optionContentP' key={p.id}>
-                        <img src={p.fotoPerfil} className="avatarP" />
+                        <img src={p.fotoPerfil.includes('userDefault') ? userDefault : getImageUrl(p.fotoPerfil, userDefault)} className="avatarP" />
                         <span>{p.nombre}</span>
                     </div>
                 )}

@@ -34,6 +34,8 @@ async function startServer() {
     const server = createServer(app);
     const allowedOrigins = [
         process.env.FRONTEND_URL,
+        'http://192.168.1.81:5000',
+        'http://192.168.1.81:9001',
         'http://localhost:3000',
         'http://localhost:3001',
         'http://localhost:5173',
@@ -50,6 +52,7 @@ async function startServer() {
                 origin === process.env.AZURE_FRONTEND_URL ||
                 origin.includes('mind-notes.net') ||
                 origin.includes('localhost') ||
+                origin.includes('192.168.1') ||
                 origin.includes('azurestaticapps.net') ||
                 origin.includes('azurewebsites.net')) {
                 callback(null, true);

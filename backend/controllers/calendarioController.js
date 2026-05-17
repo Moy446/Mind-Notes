@@ -63,7 +63,7 @@ class CalendarioController {
             const formattedAgenda = datosAgenda.map(cita =>({
                 id: cita.idPaciente.toString() == idUsuario.toString() ? cita.idCita : null,
                 nombre: cita.idPaciente.toString() == idUsuario.toString() ?cita.nombrePaciente: 'reservado',
-                img: cita.idPaciente.toString() == idUsuario.toString() ? cita.fotoPaciente : null,
+                img: cita.idPaciente.toString() == idUsuario.toString() ? cita.fotoPaciente : 'userDefault',
                 horaI: cita.horaInicio,
                 horaF: cita.horaFin,
                 fecha: `${cita.fechaCita.getFullYear()}-${cita.fechaCita.getMonth()+1}-${cita.fechaCita.getDate()}`,

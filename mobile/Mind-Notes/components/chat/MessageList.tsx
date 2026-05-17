@@ -149,7 +149,7 @@ export const MessageList: React.FC<MessageListProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f0f0f0',
   },
   contentContainer: {
     paddingVertical: 8,

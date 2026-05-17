@@ -20,9 +20,7 @@ interface LinkedDocumentsPanelProps {
   onClose?: () => void;
 }
 
-const backendBaseUrl =
-  (process.env.EXPO_PUBLIC_BACKEND_URL || process.env.EXPO_PUBLIC_BACKEND_URL_ANDROID || '')
-    .replace(/\/api$/, '') || 'http://localhost:5000';
+const backendBaseUrl = process.env.EXPO_PUBLIC_BASE_URL
 
 const buildFileUrl = (file?: LinkedFile): string | null => {
   if (!file?.path) return null;
@@ -49,21 +47,52 @@ export const LinkedDocumentsPanel = ({
   const maxPage = Math.max(1, Math.ceil(currentData.length / itemsPerPage));
   const currentItems = currentData.slice((page - 1) * itemsPerPage, page * itemsPerPage);
 
-  const openFile = async (file: LinkedFile) => {
-    const url = buildFileUrl(file);
-    if (!url) return;
-
+  const openFile = async (item: LinkedFile, idPaciente: string) => {
     try {
-      const supported = await Linking.canOpenURL(url);
-      if (!supported) {
-        Alert.alert('No disponible', 'No se puede abrir este archivo en el dispositivo');
+      const fileUrl = item.path ? buildFileUrl(item) : null;
+      const extension = item.nombre?.split('.').pop()?.toLowerCase();        
+
+      if (!fileUrl) {
+        Alert.alert('Error', 'No hay archivo disponible');
         return;
       }
-      await Linking.openURL(url);
-    } catch (_error) {
+      if (!extension){
+        Alert.alert('Error', 'No se pudo determinar la extensión del archivo');
+        return;
+      }
+      if (!showSupport){
+        if (['mp3', 'wav', 'aac', 'm4a'].includes(extension)) {
+          await Linking.openURL(fileUrl);
+          return;
+        }
+        router.push({
+          pathname:'/psicologo/document',
+          params:{idDoc: item._id, idPat: idPaciente}
+        })
+        return;
+      }
+    
+      if (extension === 'pdf') {
+        await Linking.openURL(fileUrl);
+        return;
+      }
+    
+      if (['mp3', 'wav', 'aac', 'm4a'].includes(extension)) {
+        await Linking.openURL(fileUrl);
+        return;
+      }
+    
+      if (['mp4', 'mov', 'avi', 'mkv'].includes(extension)) {
+        await Linking.openURL(fileUrl);
+        return;
+      }
+      await Linking.openURL(fileUrl);
+  
+    } catch (error) {
+      console.log(error);
       Alert.alert('Error', 'No se pudo abrir el archivo');
     }
-  };
+  }
 
   const switchTab = (toSupport: boolean) => {
     if (showSupport === toSupport) return;
@@ -102,10 +131,7 @@ export const LinkedDocumentsPanel = ({
             <TouchableOpacity
               key={item._id || `${item.nombre || 'file'}-${index}`}
               style={linkedDocumentsStyle.fileItem}
-              onPress={() => router.push({
-                pathname:'/psicologo/document',
-                params:{idDoc: item._id, idPat: idPaciente}
-              })}
+              onPress={() => openFile(item, idPaciente || '')}
             >
               <Text style={linkedDocumentsStyle.fileName} numberOfLines={1}>
                 {item.nombre || 'Archivo sin nombre'}

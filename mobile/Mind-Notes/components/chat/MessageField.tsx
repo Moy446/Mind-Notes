@@ -69,7 +69,7 @@ export const MessageField: React.FC<MessageFieldProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f5f5',
     borderTopWidth: 1,
     borderTopColor: '#e0e0e0',
   },
