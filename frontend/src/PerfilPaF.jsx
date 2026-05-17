@@ -9,7 +9,8 @@ import { AuthContext } from './context/AuthContext';
 import { actualizarPerfil, cambiarFotoPerfil, eliminarCuenta } from './services/usuarioService';    
 import { getImageUrl } from './utils/imageHelper';
 import Swal from 'sweetalert2';
-
+import userDefault from './images/userDefault.png'
+    
 export default function PerfilPaF(props){
 
     const navigate = useNavigate();
@@ -19,7 +20,7 @@ export default function PerfilPaF(props){
     const [userData, setUserData] = useState({
         nombre: '',
         email: '',
-        fotoPerfil: '/src/images/testimg.png'
+        fotoPerfil: userDefault
     });
 
     const [delMenu, openDelMenu] = useState(false);
@@ -162,10 +163,9 @@ export default function PerfilPaF(props){
             setUserData({
                 nombre: user.nombre || user.name || 'Usuario',
                 email: user.email || '',
-                fotoPerfil: user.fotoPerfil || '/src/images/testimg.png'
+                fotoPerfil: user.fotoPerfil?.includes('userDefault') ? userDefault : getImageUrl(user.fotoPerfil, userDefault)
             });
             
-            console.log(user.fotoPerfil);
         }
     }, [user]);
 

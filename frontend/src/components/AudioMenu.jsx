@@ -31,7 +31,7 @@ export default function AudioMenu(props) {
                         if (foto.includes('userDefault')) {
                             return userDefault;
                         }
-                        return getImageUrl(foto);
+                        return getImageUrl(foto, userDefault);
                     })()
                 })));
 
@@ -87,7 +87,7 @@ export default function AudioMenu(props) {
                     onChange={actualizarDatosPaciente}
                     formatOptionLabel={(p) => (
                         <div className='optionContentM' key={p.id}>
-                            <img src={p.fotoPerfil} className="avatarM" />
+                            <img src={p.fotoPerfil.includes('userDefault') ? userDefault : getImageUrl(p.fotoPerfil, userDefault)} className="avatarM" />
                             <span>{p.nombre}</span>
                         </div>
                     )} />
